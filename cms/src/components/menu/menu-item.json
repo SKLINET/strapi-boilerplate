@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_menu_menu_items",
+  "info": {
+    "displayName": "MenuItem",
+    "icon": "angle-right",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "externalUrl": {
+      "type": "string"
+    },
+    "target": {
+      "type": "enumeration",
+      "enum": [
+        "_self",
+        "_blank"
+      ]
+    },
+    "showMegaMenu": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_complementary_nav_contents",
+  "info": {
+    "displayName": "NavContent",
+    "icon": "fax",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "searchBar": {
+      "type": "component",
+      "repeatable": false,
+      "component": "complementary.navigation-search-bar"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+    "collectionName": "components_block_rich_text_blocks",
+    "info": {
+        "displayName": "Blok : RichText",
+        "icon": "align-left"
+    },
+    "options": {},
+    "attributes": {
+        "content": {
+            "type": "richtext"
+        },
+        "sectionId": {
+            "type": "string"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_complementary_ecomails",
+  "info": {
+    "displayName": "Ecomail",
+    "icon": "envelope"
+  },
+  "options": {},
+  "attributes": {
+    "apiKey": {
+      "type": "string"
+    },
+    "listId": {
+      "type": "string"
+    }
+  }
+}

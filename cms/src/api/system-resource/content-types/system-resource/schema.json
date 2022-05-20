@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "system_resources",
+  "info": {
+    "singularName": "system-resource",
+    "pluralName": "system-resources",
+    "displayName": "Všeobecné texty",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    },
+    "versions": {
+      "versioned": true
+    }
+  },
+  "attributes": {
+    "codename": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "value": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

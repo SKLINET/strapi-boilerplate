@@ -1,0 +1,52 @@
+{
+  "name": "SKLINET Strapi boilerplate",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Strapi boilerplate",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "source ~/.nvm/nvm.sh; nvm use 14.17.0 && NODE_ENV=productio strapi start",
+    "build": "NODE_ENV=production strapi build",
+    "strapi": "strapi"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@notum-cz/strapi-plugin-content-versioning": "^0.4.1",
+    "@strapi/admin": "4.1.10",
+    "@strapi/plugin-content-manager": "4.1.10",
+    "@strapi/plugin-content-type-builder": "4.1.10",
+    "@strapi/plugin-documentation": "4.1.10",
+    "@strapi/plugin-email": "4.1.10",
+    "@strapi/plugin-graphql": "4.1.10",
+    "@strapi/plugin-i18n": "4.1.10",
+    "@strapi/plugin-seo": "^1.7.2",
+    "@strapi/plugin-upload": "4.1.10",
+    "@strapi/plugin-users-permissions": "4.1.10",
+    "@strapi/provider-email-nodemailer": "^4.1.10",
+    "@strapi/strapi": "4.1.10",
+    "@strapi/utils": "4.1.10",
+    "knex": "2.0.0",
+    "mysql": "2.18.1",
+    "sharp": "^0.30.4",
+    "strapi-plugin-email-designer": "^2.1.1",
+    "strapi-plugin-import-export-content": "^0.4.1",
+    "strapi-plugin-local-image-sharp": "^1.0.2",
+    "strapi-plugin-navigation": "^2.0.13",
+    "strapi-plugin-notes": "^1.0.1",
+    "strapi-plugin-preview-button": "^0.3.2",
+    "strapi-plugin-slugify": "^2.2.2",
+    "strapi-plugin-transformer": "^2.0.1"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "71e40369-634b-4da2-bc11-f5e409058102",
+    "telemetryDisabled": true
+  },
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": "^6.0.0"
+  },
+  "license": "MIT"
+}

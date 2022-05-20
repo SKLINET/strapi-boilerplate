@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_complementary_links",
+  "info": {
+    "displayName": "Link",
+    "icon": "hand-pointer",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    },
+    "linkExternal": {
+      "type": "string"
+    },
+    "page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    }
+  }
+}

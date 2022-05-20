@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_complementary_mailchimps",
+  "info": {
+    "displayName": "Mailchimp",
+    "icon": "envelope-square"
+  },
+  "options": {},
+  "attributes": {
+    "serverPrefix": {
+      "type": "string"
+    },
+    "apiKey": {
+      "type": "string"
+    },
+    "listId": {
+      "type": "string"
+    }
+  }
+}

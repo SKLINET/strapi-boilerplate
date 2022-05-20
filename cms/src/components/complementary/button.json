@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_complementary_buttons",
+  "info": {
+    "displayName": "Button",
+    "icon": "bold",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    },
+    "page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    },
+    "linkExternal": {
+      "type": "string"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "inverse"
+      ]
+    }
+  }
+}

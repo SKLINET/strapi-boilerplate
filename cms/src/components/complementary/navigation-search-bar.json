@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_complementary_navigation_search_bars",
+  "info": {
+    "displayName": "NavigationSearchBar",
+    "icon": "search-location",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "searchLabel": {
+      "type": "string"
+    },
+    "placeholder": {
+      "type": "string"
+    },
+    "actualLabel": {
+      "type": "string"
+    },
+    "productsLabel": {
+      "type": "string"
+    }
+  }
+}

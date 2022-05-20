@@ -1,0 +1,31 @@
+{
+    "kind": "collectionType",
+    "collectionName": "messages",
+    "info": {
+        "singularName": "message",
+        "pluralName": "messages",
+        "displayName": "Kontaktný formulár",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string"
+        },
+        "phone": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string"
+        },
+        "message": {
+            "type": "text"
+        },
+        "city": {
+            "type": "string"
+        }
+    }
+}

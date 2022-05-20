@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_block_error_page_blocks",
+  "info": {
+    "displayName": "Blok : Chybová stránka",
+    "icon": "file-excel",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "richtext"
+    },
+    "subHeading": {
+      "type": "string"
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "buttonLabel": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_sitemaps",
+  "info": {
+    "displayName": "Sitemap",
+    "icon": "boxes"
+  },
+  "options": {},
+  "attributes": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "changeFrequency": {
+      "type": "enumeration",
+      "enum": [
+        "always",
+        "hourly",
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly",
+        "never"
+      ]
+    },
+    "priority": {
+      "type": "decimal"
+    }
+  }
+}
