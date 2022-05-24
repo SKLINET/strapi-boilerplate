@@ -10,8 +10,8 @@ import { Table } from '../Table/Table';
 import { Paragraph } from '../Paragraph/Paragraph';
 import { Blockquote } from '../Blockquote/Blockquote';
 import styles from './RichText.module.scss';
-import nbsp from '../../../utils/nbsp';
-import { isInternalLink } from '../../../utils/isInternalLink';
+import { nbsp } from '@symbio/headless/utils';
+import { isInternalLink } from '@symbio/headless';
 
 export interface RichTextProps {
     content: string;

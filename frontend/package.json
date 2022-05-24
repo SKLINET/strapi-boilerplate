@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@react-google-maps/api": "^2.7.0",
+        "@symbio/headless": "canary",
         "axios": "^0.26.0",
         "busboy": "^1.4.0",
         "clsx": "^1.1.1",

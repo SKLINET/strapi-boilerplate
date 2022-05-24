@@ -7,7 +7,7 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Layout } from '../components/base/Layout/Layout';
-import { Logger } from '../services';
+import { Logger } from '@symbio/headless/services';
 import { MyPageProps } from '../types/page';
 import { AppContext } from '../utils/AppContext';
 import { Page as PageProps } from '../types/page';

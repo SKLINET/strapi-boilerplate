@@ -5,7 +5,7 @@ export interface ImageProps {
             width: number;
             height: number;
             alternativeText: string;
-            fp?: {
+            focalPoints?: {
                 readonly x: number | null;
                 readonly y: number | null;
             } | null;

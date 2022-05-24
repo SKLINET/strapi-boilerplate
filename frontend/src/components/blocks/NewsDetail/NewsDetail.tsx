@@ -17,7 +17,7 @@ const NewsDetail = ({ item, app }: NewsDetailProps): ReactElement => {
         <>
             <Heading tag={'h1'}>aaa</Heading>
             <div className="text-base italic">
-                {/* {dayjs.tz(String(item?.dateFrom), symbio.tz).format()}
+                {/* {dayjs.tz(String(item?.dateFrom), config.tz).format()}
                 {item?.perex && <RichText content={item.perex} />} */}
             </div>
             {/* {app && item?.content && <Blocks blocksData={item.content} initialProps={{}} app={app} />} */}

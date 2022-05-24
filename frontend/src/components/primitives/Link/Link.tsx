@@ -3,7 +3,7 @@ import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { UrlObject } from 'url';
 import { Page } from '../../../types/page';
-import nbsp from '../../../utils/nbsp';
+import { nbsp } from '@symbio/headless/utils';
 import { getPageUrl } from '../../../utils/getPageUrl';
 
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> &

@@ -6,7 +6,7 @@ import { trackPage } from '../utils/gtm';
 import '../styles/global.scss';
 import config from '../../sklinet.config.json';
 import { CustomCursorProvider } from '../components/primitives/CustomCursor/CustomCursorProvider';
-import metricsReport from '../utils/metricsReport/metricsReport';
+import { metricsReport } from '@symbio/headless/utils';
 
 if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
