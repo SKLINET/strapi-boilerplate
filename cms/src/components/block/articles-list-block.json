@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_block_articles_list_blocks",
+  "info": {
+    "displayName": "ArticlesListBlock",
+    "icon": "list-alt"
+  },
+  "options": {},
+  "attributes": {
+    "sectionId": {
+      "type": "string"
+    }
+  }
+}

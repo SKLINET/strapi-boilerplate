@@ -59,7 +59,17 @@
       "type": "dynamiczone",
       "components": [
         "block.error-page-block",
-        "block.rich-text-block"
+        "block.rich-text-block",
+        "block.button-block",
+        "block.carousel-block",
+        "block.gallery-block",
+        "block.image-block",
+        "block.map-block",
+        "block.article-detail-block",
+        "block.articles-list-block",
+        "block.latest-articles-block",
+        "block.video-block",
+        "block.youtube-vimeo-block"
       ],
       "pluginOptions": {
         "i18n": {

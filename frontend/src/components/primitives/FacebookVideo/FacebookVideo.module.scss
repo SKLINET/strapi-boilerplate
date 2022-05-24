@@ -1,0 +1,7 @@
+.wrapper {
+    @apply relative h-0 w-full overflow-hidden;
+}
+
+.iframe {
+    @apply absolute top-0 left-0 w-full h-full;
+}

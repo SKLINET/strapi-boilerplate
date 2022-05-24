@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_block_map_blocks",
+  "info": {
+    "displayName": "MapBlock",
+    "icon": "map",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "bubbleText": {
+      "type": "text"
+    },
+    "gps": {
+      "displayName": "GpsCoordinates",
+      "type": "component",
+      "repeatable": false,
+      "component": "complementary.gps-coordinates"
+    }
+  }
+}

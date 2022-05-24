@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_shared_global_seos",
+  "info": {
+    "displayName": "GlobalSeo",
+    "icon": "address-card"
+  },
+  "options": {},
+  "attributes": {
+    "siteName": {
+      "type": "string"
+    },
+    "titleSuffix": {
+      "type": "string"
+    },
+    "facebookPageUrl": {
+      "type": "string"
+    },
+    "twitterAccount": {
+      "type": "string"
+    },
+    "fallbackSeo": {
+      "displayName": "FallbackSeo",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.fallback-seo"
+    },
+    "favicon": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "faviconMetaTags": {
+      "displayName": "FaviconMetaTag",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.favicon-meta-tag"
+    }
+  }
+}

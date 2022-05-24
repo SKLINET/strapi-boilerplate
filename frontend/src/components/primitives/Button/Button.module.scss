@@ -1,0 +1,32 @@
+.button {
+    @apply inline-flex transition-all duration-200 relative no-underline cursor-pointer outline-none p-4 text-primary bg-secondary border border-solid border-primary;
+
+    &.hasLink {
+        @apply p-0;
+    }
+
+    &.disabled {
+        @apply cursor-default pointer-events-none opacity-40;
+    }
+
+    &:hover,
+    &:active {
+        @apply bg-primary text-secondary;
+    }
+}
+
+.link {
+    @apply p-4;
+}
+
+.icon {
+    @apply ml-4 mr-0;
+
+    &.iconOnLeft {
+        @apply ml-0 mr-4;
+    }
+
+    &.isFilter {
+        @apply m-0 mt-3;
+    }
+}

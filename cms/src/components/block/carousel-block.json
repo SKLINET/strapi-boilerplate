@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_block_carousel_blocks",
+  "info": {
+    "displayName": "CarouselBlock",
+    "icon": "arrows-alt-h"
+  },
+  "options": {},
+  "attributes": {
+    "textAlign": {
+      "type": "string"
+    },
+    "autoplay": {
+      "type": "boolean"
+    },
+    "interval": {
+      "type": "integer"
+    },
+    "banners": {
+      "displayName": "CarouselBanner",
+      "type": "component",
+      "repeatable": true,
+      "component": "complementary.carousel-banner"
+    }
+  }
+}

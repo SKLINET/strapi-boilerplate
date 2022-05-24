@@ -109,6 +109,30 @@
         }
       },
       "type": "string"
+    },
+    "mainMenu": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::menu.menu"
+    },
+    "globalSeo": {
+      "displayName": "GlobalSeo",
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "versions": {
+          "versioned": true
+        },
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.global-seo"
+    },
+    "articlesPage": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
     }
   }
 }

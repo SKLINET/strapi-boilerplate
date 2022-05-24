@@ -1,2 +1,27 @@
+# NodeJS
+node_modules/
 
+# NextJS
+.next/
+
+# IDEs
+.idea/
+
+# dotenv
+.env
+.env.local
+
+# graphql/relay
+schema.graphql
+/src/types/graphql.ts
+/src/schema/graphql.schema.json
+__generated__/
+
+fixtures/
+
+.vercel
+frontend/public/.DS_Store
+frontend/public/images/.DS_Store
+frontend/public/images/backgrounds/.DS_Store
 .DS_Store
+cms/src/extensions/documentation/documentation/1.0.0/full_documentation.json

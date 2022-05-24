@@ -1,0 +1,4 @@
+{
+  "presets": ["next/babel"],
+  "plugins": ["relay", "transform-export-extensions", "inline-react-svg"]
+}

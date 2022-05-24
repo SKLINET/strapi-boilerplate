@@ -17,13 +17,6 @@
     },
     "linkExternal": {
       "type": "string"
-    },
-    "variant": {
-      "type": "enumeration",
-      "enum": [
-        "default",
-        "inverse"
-      ]
     }
   }
 }

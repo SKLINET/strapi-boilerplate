@@ -7,24 +7,11 @@
   },
   "options": {},
   "attributes": {
-    "heading": {
-      "type": "richtext"
-    },
-    "subHeading": {
+    "headline": {
       "type": "string"
     },
-    "text": {
-      "type": "richtext"
-    },
-    "buttonLabel": {
-      "type": "string"
-    },
-    "image": {
-      "allowedTypes": [
-        "images"
-      ],
-      "type": "media",
-      "multiple": false
+    "description": {
+      "type": "text"
     }
   }
 }

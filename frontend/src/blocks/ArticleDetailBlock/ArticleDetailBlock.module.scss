@@ -1,0 +1,26 @@
+@import '../../styles/mixins/responsive';
+@import '../../styles/layout';
+
+.wrapper {
+    @apply w-full;
+
+    @include from-mobile-landscape {
+        padding: 0 offsetWidth(1);
+    }
+
+    @include from-tablet {
+        padding: 0 offsetWidth(2);
+    }
+
+    @include from-tablet-landscape {
+        padding: 0 offsetWidth(3);
+    }
+
+    @include from-desktop {
+        padding: 0 offsetWidth(5);
+    }
+
+    @include large-desktop {
+        padding: 0 offsetWidth(6);
+    }
+}

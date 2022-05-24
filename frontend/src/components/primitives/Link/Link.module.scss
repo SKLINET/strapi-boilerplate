@@ -1,0 +1,8 @@
+.wrapper {
+    @apply underline;
+    color: inherit;
+
+    &:hover {
+        @apply no-underline;
+    }
+}

@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_block_youtube_vimeo_blocks",
+  "info": {
+    "displayName": "YoutubeVimeoBlock",
+    "icon": "file-video",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "enumeration",
+      "enum": [
+        "youtube",
+        "vimeo",
+        "facebook"
+      ]
+    },
+    "providerUid": {
+      "type": "string"
+    },
+    "width": {
+      "type": "integer"
+    },
+    "height": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string"
+    },
+    "thumbnailUrl": {
+      "type": "string"
+    }
+  }
+}

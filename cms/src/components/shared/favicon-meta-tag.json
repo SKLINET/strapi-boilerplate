@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_favicon_meta_tags",
+  "info": {
+    "displayName": "FaviconMetaTag",
+    "icon": "vector-square"
+  },
+  "options": {},
+  "attributes": {
+    "tag": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "text"
+    },
+    "content": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+.wrapper {
+    grid-gap: 0 var(--grid-gap);
+    grid-template-columns: repeat(auto-fill, var(--grid-column));
+    grid-template-rows: 1fr;
+}

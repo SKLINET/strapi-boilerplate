@@ -1,0 +1,23 @@
+@function columnWidth($count, $totalCount: false, $addition: false) {
+    $columnsCount: var(--grid-columns);
+    @if $totalCount {
+        $columnsCount: $totalCount;
+    }
+    $columnWidth: calc((100% - ((#{$columnsCount} - 1) * var(--grid-gap))) / #{$columnsCount});
+    @if $addition {
+        $columnWidth: calc((100% + #{$addition} - ((#{$columnsCount} - 1) * var(--grid-gap))) / #{$columnsCount});
+    }
+    @return calc(#{$count} * #{$columnWidth} + #{$count - 1} * var(--grid-gap));
+}
+
+@function offsetWidth($count, $totalCount: false, $addition: false) {
+    $columnsCount: var(--grid-columns);
+    @if $totalCount {
+        $columnsCount: $totalCount;
+    }
+    $columnWidth: calc((100% - ((#{$columnsCount} - 1) * var(--grid-gap))) / #{$columnsCount});
+    @if $addition {
+        $columnWidth: calc((100% + #{$addition} - ((#{$columnsCount} - 1) * var(--grid-gap))) / #{$columnsCount});
+    }
+    @return calc(#{$count} * (#{$columnWidth} + var(--grid-gap)));
+}

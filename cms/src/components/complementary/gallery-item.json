@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_complementary_gallery_items",
+  "info": {
+    "displayName": "GalleryItem",
+    "icon": "file-image"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+    "gtm": {
+        "code": false
+    },
+    "i18n": {
+        "locales": ["sk", "cs"],
+        "defaultLocale": "sk",
+        "localeDetection": false
+    },
+    "images": {
+        "imageSizes": [16, 32, 64, 96, 128, 192],
+        "deviceSizes": [80, 160, 320, 420, 768, 1024, 1280, 1440, 1920, 2560],
+        "domains": [
+            "localhost:8080",
+            "localhost:3000",
+            "127.0.0.1",
+            "localhost",
+            "test.sklinet.com",
+            "vercel.app",
+            "http://localhost:3000"
+        ],
+        "loader": "imgix",
+        "path": ""
+    },
+    "mailer": {
+        "from": "no-reply@example.com",
+        "name": "SKLINET"
+    },
+    "newsletter": {
+        "subject": "New newsletter subscription",
+        "to": "subscriber@example.com",
+        "body": "The new subscriber has just confirmed the newsletter.\nE-mail: {EMAIL}\n"
+    },
+    "ssg": {
+        "revalidate": 10,
+        "staticGeneration": true
+    },
+    "tz": "Europe/Slovakia"
+}

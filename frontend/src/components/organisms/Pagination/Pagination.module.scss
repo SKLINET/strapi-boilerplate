@@ -1,0 +1,10 @@
+.linkItem {
+    @apply flex justify-center items-center w-10 h-10 border-b border-solid border-transparent;
+    a {
+        @apply flex justify-center items-center w-full h-full self-center;
+    }
+}
+
+.linkItemActive {
+    @apply text-primary border-primary;
+}

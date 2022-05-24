@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_block_latest_articles_blocks",
+  "info": {
+    "displayName": "LatestArticlesBlock",
+    "icon": "list-ul"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "buttonLabel": {
+      "type": "string"
+    }
+  }
+}

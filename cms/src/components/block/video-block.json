@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_block_video_blocks",
+  "info": {
+    "displayName": "VideoBlock",
+    "icon": "video",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "autoplay": {
+      "type": "boolean"
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "videoId": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "thumbnailUrl": {
+      "type": "string"
+    }
+  }
+}

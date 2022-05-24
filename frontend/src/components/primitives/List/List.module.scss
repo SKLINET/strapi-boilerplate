@@ -1,0 +1,30 @@
+.list {
+    @apply mb-12;
+    counter-reset: list;
+
+    li {
+        @apply mb-4 pl-8 relative;
+        &:last-child {
+            @apply mb-0;
+        }
+    }
+}
+
+.ul {
+    li {
+        &:before {
+            @apply w-px h-px absolute left-0 top-2 bg-black;
+            content: '';
+        }
+    }
+}
+
+.ol {
+    li {
+        &:before {
+            @apply absolute left-0 text-black top-px;
+            counter-increment: list;
+            content: counter(list) '.';
+        }
+    }
+}
