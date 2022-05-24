@@ -27,11 +27,8 @@ module.exports = {
                             const data = await strapi.entityService.findMany(
                                 "api::page.page",
                                 {
-                                    filters: {
-                                        locale,
-                                    },
-                                    publicationState:
-                                        publicationState || "LIVE",
+                                    locale,
+                                    publicationState: publicationState || "live",
                                 }
                             );
                             for (const it of data) {
@@ -64,7 +61,7 @@ module.exports = {
                                         redirectFrom,
                                     },
                                     publicationState:
-                                        publicationState || "LIVE",
+                                        publicationState || "live",
                                 }
                             );
                             for (const it of data) {
