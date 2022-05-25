@@ -1,5 +1,79 @@
 import { graphql } from 'relay-runtime';
 
+graphql`
+    fragment pageFragment on PageEntityResponse {
+        data {
+            id
+            attributes {
+                title
+                url
+                pages {
+                    data {
+                        attributes {
+                            url
+                        }
+                    }
+                }
+                parent {
+                    data {
+                        attributes {
+                            url
+                        }
+                    }
+                }
+                meta {
+                    metaTitle
+                    metaDescription
+                    metaImage {
+                        data {
+                            attributes {
+                                url
+                                width
+                                height
+                                alternativeText
+                            }
+                        }
+                    }
+                    metaSocial {
+                        socialNetwork
+                        title
+                        description
+                        image {
+                            data {
+                                attributes {
+                                    url
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    preventIndexing
+                    meta {
+                        name
+                        content
+                    }
+                    title
+                }
+                sitemap {
+                    enabled
+                    changeFrequency
+                    priority
+                }
+                blocks {
+                    ...blocksContent @relay(mask: false)
+                }
+            }
+        }
+    }
+`;
+
 export const SitemapPagesQuery = graphql`
     query pagesSitemapQuery($publicationState: PublicationState) {
         pages(publicationState: $publicationState) {
@@ -30,6 +104,14 @@ export const SitemapArticlesQuery = graphql`
                     }
                 }
             }
+        }
+    }
+`;
+
+export const pageDetailQuery = graphql`
+    query pageDetailQuery($locale: I18NLocaleCode) {
+        item: page(locale: $locale) {
+            ...pageFragment @relay(mask: false)
         }
     }
 `;
