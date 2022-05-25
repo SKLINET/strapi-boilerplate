@@ -21,6 +21,7 @@ import { SWRConfig } from 'swr';
 import { RelayEnvironmentProvider } from 'relay-hooks';
 import { createRelayEnvironment } from '../utils/createRelayEnvironment';
 import NextNprogress from 'nextjs-progressbar';
+import dynamic from 'next/dynamic';
 
 const resolvePage = (page: PageProps | undefined, blocksProps: any) => {
     if (!page) {
@@ -28,6 +29,10 @@ const resolvePage = (page: PageProps | undefined, blocksProps: any) => {
     }
     return <Blocks blocksData={page?.blocks} initialProps={blocksProps} />;
 };
+
+const GridHelper = dynamic<unknown>(() =>
+    import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
+);
 
 const Page = (props: MyPageProps): ReactElement => {
     const { page, webSetting, systemResources, blocksProps } = props;
@@ -108,6 +113,7 @@ const Page = (props: MyPageProps): ReactElement => {
                     )}
                     <NextNprogress color={'#00CCCB'} options={{ showSpinner: false }} />
                     <Layout>{resolvePage(page, blocksProps)}</Layout>
+                    {process.env.NODE_ENV === 'development' && <GridHelper />}
                 </SWRConfig>
             </RelayEnvironmentProvider>
         </AppContext.Provider>
