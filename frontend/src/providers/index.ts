@@ -3,5 +3,5 @@ import NewsProvider from './NewsProvider';
 
 export default {
     page: PageProvider,
-    articles: NewsProvider,
+    news: NewsProvider,
 };

@@ -1,18 +1,8 @@
 import { Environment, GraphQLTaggedNode, fetchQuery } from 'relay-runtime';
-
+import { AbstractProvider, CmsItem, FindOneParams, FindParams } from '@symbio/cms';
 import { STRAPI_MAX_LIMIT } from '../constants';
-import {
-    AbstractProvider,
-    BaseRecord,
-    CmsItem,
-    FindOneParams,
-    FindOperationType,
-    FindParams,
-    FindResponse,
-    OneOperationType,
-    ProviderOptions,
-} from '../index';
 import { createRelayEnvironment } from '../utils/createRelayEnvironment';
+import { FindOperationType, FindResponse, OneOperationType, ProviderOptions, BaseRecord } from '../index';
 
 export default class StrapiProvider<
     TOne extends OneOperationType,
@@ -81,7 +71,7 @@ export default class StrapiProvider<
             return null;
         }
 
-        return await this.transformResult<TItem>(result.item as TItem, locale);
+        return await this.transformResult<any>(result.item as TItem, locale);
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -125,7 +115,7 @@ export default class StrapiProvider<
 
         return {
             count,
-            data: await this.transformResults<TItem>(data as ReadonlyArray<TItem>, options.locale),
+            data: await this.transformResults<any>(data as ReadonlyArray<TItem>, options.locale),
         };
     }
 

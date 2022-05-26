@@ -39,8 +39,8 @@ export const newsListQuery = graphql`
 `;
 
 export const newsStaticPathsQuery = graphql`
-    query newsStaticPathsQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
-        articles(locale: $locale, pagination: { start: $start, limit: $limit }) {
+    query newsStaticPathsQuery($locale: I18NLocaleCode, $start: Int, $limit: Int, $filters: ArticleFiltersInput) {
+        articles(locale: $locale, pagination: { start: $start, limit: $limit }, filters: $filters) {
             meta {
                 pagination {
                     total

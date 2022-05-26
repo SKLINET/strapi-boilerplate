@@ -11,7 +11,7 @@ import StrapiProvider from './StrapiProvider';
 
 class NewsProvider extends StrapiProvider<any, any> {
     getFilterParams(): Record<string, Record<string, string | boolean>> {
-        return { dateFrom: { lte: dayjs().format() }, slug: { neq: 'null' }, title: { exists: true } };
+        return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
 
     async getStaticPaths(locale: string): Promise<GetStaticPathsResult['paths']> {
@@ -37,4 +37,6 @@ class NewsProvider extends StrapiProvider<any, any> {
 
 export default new NewsProvider(newsDetailQuery, newsListQuery, {
     locales: config.i18n.locales,
+    id: '',
+    apiKey: '',
 });

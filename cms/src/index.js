@@ -109,82 +109,46 @@ module.exports = {
                     });
                 },
             });
-            // const oneArticleQuery = nexus.extendType({
-            //     type: "Query",
-            //     auth: false,
-            //     definition(t) {
-            //         t.field("findArticle", {
-            //             type: "Article",
-            //             auth: false,
-            //             args: {
-            //                 slug: "String",
-            //                 publicationState: "PublicationState",
-            //                 locale: "String",
-            //             },
-            //             async resolve(parent, args) {
-            //                 const { locale, publicationState, slug } = args;
-            //                 const data = await strapi.entityService.findMany(
-            //                     "api::article.article",
-            //                     {
-            //                         locale,
-            //                         slug,
-            //                         publicationState:
-            //                             publicationState || "live",
-            //                     }
-            //                 );
-            //                 for (const it of data) {
-            //                     if (it?.url?.match(pattern)) {
-            //                         return it;
-            //                     }
-            //                 }
-            //                 return null;
-            //             },
-            //         });
-            //     },
-            // });
-
-            // const articleQuery = nexus.extendType({
-            //     type: "Query",
-            //     auth: false,
-            //     definition(t) {
-            //         t.field("findArticle", {
-            //             type: "Article",
-            //             auth: false,
-            //             args: {
-            //                 publicationState: "PublicationState",
-            //                 locale: "String",
-            //                 slug: "String",
-            //             },
-            //             async resolve(parent, args) {
-            //                 const { locale, publicationState, slug } = args;
-            //                 const data = await strapi.entityService.findOne(
-            //                     "api::article.article",
-            //                     {
-            //                         filters: {
-            //                             args,
-            //                         },
-
-            //                         publicationState:
-            //                             publicationState || "live",
-            //                     }
-            //                 );
-            //                 for (const it of data) {
-            //                     if (it?.url?.match(pattern)) {
-            //                         return it;
-            //                     }
-            //                 }
-            //                 return null;
-            //             },
-            //         });
-            //     },
-            // });
+            const oneArticleQuery = nexus.extendType({
+                type: "Query",
+                auth: false,
+                definition(t) {
+                    t.field("article", {
+                        type: "Article",
+                        auth: false,
+                        args: {
+                            slug: "String",
+                            publicationState: "PublicationState",
+                            locale: "String",
+                        },
+                        async resolve(parent, args) {
+                            const { locale, publicationState, slug } = args;
+                            const data = await strapi.entityService.findMany(
+                                "api::article.article",
+                                {
+                                    locale,
+                                    slug,
+                                    publicationState:
+                                        publicationState || "live",
+                                }
+                            );
+                            for (const it of data) {
+                                if (it?.url?.match(pattern)) {
+                                    return it;
+                                }
+                            }
+                            return null;
+                        },
+                    });
+                },
+            });
 
             return {
                 types: [
                     pageQuery,
                     redirectQuery,
                     onePageQuery,
-                    // oneArticleQuery,
+                    oneArticleQuery,
                 ],
                 resolversConfig: {
                     "Query.findPage": {
@@ -193,13 +157,12 @@ module.exports = {
                     "Query.page": {
                         auth: false,
                     },
-                    // "Query.findArticle": {
-                    //     auth: false,
-                    // },
+                    "Query.article": {
+                        auth: false,
+                    },
                     "Query.findRedirect": {
                         auth: false,
                     },
-
                     "Query.findSlug": {
                         auth: false,
                     },

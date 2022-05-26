@@ -16,7 +16,6 @@ function LatestArticlesBlock({ blocksData, data, ...rest }: BaseBlockProps): Rea
     const articlesData = data;
     const allNewsUrl = rest?.app?.webSetting?.data?.attributes?.articlesPage?.data?.attributes?.url || '';
     const detailUrl = rest?.app?.webSetting?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '';
-    console.log(data);
     return (
         <BlockWrapper {...rest}>
             <NewsList

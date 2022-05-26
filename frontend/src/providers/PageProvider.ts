@@ -16,9 +16,9 @@ import { Providers } from '../types/providers';
 import getPublicationState from '../utils/getPublicationState';
 import StrapiProvider from './StrapiProvider';
 import { AppData } from '../index';
+import { appQuery } from '../relay/__generated__/appQuery.graphql';
 
-// ** TODO ** Need to update BaseRecord to fit pageDetailQuery and pageListQuery
-class PageProvider extends StrapiProvider<d.pageDetailQuery, any> {
+class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     /**
      * Special function returning Page and Site data
      * @param locale
@@ -116,5 +116,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, any> {
 }
 
 export default new PageProvider(pageDetailQuery, pageListQuery, {
+    id: '',
+    apiKey: '',
     locales: config.i18n.locales,
 });

@@ -101,7 +101,7 @@ export const pageListQuery = graphql`
                 }
             }
         }
-        items: pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
+        pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
             data {
                 id
                 attributes {

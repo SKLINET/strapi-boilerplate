@@ -1,7 +1,5 @@
 import { GetStaticPathsResult } from 'next';
-import AbstractProvider from './providers/AbstractProvider';
-import AbstractSingletonProvider from './providers/AbstractSingletonProvider';
-import { findProvider } from '@symbio/cms';
+import { AbstractProvider, AbstractSingletonProvider, findProvider } from '@symbio/cms';
 import { Variables } from 'relay-runtime';
 
 export type ItemId = string;
@@ -28,10 +26,13 @@ export type OneOperationType = {
 export type FindOperationType = {
     readonly variables: Variables;
     readonly response: {
-        items: ReadonlyArray<BaseRecord>;
-        meta: {
-            count: number | null;
-        };
+        readonly meta: {
+            readonly meta: {
+                readonly pagination: {
+                    readonly total: number;
+                };
+            };
+        } | null;
     };
     readonly rawResponse?: unknown;
 };
@@ -41,7 +42,7 @@ export type ItemStatus = 'draft' | 'updated' | 'published';
 export type BaseRecord =
     | ({
           id?: string | undefined | null | unknown;
-      } & Record<string, unknown>)
+      } & Record<string, unknown | null>)
     | null;
 
 export type SingletonBaseRecord = Record<string, unknown> | null;
@@ -60,8 +61,8 @@ export type FindResponse<T, TRest = unknown> = {
 
 export interface ProviderOptions {
     locales: string[];
-    apiKey?: string;
-    id?: string;
+    apiKey: string;
+    id: string;
 }
 
 export interface Provider {
