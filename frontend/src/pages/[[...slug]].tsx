@@ -23,7 +23,8 @@ const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
 );
 
-const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
+// ** TODO ** fix any, Strapi GQL structure doesn't match our needs
+const Page = (props: MyPageProps<any, WebSettingsProps>): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, preview, redirect } = props;
     const { gtm, tz } = config;
     const item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
@@ -59,16 +60,15 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
-
-    AppStore.getInstance<PageProps, WebSettingsProps>(app);
-
+    // ** TODO ** fix any, Strapi GQL structure doesn't match our needs
+    AppStore.getInstance<any, WebSettingsProps>(app);
     return (
         <>
-            <Head site={site} page={page} item={item} />
+            <Head site={webSetting} page={page} item={item} />
 
             <Layout>
                 <Navbar />
-                {page?.content && <Blocks blocksData={page.content} initialProps={blocksPropsMap} app={app} />}
+                {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
             {preview && <GridHelper />}

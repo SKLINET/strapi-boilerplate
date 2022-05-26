@@ -9,6 +9,8 @@ import { articleDetailQuery } from '../../relay/__generated__/articleDetailQuery
 import { ArticleDetailQuery } from '../../relay/article';
 import { createRelayEnvironment } from '../../utils/createRelayEnvironment';
 import getPublicationState from '../../utils/getPublicationState';
+import providers from '../../providers';
+import { newsDetailQueryResponse } from '../../relay/__generated__/newsDetailQuery.graphql';
 
 graphql`
     fragment ArticleDetailBlock_content on ComponentBlockArticleDetailBlock {
@@ -17,8 +19,7 @@ graphql`
 `;
 
 function ArticleDetailBlock({ blocksData, data }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
-    const articleData = data.article.data.attributes;
-
+    console.log(data);
     return (
         <BlockWrapper className={`flex-col ${styles.wrapper}`}>
             {/* {item && item.content && (
@@ -40,16 +41,10 @@ function ArticleDetailBlock({ blocksData, data }: BaseBlockProps): ReactElement<
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({ slug }: StaticBlockContext): Promise<BaseBlockProps> => {
-        const environment = createRelayEnvironment({});
-
-        const articleData = await fetchQuery<articleDetailQuery>(environment, ArticleDetailQuery, {
-            slug: slug,
-            publicationState: getPublicationState().toLowerCase(),
-        }).toPromise();
-
+        const item = (await providers.articles.findOne({})) as newsDetailQueryResponse['item'];
         return {
             data: {
-                article: articleData?.findSlug,
+                article: item,
             },
         };
     };

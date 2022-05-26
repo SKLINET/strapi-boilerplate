@@ -19,14 +19,18 @@ interface NewsListProps {
         }[];
     };
     allNewsLinkText?: string;
+    allNewsUrl?: string;
+    detailUrl?: string;
 }
 
-const NewsList = ({ headline, allNewsLinkText, items }: NewsListProps): ReactElement<NewsListProps, 'div'> | null => {
+const NewsList = ({
+    headline,
+    allNewsLinkText,
+    items,
+    allNewsUrl,
+    detailUrl,
+}: NewsListProps): ReactElement<NewsListProps, 'div'> | null => {
     dayjs.extend(Calendar);
-    const context = useContext(AppContext);
-    const allNewsPage = context?.data?.attributes?.articlesPage?.data?.attributes?.url || '';
-    const detailPage = context?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '';
-
     return (
         <div className="flex flex-col items-center">
             {headline && (
@@ -40,14 +44,14 @@ const NewsList = ({ headline, allNewsLinkText, items }: NewsListProps): ReactEle
                     return (
                         <Link
                             key={`article-item-${i}`}
-                            href={getPageUrl(detailPage).replace(':slug', item?.attributes?.slug)}
+                            href={detailUrl?.replace(':slug', item?.attributes?.slug) || ''}
                         >
                             {item?.attributes.title}
                         </Link>
                     );
                 })}
             </ul>
-            {allNewsLinkText && <Link href={getPageUrl(allNewsPage)}>{allNewsLinkText || ''}</Link>}
+            {allNewsLinkText && <Link href={allNewsUrl}>{allNewsLinkText || ''}</Link>}
         </div>
     );
 };

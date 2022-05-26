@@ -11,6 +11,73 @@ export const AppQuery = graphql`
             }
         }
 
+        page(locale: $locale, pattern: $pattern) {
+            title
+            url
+            pages {
+                data {
+                    attributes {
+                        url
+                    }
+                }
+            }
+            parent {
+                data {
+                    attributes {
+                        url
+                    }
+                }
+            }
+            meta {
+                metaTitle
+                metaDescription
+                metaImage {
+                    data {
+                        attributes {
+                            url
+                            width
+                            height
+                            alternativeText
+                        }
+                    }
+                }
+                metaSocial {
+                    socialNetwork
+                    title
+                    description
+                    image {
+                        data {
+                            attributes {
+                                url
+                                width
+                                height
+                                alternativeText
+                            }
+                        }
+                    }
+                }
+                keywords
+                metaRobots
+                structuredData
+                metaViewport
+                canonicalURL
+                preventIndexing
+                meta {
+                    name
+                    content
+                }
+                title
+            }
+            sitemap {
+                enabled
+                changeFrequency
+                priority
+            }
+            blocks {
+                ...blocksContent @relay(mask: false)
+            }
+        }
+
         findPage(pattern: $pattern, publicationState: $publicationState, locale: $locale) {
             title
             locale

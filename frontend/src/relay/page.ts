@@ -1,30 +1,42 @@
 import { graphql } from 'relay-runtime';
 
-graphql`
-    fragment pageFragment on PageEntityResponse {
-        data {
-            id
-            attributes {
-                title
-                url
-                pages {
+export const pageDetailQuery = graphql`
+    query pageDetailQuery($locale: I18NLocaleCode) {
+        item: page(locale: $locale) {
+            title
+            url
+            pages {
+                data {
+                    attributes {
+                        url
+                    }
+                }
+            }
+            parent {
+                data {
+                    attributes {
+                        url
+                    }
+                }
+            }
+            meta {
+                metaTitle
+                metaDescription
+                metaImage {
                     data {
                         attributes {
                             url
+                            width
+                            height
+                            alternativeText
                         }
                     }
                 }
-                parent {
-                    data {
-                        attributes {
-                            url
-                        }
-                    }
-                }
-                meta {
-                    metaTitle
-                    metaDescription
-                    metaImage {
+                metaSocial {
+                    socialNetwork
+                    title
+                    description
+                    image {
                         data {
                             attributes {
                                 url
@@ -34,11 +46,85 @@ graphql`
                             }
                         }
                     }
-                    metaSocial {
-                        socialNetwork
-                        title
-                        description
-                        image {
+                }
+                keywords
+                metaRobots
+                structuredData
+                metaViewport
+                canonicalURL
+                preventIndexing
+                meta {
+                    name
+                    content
+                }
+                title
+            }
+            sitemap {
+                enabled
+                changeFrequency
+                priority
+            }
+            blocks {
+                ...blocksContent @relay(mask: false)
+            }
+        }
+    }
+`;
+
+export const pageStaticPathsQuery = graphql`
+    query pageStaticPathsQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
+        pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
+            meta {
+                pagination {
+                    total
+                }
+            }
+            data {
+                id
+                attributes {
+                    url
+                    blocks {
+                        ...blocksContent @relay(mask: false)
+                    }
+                }
+            }
+        }
+    }
+`;
+
+export const pageListQuery = graphql`
+    query pageListQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
+        meta: pages(locale: $locale) {
+            meta {
+                pagination {
+                    total
+                }
+            }
+        }
+        items: pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
+            data {
+                id
+                attributes {
+                    title
+                    url
+                    pages {
+                        data {
+                            attributes {
+                                url
+                            }
+                        }
+                    }
+                    parent {
+                        data {
+                            attributes {
+                                url
+                            }
+                        }
+                    }
+                    meta {
+                        metaTitle
+                        metaDescription
+                        metaImage {
                             data {
                                 attributes {
                                     url
@@ -48,26 +134,41 @@ graphql`
                                 }
                             }
                         }
+                        metaSocial {
+                            socialNetwork
+                            title
+                            description
+                            image {
+                                data {
+                                    attributes {
+                                        url
+                                        width
+                                        height
+                                        alternativeText
+                                    }
+                                }
+                            }
+                        }
+                        keywords
+                        metaRobots
+                        structuredData
+                        metaViewport
+                        canonicalURL
+                        preventIndexing
+                        meta {
+                            name
+                            content
+                        }
+                        title
                     }
-                    keywords
-                    metaRobots
-                    structuredData
-                    metaViewport
-                    canonicalURL
-                    preventIndexing
-                    meta {
-                        name
-                        content
+                    sitemap {
+                        enabled
+                        changeFrequency
+                        priority
                     }
-                    title
-                }
-                sitemap {
-                    enabled
-                    changeFrequency
-                    priority
-                }
-                blocks {
-                    ...blocksContent @relay(mask: false)
+                    blocks {
+                        ...blocksContent @relay(mask: false)
+                    }
                 }
             }
         }
@@ -104,14 +205,6 @@ export const SitemapArticlesQuery = graphql`
                     }
                 }
             }
-        }
-    }
-`;
-
-export const pageDetailQuery = graphql`
-    query pageDetailQuery($locale: I18NLocaleCode) {
-        item: page(locale: $locale) {
-            ...pageFragment @relay(mask: false)
         }
     }
 `;

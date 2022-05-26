@@ -23,3 +23,5 @@ export enum ASYNC_STATES {
     SUCCESS = 'success',
     ERROR = 'error',
 }
+
+export const STRAPI_MAX_LIMIT = 100;

@@ -2,12 +2,7 @@ import React, { ReactElement } from 'react';
 import { Link } from '../../primitives/Link/Link';
 
 export interface PageBoxProps {
-    page: {
-        __typename: 'PageRecord';
-        id: string;
-        title: string;
-        url: string;
-    };
+    page: any; // **TODO** Fix page TS
     className?: string;
 }
 

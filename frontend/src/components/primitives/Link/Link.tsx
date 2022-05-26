@@ -9,7 +9,7 @@ import { getPageUrl } from '../../../utils/getPageUrl';
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> &
     Partial<NextLinkProps> & {
         href?: string | UrlObject;
-        page?: PageProps;
+        page?: any; // ** TODO ** Fix page any
         params?: Record<string, string | number> | ParsedUrlQuery;
         plain?: boolean;
     };

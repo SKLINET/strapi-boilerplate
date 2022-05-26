@@ -4,9 +4,10 @@ import { AppContextProps } from '@symbio/headless';
 import config from '../../../../sklinet.config.json';
 import { WebSettingsProps } from '../../../types/webSettings';
 
+// ** TODO ** fix any, Strapi GQL structure doesn't match our needs
 export interface HeadProps {
-    item?: WebSettingsProps;
-    page?: WebSettingsProps;
+    item?: AppContextProps<any, WebSettingsProps>['item'];
+    page?: AppContextProps<any, WebSettingsProps>['page'];
     site: WebSettingsProps;
 }
 
@@ -25,7 +26,7 @@ export const Head = ({ item, page, site }: HeadProps): ReactElement => {
             />
 
             {/* APP */}
-            <link rel="manifest" href="/manifest.json" />
+            {/* <link rel="manifest" href="/manifest.json" /> */}
             <meta name="msapplication-TileColor" content="#00aba9" />
             <meta name="theme-color" content="#61279e" />
             {site?.data?.attributes?.globalSeo?.siteName && (

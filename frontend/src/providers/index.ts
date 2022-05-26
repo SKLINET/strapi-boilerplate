@@ -1,9 +1,7 @@
-import NewsProvider from './NewsProvider';
-import NewsCategoryProvider from './NewsCategoryProvider';
 import PageProvider from './PageProvider';
+import NewsProvider from './NewsProvider';
 
 export default {
-    news: NewsProvider,
-    newsCategory: NewsCategoryProvider,
     page: PageProvider,
+    articles: NewsProvider,
 };

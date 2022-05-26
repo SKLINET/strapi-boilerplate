@@ -1,7 +1,7 @@
 import { GeneralText } from './generalText';
 import { Locale } from './locale';
-import { Page } from './page';
 import { appQueryResponse } from '../relay/__generated__/appQuery.graphql';
+import { PageProps } from './page';
 
 export type WebSetting = appQueryResponse['webSetting'];
 export type SystemResources = appQueryResponse['systemResources'];
@@ -14,7 +14,7 @@ export type AppContextProps = Partial<WebSetting> & {
     locale?: string;
     defaultLocale?: string;
     pageId?: number;
-    page?: Page;
+    page?: PageProps;
     showSpinner: boolean;
     setShowSpinner: (show: boolean) => void;
 };

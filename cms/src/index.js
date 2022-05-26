@@ -28,7 +28,8 @@ module.exports = {
                                 "api::page.page",
                                 {
                                     locale,
-                                    publicationState: publicationState || "live",
+                                    publicationState:
+                                        publicationState || "live",
                                 }
                             );
                             for (const it of data) {
@@ -75,6 +76,73 @@ module.exports = {
                 },
             });
 
+            const onePageQuery = nexus.extendType({
+                type: "Query",
+                auth: false,
+                definition(t) {
+                    t.field("page", {
+                        type: "Page",
+                        auth: false,
+                        args: {
+                            pattern: "String",
+                            publicationState: "PublicationState",
+                            locale: "String",
+                        },
+                        async resolve(parent, args) {
+                            const { locale, publicationState, pattern } = args;
+                            const data = await strapi.entityService.findMany(
+                                "api::page.page",
+                                {
+                                    locale,
+                                    pattern,
+                                    publicationState:
+                                        publicationState || "live",
+                                }
+                            );
+                            for (const it of data) {
+                                if (it?.url?.match(pattern)) {
+                                    return it;
+                                }
+                            }
+                            return null;
+                        },
+                    });
+                },
+            });
+            // const oneArticleQuery = nexus.extendType({
+            //     type: "Query",
+            //     auth: false,
+            //     definition(t) {
+            //         t.field("findArticle", {
+            //             type: "Article",
+            //             auth: false,
+            //             args: {
+            //                 slug: "String",
+            //                 publicationState: "PublicationState",
+            //                 locale: "String",
+            //             },
+            //             async resolve(parent, args) {
+            //                 const { locale, publicationState, slug } = args;
+            //                 const data = await strapi.entityService.findMany(
+            //                     "api::article.article",
+            //                     {
+            //                         locale,
+            //                         slug,
+            //                         publicationState:
+            //                             publicationState || "live",
+            //                     }
+            //                 );
+            //                 for (const it of data) {
+            //                     if (it?.url?.match(pattern)) {
+            //                         return it;
+            //                     }
+            //                 }
+            //                 return null;
+            //             },
+            //         });
+            //     },
+            // });
+
             // const articleQuery = nexus.extendType({
             //     type: "Query",
             //     auth: false,
@@ -112,11 +180,22 @@ module.exports = {
             // });
 
             return {
-                types: [pageQuery, redirectQuery],
+                types: [
+                    pageQuery,
+                    redirectQuery,
+                    onePageQuery,
+                    // oneArticleQuery,
+                ],
                 resolversConfig: {
                     "Query.findPage": {
                         auth: false,
                     },
+                    "Query.page": {
+                        auth: false,
+                    },
+                    // "Query.findArticle": {
+                    //     auth: false,
+                    // },
                     "Query.findRedirect": {
                         auth: false,
                     },
