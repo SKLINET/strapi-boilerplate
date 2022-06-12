@@ -1,38 +1,33 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import config from '../../sklinet.config.json';
+import React, { ReactElement, useMemo } from 'react';
+import { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { Layout } from '../components/base/Layout/Layout';
-import { Logger } from '@symbio/headless/services';
-import { MyPageProps } from '../types/page';
-import { AppContext } from '../utils/AppContext';
-import { Page as PageProps } from '../types/page';
-import { Blocks } from '../components/base/Blocks/Blocks';
-import { trackPage } from '../utils/gtm';
-import { PageMeta } from '../components/base/Meta';
 import blocks from '../blocks';
-import { getBlocksProps } from '../lib/blocks/getBlocksProps';
-import { Article } from '../types/article';
-import { SWRConfig } from 'swr';
-import { RelayEnvironmentProvider } from 'relay-hooks';
-import { createRelayEnvironment } from '../utils/createRelayEnvironment';
-import NextNprogress from 'nextjs-progressbar';
+import { Blocks } from '../components/base/Blocks/Blocks';
+import { Head } from '../components/base/Head/Head';
+import { Layout } from '../components/base/Layout/Layout';
+import { Navbar } from '../components/organisms/Navbar/Navbar';
+import { CALENDAR_FORMATS } from '../constants';
+import providers from '../providers';
+import config from '../../sklinet.config.json';
+import { Logger } from '@symbio/headless/services';
+import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
+import { PageProps } from '../types/page';
+import { WebSettingsProps } from '../types/webSettings';
 
-const resolvePage = (page: PageProps | undefined, blocksProps: any) => {
-    if (!page) {
-        return <></>;
-    }
-    return <Blocks blocksData={page?.blocks} initialProps={blocksProps} />;
-};
+const GridHelper = dynamic<unknown>(() =>
+    import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
+);
 
-const Page = (props: MyPageProps): ReactElement => {
-    const { page, webSetting, systemResources, blocksProps } = props;
-    const settings: Record<string, any> = webSetting?.data?.attributes || {};
-    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+// ** TODO ** fix any, Strapi GQL structure doesn't match our needs
+const Page = (props: MyPageProps<any, WebSettingsProps>): ReactElement => {
+    const { hostname, site, page, webSetting, blocksPropsMap, preview, redirect } = props;
+    const { gtm, tz } = config;
+    const item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
     const currentUrl =
@@ -40,17 +35,18 @@ const Page = (props: MyPageProps): ReactElement => {
             ? router.asPath
             : '';
 
-    if (router.isFallback) {
-        return <div>Loading...</div>;
-    }
-
-    let object: Article | null = null;
-    for (const p of blocksProps) {
-        if (p.item) {
-            object = p.item;
-            break;
-        }
-    }
+    const app = useMemo(
+        () => ({
+            currentUrl,
+            hostname,
+            page,
+            site,
+            item,
+            webSetting,
+            redirect,
+        }),
+        [page],
+    );
 
     if (router.isFallback) {
         return <div>Loading...</div>;
@@ -60,68 +56,62 @@ const Page = (props: MyPageProps): ReactElement => {
     dayjs.extend(timeZone);
     dayjs.extend(localizedFormat);
     if (locale) {
+        dayjs.updateLocale(locale, { calendar: CALENDAR_FORMATS[locale] });
         dayjs.locale(locale);
     }
-    dayjs.tz.setDefault(config.tz);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        trackPage(currentUrl);
-    }, [currentUrl]);
-
+    dayjs.tz.setDefault(tz);
+    // ** TODO ** fix any, Strapi GQL structure doesn't match our needs
+    AppStore.getInstance<any, WebSettingsProps>(app);
     return (
-        <AppContext.Provider
-            value={{
-                uri: currentUrl,
-                locale: locale,
-                defaultLocale: router.defaultLocale,
-                page: page,
-                nextRouteName: page?.routeName,
-                systemResources: systemResources?.data?.map((d: any) => d?.attributes) || [],
-                showSpinner,
-                setShowSpinner,
-                ...webSetting,
-            }}
-        >
-            <RelayEnvironmentProvider environment={createRelayEnvironment({})}>
-                <SWRConfig
-                    value={{
-                        refreshInterval: 0,
-                        fetcher: (url: string) =>
-                            fetch(url, {
-                                headers: new Headers(),
-                                credentials: 'same-origin',
-                                mode: 'same-origin',
-                            }).then((res) => res.json()),
-                        revalidateOnMount: true,
+        <>
+            <Head site={webSetting} page={page} item={item} />
+
+            <Layout>
+                <Navbar />
+                {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
+            </Layout>
+
+            {preview && <GridHelper />}
+
+            {gtm.code && (
+                <noscript
+                    dangerouslySetInnerHTML={{
+                        __html: `<!-- Google Tag Manager (noscript) -->
+                        <iframe src="https://www.googletagmanager.com/ns.html?id=${gtm.code}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+                        <!-- End Google Tag Manager (noscript) -->`,
                     }}
-                >
-                    {page && <PageMeta object={object} page={page} gtm={settings?.gtmCode || ''} />}
-                    <script>0</script>
-                    {settings?.gtmCode && (
-                        <noscript
-                            dangerouslySetInnerHTML={{
-                                __html: `<!-- Google Tag Manager (noscript) -->
-                    <iframe src="https://www.googletagmanager.com/ns.html?id=${settings?.gtmCode}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-                    <!-- End Google Tag Manager (noscript) -->`,
-                            }}
-                        />
-                    )}
-                    <NextNprogress color={'#00CCCB'} options={{ showSpinner: false }} />
-                    <Layout>{resolvePage(page, blocksProps)}</Layout>
-                </SWRConfig>
-            </RelayEnvironmentProvider>
-        </AppContext.Provider>
+                />
+            )}
+        </>
     );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    return {
-        paths: [],
-        fallback: 'blocking',
-    };
+export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
+    const { ssg } = config;
+    if (process.env.NODE_ENV !== 'development' && ssg.staticGeneration && locales) {
+        const paths: GetStaticPathsResult['paths'] = [];
+        const provider = providers.page;
+
+        // loop over all locales
+        for (const locale of locales) {
+            const localePaths = await provider.getStaticPaths(locale, blocks);
+            paths.push(...localePaths);
+        }
+
+        return {
+            paths,
+            fallback: false,
+        };
+    } else {
+        return {
+            paths: [],
+            fallback: 'blocking',
+        };
+    }
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+    const { tz } = config;
     const p = context.params;
     Logger.info('GET ' + '/' + (p && Array.isArray(p.slug) ? p.slug : []).join('/'));
 
@@ -130,10 +120,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
     dayjs.extend(timeZone);
     dayjs.extend(localizedFormat);
     if (locale) {
+        dayjs.updateLocale(locale, { calendar: CALENDAR_FORMATS[locale] });
         dayjs.locale(locale);
     }
-    dayjs.tz.setDefault(config.tz);
-    return await getBlocksProps(context, blocks);
+    dayjs.tz.setDefault(tz);
+
+    return await getBlocksProps(context, providers, blocks, config.ssg);
 };
 
 export default Page;

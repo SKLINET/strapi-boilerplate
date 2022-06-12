@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// import { isMobile } from '@symbio/headless/utils';
 
 interface ImportProps {
     touch: () => Promise<any>;

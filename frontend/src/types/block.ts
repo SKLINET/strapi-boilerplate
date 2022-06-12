@@ -9,6 +9,7 @@ export interface BaseBlockProps {
     item?: any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     blocksData?: any;
+    app?: any;
 }
 
 export interface StaticBlockContext {
@@ -17,6 +18,8 @@ export interface StaticBlockContext {
     slug?: string;
     page?: any;
     block?: any;
+    app?: any;
+    providers?: any;
 }
 
 export interface ServerSideBlockContext extends StaticBlockContext {

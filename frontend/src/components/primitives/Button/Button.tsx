@@ -3,13 +3,12 @@ import clsx from 'clsx';
 import { Link } from '../Link/Link';
 import { Icon, Icons } from '../Icon/Icon';
 import styles from './Button.module.scss';
-import { Page } from '../../../types/page';
 
 type IconPosition = 'left' | 'right';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     href?: string;
-    page?: Pick<Page, 'url' | 'id' | 'title'>;
+    page?: any; // ** TODO ** Fix page any
     params?: Record<string, string | number>;
     icon?: Icons;
     iconPosition?: IconPosition;

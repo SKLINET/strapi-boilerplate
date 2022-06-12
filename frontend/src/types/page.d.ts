@@ -1,4 +1,3 @@
-import { NextPageContext } from 'next/types';
 import { Environment } from 'relay-runtime';
 import { ParsedUrlQuery } from 'querystring';
 import { PageText } from './pageText';
@@ -10,7 +9,7 @@ import { appQueryResponse } from '../relay/__generated__/appQuery.graphql';
 import { Meta } from './meta';
 export type AppData = appQueryResponse;
 
-export interface Page {
+export interface PageDefault {
     id: string;
     _id: string;
     url: string;
@@ -21,7 +20,7 @@ export interface Page {
     texts: PageText[];
     blocks: any[];
     lvl: number;
-    children?: Page[];
+    children?: PageDefault[];
 }
 
 interface Redirect {
@@ -36,7 +35,7 @@ interface MyPageContext extends MyPageProps {
 
 export interface MyPageProps extends AppData {
     redirect?: Redirect;
-    page?: Page;
+    page?: PageDefault;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     relayData?: any;
     params?: Record<string, any>;
@@ -47,7 +46,7 @@ export interface MyPageProps extends AppData {
 }
 
 export interface APIPageProps {
-    findPage?: Page;
+    findPage?: PageDefault;
     findRedirect?: Redirect;
     generalTexts: GeneralText[];
     menus: Menu[];

@@ -2,14 +2,14 @@ import React, { AnchorHTMLAttributes, memo } from 'react';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { UrlObject } from 'url';
-import { Page } from '../../../types/page';
+import { PageProps } from '../../../types/page';
 import { nbsp } from '@symbio/headless/utils';
 import { getPageUrl } from '../../../utils/getPageUrl';
 
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> &
     Partial<NextLinkProps> & {
         href?: string | UrlObject;
-        page?: Pick<Page, 'id' | 'url' | 'title'>;
+        page?: any; // ** TODO ** Fix page any
         params?: Record<string, string | number> | ParsedUrlQuery;
         plain?: boolean;
     };
@@ -23,16 +23,16 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
         }
         realHref = href;
     } else if (page) {
-        realHref = getPageUrl(page?.url);
+        realHref = getPageUrl(page?.data?.attributes?.url || '');
     }
 
     const attrs = {
         className,
-        title: page?.title || undefined,
+        title: page?.data?.attributes?.title || undefined,
         ...rest,
     };
 
-    const realChildren = children || page?.title;
+    const realChildren = children || page?.data?.attributes?.title;
 
     if (plain || (realHref && realHref.startsWith('http')) || target === '_blank') {
         return (
