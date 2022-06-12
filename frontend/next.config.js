@@ -11,6 +11,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
     i18n,
     images,
+    swcMinify: true,
     compiler: {
         relay: {
             src: './',
@@ -42,6 +43,24 @@ const nextConfig = {
 
         return config;
     },
+    async rewrites() {
+        return {
+            beforeFiles: [
+                {
+                    source: '/robots.txt',
+                    destination: '/api/robots',
+                },
+                {
+                    source: '/sitemap.xml',
+                    destination: '/api/sitemap',
+                },
+                {
+                    source: '/sitemap/:provider',
+                    destination: '/api/sitemap/:provider',
+                },
+            ],
+        };
+    },
     async headers() {
         return [
             {
@@ -59,10 +78,10 @@ const nextConfig = {
                         key: 'X-XSS-Protection',
                         value: '1; mode=block',
                     },
-                    // {
-                    //     key: 'Content-Security-Policy',
-                    //     value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000",
-                    // },
+                    {
+                        key: 'Content-Security-Policy',
+                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000",
+                    },
                     {
                         key: 'Referrer-Policy',
                         value: 'no-referrer-when-downgrade',

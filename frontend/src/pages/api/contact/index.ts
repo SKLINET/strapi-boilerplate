@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import { appQuery, appQueryResponse } from '../../../relay/__generated__/appQuery.graphql';
 import { AppQuery } from '../../../relay/app';
-import { createRelayEnvironment } from '../../../utils/createRelayEnvironment';
+import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 import { FormMutation } from '../../../relay/api/contact';
 import { contactMutation } from '../../../relay/api/__generated__/contactMutation.graphql';
 import getPublicationState from '../../../utils/getPublicationState';

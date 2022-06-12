@@ -3,10 +3,10 @@ import { AppProps, NextWebVitalsMetric } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { trackPage } from '../utils/gtm';
+import { metricsReport } from '@symbio/headless/utils';
 import '../styles/global.scss';
 import config from '../../sklinet.config.json';
 import { CustomCursorProvider } from '../components/primitives/CustomCursor/CustomCursorProvider';
-import { metricsReport } from '@symbio/headless/utils';
 
 if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function reportWebVitals(metrics: NextWebVitalsMetric): void {
-    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
         metricsReport(metrics);
     }
 }

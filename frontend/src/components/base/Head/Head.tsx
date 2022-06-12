@@ -3,11 +3,11 @@ import NextHead from 'next/head';
 import { AppContextProps } from '@symbio/headless';
 import config from '../../../../sklinet.config.json';
 import { WebSettingsProps } from '../../../types/webSettings';
+import { PageProps } from '../../../types/page';
 
-// ** TODO ** fix any, Strapi GQL structure doesn't match our needs
 export interface HeadProps {
-    item?: AppContextProps<any, WebSettingsProps>['item'];
-    page?: AppContextProps<any, WebSettingsProps>['page'];
+    item?: AppContextProps<PageProps, WebSettingsProps>['item'];
+    page?: AppContextProps<PageProps, WebSettingsProps>['page'];
     site: WebSettingsProps;
 }
 
@@ -30,12 +30,12 @@ export const Head = ({ item, page, site }: HeadProps): ReactElement => {
             <meta name="msapplication-TileColor" content="#00aba9" />
             <meta name="theme-color" content="#61279e" />
             {site?.data?.attributes?.globalSeo?.siteName && (
-                <meta name="application-name" content={site?.data?.attributes?.globalSeo?.siteName} />
+                <meta name="application-name" content={site.data.attributes.globalSeo.siteName} />
             )}
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
             {site?.data?.attributes?.globalSeo?.siteName && (
-                <meta name="apple-mobile-web-app-title" content={site?.data?.attributes?.globalSeo?.siteName} />
+                <meta name="apple-mobile-web-app-title" content={site.data.attributes.globalSeo.siteName} />
             )}
             <meta name="format-detection" content="telephone=no" />
             <meta name="mobile-web-app-capable" content="yes" />

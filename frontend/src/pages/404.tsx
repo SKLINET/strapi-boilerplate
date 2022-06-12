@@ -15,8 +15,8 @@ import providers from '../providers';
 import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
-// ** TODO ** fix any, Strapi GQL structure doesn't match our needs
-const Page = (props: MyPageProps<any, WebSettingsProps>): ReactElement => {
+
+const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, redirect } = props;
     const { gtm, tz } = config;
     const router = useRouter();
@@ -46,8 +46,8 @@ const Page = (props: MyPageProps<any, WebSettingsProps>): ReactElement => {
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
-    // ** TODO ** fix any, Strapi GQL structure doesn't match our needs
-    AppStore.getInstance<any, WebSettingsProps>(app);
+
+    AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
     return (
         <>

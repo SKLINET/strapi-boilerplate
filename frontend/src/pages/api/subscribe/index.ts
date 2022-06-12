@@ -11,7 +11,7 @@ import { SubscribeFormMutation } from '../../../relay/api/subscribe';
 //     subscribeEcomailQueryResponse,
 // } from '../../../relay/api/__generated__/subscribeEcomailQuery.graphql';
 // import getPublicationState from '../../../utils/getPublicationState';
-import { createRelayEnvironment } from '../../../utils/createRelayEnvironment';
+import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 
 dotenv.config();
 

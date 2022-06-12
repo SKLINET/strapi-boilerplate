@@ -1,12 +1,14 @@
 import React, { ReactElement } from 'react';
-import blocks from '../../../blocks';
 import { getBlockName } from '@symbio/headless/utils';
-import { BlocksPropsMap } from '@symbio/headless';
+import blocks from '../../../blocks';
+import { AppContextProps, BlocksPropsMap } from '@symbio/headless';
+import { PageProps } from '../../../types/page';
+import { WebSettingsProps } from '../../../types/webSettings';
 
 interface BlocksProps {
-    blocksData: readonly BlocksPropsMap[] | null | undefined;
-    initialProps: any;
-    app: any;
+    blocksData: readonly any[] | null;
+    initialProps?: BlocksPropsMap;
+    app: AppContextProps<PageProps, WebSettingsProps>;
 }
 
 export const Blocks = ({ blocksData, initialProps, app }: BlocksProps): ReactElement => (
@@ -16,15 +18,14 @@ export const Blocks = ({ blocksData, initialProps, app }: BlocksProps): ReactEle
             if (!blockName || !Object.prototype.hasOwnProperty.call(blocks, blockName)) {
                 return null;
             }
-            const BlockComponent = blocks[blockName || ''];
+            const BlockComponent = blocks[blockName];
             const blockInitialProps =
-                initialProps && Object.prototype.hasOwnProperty.call(initialProps, block.id as number)
-                    ? initialProps[block.id as number]
+                initialProps && Object.prototype.hasOwnProperty.call(initialProps, block.id)
+                    ? initialProps[block.id]
                     : undefined;
             return (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-
                 <BlockComponent blocksData={block} {...blockInitialProps} app={app} key={`block_${i}`} />
             );
         })}
