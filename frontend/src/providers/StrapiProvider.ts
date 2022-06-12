@@ -1,7 +1,7 @@
 import { Environment, GraphQLTaggedNode, fetchQuery } from 'relay-runtime';
 import { AbstractProvider, CmsItem, FindOneParams, FindParams } from '@symbio/cms';
 import { STRAPI_MAX_LIMIT } from '../constants';
-import { createRelayEnvironment } from '../utils/createRelayEnvironment';
+import { createRelayEnvironment } from '../relay/createRelayEnvironment';
 import { FindOperationType, FindResponse, OneOperationType, ProviderOptions, BaseRecord } from '../index';
 
 export default class StrapiProvider<

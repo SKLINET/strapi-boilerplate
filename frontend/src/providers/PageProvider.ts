@@ -29,7 +29,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
-    ): Promise<AppData<any, WebSettingsProps> | undefined> {
+    ): Promise<AppData<PageProps, WebSettingsProps> | undefined> {
         const pattern = getPagePattern(slug);
         const publicationState = getPublicationState();
         return await fetchQuery<any>(this.getEnvironment(), AppQuery, {
@@ -39,10 +39,9 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
         }).toPromise();
     }
 
-    // ** TODO ** fix any, Strapi GQL structure doesn't match our needs
     async getStaticPaths(
         locale: string | undefined,
-        blocks?: Record<string, BlockType<any, WebSettingsProps, Providers, Locale>>, // ** TODO ** PageProps
+        blocks?: Record<string, BlockType<PageProps, WebSettingsProps, Providers, Locale>>,
     ): Promise<GetStaticPathsResult['paths']> {
         const params: ParsedUrlQuery[] = [];
         let cnt = -1;
@@ -70,13 +69,12 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                     const url = page?.attributes?.url;
 
                     if (url && blocks) {
-                        // ** TODO ** fix any, Strapi GQL structure doesn't match our needs - PageProps
-                        const blocksParams = await getStaticParamsFromBlocks<any, WebSettingsProps, Providers, Locale>(
-                            page.attributes.blocks,
-                            locale ?? '',
-                            providers,
-                            blocks,
-                        );
+                        const blocksParams = await getStaticParamsFromBlocks<
+                            PageProps,
+                            WebSettingsProps,
+                            Providers,
+                            Locale
+                        >(page.attributes.blocks, locale ?? '', providers, blocks);
 
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
@@ -117,6 +115,6 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
 
 export default new PageProvider(pageDetailQuery, pageListQuery, {
     id: '',
-    apiKey: '',
+    apiKey: 'page',
     locales: config.i18n.locales,
 });

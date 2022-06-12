@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import Calendar from 'dayjs/plugin/calendar';
 import { Heading } from '../../primitives/Heading/Heading';
 import { Link } from '../../primitives/Link/Link';
-import { AppContext } from '../../../utils/AppContext';
 import { getPageUrl } from '../../../utils/getPageUrl';
 
 interface NewsListProps {
