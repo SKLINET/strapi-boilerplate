@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_complementary_test_components",
+  "info": {
+    "displayName": "TestComponent",
+    "icon": "backspace",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::icon.icon"
+    }
+  }
+}

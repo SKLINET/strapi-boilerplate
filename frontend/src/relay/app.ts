@@ -99,3 +99,40 @@ export const AppQuery = graphql`
         }
     }
 `;
+
+graphql`
+    fragment appImageFragment on UploadFileEntityResponse {
+        data {
+            attributes {
+                url
+                alternativeText
+                width
+                height
+            }
+        }
+    }
+`;
+graphql`
+    fragment appIconFragment on IconEntityResponse {
+        data {
+            attributes {
+                title
+                codename
+            }
+        }
+    }
+`;
+
+graphql`
+    fragment appButtonFragment on ComponentComplementaryButton {
+        text
+        page {
+            data {
+                attributes {
+                    url
+                }
+            }
+        }
+        linkExternal
+    }
+`;

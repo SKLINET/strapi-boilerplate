@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_block_test_blocks",
+  "info": {
+    "displayName": "TestBlock",
+    "icon": "allergies",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "testText": {
+      "type": "string"
+    },
+    "testComponent": {
+      "displayName": "TestComponent",
+      "type": "component",
+      "repeatable": true,
+      "component": "complementary.test-component"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article"
+    },
+    "button": {
+      "type": "component",
+      "repeatable": false,
+      "component": "complementary.button"
+    }
+  }
+}
