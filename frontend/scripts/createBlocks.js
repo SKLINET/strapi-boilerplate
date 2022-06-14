@@ -43,7 +43,6 @@ generateModels().then(() => {
             try {
                 await fs.access(file, (fs.constants || fs).R_OK);
             } catch (e) {
-                console.log(e);
                 if (e.code === 'ENOENT') {
                     console.error('Creating block ' + file);
                     const contentBlocks = await axios.get('http://localhost:1337/api/content-type-builder/components');
@@ -72,19 +71,19 @@ generateModels().then(() => {
                                             const filteredComponent = allComponents.filter(
                                                 (component) => component.uid === blocksComponent,
                                             );
-                                            const fields = Object.entries(filteredComponent[0].schema);
-                                            const fieldsToSend = fields.map((fieldPair) => {
-                                                if (fieldPair[1].type === 'media') {
-                                                    return `${fieldPair[0]}{...appImageFragment @relay(mask: false)}`;
-                                                } else if (fieldPair[1].type === 'relation') {
-                                                    return `${fieldPair[0]}{${
-                                                        fieldPair[1].target === 'api::icon.icon'
+                                            const componentFieldsArr = Object.entries(filteredComponent[0].schema);
+                                            const componentFields = componentFieldsArr.map((field) => {
+                                                if (field[1].type === 'media') {
+                                                    return `${field[0]}{...appImageFragment @relay(mask: false)}`;
+                                                } else if (field[1].type === 'relation') {
+                                                    return `${field[0]}{${
+                                                        field[1].target === 'api::icon.icon'
                                                             ? '...appIconFragment @relay(mask: false)'
                                                             : 'data{id}'
                                                     }}`;
-                                                } else return fieldPair[0];
+                                                } else return field[0];
                                             });
-                                            return `${name[0]}{${fieldsToSend}}`;
+                                            return `${name[0]}{${componentFields}}`;
                                         }
                                     } else if (name[1].type === 'relation') {
                                         return `${name[0]}{${
