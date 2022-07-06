@@ -26,6 +26,19 @@ import { graphql } from 'relay-runtime';
 graphql`
     fragment serverBlocksContent on PageBlocksDynamicZone {
         __typename
+        ...ArticleDetailBlock_content @relay(mask: false)
+        ...ArticlesListBlock_content @relay(mask: false)
+        ...ButtonBlock_content @relay(mask: false)
+        ...CarouselBlock_content @relay(mask: false)
+        ...ErrorPageBlock_content @relay(mask: false)
+        ...GalleryBlock_content @relay(mask: false)
+        ...ImageBlock_content @relay(mask: false)
+        ...LatestArticlesBlock_content @relay(mask: false)
+        ...MapBlock_content @relay(mask: false)
+        ...RichTextBlock_content @relay(mask: false)
+        ...TestBlock_content @relay(mask: false)
+        ...VideoBlock_content @relay(mask: false)
+        ...YoutubeVimeoBlock_content @relay(mask: false)
     }
 `;
 const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {

@@ -5,6 +5,7 @@
   "description": "Strapi boilerplate",
   "scripts": {
     "develop": "strapi develop",
+    "watch": "strapi develop --watch-admin",
     "start": "source ~/.nvm/nvm.sh; nvm use 14.17.0 && NODE_ENV=productio strapi start",
     "build": "NODE_ENV=production strapi build",
     "strapi": "strapi"
