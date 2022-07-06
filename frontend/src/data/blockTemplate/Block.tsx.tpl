@@ -12,7 +12,7 @@ import { Locale } from '../../types/locale';
 export interface {BLOCK_NAME}StaticProps {}
 
 export interface {BLOCK_NAME}Content extends OmitRefType<{BLOCK_NAME}_content> {
-    __typename: '{BLOCK_NAME}Record';
+    __typename: 'ComponentBlock{BLOCK_NAME}';
 }
 
 export interface {BLOCK_NAME}Props extends {BLOCK_NAME}StaticProps {
@@ -22,9 +22,10 @@ export interface {BLOCK_NAME}Props extends {BLOCK_NAME}StaticProps {
 }
 
 graphql`
-    fragment {BLOCK_NAME}_content on ComponentBlock{BLOCK_NAME}{
-        id{FIELDS}
-    }
+    fragment {BLOCK_NAME}_content on ComponentBlock{BLOCK_NAME} {
+        id
+        {FIELDS}
+}
 `;
 
 const {BLOCK_NAME} = ({ content, ...otherProps }: {BLOCK_NAME}Props): ReactElement => (

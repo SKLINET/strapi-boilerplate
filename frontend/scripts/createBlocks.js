@@ -104,7 +104,7 @@ generateModels().then(() => {
                             .toString('utf-8')
                             .replace(/{BLOCK_NAME}/g, blockName)
                             .replace(/{COMPONENT_NAME}/g, componentName)
-                            .replace(/{FIELDS}/g, fieldsGql ? '\n' + fieldsGql : ''),
+                            .replace(/{FIELDS}/g, fieldsGql ? fieldsGql : ''),
                     );
 
                     await createComponentTemplate(componentName);
