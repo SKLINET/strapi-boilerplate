@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextArea as TextAreaComponent, TextAreaProps } from './TextArea';
+import { TextArea as TextAreaComponent, TextAreaProps } from './Textarea';
 import { Story } from '@storybook/react/types-6-0';
 
 // eslint-disable-next-line import/no-anonymous-default-export

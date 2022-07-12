@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import styles from './TextArea.module.scss';
+import styles from './Textarea.module.scss';
 import clsx from 'clsx';
 import { UseFormRegister } from 'react-hook-form';
 
