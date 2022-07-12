@@ -1,6 +1,7 @@
 .wrapper {
-    @apply w-4 h-4 flex-shrink-0 flex-grow-0 inline-flex relative;
+    @apply flex items-center justify-center;
+
     svg {
-        @apply w-full h-auto;
+        @apply w-full max-h-full;
     }
 }

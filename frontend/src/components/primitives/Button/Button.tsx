@@ -13,6 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: Icons;
     iconPosition?: IconPosition;
     target?: string;
+    className?: string;
 }
 
 const Button = ({
@@ -24,11 +25,12 @@ const Button = ({
     iconPosition = 'left',
     disabled,
     type,
+    className,
     ...rest
 }: ButtonProps): JSX.Element => {
     if ((href || page) && type !== 'submit') {
         return (
-            <div className={clsx(styles.button, styles.hasLink, disabled && styles.disabled)}>
+            <div className={clsx(styles.button, styles.hasLink, disabled && styles.disabled, className)}>
                 <Link className={styles.link} href={href} page={page} target={rest.target} params={params}>
                     {icon && iconPosition === 'left' && (
                         <Icon className={clsx(styles.icon, styles.iconOnLeft)} name={icon} />
@@ -43,7 +45,7 @@ const Button = ({
     } else {
         return (
             <button
-                className={clsx(styles.button, disabled && styles.disabled)}
+                className={clsx(styles.button, disabled && styles.disabled, className)}
                 type={type}
                 disabled={disabled}
                 {...rest}

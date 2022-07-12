@@ -37,7 +37,6 @@ const NewsList = ({
                     {headline}
                 </Heading>
             )}
-
             <ul className="flex p-0 flex-wrap gap-x-4">
                 {items?.data?.map((item, i) => {
                     return (

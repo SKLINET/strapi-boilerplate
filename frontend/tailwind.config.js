@@ -17,8 +17,13 @@ module.exports = {
             fullhd: '120rem',
         },
         extend: {
-            maxHeight: {
-                '16-9': '56.25vw',
+            colors: {
+                secondary: '#fff',
+                red: '#ff0000',
+                error: '#ff0000',
+                logo: '#f60',
+                primary: '#000',
+                grey: '#F2F3F4',
             },
             gridColumnEnd: {
                 13: '13',
@@ -27,24 +32,38 @@ module.exports = {
                 16: '16',
                 17: '17',
             },
-            transitionProperty: {
-                width: 'width',
+            height: {
+                '56.25vw': '56.25vw',
+                2.5: '0.625rem',
+                3.5: '0.875rem',
+                5: '1.25rem',
+                5.5: '1.375rem',
             },
-            colors: {
-                secondary: '#fff',
-                red: '#ff0000',
-                error: '#ff0000',
-                logo: '#f60',
-                primary: '#000',
+            margin: {
+                0.25: '0.0625rem',
+                0.5: '0.125rem',
             },
-            zIndex: {
-                9999: '9999',
+            maxHeight: {
+                '16-9': '56.25vw',
+            },
+            maxWidth: {
+                120: '30rem',
             },
             padding: {
                 '16/9': '56.25%',
             },
-            height: {
-                '56.25vw': '56.25vw',
+            transitionProperty: {
+                width: 'width',
+                'transform-color': 'transform, color',
+            },
+            width: {
+                2.5: '0.625rem',
+                3.5: '0.875rem',
+                5: '1.25rem',
+                5.5: '1.375rem',
+            },
+            zIndex: {
+                9999: '9999',
             },
         },
     },

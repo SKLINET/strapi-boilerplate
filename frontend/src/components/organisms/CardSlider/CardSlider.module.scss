@@ -1,0 +1,21 @@
+@import '../../../styles/mixins/hover.scss';
+
+.button {
+    @apply w-12 h-12 flex items-center justify-center text-center text-lg border border-black transition-colors ease-in-out duration-300;
+
+    @include hover {
+        &:hover {
+            @apply bg-black text-white;
+        }
+    }
+
+    &:global(.disable) {
+        @apply opacity-30 cursor-not-allowed;
+
+        @include hover {
+            &:hover {
+                @apply bg-transparent text-black;
+            }
+        }
+    }
+}

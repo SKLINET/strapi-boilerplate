@@ -1,19 +1,19 @@
 import React from 'react';
-import { TextArea as TextAreaComponent, TextAreaProps } from './TextArea';
+import { TextInput as TextInputComponent, TextInputProps } from './TextInput';
 import { Story } from '@storybook/react/types-6-0';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-    component: TextAreaComponent,
-    title: 'Primitives/TextArea',
+    component: TextInputComponent,
+    title: 'Primitives/TextInput',
     args: {
-        name: 'password',
+        name: 'email',
         register: () => false,
-        placeholder: 'Heslo',
+        placeholder: 'E-mail',
     },
 };
 
-const Template: Story<TextAreaProps> = (args) => <TextAreaComponent {...args} />;
+const Template: Story<TextInputProps> = (args) => <TextInputComponent {...args} />;
 
 export const TextArea = Template.bind({});
 

@@ -22,7 +22,6 @@ import ImageBlock from './ImageBlock/ImageBlock';
 import LatestArticlesBlock from './LatestArticlesBlock/LatestArticlesBlock';
 import MapBlock from './MapBlock/MapBlock';
 import RichTextBlock from './RichTextBlock/RichTextBlock';
-import TestBlock from './TestBlock/TestBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
 graphql`
@@ -38,7 +37,6 @@ graphql`
         ...LatestArticlesBlock_content @relay(mask: false)
         ...MapBlock_content @relay(mask: false)
         ...RichTextBlock_content @relay(mask: false)
-        ...TestBlock_content @relay(mask: false)
         ...VideoBlock_content @relay(mask: false)
         ...YoutubeVimeoBlock_content @relay(mask: false)
     }
@@ -56,7 +54,6 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               LatestArticlesBlock: dynamic(() => import('./LatestArticlesBlock/LatestArticlesBlock')),
               MapBlock: dynamic(() => import('./MapBlock/MapBlock')),
               RichTextBlock: dynamic(() => import('./RichTextBlock/RichTextBlock')),
-              TestBlock: dynamic(() => import('./TestBlock/TestBlock')),
               VideoBlock: dynamic(() => import('./VideoBlock/VideoBlock')),
               YoutubeVimeoBlock: dynamic(() => import('./YoutubeVimeoBlock/YoutubeVimeoBlock')),
           }
@@ -71,7 +68,6 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               LatestArticlesBlock,
               MapBlock,
               RichTextBlock,
-              TestBlock,
               VideoBlock,
               YoutubeVimeoBlock,
           };

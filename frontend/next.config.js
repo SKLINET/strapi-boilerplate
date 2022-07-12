@@ -80,7 +80,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000",
+                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000",
                     },
                     {
                         key: 'Referrer-Policy',

@@ -1,0 +1,57 @@
+@import '../../../styles/mixins/hover.scss';
+
+.wrapper {
+    @apply flex flex-wrap;
+
+    &.active {
+        .content {
+            @include hover {
+                &:hover {
+                    .column {
+                        @apply bg-black;
+                    }
+                }
+            }
+        }
+
+        .column {
+            @apply bg-black border border-black;
+
+            .innerRound {
+                @apply bg-white translate-x-full;
+            }
+        }
+    }
+}
+
+.content {
+    @apply inline-flex cursor-pointer;
+
+    @include hover {
+        &:hover {
+            .column {
+                @apply bg-gray-100;
+            }
+        }
+    }
+}
+
+.column {
+    @apply w-10 h-6 p-1 border border-gray-300 rounded-full flex items-center shrink-0 transition-colors ease-in-out duration-300;
+}
+
+.innerRound {
+    @apply w-3.5 h-3.5 bg-gray-400 rounded-full transition-transform-color ease-in-out duration-300;
+}
+
+.placeholder {
+    @apply pl-2 m-0 text-base;
+}
+
+.input {
+    @apply hidden;
+}
+
+.error {
+    @apply w-full text-red text-sm mt-1;
+}
