@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { TextInput } from '../../primitives/TextInput/TextInput';
 import { PasswordInput } from '../../primitives/PasswordInput/PasswordInput';
-import { TextArea } from '../../primitives/TextArea/TextArea';
+import { TextArea } from '../../primitives/Textarea/Textarea';
 import { Checkbox } from '../../primitives/Checkbox/Checkbox';
 import { Switch } from '../../primitives/Switch/Switch';
 import { RadioButtons } from '../../primitives/RadioButtons/RadioButtons';
