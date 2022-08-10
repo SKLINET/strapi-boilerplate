@@ -25,16 +25,6 @@ export const ArticleDetailQuery = graphql`
                         seo {
                             metaTitle
                             metaDescription
-                            metaImage {
-                                data {
-                                    attributes {
-                                        url
-                                        alternativeText
-                                        width
-                                        height
-                                    }
-                                }
-                            }
                             metaSocial {
                                 socialNetwork
                                 title
@@ -43,9 +33,9 @@ export const ArticleDetailQuery = graphql`
                                     data {
                                         attributes {
                                             url
-                                            alternativeText
                                             width
                                             height
+                                            alternativeText
                                         }
                                     }
                                 }
@@ -55,12 +45,11 @@ export const ArticleDetailQuery = graphql`
                             structuredData
                             metaViewport
                             canonicalURL
-                            preventIndexing
                             meta {
                                 name
                                 content
                             }
-                            title
+                            preventIndexing
                         }
 
                         sitemap {

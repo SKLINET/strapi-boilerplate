@@ -18,16 +18,6 @@
       "maxLength": 160,
       "minLength": 50
     },
-    "metaImage": {
-      "type": "media",
-      "multiple": false,
-      "required": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ]
-    },
     "metaSocial": {
       "type": "component",
       "repeatable": true,
@@ -51,16 +41,14 @@
       "type": "string"
     },
     "preventIndexing": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "meta": {
       "displayName": "Meta",
       "type": "component",
       "repeatable": true,
       "component": "shared.meta"
-    },
-    "title": {
-      "type": "string"
     }
   }
 }

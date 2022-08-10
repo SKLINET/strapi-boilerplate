@@ -17,6 +17,7 @@ module.exports = ({ env }) => ({
             },
             defaultLimit: 100,
             maxLimit: -1,
+            playgroundAlways: true,
         },
     },
     email: {
@@ -49,14 +50,17 @@ module.exports = ({ env }) => ({
     "preview-button": {
         enabled: true,
         config: {
+            baseUrl: process.env.STRAPI_PREVIEW_URL,
             contentTypes: [
                 {
                     uid: "api::page.page",
-                    targetField: "slug",
+                    targetField: "url",
+                    type: "pages",
                 },
                 {
                     uid: "api::article.article",
                     targetField: "slug",
+                    type: "articles",
                 },
             ],
         },

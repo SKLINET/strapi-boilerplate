@@ -34,7 +34,6 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
         webSetting,
         redirect,
     };
-
     if (router.isFallback) {
         return <div>Loading...</div>;
     }

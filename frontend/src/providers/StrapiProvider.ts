@@ -1,5 +1,5 @@
 import { Environment, GraphQLTaggedNode, fetchQuery } from 'relay-runtime';
-import { AbstractProvider, CmsItem, FindOneParams, FindParams } from '@symbio/cms';
+import { AbstractProvider, CmsItem, FindOneParams, FindParams, SingletonBaseRecord } from '@symbio/cms';
 import { STRAPI_MAX_LIMIT } from '../constants';
 import { createRelayEnvironment } from '../relay/createRelayEnvironment';
 import { FindOperationType, FindResponse, OneOperationType, ProviderOptions, BaseRecord } from '../index';
@@ -95,9 +95,8 @@ export default class StrapiProvider<
                 data: [],
             };
         }
-
-        const count = result.meta.count;
-        const data = [...result.items];
+        const count = result.items.meta.pagination.total;
+        const data = [...result.items.data];
 
         if (options.limit > STRAPI_MAX_LIMIT) {
             while (options.limit && data.length < count && result.items.length === STRAPI_MAX_LIMIT) {
@@ -117,6 +116,27 @@ export default class StrapiProvider<
             count,
             data: await this.transformResults<any>(data as ReadonlyArray<TItem>, options.locale),
         };
+    }
+
+    async get<TItem extends SingletonBaseRecord = TOne['response']['item']>(options?: {
+        locale?: string;
+        preview?: boolean;
+    }): Promise<TItem | null> {
+        const result = await fetchQuery<TOne>(
+            this.getEnvironment(!!options?.preview),
+            this.node,
+            this.isLocalizable()
+                ? {
+                      locale: options?.locale,
+                  }
+                : {},
+        ).toPromise();
+
+        if (!result?.item) {
+            return null;
+        }
+
+        return await this.transformResult<any>(result.item as TItem);
     }
 
     getFilterParams(): Record<string, unknown> {

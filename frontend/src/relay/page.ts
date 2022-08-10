@@ -19,19 +19,9 @@ export const pageDetailQuery = graphql`
                     }
                 }
             }
-            meta {
+            seo {
                 metaTitle
                 metaDescription
-                metaImage {
-                    data {
-                        attributes {
-                            url
-                            width
-                            height
-                            alternativeText
-                        }
-                    }
-                }
                 metaSocial {
                     socialNetwork
                     title
@@ -52,13 +42,13 @@ export const pageDetailQuery = graphql`
                 structuredData
                 metaViewport
                 canonicalURL
-                preventIndexing
                 meta {
                     name
                     content
                 }
-                title
+                preventIndexing
             }
+
             sitemap {
                 enabled
                 changeFrequency
@@ -121,19 +111,9 @@ export const pageListQuery = graphql`
                             }
                         }
                     }
-                    meta {
+                    seo {
                         metaTitle
                         metaDescription
-                        metaImage {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
-                        }
                         metaSocial {
                             socialNetwork
                             title
@@ -154,13 +134,13 @@ export const pageListQuery = graphql`
                         structuredData
                         metaViewport
                         canonicalURL
-                        preventIndexing
                         meta {
                             name
                             content
                         }
-                        title
+                        preventIndexing
                     }
+
                     sitemap {
                         enabled
                         changeFrequency

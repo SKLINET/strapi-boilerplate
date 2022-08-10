@@ -115,8 +115,12 @@
       "relation": "oneToOne",
       "target": "api::menu.menu"
     },
-    "globalSeo": {
-      "displayName": "GlobalSeo",
+    "articlesPage": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
+    },
+    "seo": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -127,12 +131,7 @@
           "localized": true
         }
       },
-      "component": "shared.global-seo"
-    },
-    "articlesPage": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::page.page"
+      "component": "shared.seo"
     }
   }
 }

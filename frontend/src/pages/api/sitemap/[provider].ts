@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import dayjs from 'dayjs';
 import { TLSSocket } from 'tls';
 import { findProvider } from '@symbio/cms';
-import { getUrlFromPage } from '@symbio/headless';
 import { toCamel } from '@symbio/headless/utils';
+import { getUrlFromPage } from '@symbio/headless/dist/lib/routing/getUrlFromPage';
 import config from '../../../../sklinet.config.json';
 import { webSettingQueryResponse } from '../../../relay/__generated__/webSettingQuery.graphql';
 import providers from '../../../providers';
@@ -55,6 +55,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
                     }
                 }
             }
+        } else {
+            const ws = await providers.webSetting.get({
+                locale,
+                preview: req.preview,
+            });
+            const pageKey = toCamel(p.getApiKey()) + 'Page';
+            if (ws && Object.prototype.hasOwnProperty.call(ws, pageKey)) {
+                const page = ws[pageKey as keyof NonNullable<webSettingQueryResponse['item']>] as NonNullable<
+                    webSettingQueryResponse['item']
+                >;
+                const staticPaths = await p.getStaticPaths(locale);
+                for (const path of staticPaths) {
+                    if (page && typeof path === 'object') {
+                        urls.push(
+                            basepath +
+                                (locale === i18n.defaultLocale ? '' : '/' + locale) +
+                                getUrlFromPage(
+                                    {
+                                        id: page?.data?.attributes?.homePage?.data?.id || '',
+                                        url: page?.data?.attributes?.homePage?.data?.attributes?.url || '',
+                                    },
+                                    path.params,
+                                ),
+                        );
+                    }
+                }
+            }
         }
     }
 
@@ -64,7 +91,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 's-maxage=21600, stale-while-revalidate');
     res.end(`<?xml version='1.0' encoding='UTF-8'?>
-<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
     .map(
         (url) => `<url>

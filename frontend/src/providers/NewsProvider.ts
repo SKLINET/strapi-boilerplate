@@ -3,8 +3,6 @@ import { ParsedUrlQuery } from 'querystring';
 import { fetchQuery } from 'react-relay';
 import { GetStaticPathsResult } from 'next';
 import { newsDetailQuery, newsListQuery, newsStaticPathsQuery } from '../relay/news';
-import * as d from '../relay/__generated__/articleDetailQuery.graphql';
-import * as l from '../relay/__generated__/articleListQuery.graphql';
 import * as s from '../relay/__generated__/newsStaticPathsQuery.graphql';
 import config from '../../sklinet.config.json';
 import StrapiProvider from './StrapiProvider';
@@ -23,7 +21,7 @@ class NewsProvider extends StrapiProvider<any, any> {
         if (data) {
             for (const news of data.articles?.data || []) {
                 params.push({
-                    slug: news.attributes?.slug || '',
+                    slug: news.attributes?.url || '',
                 });
             }
         }
