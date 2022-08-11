@@ -67,7 +67,7 @@ export const newsDetailQuery = graphql`
 
 export const newsListQuery = graphql`
     query newsListQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
-        items: articles(locale: $locale, pagination: { start: $start, limit: $limit }) {
+        items: articles(locale: $locale, pagination: { start: $start, limit: $limit }, sort: "publishDate:desc") {
             meta {
                 pagination {
                     total
