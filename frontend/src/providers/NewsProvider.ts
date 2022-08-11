@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { ParsedUrlQuery } from 'querystring';
 import { fetchQuery } from 'react-relay';
 import { GetStaticPathsResult } from 'next';
 import { newsDetailQuery, newsListQuery, newsStaticPathsQuery } from '../relay/news';
 import * as s from '../relay/__generated__/newsStaticPathsQuery.graphql';
 import config from '../../sklinet.config.json';
 import StrapiProvider from './StrapiProvider';
+import { StaticPathsParams } from '../types/staticPathsParams';
 
 class NewsProvider extends StrapiProvider<any, any> {
     getFilterParams(): Record<string, Record<string, string | boolean>> {
@@ -13,28 +13,35 @@ class NewsProvider extends StrapiProvider<any, any> {
     }
 
     async getStaticPaths(locale: string): Promise<GetStaticPathsResult['paths']> {
-        const params: ParsedUrlQuery[] = [];
+        const items = [];
         const data = await fetchQuery<s.newsStaticPathsQuery>(this.getEnvironment(), newsStaticPathsQuery, {
             locale: locale,
         }).toPromise();
 
         if (data) {
             for (const news of data.articles?.data || []) {
-                params.push({
-                    slug: news.attributes?.url || '',
+                items.push({
+                    params: {
+                        slug: [news.attributes?.url || ''],
+                        locale,
+                        sitemap: {
+                            enabled: news?.attributes?.sitemap?.enabled || false,
+                            changeFrequency: news?.attributes?.sitemap?.changeFrequency || 'monthly',
+                            priority: news?.attributes?.sitemap?.priority || 0.3,
+                        },
+                    },
                 });
             }
         }
-
-        return params.map((p) => ({
-            params: p,
+        return items.map((item: StaticPathsParams) => ({
+            params: { slug: item?.params?.slug, locale: locale, sitemap: item.params?.sitemap },
             locale,
-        }));
+        })) as any;
     }
 }
 
 export default new NewsProvider(newsDetailQuery, newsListQuery, {
     locales: config.i18n.locales,
     id: '',
-    apiKey: '',
+    apiKey: 'article',
 });

@@ -17,6 +17,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
             providers,
         )
             .map((provider: Provider) => {
+                if (provider.getApiKey() === 'webSetting') {
+                    return;
+                }
                 return `<sitemap><loc>${basepath}/api/sitemap/${provider.getApiKey()}.xml</loc></sitemap>`;
             })
             .join('')}</sitemapindex>`,

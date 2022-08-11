@@ -119,6 +119,11 @@ export const newsStaticPathsQuery = graphql`
                             }
                         }
                     }
+                    sitemap {
+                        enabled
+                        changeFrequency
+                        priority
+                    }
                 }
             }
         }

@@ -27,7 +27,7 @@ export const Head = ({ item, page, site }: HeadProps): ReactElement => {
         canonical: item?.seo?.canonicalURL || page?.seo?.canonicalURL || siteObj?.canonicalURL || '',
     };
     const preventIndexing = item?.seo ? item?.seo?.preventIndexing : page?.seo ? page.seo.preventIndexing : false;
-    const meta = page?.seo?.meta || siteObj?.meta;
+    const meta = item?.seo?.meta || page?.seo?.meta || siteObj?.meta;
     const router = useRouter();
     const currentPageUrl = process.env.BASE_PATH + router?.asPath;
     return (

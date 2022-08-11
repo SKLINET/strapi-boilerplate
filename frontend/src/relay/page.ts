@@ -76,6 +76,11 @@ export const pageStaticPathsQuery = graphql`
                     blocks {
                         ...blocksContent @relay(mask: false)
                     }
+                    sitemap {
+                        enabled
+                        changeFrequency
+                        priority
+                    }
                 }
             }
         }

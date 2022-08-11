@@ -11,6 +11,6 @@ export default new WebSettingProvider(
     {
         id: '',
         locales: config.i18n.locales,
-        apiKey: '',
+        apiKey: 'webSetting',
     },
 );
