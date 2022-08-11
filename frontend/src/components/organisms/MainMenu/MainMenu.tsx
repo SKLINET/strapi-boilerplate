@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { LinkTarget } from '../../../types/linkTarget';
 import { MenuItem } from '../../../types/menu';
+import { formatPageObject } from '../../../utils/formatPageObject';
+import { getPageUrl } from '../../../utils/getPageUrl';
 import { MenuLink } from '../../primitives/MenuLink/MenuLink';
 import styles from './MainMenu.module.scss';
 
@@ -14,7 +16,11 @@ function renderMenu(menuItems: readonly MenuItem[]): ReactElement {
             {menuItems.map((item, i) => (
                 <li key={i}>
                     <MenuLink
-                        href={item?.page?.data?.attributes?.url ? item?.page?.data?.attributes?.url : item?.externalUrl}
+                        href={
+                            item?.page?.data?.attributes?.url
+                                ? getPageUrl(formatPageObject(item?.page?.data?.attributes?.url))
+                                : item?.externalUrl
+                        }
                         target={(item?.target as LinkTarget) || '_self'}
                     >
                         {item.title}
