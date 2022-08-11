@@ -1,9 +1,8 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import dayjs from 'dayjs';
 import Calendar from 'dayjs/plugin/calendar';
 import { Heading } from '../../primitives/Heading/Heading';
 import { Link } from '../../primitives/Link/Link';
-import { getPageUrl } from '../../../utils/getPageUrl';
 
 interface NewsListProps {
     headline?: string | null;

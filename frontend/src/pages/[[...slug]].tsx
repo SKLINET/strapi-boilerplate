@@ -21,7 +21,8 @@ import { WebSettingsProps } from '../types/webSettings';
 
 import { CardSlider } from '../components/organisms/CardSlider/CardSlider';
 import { TestForm } from '../components/organisms/TestForm/TestForm';
-import { MetaItem, MetaItems } from '../types/metaItem';
+import { MetaItems } from '../types/metaItem';
+import { MenuItem } from '../types/menu';
 
 const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
@@ -32,7 +33,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     const { gtm, tz } = config;
     const items = Object.values(blocksPropsMap as unknown as MetaItems);
     const item = Array.isArray(items) && items.length > 0 ? items[0].item : undefined;
-
+    const menuItems = webSetting?.data?.attributes?.mainMenu?.data?.attributes?.items || [];
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
     const currentUrl =
@@ -71,7 +72,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <Head site={webSetting} page={page} item={item} />
 
             <Layout>
-                <Navbar />
+                {menuItems && menuItems.length > 0 && <Navbar menuItems={menuItems as readonly MenuItem[]} />}
                 {/*
                 <CardSlider
                     data={[
@@ -121,7 +122,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
                 {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
-            {/* {preview && <GridHelper />} */}
+            {preview && <GridHelper />}
 
             {gtm.code && (
                 <noscript

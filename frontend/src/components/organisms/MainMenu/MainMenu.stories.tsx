@@ -15,6 +15,6 @@ export default {
     },
 };
 
-const Template: Story = (args) => <MainMenuComponent {...args} />;
+const Template: Story = (args) => <MainMenuComponent menu={[]} {...args} />;
 
 export const MainMenu = Template.bind({});

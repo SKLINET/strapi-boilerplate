@@ -7,6 +7,6 @@ export default {
     title: 'Organisms/Navbar',
 };
 
-const Template: Story = (args) => <NavbarComponent {...args} />;
+const Template: Story = (args) => <NavbarComponent menuItems={[]} {...args} />;
 
 export const Navbar = Template.bind({});

@@ -56,6 +56,25 @@ graphql`
                         }
                     }
                 }
+                footerMenu {
+                    data {
+                        attributes {
+                            items {
+                                title
+                                page {
+                                    data {
+                                        attributes {
+                                            url
+                                        }
+                                    }
+                                }
+                                externalUrl
+                                target
+                                showMegaMenu
+                            }
+                        }
+                    }
+                }
                 seo {
                     metaTitle
                     metaDescription
