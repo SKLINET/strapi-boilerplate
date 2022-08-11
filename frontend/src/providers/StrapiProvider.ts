@@ -43,7 +43,6 @@ export default class StrapiProvider<
     ): Promise<CmsItem<TItem> | null> {
         const { locale, preview, id, ...other } = options;
         let variables: TOne['variables'];
-
         if (id) {
             // get by id
             variables = {
@@ -57,6 +56,7 @@ export default class StrapiProvider<
         } else {
             variables = {
                 ...other,
+                locale,
                 limit: 1,
                 offset: 0,
                 filter: (options as FindParams<TFind['variables']>).filter

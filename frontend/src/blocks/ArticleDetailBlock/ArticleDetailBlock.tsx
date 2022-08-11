@@ -62,7 +62,7 @@ if (typeof window === 'undefined') {
         }
         const provider = providers.news;
         const item = await provider.findOne({
-            locale,
+            locale: locale,
             preview,
             slug: slug,
         });
@@ -71,7 +71,7 @@ if (typeof window === 'undefined') {
             err.code = 'ENOENT';
             throw err;
         }
-        return { item: item?.data?.attributes };
+        return { item: item?.data?.attributes || {} };
     };
 }
 

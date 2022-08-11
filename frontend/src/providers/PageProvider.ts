@@ -136,9 +136,9 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
         } while (done < cnt);
 
         return items.map((item: StaticPathsParams) => ({
-            params: { slug: item?.params?.slug, locale: locale, sitemap: item.params?.sitemap },
+            params: { slug: item?.params?.slug, locale: locale, sitemap: item.params?.sitemap } as any,
             locale,
-        })) as any;
+        }));
     }
 }
 
