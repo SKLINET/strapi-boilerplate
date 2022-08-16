@@ -76,6 +76,7 @@ graphql`
                     }
                 }
                 seo {
+                    title
                     metaTitle
                     metaDescription
                     metaSocial {

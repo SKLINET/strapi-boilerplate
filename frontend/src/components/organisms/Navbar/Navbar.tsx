@@ -19,7 +19,7 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
             {/*        <Logo />*/}
             {/*    </Link>*/}
             {/*)}*/}
-            {menuItems && <MainMenu menu={menuItems as readonly MenuItem[]} />}
+            {menuItems && menuItems?.length > 0 && <MainMenu menu={menuItems as readonly MenuItem[]} />}
             {Array.isArray(locales) && locales.length > 1 ? (
                 <div className="relative uppercase text-base">
                     {locale}

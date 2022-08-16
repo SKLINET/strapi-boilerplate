@@ -20,6 +20,7 @@ export const pageDetailQuery = graphql`
                 }
             }
             seo {
+                title
                 metaTitle
                 metaDescription
                 metaSocial {

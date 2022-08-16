@@ -17,7 +17,7 @@ export interface HeadProps {
 export const Head = ({ item, page, site }: HeadProps): ReactElement => {
     const siteObj = site?.data?.attributes?.seo;
     const data = {
-        title: item?.title || page?.seo?.metaTitle || page?.title || siteObj?.metaTitle || '',
+        title: item?.seo?.title || item?.title || page?.seo?.title || page?.title || siteObj?.title || '',
         metaTitle: item?.seo?.metaTitle || page?.seo?.metaTitle || siteObj?.metaTitle || '',
         metaDescription: item?.seo?.metaDescription || page?.seo?.metaDescription || siteObj?.metaDescription || '',
         social: item?.seo?.metaSocial || page?.seo?.metaSocial || siteObj?.metaSocial || [],

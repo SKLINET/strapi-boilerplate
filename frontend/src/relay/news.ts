@@ -25,6 +25,7 @@ export const newsDetailQuery = graphql`
                         content
                         author
                         seo {
+                            title
                             metaTitle
                             metaDescription
                             metaSocial {

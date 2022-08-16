@@ -55,7 +55,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <Head site={webSetting} page={page} />
 
             <Layout>
-                {menuItems && menuItems.length > 0 && <Navbar menuItems={menuItems as readonly MenuItem[]} />}
+                <Navbar menuItems={menuItems as readonly MenuItem[]} />
                 {page?.blocks && <Blocks blocksData={page?.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 

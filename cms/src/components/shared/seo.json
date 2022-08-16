@@ -49,6 +49,9 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.meta"
+    },
+    "title": {
+      "type": "string"
     }
   }
 }

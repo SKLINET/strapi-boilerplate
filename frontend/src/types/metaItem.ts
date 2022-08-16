@@ -1,6 +1,7 @@
 export interface MetaItem {
     title: string;
     seo: {
+        title: string;
         metaTitle: string;
         metaDescription: string;
         metaSocial: {
