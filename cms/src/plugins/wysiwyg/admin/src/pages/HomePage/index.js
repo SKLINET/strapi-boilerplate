@@ -4,17 +4,33 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo } from "react";
 // import PropTypes from 'prop-types';
-import pluginId from '../../pluginId';
+import pluginId from "../../pluginId";
+import { BaseHeaderLayout } from "@strapi/design-system/Layout";
+import { Stack } from "@strapi/design-system/Stack";
+import {
+    Field,
+    FieldLabel,
+    FieldHint,
+    FieldError,
+    FieldInput,
+    FieldAction,
+} from "@strapi/design-system/Field";
 
 const HomePage = () => {
-  return (
-    <div>
-      <h1>{pluginId}&apos;s HomePage</h1>
-      <p>Happy coding</p>
-    </div>
-  );
+    return (
+        <>
+            <BaseHeaderLayout title="Sklinet TinyMCE plugin" as="h2" />
+            <Field name="text" hint="TinyMCE api key">
+                <Stack spacing={1} size={50}>
+                    <FieldLabel>API key</FieldLabel>
+                    <FieldInput placeholder="Key" onChange={() => {}} />
+                    <FieldHint />
+                </Stack>
+            </Field>
+        </>
+    );
 };
 
 export default memo(HomePage);
