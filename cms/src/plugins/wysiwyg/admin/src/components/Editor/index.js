@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Editor } from "@tinymce/tinymce-react";
+
 const TinyEditor = ({ onChange, name, value }) => {
     return (
         <Editor
@@ -12,21 +13,16 @@ const TinyEditor = ({ onChange, name, value }) => {
             }}
             outputFormat="html"
             init={{
-                language: "sk",
+                language: "cs",
                 height: 500,
                 menubar: false,
                 extended_valid_elements: "span, img, small",
                 forced_root_block: "",
                 convert_urls: false,
                 entity_encoding: "raw",
-                plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "table emoticons nonbreaking",
-                    "insertdatetime media table paste code help wordcount",
-                ],
+                plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen table emoticons nonbreaking insertdatetime media table paste code help wordcount',
                 toolbar:
-                    "undo redo | styleselect | bold italic forecolor backcolor | \
+                    "undo redo | styles | bold italic forecolor backcolor | \
                     alignleft aligncenter alignright alignjustify | \
                     table emoticons visualblocks code|\
                     nonbreaking bullist numlist outdent indent | removeformat | help",
