@@ -7,17 +7,20 @@ import { StaticBlockContext } from '@symbio/headless';
 import { WebSettingsProps } from '../../types/webSettings';
 import { Providers } from '../../types/providers';
 import { Locale } from '../../types/locale';
+import { NewsList } from '../../components/blocks/NewsList/NewsList';
 
 graphql`
     fragment ArticlesListBlock_content on ComponentBlockArticlesListBlock {
+        id
         sectionId
     }
 `;
 
 function ArticlesListBlock({ data, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
+    const articles = data || [];
     return (
         <BlockWrapper className={styles.wrapper} {...rest}>
-            {/* <NewsList items={articles} /> */}
+            <NewsList items={articles} />
         </BlockWrapper>
     );
 }
@@ -32,6 +35,7 @@ if (typeof window === 'undefined') {
             locale,
             slug: params?.slug,
         });
+        return { data };
     };
 }
 

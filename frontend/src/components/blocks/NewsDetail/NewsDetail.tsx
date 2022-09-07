@@ -5,6 +5,7 @@ import React, { ReactElement } from 'react';
 import dynamic from 'next/dynamic';
 import { Heading } from '../../primitives/Heading/Heading';
 import { RichText } from '../../primitives/RichText/RichText';
+import config from '../../../../sklinet.config.json';
 
 // const Blocks = dynamic<BlocksProps>(() => import('../../base/Blocks/Blocks').then((mod) => mod.Blocks));
 
@@ -15,10 +16,10 @@ const NewsDetail = ({ item, app }: NewsDetailProps): ReactElement => {
     dayjs.extend(timeZone);
     return (
         <>
-            <Heading tag={'h1'}>aaa</Heading>
+            <Heading tag={'h1'}>{item.title}</Heading>
             <div className="text-base italic">
-                {/* {dayjs.tz(String(item?.dateFrom), config.tz).format()}
-                {item?.perex && <RichText content={item.perex} />} */}
+                {/* {dayjs.tz(String(item?.date), config.tz).format()} */}
+                {item?.perex && <RichText content={item.perex} />}
             </div>
             {/* {app && item?.content && <Blocks blocksData={item.content} initialProps={{}} app={app} />} */}
         </>

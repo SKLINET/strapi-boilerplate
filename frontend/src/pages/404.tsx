@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { ReactElement } from 'react';
 import config from '../../sklinet.config.json';
-import blocks from '../blocks';
+import blocks from '../blocks/server';
 import { Blocks } from '../components/base/Blocks/Blocks';
 import { Head } from '../components/base/Head/Head';
 import { Layout } from '../components/base/Layout/Layout';
@@ -15,12 +15,14 @@ import providers from '../providers';
 import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
+import { MenuItem } from '../types/menu';
 
 const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, redirect } = props;
     const { gtm, tz } = config;
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
+    const menuItems = webSetting?.data?.attributes?.mainMenu?.data?.attributes?.items || [];
     const currentUrl =
         '/' + (router.locale === router.defaultLocale ? '' : router.locale) + router.asPath !== '/'
             ? router.asPath
@@ -34,7 +36,6 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
         webSetting,
         redirect,
     };
-
     if (router.isFallback) {
         return <div>Loading...</div>;
     }
@@ -54,7 +55,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <Head site={webSetting} page={page} />
 
             <Layout>
-                <Navbar />
+                <Navbar menuItems={menuItems as readonly MenuItem[]} />
                 {page?.blocks && <Blocks blocksData={page?.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 

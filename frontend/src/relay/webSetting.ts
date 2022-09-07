@@ -15,6 +15,7 @@ graphql`
                 mailSubject
                 homePage {
                     data {
+                        id
                         attributes {
                             url
                         }
@@ -22,6 +23,7 @@ graphql`
                 }
                 articlesPage {
                     data {
+                        id
                         attributes {
                             url
                         }
@@ -29,6 +31,7 @@ graphql`
                 }
                 articleDetailPage {
                     data {
+                        id
                         attributes {
                             url
                         }
@@ -53,13 +56,33 @@ graphql`
                         }
                     }
                 }
-                globalSeo {
-                    siteName
-                    titleSuffix
-                    facebookPageUrl
-                    fallbackSeo {
-                        description
+                footerMenu {
+                    data {
+                        attributes {
+                            items {
+                                title
+                                page {
+                                    data {
+                                        attributes {
+                                            url
+                                        }
+                                    }
+                                }
+                                externalUrl
+                                target
+                                showMegaMenu
+                            }
+                        }
+                    }
+                }
+                seo {
+                    title
+                    metaTitle
+                    metaDescription
+                    metaSocial {
+                        socialNetwork
                         title
+                        description
                         image {
                             data {
                                 attributes {
@@ -70,24 +93,17 @@ graphql`
                                 }
                             }
                         }
-                        twitterCard
                     }
-                    twitterAccount
-                    favicon {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
-                    }
-                    faviconMetaTags {
-                        tag
-                        attributes
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    meta {
+                        name
                         content
                     }
+                    preventIndexing
                 }
             }
         }

@@ -2,12 +2,14 @@
   "collectionName": "components_shared_sitemaps",
   "info": {
     "displayName": "Sitemap",
-    "icon": "boxes"
+    "icon": "boxes",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true
     },
     "changeFrequency": {
       "type": "enumeration",

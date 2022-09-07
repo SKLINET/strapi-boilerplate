@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import blocks from '../blocks';
+import blocks from '../blocks/server';
 import { Blocks } from '../components/base/Blocks/Blocks';
 import { Head } from '../components/base/Head/Head';
 import { Layout } from '../components/base/Layout/Layout';
@@ -21,6 +21,8 @@ import { WebSettingsProps } from '../types/webSettings';
 
 import { CardSlider } from '../components/organisms/CardSlider/CardSlider';
 import { TestForm } from '../components/organisms/TestForm/TestForm';
+import { MetaItems } from '../types/metaItem';
+import { MenuItem } from '../types/menu';
 
 const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
@@ -29,14 +31,15 @@ const GridHelper = dynamic<unknown>(() =>
 const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, preview, redirect } = props;
     const { gtm, tz } = config;
-    const item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
+    const items = Object.values(blocksPropsMap as unknown as MetaItems);
+    const item = Array.isArray(items) && items.length > 0 ? items[0].item : undefined;
+    const menuItems = webSetting?.data?.attributes?.mainMenu?.data?.attributes?.items || [];
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
     const currentUrl =
         '/' + (router.locale === router.defaultLocale ? '' : router.locale) + router.asPath !== '/'
             ? router.asPath
             : '';
-
     const app = useMemo(
         () => ({
             currentUrl,
@@ -49,7 +52,6 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
         }),
         [page],
     );
-
     if (router.isFallback) {
         return <div>Loading...</div>;
     }
@@ -70,7 +72,8 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <Head site={webSetting} page={page} item={item} />
 
             <Layout>
-                <Navbar />
+                <Navbar menuItems={menuItems as readonly MenuItem[]} />
+                {/*
                 <CardSlider
                     data={[
                         {
@@ -115,7 +118,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
                         },
                     ]}
                 />
-                <TestForm />
+                <TestForm /> */}
                 {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 

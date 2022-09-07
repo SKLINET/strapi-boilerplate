@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { TLSSocket } from 'tls';
 import providers from '../../../providers';
+import { TLSSocket } from 'tls';
+import { Provider } from '@symbio/cms';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const basepath =
@@ -15,8 +16,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
         `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${Object.values(
             providers,
         )
-            .map((provider) => {
-                return `<sitemap><loc>${basepath}/sitemap/${provider.getApiKey()}.xml</loc></sitemap>`;
+            .map((provider: Provider) => {
+                if (provider.getApiKey() === 'webSetting') {
+                    return;
+                }
+                return `<sitemap><loc>${basepath}/api/sitemap/${provider.getApiKey()}.xml</loc></sitemap>`;
             })
             .join('')}</sitemapindex>`,
     );

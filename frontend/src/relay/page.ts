@@ -19,19 +19,10 @@ export const pageDetailQuery = graphql`
                     }
                 }
             }
-            meta {
+            seo {
+                title
                 metaTitle
                 metaDescription
-                metaImage {
-                    data {
-                        attributes {
-                            url
-                            width
-                            height
-                            alternativeText
-                        }
-                    }
-                }
                 metaSocial {
                     socialNetwork
                     title
@@ -52,13 +43,13 @@ export const pageDetailQuery = graphql`
                 structuredData
                 metaViewport
                 canonicalURL
-                preventIndexing
                 meta {
                     name
                     content
                 }
-                title
+                preventIndexing
             }
+
             sitemap {
                 enabled
                 changeFrequency
@@ -85,6 +76,11 @@ export const pageStaticPathsQuery = graphql`
                     url
                     blocks {
                         ...blocksContent @relay(mask: false)
+                    }
+                    sitemap {
+                        enabled
+                        changeFrequency
+                        priority
                     }
                 }
             }
@@ -121,19 +117,9 @@ export const pageListQuery = graphql`
                             }
                         }
                     }
-                    meta {
+                    seo {
                         metaTitle
                         metaDescription
-                        metaImage {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
-                        }
                         metaSocial {
                             socialNetwork
                             title
@@ -154,13 +140,13 @@ export const pageListQuery = graphql`
                         structuredData
                         metaViewport
                         canonicalURL
-                        preventIndexing
                         meta {
                             name
                             content
                         }
-                        title
+                        preventIndexing
                     }
+
                     sitemap {
                         enabled
                         changeFrequency

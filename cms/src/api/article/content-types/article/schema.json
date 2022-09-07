@@ -68,26 +68,6 @@
         }
       }
     },
-    "seo": {
-      "type": "component",
-      "repeatable": true,
-      "component": "shared.seo",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "sitemap": {
-      "type": "component",
-      "repeatable": false,
-      "component": "shared.sitemap",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "author": {
       "pluginOptions": {
         "versions": {
@@ -98,6 +78,32 @@
         }
       },
       "type": "string"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "versions": {
+          "versioned": true
+        },
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
+    },
+    "sitemap": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "versions": {
+          "versioned": true
+        },
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.sitemap"
     }
   }
 }

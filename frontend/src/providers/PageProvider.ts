@@ -16,7 +16,7 @@ import { Providers } from '../types/providers';
 import getPublicationState from '../utils/getPublicationState';
 import StrapiProvider from './StrapiProvider';
 import { AppData } from '../index';
-import { appQuery } from '../relay/__generated__/appQuery.graphql';
+import { StaticPathsParams } from '../types/staticPathsParams';
 
 class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     /**
@@ -43,7 +43,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
         locale: string | undefined,
         blocks?: Record<string, BlockType<PageProps, WebSettingsProps, Providers, Locale>>,
     ): Promise<GetStaticPathsResult['paths']> {
-        const params: ParsedUrlQuery[] = [];
+        const items: StaticPathsParams[] = [];
         let cnt = -1;
         let done = 0;
         do {
@@ -59,15 +59,24 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                 }
                 // loop over all pages
                 for (const page of data?.pages?.data || []) {
-                    if (String(page?.attributes?.url) === 'homepage') {
-                        params.push({ slug: [] });
+                    if (String(page?.attributes?.url) === 'homepage' && page?.attributes?.sitemap) {
+                        items.push({
+                            params: {
+                                slug: [],
+                                sitemap: {
+                                    enabled: page?.attributes?.sitemap?.enabled || false,
+                                    changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
+                                    priority: page?.attributes?.sitemap?.priority || 0.3,
+                                },
+                            },
+                        });
+
                         continue;
                     }
                     if (String(page?.attributes?.url) === '404') {
                         continue;
                     }
                     const url = page?.attributes?.url;
-
                     if (url && blocks) {
                         const blocksParams = await getStaticParamsFromBlocks<
                             PageProps,
@@ -75,7 +84,6 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                             Providers,
                             Locale
                         >(page.attributes.blocks, locale ?? '', providers, blocks);
-
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;
@@ -93,12 +101,32 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                                 }
                                 // build slug array
                                 const pathParts = newUrl.split('/');
-                                params.push({ slug: pathParts, locale });
+                                items.push({
+                                    params: {
+                                        slug: pathParts,
+                                        locale,
+                                        sitemap: {
+                                            enabled: page?.attributes?.sitemap?.enabled || false,
+                                            changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
+                                            priority: page?.attributes?.sitemap?.priority || 0.3,
+                                        },
+                                    },
+                                });
                             }
                         } else {
                             // build slug array
                             const pathParts = url.split('/');
-                            params.push({ slug: pathParts, locale });
+                            items.push({
+                                params: {
+                                    slug: pathParts,
+                                    locale,
+                                    sitemap: {
+                                        enabled: page?.attributes?.sitemap?.enabled || false,
+                                        changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
+                                        priority: page?.attributes?.sitemap?.priority || 0.3,
+                                    },
+                                },
+                            });
                         }
                     }
                 }
@@ -106,8 +134,9 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                 done += data?.pages?.data?.length || 0;
             }
         } while (done < cnt);
-        return params.map((p) => ({
-            params: p,
+
+        return items.map((item: StaticPathsParams) => ({
+            params: { slug: item?.params?.slug, locale: locale, sitemap: item.params?.sitemap } as any,
             locale,
         }));
     }

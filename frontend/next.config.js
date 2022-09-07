@@ -44,22 +44,20 @@ const nextConfig = {
         return config;
     },
     async rewrites() {
-        return {
-            beforeFiles: [
-                {
-                    source: '/robots.txt',
-                    destination: '/api/robots',
-                },
-                {
-                    source: '/sitemap.xml',
-                    destination: '/api/sitemap',
-                },
-                {
-                    source: '/sitemap/:provider',
-                    destination: '/api/sitemap/:provider',
-                },
-            ],
-        };
+        return [
+            {
+                source: '/robots.txt',
+                destination: '/api/robots',
+            },
+            {
+                source: '/sitemap.xml',
+                destination: '/api/sitemap',
+            },
+            {
+                source: '/sitemap/:provider',
+                destination: '/api/sitemap/:provider',
+            },
+        ];
     },
     async headers() {
         return [

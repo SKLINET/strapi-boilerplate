@@ -1,21 +1,37 @@
 import React, { ReactElement } from 'react';
-import { Link } from '../../primitives/Link/Link';
+import { LinkTarget } from '../../../types/linkTarget';
+import { MenuItem } from '../../../types/menu';
+import { formatPageObject } from '../../../utils/formatPageObject';
+import { getPageUrl } from '../../../utils/getPageUrl';
+import { MenuLink } from '../../primitives/MenuLink/MenuLink';
 import styles from './MainMenu.module.scss';
 
-function renderMenu(menu: any, level = 1): ReactElement {
+interface MainMenuProps {
+    menu: readonly MenuItem[];
+}
+
+function renderMenu(menuItems: readonly MenuItem[]): ReactElement {
     return (
-        <ul className={styles['menu' + level]}>
-            {menu?.links.map((link: any, i: number) => (
-                <li key={`Mainmenu_${i}`} className="mr-4">
-                    {link.__typename === 'PageRecord' && <Link page={link} />}
-                    {link.__typename === 'MenuRecord' && renderMenu(link, level + 1)}
+        <ul className={styles.topMenu}>
+            {menuItems.map((item, i) => (
+                <li key={i}>
+                    <MenuLink
+                        href={
+                            item?.page?.data?.attributes?.url
+                                ? getPageUrl(formatPageObject(item?.page?.data?.attributes?.url))
+                                : item?.externalUrl
+                        }
+                        target={(item?.target as LinkTarget) || '_self'}
+                    >
+                        {item.title}
+                    </MenuLink>
                 </li>
             ))}
         </ul>
     );
 }
 
-const MainMenu = ({ menu }: any): ReactElement => renderMenu(menu, 1);
+const MainMenu = ({ menu }: MainMenuProps): ReactElement => renderMenu(menu);
 
 MainMenu.whyDidYouRender = true;
 
