@@ -82,7 +82,6 @@ module.exports = ({ env }) => ({
         resolve: "./src/plugins/wysiwyg",
         config: {
             editor: {
-                apiKey: "hjiprjofziev8cze327dqan7x016r7bfcbdaandx6203uh8a",
                 outputFormat: "html",
                 editorConfig: {
                     language: "sk",

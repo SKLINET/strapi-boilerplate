@@ -2,36 +2,36 @@ import { prefixPluginTranslations } from "@strapi/helper-plugin";
 import pluginPkg from "../../package.json";
 import pluginId from "./pluginId";
 import Initializer from "./components/Initializer";
-import PluginIcon from "./components/PluginIcon";
 import Wysiwyg from "./components/Wysiwyg";
+import { getTrad } from "./utils";
 
 const name = pluginPkg.strapi.name;
 
 export default {
     register(app) {
-        app.addMenuLink({
-            to: `/plugins/${pluginId}`,
-            icon: PluginIcon,
-            intlLabel: {
-                id: `${pluginId}.plugin.name`,
-                defaultMessage: name,
-            },
-            Component: async () => {
-                const component = await import(
-                    /* webpackChunkName: "[request]" */ "./pages/App"
-                );
-
-                return component;
-            },
-            permissions: [
-                // Uncomment to set the permissions of the plugin here
-                // {
-                //   action: '', // the action name should be plugin::plugin-name.actionType
-                //   subject: null,
-                // },
-            ],
-        });
         app.addFields({ type: "wysiwyg", Component: Wysiwyg });
+        app.createSettingSection(
+            {
+                id: pluginId,
+                intlLabel: {
+                    id: `${pluginId}.plugin.name`,
+                    defaultMessage: "TinyMCE",
+                },
+            },
+            [
+                {
+                    intlLabel: {
+                        id: getTrad("settings.page-title"),
+                        defaultMessage: "Configuration",
+                    },
+                    id: "settings",
+                    to: `/settings/${pluginId}`,
+                    Component: async () => {
+                        return import("./pages/Settings");
+                    },
+                },
+            ]
+        );
         app.registerPlugin({
             id: pluginId,
             initializer: Initializer,

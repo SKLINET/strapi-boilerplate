@@ -1,8 +1,7 @@
-module.exports = [
-    {
-        method: "GET",
-        path: "/config/:configKey",
-        handler: "config.getConfig",
-        config: { policies: [] },
-    },
-];
+const config = require("./config");
+const settings = require("./settings");
+
+module.exports = {
+    config,
+    settings,
+};
