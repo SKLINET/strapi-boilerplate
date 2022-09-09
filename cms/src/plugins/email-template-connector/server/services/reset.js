@@ -12,9 +12,9 @@ module.exports = ({ strapi }) => ({
                             // required
                             to: data.email,
                             // optional if /config/plugins.js -> email.settings.defaultFrom is set
-                            from: "boilerplate@example.com",
+                            from: "boilerplate2022@example.com",
                             // optional if /config/plugins.js -> email.settings.defaultReplyTo is set
-                            replyTo: "boilerplate@example.com",
+                            replyTo: "boilerplate2022@example.com",
                             // optional array of files
                             attachments: [],
                         },
@@ -24,7 +24,7 @@ module.exports = ({ strapi }) => ({
 
                             // If provided here will override the template's subject.
                             // Can include variables like `Thank you for your order {{= USER.firstName }}!`
-                            subject: `${data.name}, your password reset link is ready.`,
+                            subject: `${data.name}, your password reset link is ready, check your inbox.`,
                         },
                         {
                             // this object must include all variables you're using in your email template

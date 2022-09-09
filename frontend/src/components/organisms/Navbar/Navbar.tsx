@@ -63,7 +63,7 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
                     className="p-2 border-2 border-solid bg-white border-blue-600 text-black ml-6"
                     onClick={() => handleButtonClick()}
                 >
-                    Test Email designer
+                    Test Email Designer
                 </button>
             </div>
         </>
