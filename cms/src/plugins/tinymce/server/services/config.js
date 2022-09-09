@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => {
     return {
         getConfig(key = "editor") {
-            return strapi.plugin("wysiwyg").config(key) ?? {};
+            return strapi.plugin("tinymce").config(key) ?? {};
         },
     };
 };

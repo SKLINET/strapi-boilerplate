@@ -4,7 +4,7 @@ module.exports = {
     getSettings: async (ctx) => {
         try {
             ctx.body = await strapi
-                .plugin("wysiwyg")
+                .plugin("tinymce")
                 .service("settings")
                 .getSettings();
         } catch (err) {
@@ -16,11 +16,11 @@ module.exports = {
         const { body } = ctx.request;
         try {
             await strapi
-                .plugin("wysiwyg")
+                .plugin("tinymce")
                 .service("settings")
                 .setSettings(body);
             ctx.body = await strapi
-                .plugin("wysiwyg")
+                .plugin("tinymce")
                 .service("settings")
                 .getSettings();
         } catch (err) {

@@ -77,9 +77,9 @@ module.exports = ({ env }) => ({
     seo: {
         enabled: true,
     },
-    wysiwyg: {
+    tinymce: {
         enabled: true,
-        resolve: "./src/plugins/wysiwyg",
+        resolve: "./src/plugins/tinymce",
         config: {
             editor: {
                 outputFormat: "html",
