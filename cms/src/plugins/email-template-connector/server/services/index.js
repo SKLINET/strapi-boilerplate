@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const myService = require('./my-service');
+const reset = require("./reset");
 
 module.exports = {
-  myService,
+    reset,
 };

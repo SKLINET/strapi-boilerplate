@@ -1,10 +1,5 @@
-module.exports = [
-  {
-    method: 'GET',
-    path: '/',
-    handler: 'myController.index',
-    config: {
-      policies: [],
-    },
-  },
-];
+const reset = require("./reset");
+
+module.exports = {
+    reset,
+};
