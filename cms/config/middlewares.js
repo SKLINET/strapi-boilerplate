@@ -11,6 +11,7 @@ module.exports = [
                         "*.tinymce.com",
                         "*.tiny.cloud",
                         "https:",
+                        "editor.unlayer.com",
                     ],
                     "connect-src": [
                         "'self'",
@@ -24,6 +25,9 @@ module.exports = [
                         "*.tiny.cloud",
                         "data:",
                         "blob:",
+                        "cdn.jsdelivr.net",
+                        "strapi.io",
+                        "s3.amazonaws.com",
                     ],
                     "style-src": [
                         "'self'",
@@ -31,7 +35,12 @@ module.exports = [
                         "*.tinymce.com",
                         "*.tiny.cloud",
                     ],
-                    "font-src": ["'self'", "*.tinymce.com", "*.tiny.cloud"],
+                    "font-src": [
+                        "'self'",
+                        "*.tinymce.com",
+                        "*.tiny.cloud",
+                        "editor.unlayer.com",
+                    ],
                     upgradeInsecureRequests: null,
                 },
             },

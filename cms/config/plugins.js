@@ -69,7 +69,7 @@ module.exports = ({ env }) => ({
         enabled: true,
     },
     "email-designer": {
-        enabled: false,
+        enabled: true,
     },
     navigation: {
         enabled: false,
