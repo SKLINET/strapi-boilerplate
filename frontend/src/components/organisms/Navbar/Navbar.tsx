@@ -3,7 +3,10 @@ import React, { ReactElement, useState } from 'react';
 import { MenuItem } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
 import { Link } from '../../primitives/Link/Link';
-import { resetUserPassword } from '../../../utils/resetPassword';
+import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
+import { sendTemplatedEmailQuery } from '../../../relay/api/__generated__/sendTemplatedEmailQuery.graphql';
+import { SendTemplatedEmailQuery } from '../../../relay/api/sendTemplatedEmail';
+import { fetchQuery } from 'relay-runtime';
 
 interface NavbarProps {
     menuItems: readonly MenuItem[];
@@ -14,12 +17,17 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
 
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState<boolean>(false);
 
-    const handleButtonClick = () => {
-        const dummyData = {
-            email: 'jakub.bednar@sklinet.com',
-            name: 'Jakub',
-        };
-        resetUserPassword(dummyData);
+    const handleButtonClick = async () => {
+        const environment = createRelayEnvironment({});
+
+        await fetchQuery<sendTemplatedEmailQuery>(environment, SendTemplatedEmailQuery, {
+            emailTo: 'jakub.bednar@sklinet.com',
+            emailTemplate: 1,
+            variables: {
+                email: 'jakub.bednar@sklinet.com',
+                firstName: 'Jakub',
+            },
+        }).toPromise();
     };
     return (
         <>
@@ -60,10 +68,10 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
                     <span />
                 )}
                 <button
-                    className="p-2 border-2 border-solid bg-white border-blue-600 text-black ml-6"
+                    className="p-2 border-[1px] border-solid  border-white text-white ml-6"
                     onClick={() => handleButtonClick()}
                 >
-                    Test Email Designer
+                    Send Templated E-mail
                 </button>
             </div>
         </>

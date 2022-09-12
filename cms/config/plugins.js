@@ -84,8 +84,4 @@ module.exports = ({ env }) => ({
     i18n: {
         enabled: true,
     },
-    "email-template-connector": {
-        enabled: true,
-        resolve: "./src/plugins/email-template-connector",
-    },
 });

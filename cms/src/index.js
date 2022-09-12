@@ -143,12 +143,62 @@ module.exports = {
                 },
             });
 
+            const Variables = nexus.inputObjectType({
+                name: "Variables",
+                definition(t) {
+                    t.string("firstName");
+                    t.string("email");
+                },
+            });
+
+            const sendTemplatedEmail = nexus.extendType({
+                type: "Query",
+                auth: false,
+                definition(t) {
+                    t.field("sendEmail", {
+                        type: "Boolean",
+                        auth: false,
+                        args: {
+                            emailTo: "String",
+                            emailTemplate: "Int",
+                            variables: Variables,
+                        },
+                        async resolve(parent, args) {
+                            const { emailTo, emailTemplate, variables } = args;
+
+                            if (args) {
+                                try {
+                                    await strapi
+                                        .plugin("email-designer")
+                                        .service("email")
+                                        .sendTemplatedEmail(
+                                            { to: emailTo },
+                                            {
+                                                templateReferenceId:
+                                                    emailTemplate,
+                                            },
+                                            {
+                                                ...variables,
+                                            }
+                                        );
+
+                                    return true;
+                                } catch (err) {
+                                    return false;
+                                }
+                            } else return false;
+                        },
+                    });
+                },
+            });
+
             return {
                 types: [
                     pageQuery,
                     redirectQuery,
                     onePageQuery,
                     oneArticleQuery,
+                    sendTemplatedEmail,
                 ],
                 resolversConfig: {
                     "Query.findPage": {
@@ -164,6 +214,9 @@ module.exports = {
                         auth: false,
                     },
                     "Query.findSlug": {
+                        auth: false,
+                    },
+                    "Query.sendEmail": {
                         auth: false,
                     },
                 },
