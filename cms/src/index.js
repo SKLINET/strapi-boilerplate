@@ -143,14 +143,6 @@ module.exports = {
                 },
             });
 
-            const Variables = nexus.inputObjectType({
-                name: "Variables",
-                definition(t) {
-                    t.string("firstName");
-                    t.string("email");
-                },
-            });
-
             const sendTemplatedEmail = nexus.extendType({
                 type: "Query",
                 auth: false,
@@ -161,11 +153,13 @@ module.exports = {
                         args: {
                             emailTo: "String",
                             emailTemplate: "Int",
-                            variables: Variables,
+                            email: "String",
+                            firstName: "String",
                         },
-                        async resolve(parent, args) {
-                            const { emailTo, emailTemplate, variables } = args;
 
+                        async resolve(parent, args) {
+                            const { emailTo, emailTemplate, email, firstName } =
+                                args;
                             if (args) {
                                 try {
                                     await strapi
@@ -178,12 +172,14 @@ module.exports = {
                                                     emailTemplate,
                                             },
                                             {
-                                                ...variables,
+                                                email,
+                                                firstName,
                                             }
                                         );
 
                                     return true;
                                 } catch (err) {
+                                    console.log(err);
                                     return false;
                                 }
                             } else return false;

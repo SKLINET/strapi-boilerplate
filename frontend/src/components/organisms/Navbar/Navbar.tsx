@@ -3,10 +3,6 @@ import React, { ReactElement, useState } from 'react';
 import { MenuItem } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
 import { Link } from '../../primitives/Link/Link';
-import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
-import { sendTemplatedEmailQuery } from '../../../relay/api/__generated__/sendTemplatedEmailQuery.graphql';
-import { SendTemplatedEmailQuery } from '../../../relay/api/sendTemplatedEmail';
-import { fetchQuery } from 'relay-runtime';
 
 interface NavbarProps {
     menuItems: readonly MenuItem[];
@@ -17,18 +13,6 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
 
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState<boolean>(false);
 
-    const handleButtonClick = async () => {
-        const environment = createRelayEnvironment({});
-
-        await fetchQuery<sendTemplatedEmailQuery>(environment, SendTemplatedEmailQuery, {
-            emailTo: 'jakub.bednar@sklinet.com',
-            emailTemplate: 1,
-            variables: {
-                email: 'jakub.bednar@sklinet.com',
-                firstName: 'Jakub',
-            },
-        }).toPromise();
-    };
     return (
         <>
             <div className="flex absolute items-center flex-row justify-center left-0 right-0 top-0 text-white bg-black p-10 h-20">
@@ -67,12 +51,6 @@ const Navbar = ({ menuItems }: NavbarProps): ReactElement<null, 'div'> | null =>
                 ) : (
                     <span />
                 )}
-                <button
-                    className="p-2 border-[1px] border-solid  border-white text-white ml-6"
-                    onClick={() => handleButtonClick()}
-                >
-                    Send Templated E-mail
-                </button>
             </div>
         </>
     );
