@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { NextApiRequest, NextApiResponse } from 'next';
-import Busboy, { BusboyHeaders } from 'busboy';
+import busboy from 'busboy';
 import { commitMutation, fetchQuery } from 'relay-runtime';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
@@ -15,14 +15,14 @@ dotenv.config();
 
 export default (req: NextApiRequest, res: NextApiResponse): void => {
     if (req.method == 'POST') {
-        const busboy = new Busboy({ headers: req.headers as BusboyHeaders });
+        const bb = busboy({ headers: req.headers });
         const data: Record<string, string> = {};
 
-        busboy.on('field', function (fieldname, val) {
+        bb.on('field', function (fieldname, val) {
             data[fieldname] = val;
         });
 
-        busboy.on('finish', async function () {
+        bb.on('close', async function () {
             if (!process.env.SMTP) {
                 res.statusCode = 500;
                 res.statusMessage = 'No SMTP found';
@@ -82,6 +82,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
             });
         });
 
-        busboy.write(req.body);
+        req.pipe(bb);
+        bb.write(req.body);
     }
 };
