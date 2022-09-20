@@ -1,32 +1,91 @@
-.button {
-    @apply inline-flex transition-all duration-200 relative no-underline cursor-pointer outline-none p-4 text-primary bg-secondary border border-solid border-primary;
+@import '../../../styles/mixins/hover.scss';
 
-    &.hasLink {
-        @apply p-0;
+.wrapper {
+    @apply w-fit block cursor-pointer font-bold relative overflow-hidden transition-colors ease-in-out duration-300;
+    @apply text-sm p-4;
+
+    backface-visibility: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+    &::after {
+        content: '';
+        @apply w-full h-full absolute left-0 -bottom-full z-1 transition-transform ease-in-out duration-300;
     }
 
-    &.disabled {
-        @apply cursor-default pointer-events-none opacity-40;
+    @include hover {
+        &:hover::after {
+            @apply transform -translate-y-full;
+        }
     }
 
-    &:hover,
-    &:active {
-        @apply bg-primary text-secondary;
+    &.primary {
+        @apply text-white bg-darkGrey;
+
+        &::after {
+            @apply bg-black;
+        }
+    }
+
+    &.secondary {
+        @apply text-black bg-white border-2 border-black;
+
+        &::after {
+            @apply bg-black;
+        }
+
+        @include hover {
+            &:hover {
+                @apply text-white;
+            }
+        }
+    }
+
+    &.secondary-blue {
+        @apply text-primary bg-white;
+
+        &::after {
+            @apply bg-primary;
+        }
+
+        @include hover {
+            &:hover {
+                @apply text-white;
+            }
+        }
+    }
+
+    &.loading {
+        .content {
+            @apply opacity-0;
+        }
+
+        .loader {
+            @apply block;
+        }
+    }
+
+    &.stretchOnMobile {
+        @apply w-full tablet:w-fit;
     }
 }
 
-.link {
-    @apply p-4;
+.content {
+    @apply w-full h-full flex items-center justify-center relative;
+
+    & > * {
+        @apply relative z-3;
+    }
 }
 
-.icon {
-    @apply ml-4 mr-0;
+.loader {
+    @apply w-6 h-6 absolute z-4 hidden;
+    animation: spin 1s linear infinite;
+    top: calc(50% - 0.75rem);
+    left: calc(50% - 0.75rem);
+}
 
-    &.iconOnLeft {
-        @apply ml-0 mr-4;
-    }
-
-    &.isFilter {
-        @apply m-0 mt-3;
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
     }
 }

@@ -2,7 +2,6 @@ import React, { AnchorHTMLAttributes, memo } from 'react';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { UrlObject } from 'url';
-import { PageProps } from '../../../types/page';
 import { nbsp } from '@symbio/headless/utils';
 import { getPageUrl } from '../../../utils/getPageUrl';
 

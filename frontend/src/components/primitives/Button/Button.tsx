@@ -1,65 +1,92 @@
-import React, { ButtonHTMLAttributes } from 'react';
-import clsx from 'clsx';
-import { Link } from '../Link/Link';
-import { Icon, Icons } from '../Icon/Icon';
+import React, { ReactElement, ReactNode } from 'react';
 import styles from './Button.module.scss';
+import dynamic from 'next/dynamic';
+import clsx from 'clsx';
+import nbsp from '../../../utils/nbsp';
+import { IconProps } from '../../primitives/Icon/Icon';
+import { LinkProps } from '../Link/Link';
 
-type IconPosition = 'left' | 'right';
+const Icon = dynamic<IconProps>(import('../../primitives/Icon/Icon').then((mod) => mod.Icon));
+const Link = dynamic<LinkProps>(import('../Link/Link').then((mod) => mod.Link));
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    href?: string;
-    page?: any; // ** TODO ** Fix page any
-    params?: Record<string, string | number>;
-    icon?: Icons;
-    iconPosition?: IconPosition;
-    target?: string;
+export type ButtonProps = {
+    children: ReactNode;
+    type?: 'primary' | 'secondary';
+    loader?: boolean;
+    stretchOnMobile?: boolean;
     className?: string;
-}
+} & (
+    | {
+          onClick: () => void;
+          href?: never;
+          openInNewTab?: never;
+          submit?: never;
+      }
+    | {
+          onClick?: never;
+          href: string;
+          openInNewTab?: boolean;
+          submit?: never;
+      }
+    | {
+          onClick?: never;
+          href?: never;
+          openInNewTab?: never;
+          submit: true;
+      }
+    | {
+          onClick?: never;
+          href?: never;
+          openInNewTab?: never;
+          submit?: never;
+      }
+);
 
 const Button = ({
     children,
+    type = 'primary',
+    loader = false,
+    stretchOnMobile = false,
+    onClick,
     href,
-    page,
-    params,
-    icon,
-    iconPosition = 'left',
-    disabled,
-    type,
+    openInNewTab = false,
+    submit,
     className,
-    ...rest
-}: ButtonProps): JSX.Element => {
-    if ((href || page) && type !== 'submit') {
-        return (
-            <div className={clsx(styles.button, styles.hasLink, disabled && styles.disabled, className)}>
-                <Link className={styles.link} href={href} page={page} target={rest.target} params={params}>
-                    {icon && iconPosition === 'left' && (
-                        <Icon className={clsx(styles.icon, styles.iconOnLeft)} name={icon} />
-                    )}
-                    {children}
-                    {icon && iconPosition === 'right' && (
-                        <Icon className={clsx(styles.icon, styles.iconOnRight)} name={icon} />
-                    )}
-                </Link>
+}: ButtonProps): ReactElement => {
+    const allClassNames = clsx(
+        styles.wrapper,
+        styles[type],
+        loader && styles.loading,
+        stretchOnMobile && styles.stretchOnMobile,
+        className,
+    );
+
+    const getContent = () => (
+        <>
+            <div className={styles.content}>
+                {typeof children === 'string' ? <span>{nbsp(children)}</span> : children}
             </div>
-        );
-    } else {
+            {loader && <Icon name="loader" className={styles.loader} />}
+        </>
+    );
+
+    if (submit || onClick) {
         return (
-            <button
-                className={clsx(styles.button, disabled && styles.disabled, className)}
-                type={type}
-                disabled={disabled}
-                {...rest}
-            >
-                {icon && iconPosition === 'left' && (
-                    <Icon className={clsx(styles.icon, styles.iconOnLeft)} name={icon} />
-                )}
-                {children}
-                {icon && iconPosition === 'right' && (
-                    <Icon className={clsx(styles.icon, styles.iconOnRight)} name={icon} />
-                )}
+            <button type={submit ? 'submit' : 'button'} onClick={onClick} className={allClassNames}>
+                {getContent()}
             </button>
         );
     }
+
+    if (href) {
+        return (
+            <Link href={href} className={allClassNames} target={openInNewTab ? '_blank' : undefined}>
+                {getContent()}
+            </Link>
+        );
+    }
+
+    return <div className={allClassNames}>{getContent()}</div>;
 };
 
 Button.whyDidYouRender = true;
