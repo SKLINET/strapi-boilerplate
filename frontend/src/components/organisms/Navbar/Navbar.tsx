@@ -3,6 +3,7 @@ import React, { ReactElement, useState } from 'react';
 import { MenuItem } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
 import { Link } from '../../primitives/Link/Link';
+
 interface NavbarProps {
     menuItems: readonly MenuItem[];
 }
