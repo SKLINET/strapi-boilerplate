@@ -18,11 +18,9 @@ import { Logger } from '@symbio/headless/services';
 import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
-
-import { CardSlider } from '../components/organisms/CardSlider/CardSlider';
-import { TestForm } from '../components/organisms/TestForm/TestForm';
 import { MetaItems } from '../types/metaItem';
 import { MenuItem } from '../types/menu';
+import NextNprogress from 'nextjs-progressbar';
 
 const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
@@ -71,54 +69,9 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
         <>
             <Head site={webSetting} page={page} item={item} />
 
+            <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
-                {/*
-                <CardSlider
-                    data={[
-                        {
-                            id: 1,
-                            title: 'Nadpis 1',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 2,
-                            title: 'Nadpis 2',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 3,
-                            title: 'Nadpis 3',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 4,
-                            title: 'Nadpis 4',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 5,
-                            title: 'Nadpis 5',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 6,
-                            title: 'Nadpis 6',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 7,
-                            title: 'Nadpis 7',
-                            description: 'text text text ...',
-                        },
-                        {
-                            id: 8,
-                            title: 'Nadpis 8',
-                            description: 'text text text ...',
-                        },
-                    ]}
-                />
-                <TestForm /> */}
                 {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
