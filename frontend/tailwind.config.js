@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lineClamp = require('@tailwindcss/line-clamp');
 
 module.exports = {
@@ -18,12 +19,15 @@ module.exports = {
         },
         extend: {
             colors: {
-                secondary: '#fff',
+                secondary: '#ffffff',
                 red: '#ff0000',
                 error: '#ff0000',
                 logo: '#f60',
-                primary: '#000',
+                white: '#ffffff',
+                black: '#000000',
+                primary: '#000000',
                 grey: '#F2F3F4',
+                darkGrey: '#636363',
             },
             gridColumnEnd: {
                 13: '13',
@@ -63,6 +67,12 @@ module.exports = {
                 5.5: '1.375rem',
             },
             zIndex: {
+                1: '1',
+                2: '2',
+                3: '3',
+                4: '4',
+                9997: '9997',
+                9998: '9998',
                 9999: '9999',
             },
         },

@@ -2,13 +2,14 @@ import React, { ReactElement } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { TextInput } from '../../primitives/TextInput/TextInput';
-import { PasswordInput } from '../../primitives/PasswordInput/PasswordInput';
-import { TextArea } from '../../primitives/Textarea/Textarea';
-import { Checkbox } from '../../primitives/Checkbox/Checkbox';
-import { Switch } from '../../primitives/Switch/Switch';
-import { RadioButtons } from '../../primitives/RadioButtons/RadioButtons';
-import { Button } from '../../primitives/Button/Button';
+import { TextInput } from '../../../primitives/TextInput/TextInput';
+import { PasswordInput } from '../../../primitives/PasswordInput/PasswordInput';
+import { TextArea } from '../../../primitives/TextArea/Textarea';
+import { Checkbox } from '../../../primitives/Checkbox/Checkbox';
+import { Switch } from '../../../primitives/Switch/Switch';
+import { RadioButtons } from '../../../primitives/RadioButtons/RadioButtons';
+import { Button } from '../../../primitives/Button/Button';
+import { FileInput, IFile, IFiles } from '../../../primitives/FileInput/FileInput';
 
 interface FormData {
     email: string;
@@ -18,6 +19,8 @@ interface FormData {
     message: string;
     gdpr: boolean;
     nwsl: boolean;
+    file: IFile;
+    files: IFiles;
     gender: string;
 }
 
@@ -34,6 +37,8 @@ const schema = yup
         message: yup.string(),
         gdpr: yup.boolean().isTrue('Toto pole je povinné!'),
         nwsl: yup.boolean(),
+        file: yup.mixed().required('Toto pole je povinné!'),
+        files: yup.array().min(1, 'Toto pole je povinné!').required('Toto pole je povinné!'),
         gender: yup.string().typeError('Toto pole je povinné!'),
     })
     .required();
@@ -42,6 +47,7 @@ const TestForm = (): ReactElement => {
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors },
     } = useForm<FormData>({
@@ -53,6 +59,8 @@ const TestForm = (): ReactElement => {
             message: '',
             gdpr: false,
             nwsl: false,
+            file: undefined,
+            files: [],
             gender: '',
         },
         resolver: yupResolver(schema),
@@ -60,7 +68,7 @@ const TestForm = (): ReactElement => {
     const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className=" w-full max-w-120 p-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-120 p-8">
             <TextInput
                 name="email"
                 register={register}
@@ -108,7 +116,28 @@ const TestForm = (): ReactElement => {
                     error={errors.gender?.message}
                 />
             </div>
-            <Button type="submit" className="mt-6">
+            <div className="pb-4 border-b border-gray-300 mt-4">
+                <FileInput
+                    name="file"
+                    type="one"
+                    register={register}
+                    value={watch('file')}
+                    onChange={(e) => setValue('file', e, { shouldValidate: true })}
+                    filter="image"
+                    error={errors.file?.message}
+                />
+            </div>
+            <div className="pb-4 border-b border-gray-300 mt-4">
+                <FileInput
+                    name="files"
+                    type="many"
+                    register={register}
+                    values={watch('files')}
+                    onChange={(e) => setValue('files', e, { shouldValidate: true })}
+                    error={errors.files?.message}
+                />
+            </div>
+            <Button type="primary" submit className="mt-6">
                 Odeslat
             </Button>
         </form>

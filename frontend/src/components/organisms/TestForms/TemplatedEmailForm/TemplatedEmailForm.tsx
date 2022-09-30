@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { TextInput } from '../../primitives/TextInput/TextInput';
-import { Button } from '../../primitives/Button/Button';
+import { TextInput } from '../../../primitives/TextInput/TextInput';
+import { Button } from '../../../primitives/Button/Button';
 import axios from 'axios';
 
 interface TemplatedEmailFormProps {
@@ -68,7 +68,7 @@ const TemplatedEmailForm = ({ templateId }: TemplatedEmailFormProps): ReactEleme
                 placeholder="Jméno"
                 className="mt-4"
             />
-            <Button type="submit" className="mt-6">
+            <Button type="secondary" submit className="mt-6">
                 Odeslat
             </Button>
         </form>
