@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@notum-cz/strapi-plugin-content-versioning": "^0.4.3",
-    "@sklinet/strapi-plugin-tinymce": "^1.0.0",
+    "@sklinet/strapi-plugin-tinymce": "^1.0.3",
     "@strapi/admin": "4.4.1",
     "@strapi/plugin-content-manager": "4.4.1",
     "@strapi/plugin-content-type-builder": "4.4.1",
