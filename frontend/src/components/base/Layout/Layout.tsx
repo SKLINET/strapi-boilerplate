@@ -13,8 +13,8 @@ const LayoutComponent = ({ children }: LayoutProps): ReactElement | null => {
         <CustomCursor component={<DefaultCursor />}>
             {(ref) => (
                 <div className={'mx-auto my-0 pt-20'} ref={ref}>
-                    <TemplatedEmailForm templateId={1} />
-                    <TestForm />
+                    {/* <TemplatedEmailForm templateId={1} />
+                    <TestForm /> */}
                     {children}
                 </div>
             )}

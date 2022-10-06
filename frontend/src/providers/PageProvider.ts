@@ -29,10 +29,11 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
+        preview: boolean | undefined,
     ): Promise<AppData<PageProps, WebSettingsProps> | undefined> {
         const pattern = getPagePattern(slug);
-        const publicationState = getPublicationState();
-        return await fetchQuery<any>(this.getEnvironment(), AppQuery, {
+        const publicationState = getPublicationState(preview);
+        return await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             pattern,
             publicationState,

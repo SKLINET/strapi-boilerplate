@@ -21,6 +21,7 @@ import { WebSettingsProps } from '../types/webSettings';
 import { MetaItems } from '../types/metaItem';
 import { MenuItem } from '../types/menu';
 import NextNprogress from 'nextjs-progressbar';
+import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 
 const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
@@ -68,13 +69,13 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     return (
         <>
             <Head site={webSetting} page={page} item={item} />
-
             <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
                 {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
+            {preview && <PreviewToolbar />}
             {preview && <GridHelper />}
 
             {gtm.code && (
@@ -118,7 +119,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const { tz } = config;
     const p = context.params;
     Logger.info('GET ' + '/' + (p && Array.isArray(p.slug) ? p.slug : []).join('/'));
-
     const locale = context.locale || context.defaultLocale;
     dayjs.extend(updateLocale);
     dayjs.extend(timeZone);

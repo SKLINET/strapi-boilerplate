@@ -16,7 +16,7 @@ graphql`
     }
 `;
 
-function ArticlesListBlock({ data, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
+function ArticlesListBlock({ blocksData, data, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
     const articles = data || [];
     return (
         <BlockWrapper className={styles.wrapper} {...rest}>
@@ -31,11 +31,13 @@ if (typeof window === 'undefined') {
         providers,
         context: { params },
     }: StaticBlockContext<any, WebSettingsProps, Providers, Locale>): Promise<any> => {
+        console.log('list block working');
         const data = await providers.news.find({
             locale,
             slug: params?.slug,
         });
-        return { data };
+        console.log(data);
+        return data;
     };
 }
 

@@ -33,13 +33,18 @@ function LatestArticlesBlock({ blocksData, data, ...rest }: BaseBlockProps): Rea
 }
 
 if (typeof window === 'undefined') {
-    LatestArticlesBlock.getStaticProps = async ({ locale, providers }: StaticBlockContext): Promise<BaseBlockProps> => {
-        const data = await providers.news.find({
+    LatestArticlesBlock.getStaticProps = async ({
+        locale,
+        providers,
+        block,
+    }: StaticBlockContext): Promise<BaseBlockProps> => {
+        const filter = {};
+        return await providers.news.find({
             locale,
             limit: 3,
             offset: 0,
+            filter,
         });
-        return { data };
     };
 }
 

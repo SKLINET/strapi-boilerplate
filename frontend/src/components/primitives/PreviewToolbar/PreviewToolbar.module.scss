@@ -1,0 +1,6 @@
+.toolbar {
+    @apply fixed bottom-20 right-12 bg-red flex flex-col justify-center align-middle p-8;
+}
+.button {
+    @apply p-4 bg-sky-400 mt-4;
+}

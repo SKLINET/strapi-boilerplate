@@ -11,7 +11,7 @@ export const AppQuery = graphql`
             }
         }
 
-        page(locale: $locale, pattern: $pattern) {
+        page(locale: $locale, pattern: $pattern, publicationState: $publicationState) {
             title
             url
             pages {
