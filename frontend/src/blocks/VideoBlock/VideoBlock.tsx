@@ -18,16 +18,31 @@ graphql`
                 }
             }
         }
-        videoId
-        thumbnailUrl
+        externalVideo
     }
 `;
 
 function VideoBlock({ blocksData, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
-    const { autoplay, video } = blocksData;
+    const { autoplay, video, externalVideo } = blocksData;
+    const getVideoProvider = (url: string) => {
+        if (url.includes('facebook')) {
+            return 'facebook';
+        }
+        if (url.includes('vimeo')) {
+            return 'vimeo';
+        }
+        if (url.includes('youtube')) {
+            return 'youtube';
+        }
+    };
+
     return (
         <BlockWrapper className={styles.wrapper} {...rest}>
-            <Video video={video} autoPlay={autoplay} />
+            <Video
+                video={video}
+                externalVideo={{ url: externalVideo, provider: getVideoProvider(externalVideo || '') || '' }}
+                autoPlay={autoplay}
+            />
         </BlockWrapper>
     );
 }

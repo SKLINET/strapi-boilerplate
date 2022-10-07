@@ -130,4 +130,8 @@ module.exports = ({ env }) => ({
     i18n: {
         enabled: true,
     },
+    "video-field": {
+        enabled: true,
+        resolve: "./src/plugins/video-field",
+    },
 });

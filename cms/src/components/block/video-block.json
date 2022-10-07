@@ -18,14 +18,9 @@
         "videos"
       ]
     },
-    "videoId": {
-      "type": "string"
-    },
-    "url": {
-      "type": "string"
-    },
-    "thumbnailUrl": {
-      "type": "string"
+    "externalVideo": {
+      "type": "customField",
+      "customField": "plugin::video-field.video"
     }
   }
 }
