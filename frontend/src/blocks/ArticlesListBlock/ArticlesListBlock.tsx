@@ -31,12 +31,10 @@ if (typeof window === 'undefined') {
         providers,
         context: { params },
     }: StaticBlockContext<any, WebSettingsProps, Providers, Locale>): Promise<any> => {
-        console.log('list block working');
         const data = await providers.news.find({
             locale,
             slug: params?.slug,
         });
-        console.log(data);
         return data;
     };
 }

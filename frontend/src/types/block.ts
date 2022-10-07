@@ -20,6 +20,7 @@ export interface StaticBlockContext {
     block?: any;
     app?: any;
     providers?: any;
+    context: any;
 }
 
 export interface ServerSideBlockContext extends StaticBlockContext {
