@@ -11,8 +11,23 @@ const Show = dynamic(import('../../../../public/icons/show.svg'));
 const Sklinet = dynamic(import('../../../../public/icons/sklinet.svg'));
 const Tick = dynamic(import('../../../../public/icons/tick.svg'));
 const Trash = dynamic(import('../../../../public/icons/trash.svg'));
+const SklinetRound = dynamic(import('../../../../public/icons/sklinet-logo.svg'));
+const Exit = dynamic(import('../../../../public/icons/exit.svg'));
+const Edit = dynamic(import('../../../../public/icons/edit.svg'));
 
-export type Icons = 'arrowLeft' | 'arrowRight' | 'hide' | 'loader' | 'show' | 'sklinet' | 'tick' | 'trash' | '';
+export type Icons =
+    | 'arrowLeft'
+    | 'arrowRight'
+    | 'hide'
+    | 'loader'
+    | 'show'
+    | 'sklinet'
+    | 'tick'
+    | 'trash'
+    | 'sklinet-round'
+    | 'exit'
+    | 'edit'
+    | '';
 
 export const getIconName = (name: string): Icons => {
     let _name: Icons = '';
@@ -26,6 +41,9 @@ export const getIconName = (name: string): Icons => {
         case 'sklinet':
         case 'tick':
         case 'trash':
+        case 'sklinet-round':
+        case 'exit':
+        case 'edit':
             _name = name;
             break;
     }
@@ -60,6 +78,12 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
                 return <Tick />;
             case 'trash':
                 return <Trash />;
+            case 'sklinet-round':
+                return <SklinetRound />;
+            case 'exit':
+                return <Exit />;
+            case 'edit':
+                return <Edit />;
             default:
                 return <></>;
         }

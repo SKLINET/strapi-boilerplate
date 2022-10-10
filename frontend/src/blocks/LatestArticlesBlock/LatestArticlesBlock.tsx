@@ -5,6 +5,8 @@ import { NewsList } from '../../components/blocks/NewsList/NewsList';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
 import { getPageUrl } from '../../utils/getPageUrl';
 import { formatPageObject } from '../../utils/formatPageObject';
+import { getSlug } from '@symbio/headless/utils';
+import getPublicationState from '../../utils/getPublicationState';
 
 graphql`
     fragment LatestArticlesBlock_content on ComponentBlockLatestArticlesBlock {
@@ -36,14 +38,17 @@ if (typeof window === 'undefined') {
     LatestArticlesBlock.getStaticProps = async ({
         locale,
         providers,
-        block,
+        context: { params, preview },
     }: StaticBlockContext): Promise<BaseBlockProps> => {
-        const filter = {};
+        const slug = getSlug(params.slug);
+        const filter = { slug: { ne: slug } };
+        const publicationState = getPublicationState(preview);
         return await providers.news.find({
             locale,
             limit: 3,
             offset: 0,
             filter,
+            publicationState,
         });
     };
 }

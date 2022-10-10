@@ -1,8 +1,8 @@
 import { graphql } from 'relay-runtime';
 
 export const newsDetailQuery = graphql`
-    query newsDetailQuery($locale: String, $slug: String) {
-        item: findSlug(modelName: "article", slug: $slug, locale: $locale) {
+    query newsDetailQuery($locale: String, $slug: String, $publicationState: String) {
+        item: findSlug(modelName: "article", slug: $slug, locale: $locale, publicationState: $publicationState) {
             ... on ArticleEntityResponse {
                 data {
                     id
@@ -10,6 +10,7 @@ export const newsDetailQuery = graphql`
                         title
                         url: slug
                         date: publishDate
+                        publishedAt
                         perex
                         image: mainImage {
                             data {
@@ -67,8 +68,20 @@ export const newsDetailQuery = graphql`
 `;
 
 export const newsListQuery = graphql`
-    query newsListQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
-        items: articles(locale: $locale, pagination: { start: $start, limit: $limit }, sort: "publishDate:desc") {
+    query newsListQuery(
+        $locale: I18NLocaleCode
+        $start: Int
+        $limit: Int
+        $publicationState: PublicationState
+        $filters: ArticleFiltersInput
+    ) {
+        items: articles(
+            locale: $locale
+            pagination: { start: $start, limit: $limit }
+            sort: "publishDate:desc"
+            publicationState: $publicationState
+            filters: $filters
+        ) {
             meta {
                 pagination {
                     total
@@ -109,6 +122,7 @@ export const newsStaticPathsQuery = graphql`
                 attributes {
                     title
                     url: slug
+                    slug
                     date: publishDate
                     image: mainImage {
                         data {

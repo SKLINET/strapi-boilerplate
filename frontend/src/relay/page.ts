@@ -5,6 +5,7 @@ export const pageDetailQuery = graphql`
         item: page(locale: $locale) {
             title
             url
+            publishedAt
             pages {
                 data {
                     attributes {
@@ -55,7 +56,7 @@ export const pageDetailQuery = graphql`
                 changeFrequency
                 priority
             }
-            blocks {
+            content: blocks {
                 ...blocksContent @relay(mask: false)
             }
         }
@@ -74,7 +75,7 @@ export const pageStaticPathsQuery = graphql`
                 id
                 attributes {
                     url
-                    blocks {
+                    content: blocks {
                         ...blocksContent @relay(mask: false)
                     }
                     sitemap {
@@ -152,7 +153,7 @@ export const pageListQuery = graphql`
                         changeFrequency
                         priority
                     }
-                    blocks {
+                    content: blocks {
                         ...blocksContent @relay(mask: false)
                     }
                 }
@@ -190,6 +191,15 @@ export const SitemapArticlesQuery = graphql`
                         priority
                     }
                 }
+            }
+        }
+    }
+`;
+export const PageIdQuery = graphql`
+    query pageIdQuery($publicationState: PublicationState, $filters: PageFiltersInput, $locale: I18NLocaleCode) {
+        pages(publicationState: $publicationState, filters: $filters, locale: $locale) {
+            data {
+                id
             }
         }
     }

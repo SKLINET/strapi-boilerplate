@@ -54,7 +54,6 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     if (router.isFallback) {
         return <div>Loading...</div>;
     }
-
     dayjs.extend(updateLocale);
     dayjs.extend(timeZone);
     dayjs.extend(localizedFormat);
@@ -72,10 +71,10 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
-                {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
+                {page && <Blocks blocksData={page.content} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
-            {preview && <PreviewToolbar />}
+            {preview && page && <PreviewToolbar page={page} item={item} locale={locale} preview={preview} />}
             {preview && <GridHelper />}
 
             {gtm.code && (
@@ -119,6 +118,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const { tz } = config;
     const p = context.params;
     Logger.info('GET ' + '/' + (p && Array.isArray(p.slug) ? p.slug : []).join('/'));
+
     const locale = context.locale || context.defaultLocale;
     dayjs.extend(updateLocale);
     dayjs.extend(timeZone);
@@ -128,8 +128,20 @@ export const getStaticProps: GetStaticProps = async (context) => {
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
+    const renamedBlocks: Record<string, any> = {};
+    for (const key in blocks) {
+        renamedBlocks[`ComponentBlock${key}`] = blocks[key];
+    }
 
-    return await getBlocksProps(context, providers, blocks, config.ssg);
+    const res = (await getBlocksProps(context, providers, renamedBlocks, config.ssg)) as any;
+    if (res.props.blocksPropsMap) {
+        const blocks = Object.values(res.props.blocksPropsMap);
+        if (blocks.some((block: any) => block.item === undefined && block.data === undefined)) {
+            return { notFound: true };
+        }
+    }
+
+    return res;
 };
 
 export default Page;

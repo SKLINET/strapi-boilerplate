@@ -16,9 +16,10 @@ import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { MenuItem } from '../types/menu';
+import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 
 const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
-    const { hostname, site, page, webSetting, blocksPropsMap, redirect } = props;
+    const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview } = props;
     const { gtm, tz } = config;
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
@@ -53,12 +54,12 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     return (
         <>
             <Head site={webSetting} page={page} />
-
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
-                {page?.blocks && <Blocks blocksData={page?.blocks} initialProps={blocksPropsMap} app={app} />}
+                {page?.content && <Blocks blocksData={page?.content} initialProps={blocksPropsMap} app={app} />}
             </Layout>
 
+            {preview && page && <PreviewToolbar page={page} locale={locale} />}
             {gtm.code && (
                 <noscript
                     dangerouslySetInnerHTML={{
@@ -83,11 +84,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
     dayjs.tz.setDefault(tz);
 
+    const renamedBlocks: Record<string, any> = {};
+    for (const key in blocks) {
+        renamedBlocks[`ComponentBlock${key}`] = blocks[key];
+    }
+
     try {
         return await getBlocksProps(
             { ...context, params: { ...context.params, slug: ['404'] } },
             providers,
-            blocks,
+            renamedBlocks,
             config.ssg,
         );
     } catch (e) {
