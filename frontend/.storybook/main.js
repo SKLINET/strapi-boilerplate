@@ -59,5 +59,13 @@ module.exports = {
                 },
             },
         },
+        {
+            name: 'storybook-addon-swc',
+            options: {
+                enable: true,
+                enableSwcLoader: true,
+                enableSwcMinify: true,
+            },
+        },
     ],
 };
