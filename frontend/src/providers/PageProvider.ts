@@ -71,7 +71,6 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                                 },
                             },
                         });
-
                         continue;
                     }
                     if (String(page?.attributes?.url) === '404') {
@@ -84,7 +83,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                             WebSettingsProps,
                             Providers,
                             Locale
-                        >(page.attributes.blocks, locale ?? '', providers, blocks);
+                        >(page.attributes.content, locale ?? '', providers, blocks);
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;

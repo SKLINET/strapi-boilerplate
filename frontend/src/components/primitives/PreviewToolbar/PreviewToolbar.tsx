@@ -30,6 +30,21 @@ const PreviewToolbar = ({ page, item, locale, preview }: PreviewToolbarProps): R
     const title = item?.attributes?.title || page?.title || '';
     const adminPath = process.env.ADMIN_PATH;
 
+    const getPageId = async () => {
+        const environment = createRelayEnvironment({});
+        const publicationState = getPublicationState(preview);
+        const variables = {
+            filters: { url: { eq: page?.url } },
+            locale,
+            publicationState,
+        };
+        const data = await fetchQuery<pageIdQuery>(environment, PageIdQuery, variables)
+            .toPromise()
+            .then((res) => res?.pages?.data[0]?.id);
+
+        setItemId(Number(data?.replace('Page_', '')));
+    };
+
     useEffect(() => {
         if (item) {
             setIsPublished(item?.attributes?.publishedAt ? true : false);
@@ -43,6 +58,7 @@ const PreviewToolbar = ({ page, item, locale, preview }: PreviewToolbarProps): R
             setIsPublished(page?.publishedAt ? true : false);
             if (page?.url) {
                 setCollection('api::page.page');
+                getPageId();
             }
         }
     }, [page, item]);
