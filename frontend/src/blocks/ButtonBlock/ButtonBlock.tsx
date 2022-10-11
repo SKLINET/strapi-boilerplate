@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { graphql } from 'react-relay';
-import { Button } from '../../components/blocks/Button/Button';
+import Button from '../../components/blocks/Button/Button';
 import { BaseBlockProps } from '../../types/block';
 
 graphql`

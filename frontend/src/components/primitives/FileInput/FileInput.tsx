@@ -85,7 +85,7 @@ const FileInput = ({
             if (e === 'all') {
                 onChange([]);
             } else {
-                const _newFiles: File[] = [];
+                const _newFiles: IFiles = [];
 
                 for (let i = 0; i < _value.length; i++) {
                     if (i !== e) {
