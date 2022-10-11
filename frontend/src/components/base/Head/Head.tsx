@@ -35,18 +35,18 @@ type Meta = { name: string | null; content: string | null } | null;
 
 export const Head = ({ page, site }: HeadProps): ReactElement => {
     const data = {
-        title: page?.meta?.title || page?.meta?.metaTitle || page?.title || '',
-        metaTitle: page?.meta?.metaTitle,
-        metaDescription: page?.meta?.metaDescription,
-        metaImage: page?.meta?.metaImage?.data?.attributes?.url,
-        social: page?.meta?.metaSocial,
-        viewPort: page?.meta?.metaViewport,
-        keyWords: page?.meta?.keywords,
-        robots: page?.meta?.metaRobots,
-        canonical: page?.meta?.canonicalURL,
+        title: page?.seo?.title || page?.seo?.metaTitle || page?.title || '',
+        metaTitle: page?.seo?.metaTitle,
+        metaDescription: page?.seo?.metaDescription,
+        metaImage: page?.seo?.metaSocial?.[0]?.image?.data?.attributes?.url,
+        social: page?.seo?.metaSocial,
+        viewPort: page?.seo?.metaViewport,
+        keyWords: page?.seo?.keywords,
+        robots: page?.seo?.metaRobots,
+        canonical: page?.seo?.canonicalURL,
     };
-    const preventIndexing = page?.meta ? page?.meta?.preventIndexing : false;
-    const meta = page?.meta?.meta || [];
+    const preventIndexing = page?.seo ? page?.seo?.preventIndexing : false;
+    const meta = page?.seo?.meta || [];
 
     const router = useRouter();
     const currentPageUrl = process.env.BASE_PATH + router?.asPath;
@@ -109,13 +109,13 @@ export const Head = ({ page, site }: HeadProps): ReactElement => {
 
             {/* APP */}
             {/* <link rel="manifest" href="/manifest.json" /> */}
-            {site?.data?.attributes?.globalSeo?.siteName && (
-                <meta name="application-name" content={site.data.attributes.globalSeo.siteName} />
+            {site?.data?.attributes?.seo?.metaTitle && (
+                <meta name="application-name" content={site.data.attributes.seo.metaTitle} />
             )}
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-            {site?.data?.attributes?.globalSeo?.siteName && (
-                <meta name="apple-mobile-web-app-title" content={site.data.attributes.globalSeo.siteName} />
+            {site?.data?.attributes?.seo?.metaTitle && (
+                <meta name="apple-mobile-web-app-title" content={site.data.attributes.seo.metaTitle} />
             )}
             <meta name="format-detection" content="telephone=no" />
             <meta name="mobile-web-app-capable" content="yes" />

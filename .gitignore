@@ -25,3 +25,5 @@ frontend/public/images/.DS_Store
 frontend/public/images/backgrounds/.DS_Store
 .DS_Store
 cms/src/extensions/documentation/documentation/1.0.0/full_documentation.json
+cms/.history
+frontend/.history

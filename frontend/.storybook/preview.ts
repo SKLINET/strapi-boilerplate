@@ -42,8 +42,8 @@ AppStore.getInstance<PageProps, WebSettingsProps>({
     },
     site: {
         globalSeo: {
-            siteName: 'COM PLUS',
-            titleSuffix: ' - COM PLUS',
+            siteName: 'Boilerplate',
+            titleSuffix: ' - Boilerplate',
             facebookPageUrl: 'https://www.facebook.com/SkupinaPPF/',
             fallbackSeo: {
                 description:
