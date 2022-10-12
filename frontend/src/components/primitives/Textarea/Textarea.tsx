@@ -3,7 +3,7 @@ import styles from './Textarea.module.scss';
 import clsx from 'clsx';
 import { UseFormRegister } from 'react-hook-form';
 
-export interface TextAreaProps {
+export interface TextareaProps {
     name: string;
     register: UseFormRegister<any>;
     error?: string | undefined;
@@ -11,7 +11,7 @@ export interface TextAreaProps {
     className?: string;
 }
 
-const TextArea = ({ name, register, error, placeholder, className }: TextAreaProps): ReactElement => (
+const Textarea = ({ name, register, error, placeholder, className }: TextareaProps): ReactElement => (
     <div className={clsx(styles.wrapper, className)}>
         <textarea
             {...register(name)}
@@ -24,4 +24,4 @@ const TextArea = ({ name, register, error, placeholder, className }: TextAreaPro
     </div>
 );
 
-export { TextArea };
+export { Textarea };
