@@ -3,6 +3,7 @@ import { AbstractProvider, CmsItem, FindOneParams, FindParams, SingletonBaseReco
 import { STRAPI_MAX_LIMIT } from '../constants';
 import { createRelayEnvironment } from '../relay/createRelayEnvironment';
 import { FindOperationType, FindResponse, OneOperationType, ProviderOptions, BaseRecord } from '../index';
+import getPublicationState from '../utils/getPublicationState';
 
 export default class StrapiProvider<
     TOne extends OneOperationType,
@@ -59,7 +60,7 @@ export default class StrapiProvider<
                 locale,
                 limit: 1,
                 offset: 0,
-                filter: (options as FindParams<TFind['variables']>).filter
+                filters: (options as FindParams<TFind['variables']>).filter
                     ? { ...this.getFilterParams(), ...(options as FindParams<TFind['variables']>).filter }
                     : this.getFilterParams(),
             };
@@ -84,9 +85,8 @@ export default class StrapiProvider<
             offset: 0,
             ...other,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
-            filter: options.filter ? { ...this.getFilterParams(), ...options.filter } : this.getFilterParams(),
+            filters: options.filter ? { ...this.getFilterParams(), ...options.filter } : this.getFilterParams(),
         };
-
         const result = await fetchQuery<any>(this.getEnvironment(), this.findNode, variables).toPromise();
 
         if (!result) {

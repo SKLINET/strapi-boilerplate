@@ -16,7 +16,6 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         publicationState: 'PREVIEW',
         locale: locale || 'cs',
     }).toPromise();
-
     const settings = data?.webSetting?.data?.attributes || null;
     let url = locale === 'en' ? `/${locale}` : '';
 
@@ -43,6 +42,6 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 
     res.setPreviewData({});
     res.statusCode = 307;
-    res.setHeader('Location', url);
+    res.setHeader('Location', url || '/');
     res.end();
 };

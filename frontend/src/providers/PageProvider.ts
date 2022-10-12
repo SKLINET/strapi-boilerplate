@@ -29,10 +29,11 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
+        preview: boolean | undefined,
     ): Promise<AppData<PageProps, WebSettingsProps> | undefined> {
         const pattern = getPagePattern(slug);
-        const publicationState = getPublicationState();
-        return await fetchQuery<any>(this.getEnvironment(), AppQuery, {
+        const publicationState = getPublicationState(preview);
+        return await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             pattern,
             publicationState,
@@ -70,7 +71,6 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                                 },
                             },
                         });
-
                         continue;
                     }
                     if (String(page?.attributes?.url) === '404') {
@@ -83,7 +83,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                             WebSettingsProps,
                             Providers,
                             Locale
-                        >(page.attributes.blocks, locale ?? '', providers, blocks);
+                        >(page.attributes.content, locale ?? '', providers, blocks);
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;

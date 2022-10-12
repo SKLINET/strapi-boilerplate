@@ -6,44 +6,27 @@ import { WebSettingsProps } from '../../../types/webSettings';
 import { PageProps } from '../../../types/page';
 import { getImageUrl } from '../../../utils/getImageUrl';
 import { useRouter } from 'next/router';
+import { MetaItem } from '../../../types/metaItem';
 
 export interface HeadProps {
-    item?: AppContextProps<PageProps, WebSettingsProps>['item'];
+    item?: MetaItem;
     page?: AppContextProps<PageProps, WebSettingsProps>['page'];
     site: WebSettingsProps;
 }
 
-type MetaSocialItem = {
-    socialNetwork: string;
-    title: string;
-    description: string;
-    image: {
-        data: {
-            attributes: {
-                url: string;
-                width: number;
-                height: number;
-                alternativeText: string;
-                name: string;
-                caption: string;
-            };
-        };
-    };
-};
-
 type Meta = { name: string | null; content: string | null } | null;
 
-export const Head = ({ page, site }: HeadProps): ReactElement => {
+export const Head = ({ page, site, item }: HeadProps): ReactElement => {
+    const siteObj = site?.data?.attributes?.seo;
     const data = {
-        title: page?.seo?.title || page?.seo?.metaTitle || page?.title || '',
-        metaTitle: page?.seo?.metaTitle,
-        metaDescription: page?.seo?.metaDescription,
-        metaImage: page?.seo?.metaSocial?.[0]?.image?.data?.attributes?.url,
-        social: page?.seo?.metaSocial,
-        viewPort: page?.seo?.metaViewport,
-        keyWords: page?.seo?.keywords,
-        robots: page?.seo?.metaRobots,
-        canonical: page?.seo?.canonicalURL,
+        title: item?.seo?.title || item?.title || page?.seo?.title || page?.title || siteObj?.title || '',
+        metaTitle: item?.seo?.metaTitle || page?.seo?.metaTitle || siteObj?.metaTitle || '',
+        metaDescription: item?.seo?.metaDescription || page?.seo?.metaDescription || siteObj?.metaDescription || '',
+        social: item?.seo?.metaSocial || page?.seo?.metaSocial || siteObj?.metaSocial || [],
+        viewPort: item?.seo?.metaViewport || page?.seo?.metaViewport || siteObj?.metaViewport || '',
+        keyWords: item?.seo?.keywords || page?.seo?.keywords || siteObj?.keywords || '',
+        robots: item?.seo?.metaRobots || page?.seo?.metaRobots || siteObj?.metaRobots || '',
+        canonical: item?.seo?.canonicalURL || page?.seo?.canonicalURL || siteObj?.canonicalURL || '',
     };
     const preventIndexing = page?.seo ? page?.seo?.preventIndexing : false;
     const meta = page?.seo?.meta || [];
@@ -57,7 +40,6 @@ export const Head = ({ page, site }: HeadProps): ReactElement => {
             <title>{data?.title}</title>
             <meta name="title" content={`${data?.metaTitle || data?.title}`} />
             <meta name="description" content={data?.metaDescription || ''} />
-            {data.metaImage && <meta name="image" content={getImageUrl(data.metaImage)} />}
             <meta name="keywords" content={data?.keyWords || ''} />
             {preventIndexing ? (
                 <meta name="robots" content="noindex, nofollow" />
@@ -68,9 +50,8 @@ export const Head = ({ page, site }: HeadProps): ReactElement => {
                 if (!m || !m.name || !m.content) return null;
                 return <meta key={`meta-${key}`} property={m?.name} content={m?.content} />;
             })}
-            {Array.isArray(data?.social) &&
-                data.social.length > 0 &&
-                data.social.map((item: MetaSocialItem, i: number) => (
+            {data?.social?.length > 0 &&
+                data?.social?.map((item, i: number) => (
                     <React.Fragment key={`meta-social-tag-${i}`}>
                         <meta
                             property={item?.socialNetwork === 'Facebook' ? 'og:title' : 'twitter:title'}
@@ -109,14 +90,10 @@ export const Head = ({ page, site }: HeadProps): ReactElement => {
 
             {/* APP */}
             {/* <link rel="manifest" href="/manifest.json" /> */}
-            {site?.data?.attributes?.seo?.metaTitle && (
-                <meta name="application-name" content={site.data.attributes.seo.metaTitle} />
-            )}
+            {siteObj?.title && <meta name="application-name" content={siteObj.title} />}
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-            {site?.data?.attributes?.seo?.metaTitle && (
-                <meta name="apple-mobile-web-app-title" content={site.data.attributes.seo.metaTitle} />
-            )}
+            {siteObj?.title && <meta name="apple-mobile-web-app-title" content={siteObj?.title} />}
             <meta name="format-detection" content="telephone=no" />
             <meta name="mobile-web-app-capable" content="yes" />
             <meta name="msapplication-config" content="/browserconfig.xml" />
