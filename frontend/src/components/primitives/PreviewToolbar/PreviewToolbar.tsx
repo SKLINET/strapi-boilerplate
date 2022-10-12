@@ -28,7 +28,7 @@ const PreviewToolbar = ({ page, item, locale, preview }: PreviewToolbarProps): R
     const [collection, setCollection] = useState<string>('');
     const [itemId, setItemId] = useState<number>(0);
     const title = item?.attributes?.title || page?.title || '';
-    const adminPath = process.env.ADMIN_PATH;
+    const adminPath = `${process.env.API_BASE_PATH}/admin`;
 
     const getPageId = async () => {
         const environment = createRelayEnvironment({});
