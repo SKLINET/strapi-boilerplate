@@ -45,7 +45,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
             });
 
             const { webSetting } = (await fetchQuery<appQuery>(environment, AppQuery, {
-                publicationState: getPublicationState(),
+                publicationState: getPublicationState(req.preview),
                 locale: data.locale || 'cs',
             }).toPromise()) as appQueryResponse;
 

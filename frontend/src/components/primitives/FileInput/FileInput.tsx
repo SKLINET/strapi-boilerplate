@@ -85,7 +85,7 @@ const FileInput = ({
             if (e === 'all') {
                 onChange([]);
             } else {
-                const _newFiles: IFiles = [];
+                const _newFiles: any[] = [];
 
                 for (let i = 0; i < _value.length; i++) {
                     if (i !== e) {
@@ -93,7 +93,7 @@ const FileInput = ({
                     }
                 }
 
-                onChange(_newFiles);
+                onChange(_newFiles as File & IFiles);
             }
         }
     };

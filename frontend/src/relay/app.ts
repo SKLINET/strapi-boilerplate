@@ -11,9 +11,10 @@ export const AppQuery = graphql`
             }
         }
 
-        page(locale: $locale, pattern: $pattern) {
+        page(locale: $locale, pattern: $pattern, publicationState: $publicationState) {
             title
             url
+            publishedAt
             pages {
                 data {
                     attributes {
@@ -63,7 +64,7 @@ export const AppQuery = graphql`
                 changeFrequency
                 priority
             }
-            blocks {
+            content: blocks {
                 ...blocksContent @relay(mask: false)
             }
         }
@@ -72,7 +73,8 @@ export const AppQuery = graphql`
             title
             locale
             url
-            blocks {
+            publishedAt
+            content: blocks {
                 __typename
                 ...blocksContent @relay(mask: false)
             }

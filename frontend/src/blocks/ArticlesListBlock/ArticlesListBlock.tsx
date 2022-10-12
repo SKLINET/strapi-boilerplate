@@ -8,6 +8,7 @@ import { WebSettingsProps } from '../../types/webSettings';
 import { Providers } from '../../types/providers';
 import { Locale } from '../../types/locale';
 import { NewsList } from '../../components/blocks/NewsList/NewsList';
+import getPublicationState from '../../utils/getPublicationState';
 
 graphql`
     fragment ArticlesListBlock_content on ComponentBlockArticlesListBlock {
@@ -16,11 +17,12 @@ graphql`
     }
 `;
 
-function ArticlesListBlock({ data, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
+function ArticlesListBlock({ blocksData, data, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
     const articles = data || [];
+    const detailUrl = rest?.app?.webSetting?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '';
     return (
         <BlockWrapper className={styles.wrapper} {...rest}>
-            <NewsList items={articles} />
+            <NewsList items={articles} detailUrl={detailUrl} />
         </BlockWrapper>
     );
 }
@@ -29,13 +31,15 @@ if (typeof window === 'undefined') {
     ArticlesListBlock.getStaticProps = async ({
         locale,
         providers,
-        context: { params },
+        context: { params, preview },
     }: StaticBlockContext<any, WebSettingsProps, Providers, Locale>): Promise<any> => {
+        const publicationState = getPublicationState(preview);
         const data = await providers.news.find({
             locale,
             slug: params?.slug,
+            publicationState: publicationState,
         });
-        return { data };
+        return data;
     };
 }
 
