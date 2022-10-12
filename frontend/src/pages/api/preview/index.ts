@@ -42,6 +42,6 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 
     res.setPreviewData({});
     res.statusCode = 307;
-    res.setHeader('Location', url);
+    res.setHeader('Location', url || '/');
     res.end();
 };
