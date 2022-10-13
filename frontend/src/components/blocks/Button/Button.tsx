@@ -6,7 +6,7 @@ import styles from './Button.module.scss';
 
 export type ButtonProps = any;
 
-export const Button = ({ className, app, ...props }: ButtonProps): ReactElement => (
+const Button = ({ className, app, ...props }: ButtonProps): ReactElement => (
     <BlockWrapper className={clsx(styles.blockWrapper, className)}>
         <Heading tag={'h2'} className="mt-6">
             {props?.label}
@@ -14,3 +14,5 @@ export const Button = ({ className, app, ...props }: ButtonProps): ReactElement 
         <pre className="p-8 bg-gray-300 w-full">{JSON.stringify(props, undefined, '    ')}</pre>
     </BlockWrapper>
 );
+
+export default Button;

@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { TextInput } from '../../../primitives/TextInput/TextInput';
 import { PasswordInput } from '../../../primitives/PasswordInput/PasswordInput';
-import { TextArea } from '../../../primitives/Textarea/Textarea';
+import { Textarea } from '../../../primitives/Textarea/Textarea';
 import { Checkbox } from '../../../primitives/Checkbox/Checkbox';
 import { Switch } from '../../../primitives/Switch/Switch';
 import { RadioButtons } from '../../../primitives/RadioButtons/RadioButtons';
@@ -91,7 +91,7 @@ const TestForm = (): ReactElement => {
                 className="mt-4"
             />
             <TextInput name="age" register={register} error={errors.age?.message} placeholder="Věk" className="mt-4" />
-            <TextArea name="message" register={register} placeholder="Vaše zpráva" className="mt-4" />
+            <Textarea name="message" register={register} placeholder="Vaše zpráva" className="mt-4" />
             <Checkbox
                 name="gdpr"
                 register={register}

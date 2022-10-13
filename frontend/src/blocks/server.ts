@@ -16,6 +16,7 @@ import ImageBlock from './ImageBlock/ImageBlock';
 import LatestArticlesBlock from './LatestArticlesBlock/LatestArticlesBlock';
 import MapBlock from './MapBlock/MapBlock';
 import RichTextBlock from './RichTextBlock/RichTextBlock';
+import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
 /**
@@ -35,6 +36,7 @@ graphql`
         ...LatestArticlesBlock_content @relay(mask: false)
         ...MapBlock_content @relay(mask: false)
         ...RichTextBlock_content @relay(mask: false)
+        ...TemplateBlock_content @relay(mask: false)
         ...VideoBlock_content @relay(mask: false)
         ...YoutubeVimeoBlock_content @relay(mask: false)
     }
@@ -50,6 +52,7 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
     LatestArticlesBlock,
     MapBlock,
     RichTextBlock,
+    TemplateBlock,
     VideoBlock,
     YoutubeVimeoBlock,
 };
