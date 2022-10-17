@@ -10,7 +10,7 @@ import { formatPageObject } from '../../../utils/formatPageObject';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const { locale, type, slug } = req.query;
+    const { locale, type, slug, itemId, pageId } = req.query;
     const environment = createRelayEnvironment({});
     const data = await fetchQuery<previewSettingsQuery>(environment, PreviewSettingsQuery, {
         publicationState: 'PREVIEW',
@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         }
     }
 
-    res.setPreviewData({});
+    res.setPreviewData({ pageId: pageId, itemId: itemId });
     res.statusCode = 307;
     res.setHeader('Location', url || '/');
     res.end();

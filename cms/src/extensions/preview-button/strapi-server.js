@@ -22,19 +22,31 @@ async function findOne(ctx) {
 // Change cases based on content-type UIDs !
 function getPreviewUrls(entity, supportedType, baseUrl) {
     let slug = "";
+    let pageId;
+    let itemId;
     switch (supportedType?.type) {
         case "pages":
             slug = entity?.url;
+            pageId = entity.id;
             break;
         case "articles":
             slug = entity?.slug;
+            itemId = entity.id;
             break;
         default:
             slug = entity?.slug;
     }
 
-    const url = `${baseUrl}?type=${supportedType?.type}&locale=${entity?.locale}&secret=${process.env.STRAPI_PREVIEW_SECRET}&slug=${slug}`;
-    const publishedUrl = `${baseUrl}/?type=${supportedType?.type}&locale=${entity?.locale}&slug=${slug}`;
+    const url = `${baseUrl}?type=${supportedType?.type}&locale=${
+        entity?.locale
+    }&secret=${process.env.STRAPI_PREVIEW_SECRET}&slug=${slug}${
+        pageId ? `&pageId=${pageId}` : ""
+    }${itemId ? `&itemId=${itemId}` : ""}`;
+    const publishedUrl = `${baseUrl}/?type=${supportedType?.type}&locale=${
+        entity?.locale
+    }&slug=${slug}${pageId ? `&pageId=${pageId}` : ""}${
+        itemId ? `&itemId=${itemId}` : ""
+    }`;
 
     return {
         draftUrl: url,
