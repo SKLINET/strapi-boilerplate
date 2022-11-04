@@ -14,26 +14,9 @@ export interface VideoComponentProps {
     externalVideo?: {
         url: string;
         provider: string;
+        uid: string;
     };
 }
-
-const getVideoUid = (provider: string, url: string) => {
-    if (provider === 'youtube') {
-        // eslint-disable-next-line no-useless-escape
-        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\/)|(\?v=|\&v=))([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        if (match && match[8].length == 11) {
-            return match[8];
-        }
-    }
-    if (provider === 'vimeo') {
-        const regExp = /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/;
-        const match = url.match(regExp);
-        if (match && match[5]) {
-            return match[5];
-        }
-    }
-};
 
 const Video = ({ video, autoPlay, objectFit, loop, className, externalVideo }: VideoComponentProps): JSX.Element => {
     if (video.data?.attributes?.url) {
@@ -51,23 +34,13 @@ const Video = ({ video, autoPlay, objectFit, loop, className, externalVideo }: V
     if (!video.data && externalVideo?.url) {
         switch (externalVideo?.provider) {
             case 'youtube':
-                return externalVideo?.url ? (
-                    <YoutubeVideo
-                        uid={getVideoUid(externalVideo?.provider, externalVideo?.url) || ''}
-                        className={className}
-                    />
+                return externalVideo?.uid ? (
+                    <YoutubeVideo uid={externalVideo.uid || ''} className={className} />
                 ) : (
                     <></>
                 );
             case 'vimeo':
-                return externalVideo?.url ? (
-                    <VimeoVideo
-                        uid={getVideoUid(externalVideo?.provider, externalVideo?.url) || ''}
-                        className={className}
-                    />
-                ) : (
-                    <></>
-                );
+                return externalVideo?.uid ? <VimeoVideo uid={externalVideo.uid || ''} className={className} /> : <></>;
             case 'facebook':
                 return externalVideo.url ? <FacebookVideo url={externalVideo?.url} className={className} /> : <></>;
         }

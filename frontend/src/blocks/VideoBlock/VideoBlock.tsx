@@ -24,23 +24,16 @@ graphql`
 
 function VideoBlock({ blocksData, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
     const { autoplay, video, externalVideo } = blocksData;
-    const getVideoProvider = (url: string) => {
-        if (url.includes('facebook')) {
-            return 'facebook';
-        }
-        if (url.includes('vimeo')) {
-            return 'vimeo';
-        }
-        if (url.includes('youtube')) {
-            return 'youtube';
-        }
-    };
 
     return (
         <BlockWrapper className={styles.wrapper} {...rest}>
             <Video
                 video={video}
-                externalVideo={{ url: externalVideo, provider: getVideoProvider(externalVideo || '') || '' }}
+                externalVideo={{
+                    url: externalVideo.url,
+                    provider: externalVideo.provider,
+                    uid: externalVideo.videoUid,
+                }}
                 autoPlay={autoplay}
             />
         </BlockWrapper>
