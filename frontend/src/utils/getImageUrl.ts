@@ -1,10 +1,12 @@
 export function getImageUrl(url: string | null | undefined, includeHost = true): string {
-    if (process.env.IMGIX_PATH === undefined) {
+    if (url?.indexOf('imgix') === -1) {
         const baseUrl = process.env.API_BASE_PATH;
-        return `${baseUrl}${url}`;
+        return new URL(url, baseUrl).toString();
     }
 
-    const baseUrl = includeHost ? `${process.env.IMGIX_PATH}` : process.env.MEDIA_PATH;
+    if (includeHost) {
+        return url || '';
+    }
 
-    return `${baseUrl}/${url?.replace('/uploads/', '')}`;
+    return `${process.env.MEDIA_PATH}${new URL(url ?? '').pathname}`;
 }
