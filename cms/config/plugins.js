@@ -130,4 +130,11 @@ module.exports = ({ env }) => ({
     i18n: {
         enabled: true,
     },
+    "imgix-prefixer": {
+        enabled: false,
+        config: {
+            imgixBaseURL: "https://example.imgix.net",
+            graphql: true,
+        },
+    },
 });
