@@ -27,8 +27,8 @@ function LatestArticlesBlock({ blocksData, data, ...rest }: BaseBlockProps): Rea
                 headline={blocksData?.heading}
                 items={articlesData}
                 allNewsLinkText={blocksData?.buttonLabel}
-                allNewsUrl={getPageUrl(formatPageObject(allNewsUrl || ''))}
-                detailUrl={getPageUrl(formatPageObject(detailUrl || ''))}
+                allNewsUrl={getPageUrl(allNewsUrl || '')}
+                detailUrl={getPageUrl(detailUrl || '')}
             />
         </BlockWrapper>
     );

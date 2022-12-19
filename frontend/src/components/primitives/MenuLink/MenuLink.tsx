@@ -18,27 +18,21 @@ export interface LinkProps {
 }
 
 const MenuLink = ({ children, className, href, target = '_self', onClick }: LinkProps): ReactElement | null => {
-    const renderLink = () => (
-        <a
-            href={href}
-            target={getLinkTarget(target)}
+    return (
+        <NextLink
+            href={href || ''}
             rel={'noreferrer'}
-            className={cn(className)}
+            target={getLinkTarget(target)}
             onClick={() => {
                 if (onClick) {
                     onClick();
                 }
             }}
+            className={cn(className)}
         >
             {children}
-        </a>
+        </NextLink>
     );
-    if (href) {
-        return <NextLink href={href}>{renderLink()}</NextLink>;
-    } else if (onClick) {
-        return renderLink();
-    }
-    return null;
 };
 
 export { MenuLink };

@@ -42,6 +42,9 @@ const nextConfig = {
 
         return config;
     },
+    eslint: {
+        dirs: ['src/components', 'src/lib', 'src/pages', 'src/providers', 'src/utils'],
+    },
     async rewrites() {
         return [
             {

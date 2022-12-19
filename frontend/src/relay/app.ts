@@ -69,17 +69,6 @@ export const AppQuery = graphql`
             }
         }
 
-        findPage(pattern: $pattern, publicationState: $publicationState, locale: $locale) {
-            title
-            locale
-            url
-            publishedAt
-            content: blocks {
-                __typename
-                ...blocksContent @relay(mask: false)
-            }
-        }
-
         findRedirect(redirectFrom: $redirect, publicationState: $publicationState) {
             redirectFrom
             redirectTo

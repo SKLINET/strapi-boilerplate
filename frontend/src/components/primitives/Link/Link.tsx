@@ -42,19 +42,21 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
     }
 
     return (
-        <NextLink href={'/[[...slug]]'} as={realHref} locale={locale} passHref>
-            <a
-                {...attrs}
-                {...rest}
-                onClick={(e) => {
-                    if (typeof attrs.onClick === 'function') {
-                        return attrs.onClick(e);
-                    }
-                    return true;
-                }}
-            >
-                {typeof realChildren === 'string' ? nbsp(realChildren) : realChildren}
-            </a>
+        <NextLink
+            href={'/[[...slug]]'}
+            as={realHref}
+            locale={locale}
+            passHref
+            {...attrs}
+            {...rest}
+            onClick={(e) => {
+                if (typeof attrs.onClick === 'function') {
+                    return attrs.onClick(e);
+                }
+                return true;
+            }}
+        >
+            {typeof realChildren === 'string' ? nbsp(realChildren) : realChildren}
         </NextLink>
     );
 };

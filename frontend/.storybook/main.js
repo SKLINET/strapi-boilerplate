@@ -50,7 +50,6 @@ module.exports = {
         '@storybook/addon-storysource',
         '@storybook/addon-backgrounds',
         '@storybook/addon-a11y',
-        'storybook-addon-next-router',
         {
             name: '@storybook/addon-postcss',
             options: {

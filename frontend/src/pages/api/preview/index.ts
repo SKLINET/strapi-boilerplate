@@ -19,13 +19,14 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     const settings = data?.webSetting?.data?.attributes || null;
     let url = locale === 'en' ? `/${locale}` : '';
 
-    const homepage = formatPageObject(settings?.homePage?.data?.attributes?.url || '');
+    const homepage = settings?.homePage?.data?.attributes?.url || '';
 
     switch (type) {
         case 'articles':
-            url += `${getPageUrl(
-                formatPageObject(settings?.articleDetailPage?.data?.attributes?.url || '') || homepage,
-            )?.replace(':slug', String(slug))}`;
+            url += `${getPageUrl(settings?.articleDetailPage?.data?.attributes?.url || homepage || '')?.replace(
+                ':slug',
+                String(slug),
+            )}`;
             break;
     }
 
@@ -36,7 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
             pattern: getPagePattern(slug || ''),
         }).toPromise();
         if (p?.findPage) {
-            url += `${getPageUrl(formatPageObject(p?.findPage?.url || '') || homepage)}`;
+            url += `${getPageUrl(p?.findPage?.url || homepage || '')}`;
         }
     }
 
