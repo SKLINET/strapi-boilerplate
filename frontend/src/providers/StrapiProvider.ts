@@ -26,6 +26,9 @@ export default class StrapiProvider<
         this.findNode = findNode;
         this.options = options;
     }
+    public setFindOneQuery(node: GraphQLTaggedNode) {
+        this.node = node;
+    }
 
     protected getEnvironment(preview = false): Environment {
         return this.environment[preview ? 'preview' : 'production'];
@@ -47,11 +50,7 @@ export default class StrapiProvider<
         if (id) {
             // get by id
             variables = {
-                filter: {
-                    id: { eq: id },
-                    title: { exists: true },
-                    ...this.getFilterParams(),
-                },
+                id,
                 locale,
             };
         } else {
@@ -66,7 +65,7 @@ export default class StrapiProvider<
             };
         }
 
-        const result = await fetchQuery<any>(this.getEnvironment(), this.node, variables).toPromise();
+        const result = await fetchQuery<any>(this.getEnvironment(preview), this.node, variables).toPromise();
 
         if (!result?.item) {
             return null;

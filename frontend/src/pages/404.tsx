@@ -56,7 +56,9 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             <Head site={webSetting} page={page} />
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
-                {page?.content && <Blocks blocksData={page?.content} initialProps={blocksPropsMap} app={app} />}
+                {page?.attributes?.content && (
+                    <Blocks blocksData={page?.attributes?.content} initialProps={blocksPropsMap} app={app} />
+                )}
             </Layout>
 
             {preview && page && <PreviewToolbar page={page} locale={locale} />}

@@ -23,42 +23,31 @@ interface PreviewToolbarProps {
     preview?: boolean;
 }
 
-const PreviewToolbar = ({ page, item, locale, preview }: PreviewToolbarProps): ReactElement | null => {
+const PreviewToolbar = ({ page, item, locale }: PreviewToolbarProps): ReactElement | null => {
     const [isPublished, setIsPublished] = useState<boolean>(false);
     const [collection, setCollection] = useState<string>('');
     const [itemId, setItemId] = useState<number>(0);
-    const title = item?.attributes?.title || page?.title || '';
+    const title = item?.attributes?.title || page?.attributes?.title || '';
     const adminPath = `${process.env.API_BASE_PATH}/admin`;
-
-    const getPageId = async () => {
-        const environment = createRelayEnvironment({});
-        const publicationState = getPublicationState(preview);
-        const variables = {
-            filters: { url: { eq: page?.url } },
-            locale,
-            publicationState,
-        };
-        const data = await fetchQuery<pageIdQuery>(environment, PageIdQuery, variables)
-            .toPromise()
-            .then((res) => res?.pages?.data[0]?.id);
-
-        setItemId(Number(data?.replace('Page_', '')));
-    };
 
     useEffect(() => {
         if (item) {
-            setIsPublished(item?.attributes?.publishedAt ? true : false);
+            setIsPublished(!!item?.attributes?.publishedAt);
             if (item?.id) {
                 if (item?.id?.includes('Article')) {
                     setCollection('api::article.article');
                     setItemId(Number(item?.id?.replace('Article_', '')));
                 }
+                if (item?.id?.includes('JobPosition')) {
+                    setCollection('api::job-position.job-position');
+                    setItemId(Number(item?.id?.replace('JobPosition_', '')));
+                }
             }
         } else {
-            setIsPublished(page?.publishedAt ? true : false);
-            if (page?.url) {
+            setIsPublished(!!page?.attributes?.publishedAt);
+            if (page?.attributes?.url) {
                 setCollection('api::page.page');
-                getPageId();
+                setItemId(Number(page?.id?.replace('Page_', '')));
             }
         }
     }, [page, item]);

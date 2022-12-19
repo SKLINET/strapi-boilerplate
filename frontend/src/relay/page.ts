@@ -3,61 +3,64 @@ import { graphql } from 'relay-runtime';
 export const pageDetailQuery = graphql`
     query pageDetailQuery($locale: I18NLocaleCode) {
         item: page(locale: $locale) {
-            title
-            url
-            publishedAt
-            pages {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            parent {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            seo {
+            id
+            attributes {
                 title
-                metaTitle
-                metaDescription
-                metaSocial {
-                    socialNetwork
-                    title
-                    description
-                    image {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
+                url
+                publishedAt
+                pages {
+                    data {
+                        attributes {
+                            url
                         }
                     }
                 }
-                keywords
-                metaRobots
-                structuredData
-                metaViewport
-                canonicalURL
-                meta {
-                    name
-                    content
+                parent {
+                    data {
+                        attributes {
+                            url
+                        }
+                    }
                 }
-                preventIndexing
-            }
+                seo {
+                    title
+                    metaTitle
+                    metaDescription
+                    metaSocial {
+                        socialNetwork
+                        title
+                        description
+                        image {
+                            data {
+                                attributes {
+                                    url
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    meta {
+                        name
+                        content
+                    }
+                    preventIndexing
+                }
 
-            sitemap {
-                enabled
-                changeFrequency
-                priority
-            }
-            content: blocks {
-                ...blocksContent @relay(mask: false)
+                sitemap {
+                    enabled
+                    changeFrequency
+                    priority
+                }
+                content: blocks {
+                    ...blocksContent @relay(mask: false)
+                }
             }
         }
     }

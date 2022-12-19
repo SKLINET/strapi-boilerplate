@@ -4,63 +4,16 @@ export const ArticleDetailQuery = graphql`
     query articleDetailQuery($slug: String, $publicationState: String) {
         findSlug(modelName: "article", slug: $slug, publicationState: $publicationState) {
             ... on ArticleEntityResponse {
-                data {
-                    attributes {
-                        title
-                        slug
-                        publishDate
-                        content
-                        perex
-                        author
-                        mainImage {
-                            data {
-                                attributes {
-                                    url
-                                    alternativeText
-                                    width
-                                    height
-                                }
-                            }
-                        }
-                        seo {
-                            title
-                            metaTitle
-                            metaDescription
-                            metaSocial {
-                                socialNetwork
-                                title
-                                description
-                                image {
-                                    data {
-                                        attributes {
-                                            url
-                                            width
-                                            height
-                                            alternativeText
-                                        }
-                                    }
-                                }
-                            }
-                            keywords
-                            metaRobots
-                            structuredData
-                            metaViewport
-                            canonicalURL
-                            meta {
-                                name
-                                content
-                            }
-                            preventIndexing
-                        }
-
-                        sitemap {
-                            enabled
-                            changeFrequency
-                            priority
-                        }
-                    }
-                }
+                ...articleDetailFragment @relay(mask: false)
             }
+        }
+    }
+`;
+
+export const ArticlePreviewQuery = graphql`
+    query articlePreviewQuery($id: ID, $locale: I18NLocaleCode) {
+        item: article(id: $id, locale: $locale) {
+            ...articleDetailFragment @relay(mask: false)
         }
     }
 `;
@@ -100,6 +53,68 @@ export const ArticleListQuery = graphql`
                     publishDate
                     perex
                     slug
+                }
+            }
+        }
+    }
+`;
+
+graphql`
+    fragment articleDetailFragment on ArticleEntityResponse {
+        data {
+            id
+            attributes {
+                title
+                slug
+                publishDate
+                content
+                perex
+                publishedAt
+                author
+                mainImage {
+                    data {
+                        attributes {
+                            url
+                            alternativeText
+                            width
+                            height
+                        }
+                    }
+                }
+                seo {
+                    title
+                    metaTitle
+                    metaDescription
+                    metaSocial {
+                        socialNetwork
+                        title
+                        description
+                        image {
+                            data {
+                                attributes {
+                                    url
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    meta {
+                        name
+                        content
+                    }
+                    preventIndexing
+                }
+                sitemap {
+                    enabled
+                    changeFrequency
+                    priority
                 }
             }
         }

@@ -128,10 +128,12 @@ export type Redirect = {
 } | null;
 
 export interface BasePage<T extends { __typename: string; id?: string } = { __typename: string; id?: string }> {
-    id: string;
-    url: string | null;
-    title?: string | null;
-    content?: ReadonlyArray<T | null> | null;
+    id: string | null;
+    attributes: {
+        url: string | null;
+        title?: string | null;
+        content?: ReadonlyArray<T | null> | null;
+    } | null;
 }
 
 export type Route<ObjectType> = {
