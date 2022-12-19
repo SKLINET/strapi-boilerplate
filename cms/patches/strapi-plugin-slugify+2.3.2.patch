@@ -1,15 +1,16 @@
 diff --git a/node_modules/strapi-plugin-slugify/server/graphql/types.js b/node_modules/strapi-plugin-slugify/server/graphql/types.js
-index 0aeef95..f9505a9 100644
+index 6174ae7..335d4be 100644
 --- a/node_modules/strapi-plugin-slugify/server/graphql/types.js
 +++ b/node_modules/strapi-plugin-slugify/server/graphql/types.js
 @@ -48,10 +48,11 @@ const getCustomTypes = (strapi, nexus) => {
  						modelName: nexus.stringArg('The model name of the content type'),
  						slug: nexus.stringArg('The slug to query for'),
  						publicationState: nexus.stringArg('The publication state of the entry'),
+-					},
 +                        locale: nexus.stringArg('Language')
- 					},
++                    },
  					resolve: async (_parent, args, ctx) => {
- 						const { models } = getPluginService(strapi, 'settingsService').get();
+ 						const { modelsByName } = getPluginService('settingsService').get();
 -						const { modelName, slug, publicationState } = args;
 +						const { modelName, slug, publicationState, locale } = args;
  						const { auth } = ctx.state;
@@ -19,7 +20,7 @@ index 0aeef95..f9505a9 100644
  							},
  						};
  
-+                        if (locale) {
++                        if(locale){
 +                            query.locale = locale;
 +                        }
 +
