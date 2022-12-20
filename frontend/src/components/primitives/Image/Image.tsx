@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import NextImage, { ImageLoaderProps, ImageProps as NextImageProps } from 'next/image';
+import NextImage, { ImageLoaderProps, ImageProps as NextImageProps } from 'next/legacy/image';
 import { ImgixProps } from '@symbio/headless';
 import { kebabCase } from '@symbio/headless/utils';
 import { ImageProps as StrapiImageProps } from '../../../types/image';

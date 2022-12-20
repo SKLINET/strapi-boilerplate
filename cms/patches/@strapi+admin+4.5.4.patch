@@ -1,19 +1,21 @@
 diff --git a/node_modules/@strapi/admin/admin/src/components/LeftMenu/index.js b/node_modules/@strapi/admin/admin/src/components/LeftMenu/index.js
-index 23b936b..1639a23 100644
+index 752f3a6..b6e6281 100644
 --- a/node_modules/@strapi/admin/admin/src/components/LeftMenu/index.js
 +++ b/node_modules/@strapi/admin/admin/src/components/LeftMenu/index.js
-@@ -57,8 +57,9 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
+@@ -57,10 +57,11 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
      logos: { menu },
    } = useConfigurations();
    const [condensed, setCondensed] = usePersistentState('navbar-condensed', false);
 -  const { userDisplayName } = useAppInfos();
 +  const { userDisplayName, autoReload } = useAppInfos();
    const { formatMessage } = useIntl();
+   const { trackUsage } = useTracking();
+   const { pathname } = useLocation();
 +  const hideLinksIds = ['/plugins/content-type-builder', '/plugins/seo', '/plugins/documentation'];
  
    const initials = userDisplayName
      .split(' ')
-@@ -116,12 +117,9 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
+@@ -127,12 +128,9 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
  
          {pluginsSectionLinks.length > 0 ? (
            <NavSection
@@ -21,14 +23,14 @@ index 23b936b..1639a23 100644
 -              id: 'app.components.LeftMenu.plugins',
 -              defaultMessage: 'Plugins',
 -            })}
-+          label={"Pluginy"}
++            label={"Pluginy"}
            >
 -            {pluginsSectionLinks.map((link) => {
 +            {pluginsSectionLinks.filter(l => hideLinksIds.indexOf(l.to) === -1 || autoReload).map(link => {
                const Icon = link.icon;
  
                return (
-@@ -135,10 +133,7 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
+@@ -152,10 +150,7 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }) => {
  
          {generalSectionLinks.length > 0 ? (
            <NavSection
@@ -36,12 +38,12 @@ index 23b936b..1639a23 100644
 -              id: 'app.components.LeftMenu.general',
 -              defaultMessage: 'General',
 -            })}
-+          label={"Všeobecné"}
++            label={"Všeobecné"}
            >
              {generalSectionLinks.map((link) => {
                const LinkIcon = link.icon;
 diff --git a/node_modules/@strapi/admin/admin/src/pages/HomePage/ContentBlocks.js b/node_modules/@strapi/admin/admin/src/pages/HomePage/ContentBlocks.js
-index 9feb7bb..95557d6 100644
+index 9feb7bb..cc96b96 100644
 --- a/node_modules/@strapi/admin/admin/src/pages/HomePage/ContentBlocks.js
 +++ b/node_modules/@strapi/admin/admin/src/pages/HomePage/ContentBlocks.js
 @@ -4,9 +4,7 @@ import { useIntl } from 'react-intl';
@@ -60,7 +62,7 @@ index 9feb7bb..95557d6 100644
      <Stack spacing={5}>
        <BlockLink
 -        href="https://strapi.io/resource-center"
-+         href="https://docs.google.com/document/d/1GK9UpfG6kHYclm1basHQtDhoPTdHNXWUo2KzaRBSah0/edit"
++        href="https://docs.google.com/document/d/1GK9UpfG6kHYclm1basHQtDhoPTdHNXWUo2KzaRBSah0/edit"
          target="_blank"
          rel="noopener noreferrer nofollow"
          onClick={() => handleClick('didClickonReadTheDocumentationSection')}
@@ -72,7 +74,7 @@ index 9feb7bb..95557d6 100644
              defaultMessage: 'Documentation',
            })}
            subtitle={formatMessage({
-@@ -42,62 +40,25 @@ const ContentBlocks = () => {
+@@ -42,60 +40,22 @@ const ContentBlocks = () => {
          />
        </BlockLink>
        <BlockLink
@@ -99,19 +101,20 @@ index 9feb7bb..95557d6 100644
 -        target="_blank"
 -        rel="noopener noreferrer nofollow"
 -        onClick={() => handleClick('didClickonTutorialSection')}
-+            href="https://www.sklinet.com/"
-+            target="_blank"
-+            rel="noopener noreferrer nofollow"
-+            onClick={() => handleClick('didClickonTutorialSection')}
++          href="https://www.sklinet.com/"
++          target="_blank"
++          rel="noopener noreferrer nofollow"
++          onClick={() => handleClick('didClickonTutorialSection')}
        >
          <ContentBox
            title={formatMessage({
              id: 'app.components.BlockLink.tutorial',
              defaultMessage: 'Tutorials',
 -          })}
--          subtitle={formatMessage({
--            id: 'app.components.BlockLink.tutorial.content',
--            defaultMessage: 'Follow step-by-step instructions to use and customize Strapi.',
++            })}
+           subtitle={formatMessage({
+             id: 'app.components.BlockLink.tutorial.content',
+             defaultMessage: 'Follow step-by-step instructions to use and customize Strapi.',
 -          })}
 -          icon={<PlaySquare />}
 -          iconBackground="secondary100"
@@ -134,17 +137,9 @@ index 9feb7bb..95557d6 100644
 -          })}
 -          icon={<FeatherSquare />}
 -          iconBackground="alternative100"
--        />
 +            })}
-+            subtitle={formatMessage({
-+                        id: 'app.components.BlockLink.tutorial.content',
-+                        defaultMessage: 'Follow step-by-step instructions to use and customize Strapi.',
-+                       })}
 +            icon={<Earth />}
 +            iconBackground="secondary100"
-+         />
+         />
        </BlockLink>
-+
      </Stack>
-   );
- };

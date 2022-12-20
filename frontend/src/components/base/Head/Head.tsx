@@ -19,17 +19,24 @@ type Meta = { name: string | null; content: string | null } | null;
 export const Head = ({ page, site, item }: HeadProps): ReactElement => {
     const siteObj = site?.data?.attributes?.seo;
     const data = {
-        title: item?.seo?.title || item?.title || page?.seo?.title || page?.title || siteObj?.title || '',
-        metaTitle: item?.seo?.metaTitle || page?.seo?.metaTitle || siteObj?.metaTitle || '',
-        metaDescription: item?.seo?.metaDescription || page?.seo?.metaDescription || siteObj?.metaDescription || '',
-        social: item?.seo?.metaSocial || page?.seo?.metaSocial || siteObj?.metaSocial || [],
-        viewPort: item?.seo?.metaViewport || page?.seo?.metaViewport || siteObj?.metaViewport || '',
-        keyWords: item?.seo?.keywords || page?.seo?.keywords || siteObj?.keywords || '',
-        robots: item?.seo?.metaRobots || page?.seo?.metaRobots || siteObj?.metaRobots || '',
-        canonical: item?.seo?.canonicalURL || page?.seo?.canonicalURL || siteObj?.canonicalURL || '',
+        title:
+            item?.seo?.title ||
+            item?.title ||
+            page?.attributes?.seo?.title ||
+            page?.attributes?.title ||
+            siteObj?.title ||
+            '',
+        metaTitle: item?.seo?.metaTitle || page?.attributes?.seo?.metaTitle || siteObj?.metaTitle || '',
+        metaDescription:
+            item?.seo?.metaDescription || page?.attributes?.seo?.metaDescription || siteObj?.metaDescription || '',
+        social: item?.seo?.metaSocial || page?.attributes?.seo?.metaSocial || siteObj?.metaSocial || [],
+        viewPort: item?.seo?.metaViewport || page?.attributes?.seo?.metaViewport || siteObj?.metaViewport || '',
+        keyWords: item?.seo?.keywords || page?.attributes?.seo?.keywords || siteObj?.keywords || '',
+        robots: item?.seo?.metaRobots || page?.attributes?.seo?.metaRobots || siteObj?.metaRobots || '',
+        canonical: item?.seo?.canonicalURL || page?.attributes?.seo?.canonicalURL || siteObj?.canonicalURL || '',
     };
-    const preventIndexing = page?.seo ? page?.seo?.preventIndexing : false;
-    const meta = page?.seo?.meta || [];
+    const preventIndexing = page?.attributes?.seo ? page?.attributes?.seo?.preventIndexing : false;
+    const meta = page?.attributes?.seo?.meta || [];
 
     const router = useRouter();
     const currentPageUrl = process.env.BASE_PATH + router?.asPath;

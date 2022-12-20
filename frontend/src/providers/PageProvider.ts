@@ -19,6 +19,11 @@ import { AppData } from '../index';
 import { StaticPathsParams } from '../types/staticPathsParams';
 
 class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
+    private entityId: string | null = null;
+
+    public setEntityId(id: string | null) {
+        this.entityId = id;
+    }
     /**
      * Special function returning Page and Site data
      * @param locale
@@ -33,11 +38,13 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     ): Promise<AppData<PageProps, WebSettingsProps> | undefined> {
         const pattern = getPagePattern(slug);
         const publicationState = getPublicationState(preview);
-        return await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
+        const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             pattern,
             publicationState,
+            entityId: this.entityId ? parseInt(this.entityId) : null,
         }).toPromise();
+        return { ...data, page: { ...data?.page, ...data?.page?.attributes } };
     }
 
     async getStaticPaths(
