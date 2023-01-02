@@ -22,7 +22,7 @@ const VideoInput = ({
     required,
     value,
 }) => {
-    const [videoUid, setVideoUid] = useState();
+    const [providerUid, setProviderUid] = useState();
     const [provider, setProvider] = useState();
     const [videoUrl, setVideoUrl] = useState();
     const [invalidUrl, setInvalidUrl] = useState(false);
@@ -31,18 +31,17 @@ const VideoInput = ({
     // Load data from value on page load
     useEffect(() => {
         const initialValue = JSON.parse(value);
-        if (initialValue.url) {
+        if (initialValue?.url) {
             setVideoUrl(initialValue.url);
-            if (initialValue.provider && initialValue.videoUid) {
+            if (initialValue.provider && initialValue.providerUid) {
                 setInvalidUrl(false);
                 setProvider(initialValue.provider);
-                setVideoUid(initialValue.videoUid);
+                setProviderUid(initialValue.providerUid);
             } else {
                 setInvalidUrl(true);
             }
         }
     }, []);
-
 
     return (
         <Field name={name} id={name} error={error}>
@@ -78,16 +77,16 @@ const VideoInput = ({
                                         setInvalidUrl(true);
                                     }
 
-                                    if (data?.provider && data?.videoUid) {
+                                    if (data?.provider && data?.providerUid) {
                                         setInvalidUrl(false);
                                         setProvider(data.provider);
-                                        setVideoUid(data.videoUid);
+                                        setProviderUid(data.providerUid);
                                     }
 
                                     const valueObj = {
                                         url: e.target.value,
                                         provider: data?.provider || "",
-                                        videoUid: data?.videoUid || "",
+                                        providerUid: data?.providerUid || "",
                                     };
 
                                     onChange({
@@ -102,7 +101,7 @@ const VideoInput = ({
                                     const valueObj = {
                                         url: "",
                                         provider: undefined,
-                                        videoUid: undefined,
+                                        providerUid: undefined,
                                     };
                                     onChange({
                                         target: {
@@ -128,11 +127,11 @@ const VideoInput = ({
                             </Typography>
                         )}
                     </Stack>
-                    {provider && videoUid && (
+                    {provider && providerUid && (
                         <Flex paddingTop={4} justifyContent={"center"}>
                             {provider === "vimeo" && (
                                 <iframe
-                                    src={`https://player.vimeo.com/video/${videoUid}`}
+                                    src={`https://player.vimeo.com/video/${providerUid}`}
                                     frameBorder={0}
                                     allowFullScreen
                                     height={200}
@@ -140,7 +139,7 @@ const VideoInput = ({
                             )}
                             {provider === "youtube" && (
                                 <iframe
-                                    src={`https://www.youtube.com/embed/${videoUid}`}
+                                    src={`https://www.youtube.com/embed/${providerUid}`}
                                     frameBorder={0}
                                     allowFullScreen
                                     height={200}
@@ -148,7 +147,7 @@ const VideoInput = ({
                             )}
                             {provider === "facebook" && (
                                 <iframe
-                                    src={`https://www.facebook.com/plugins/video.php?href=${videoUid}&show_text=false&t=0`}
+                                    src={`https://www.facebook.com/plugins/video.php?href=${providerUid}&show_text=false&t=0`}
                                     frameBorder="0"
                                     height={200}
                                     allowFullScreen

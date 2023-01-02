@@ -13,6 +13,17 @@ module.exports = [
                         "https:",
                         "editor.unlayer.com",
                     ],
+                    "frame-src": [
+                        "'self'",
+                        "*.tinymce.com",
+                        "*.tiny.cloud",
+                        "youtube.com",
+                        "www.youtube.com",
+                        "vimeo.com",
+                        "*.vimeo.com",
+                        "facebook.com",
+                        "www.facebook.com",
+                    ],
                     "connect-src": [
                         "'self'",
                         "*.tinymce.com",

@@ -32,7 +32,7 @@ function VideoBlock({ blocksData, ...rest }: BaseBlockProps): ReactElement<BaseB
                 externalVideo={{
                     url: externalVideo.url,
                     provider: externalVideo.provider,
-                    uid: externalVideo.videoUid,
+                    uid: externalVideo.providerUid,
                 }}
                 autoPlay={autoplay}
             />
