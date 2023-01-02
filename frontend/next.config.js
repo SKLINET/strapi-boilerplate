@@ -37,11 +37,13 @@ const nextConfig = {
         config.plugins.push(
             new Dotenv({
                 path: path.join(__dirname, '.env'),
-                systemvars: true,
             }),
         );
 
         return config;
+    },
+    eslint: {
+        dirs: ['src/components', 'src/lib', 'src/pages', 'src/providers', 'src/utils'],
     },
     async rewrites() {
         return [

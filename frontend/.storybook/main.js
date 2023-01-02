@@ -50,13 +50,20 @@ module.exports = {
         '@storybook/addon-storysource',
         '@storybook/addon-backgrounds',
         '@storybook/addon-a11y',
-        'storybook-addon-next-router',
         {
             name: '@storybook/addon-postcss',
             options: {
                 postcssLoaderOptions: {
                     implementation: require('postcss'),
                 },
+            },
+        },
+        {
+            name: 'storybook-addon-swc',
+            options: {
+                enable: true,
+                enableSwcLoader: true,
+                enableSwcMinify: true,
             },
         },
     ],

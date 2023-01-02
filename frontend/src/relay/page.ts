@@ -3,60 +3,64 @@ import { graphql } from 'relay-runtime';
 export const pageDetailQuery = graphql`
     query pageDetailQuery($locale: I18NLocaleCode) {
         item: page(locale: $locale) {
-            title
-            url
-            pages {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            parent {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            seo {
+            id
+            attributes {
                 title
-                metaTitle
-                metaDescription
-                metaSocial {
-                    socialNetwork
-                    title
-                    description
-                    image {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
+                url
+                publishedAt
+                pages {
+                    data {
+                        attributes {
+                            url
                         }
                     }
                 }
-                keywords
-                metaRobots
-                structuredData
-                metaViewport
-                canonicalURL
-                meta {
-                    name
-                    content
+                parent {
+                    data {
+                        attributes {
+                            url
+                        }
+                    }
                 }
-                preventIndexing
-            }
+                seo {
+                    title
+                    metaTitle
+                    metaDescription
+                    metaSocial {
+                        socialNetwork
+                        title
+                        description
+                        image {
+                            data {
+                                attributes {
+                                    url
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    meta {
+                        name
+                        content
+                    }
+                    preventIndexing
+                }
 
-            sitemap {
-                enabled
-                changeFrequency
-                priority
-            }
-            blocks {
-                ...blocksContent @relay(mask: false)
+                sitemap {
+                    enabled
+                    changeFrequency
+                    priority
+                }
+                content: blocks {
+                    ...blocksContent @relay(mask: false)
+                }
             }
         }
     }
@@ -74,7 +78,7 @@ export const pageStaticPathsQuery = graphql`
                 id
                 attributes {
                     url
-                    blocks {
+                    content: blocks {
                         ...blocksContent @relay(mask: false)
                     }
                     sitemap {
@@ -152,7 +156,7 @@ export const pageListQuery = graphql`
                         changeFrequency
                         priority
                     }
-                    blocks {
+                    content: blocks {
                         ...blocksContent @relay(mask: false)
                     }
                 }
@@ -190,6 +194,15 @@ export const SitemapArticlesQuery = graphql`
                         priority
                     }
                 }
+            }
+        }
+    }
+`;
+export const PageIdQuery = graphql`
+    query pageIdQuery($publicationState: PublicationState, $filters: PageFiltersInput, $locale: I18NLocaleCode) {
+        pages(publicationState: $publicationState, filters: $filters, locale: $locale) {
+            data {
+                id
             }
         }
     }

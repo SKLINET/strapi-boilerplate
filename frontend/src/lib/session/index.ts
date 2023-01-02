@@ -1,18 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Session, withIronSession } from 'next-iron-session';
+import type { IronSessionOptions } from 'iron-session';
 
-export type NextIronRequest = NextApiRequest & { session: Session };
-export type NextIronHandler = (req: NextIronRequest, res: NextApiResponse) => void | Promise<void>;
+export const sessionOptions: IronSessionOptions = {
+    password: process.env.SECRET_COOKIE_PASSWORD as string,
+    cookieName: 'boilerplate-session',
+    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
+    cookieOptions: {
+        secure: process.env.NODE_ENV === 'production',
+    },
+};
 
-const withSession = (handler: NextIronHandler) =>
-    withIronSession(handler, {
-        password: String(process.env.SECRET_COOKIE_PASSWORD),
-        cookieName: 'wdd',
-        cookieOptions: {
-            // the next line allows to use the session in non-https environments like
-            // Next.js dev mode (http://localhost:3000)
-            secure: process.env.NODE_ENV === 'production',
-        },
-    });
-
-export default withSession;
+// This is where we specify the typings of req.session.*
+declare module 'iron-session' {
+    interface IronSessionData {
+        [key: string]: any;
+    }
+}

@@ -18,19 +18,23 @@ import { Logger } from '@symbio/headless/services';
 import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
-import { MetaItems } from '../types/metaItem';
 import { MenuItem } from '../types/menu';
 import NextNprogress from 'nextjs-progressbar';
+import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
+import { getSlug } from '@symbio/headless/utils';
 
 const GridHelper = dynamic<unknown>(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
 );
 
 const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
-    const { hostname, site, page, webSetting, blocksPropsMap, preview, redirect } = props;
+    const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview } = props;
     const { gtm, tz } = config;
-    const items = Object.values(blocksPropsMap as unknown as MetaItems);
-    const item = Array.isArray(items) && items.length > 0 ? items[0].item : undefined;
+    let item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
+    if (!item && blocksPropsMap && Object.keys(blocksPropsMap)?.length > 0) {
+        const firstKey = Object.keys(blocksPropsMap)[0];
+        item = ((blocksPropsMap as Record<string, any>)[firstKey].item as Record<string, any>) || undefined;
+    }
     const menuItems = webSetting?.data?.attributes?.mainMenu?.data?.attributes?.items || [];
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
@@ -53,7 +57,6 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     if (router.isFallback) {
         return <div>Loading...</div>;
     }
-
     dayjs.extend(updateLocale);
     dayjs.extend(timeZone);
     dayjs.extend(localizedFormat);
@@ -68,13 +71,15 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
     return (
         <>
             <Head site={webSetting} page={page} item={item} />
-
             <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
             <Layout>
                 <Navbar menuItems={menuItems as readonly MenuItem[]} />
-                {page && <Blocks blocksData={page.blocks} initialProps={blocksPropsMap} app={app} />}
+                {page && (
+                    <Blocks blocksData={page?.attributes?.content || []} initialProps={blocksPropsMap} app={app} />
+                )}
             </Layout>
 
+            {preview && page && <PreviewToolbar page={page} item={item} locale={locale} preview={preview} />}
             {preview && <GridHelper />}
 
             {gtm.code && (
@@ -128,8 +133,28 @@ export const getStaticProps: GetStaticProps = async (context) => {
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
+    const renamedBlocks: Record<string, any> = {};
+    for (const key in blocks) {
+        renamedBlocks[`ComponentBlock${key}`] = blocks[key];
+    }
+    const pageProvider = providers.page;
+    const slug = getSlug(context?.params?.slug || '');
+    const previewData = (context?.previewData as Record<string, unknown>) || null;
+    if (previewData?.pageId && slug === previewData?.pageSlug) {
+        pageProvider.setEntityId(String(previewData?.pageId) || null);
+    } else {
+        pageProvider.setEntityId(null);
+    }
 
-    return await getBlocksProps(context, providers, blocks, config.ssg);
+    const res = (await getBlocksProps(context, providers, renamedBlocks, config.ssg)) as any;
+    if (res.props.blocksPropsMap) {
+        const blocks = Object.values(res.props.blocksPropsMap);
+        if (blocks.some((block: any) => block.item === undefined && block.data === undefined)) {
+            return { notFound: true };
+        }
+    }
+
+    return res;
 };
 
 export default Page;

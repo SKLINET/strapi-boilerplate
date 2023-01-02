@@ -7,15 +7,13 @@ import { Link } from '../../primitives/Link/Link';
 interface NewsListProps {
     headline?: string | null;
     items: {
-        data: {
-            attributes: {
-                title: string;
-                perex: string;
-                date: string;
-                url: string;
-            };
-        }[];
-    };
+        id: string;
+        attributes: {
+            title: string;
+            url: string;
+            date: string;
+        };
+    }[];
     allNewsLinkText?: string;
     allNewsUrl?: string;
     detailUrl?: string;
@@ -37,7 +35,7 @@ const NewsList = ({
                 </Heading>
             )}
             <ul className="flex p-0 flex-wrap gap-x-4">
-                {items?.data?.map((item, i) => {
+                {items?.map((item, i) => {
                     return (
                         <Link key={`article-item-${i}`} href={detailUrl?.replace(':slug', item?.attributes?.url) || ''}>
                             {item?.attributes.title}

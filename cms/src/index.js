@@ -81,68 +81,55 @@ module.exports = {
                 auth: false,
                 definition(t) {
                     t.field("page", {
-                        type: "Page",
+                        type: "PageEntity",
                         auth: false,
                         args: {
                             pattern: "String",
                             publicationState: "PublicationState",
                             locale: "String",
+                            entityId: "Int",
                         },
                         async resolve(parent, args) {
-                            const { locale, publicationState, pattern } = args;
-                            const data = await strapi.entityService.findMany(
-                                "api::page.page",
-                                {
-                                    locale,
-                                    pattern,
-                                    publicationState:
-                                        publicationState || "live",
-                                }
-                            );
-                            for (const it of data) {
-                                if (it?.url?.match(pattern)) {
-                                    return it;
-                                }
-                            }
-                            return null;
-                        },
-                    });
-                },
-            });
-            const oneArticleQuery = nexus.extendType({
-                type: "Query",
-                auth: false,
-                definition(t) {
-                    t.field("article", {
-                        type: "Article",
-                        auth: false,
-                        args: {
-                            slug: "String",
-                            publicationState: "PublicationState",
-                            locale: "String",
-                        },
-                        async resolve(parent, args) {
-                            const { locale, publicationState, slug } = args;
-                            const data = await strapi.entityService.findMany(
-                                "api::article.article",
-                                {
-                                    locale,
-                                    slug,
-                                    publicationState:
-                                        publicationState || "live",
-                                }
-                            );
-                            for (const it of data) {
-                                if (it?.url?.match(pattern)) {
-                                    return it;
-                                }
-                            }
-                            return null;
-                        },
-                    });
-                },
-            });
+                            const {
+                                locale,
+                                publicationState,
+                                pattern,
+                                entityId,
+                            } = args;
 
+                            let data;
+                            if (entityId) {
+                                data = await strapi.entityService.findOne(
+                                    "api::page.page",
+                                    entityId,
+                                    {
+                                        locale,
+                                        publicationState:
+                                            publicationState || "LIVE",
+                                    }
+                                );
+                                return data;
+                            } else {
+                                data = await strapi.entityService.findMany(
+                                    "api::page.page",
+                                    {
+                                        locale,
+                                        publicationState:
+                                            publicationState || "LIVE",
+                                    }
+                                );
+                            }
+
+                            for (const it of data) {
+                                if (it?.url?.match(pattern)) {
+                                    return it;
+                                }
+                            }
+                            return null;
+                        },
+                    });
+                },
+            });
             const sendTemplatedEmail = nexus.extendType({
                 type: "Query",
                 auth: false,
@@ -193,7 +180,6 @@ module.exports = {
                     pageQuery,
                     redirectQuery,
                     onePageQuery,
-                    oneArticleQuery,
                     sendTemplatedEmail,
                 ],
                 resolversConfig: {
@@ -201,9 +187,6 @@ module.exports = {
                         auth: false,
                     },
                     "Query.page": {
-                        auth: false,
-                    },
-                    "Query.article": {
                         auth: false,
                     },
                     "Query.findRedirect": {

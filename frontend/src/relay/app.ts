@@ -1,7 +1,13 @@
 import { graphql } from 'relay-runtime';
 
 export const AppQuery = graphql`
-    query appQuery($pattern: String, $redirect: String, $publicationState: PublicationState, $locale: I18NLocaleCode) {
+    query appQuery(
+        $pattern: String
+        $redirect: String
+        $publicationState: PublicationState
+        $locale: I18NLocaleCode
+        $entityId: Int
+    ) {
         systemResources(publicationState: $publicationState, locale: $locale) {
             data {
                 attributes {
@@ -11,70 +17,73 @@ export const AppQuery = graphql`
             }
         }
 
-        page(locale: $locale, pattern: $pattern) {
-            title
-            url
-            pages {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            parent {
-                data {
-                    attributes {
-                        url
-                    }
-                }
-            }
-            seo {
-                metaTitle
-                metaDescription
-                metaSocial {
-                    socialNetwork
-                    title
-                    description
-                    image {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
+        page(locale: $locale, pattern: $pattern, publicationState: $publicationState, entityId: $entityId) {
+            id
+            attributes {
+                title
+                url
+                publishedAt
+                pages {
+                    data {
+                        attributes {
+                            url
                         }
                     }
                 }
-                keywords
-                metaRobots
-                structuredData
-                metaViewport
-                canonicalURL
-                meta {
-                    name
-                    content
+                parent {
+                    data {
+                        attributes {
+                            url
+                        }
+                    }
                 }
-                preventIndexing
-            }
-
-            sitemap {
-                enabled
-                changeFrequency
-                priority
-            }
-            blocks {
-                ...blocksContent @relay(mask: false)
-            }
-        }
-
-        findPage(pattern: $pattern, publicationState: $publicationState, locale: $locale) {
-            title
-            locale
-            url
-            blocks {
-                __typename
-                ...blocksContent @relay(mask: false)
+                seo {
+                    metaTitle
+                    metaDescription
+                    metaSocial {
+                        socialNetwork
+                        title
+                        description
+                        image {
+                            data {
+                                attributes {
+                                    url
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
+                        }
+                    }
+                    keywords
+                    metaRobots
+                    structuredData
+                    metaViewport
+                    canonicalURL
+                    meta {
+                        name
+                        content
+                    }
+                    preventIndexing
+                }
+                sitemap {
+                    enabled
+                    changeFrequency
+                    priority
+                }
+                localizations {
+                    data {
+                        id
+                        attributes {
+                            url
+                            locale
+                        }
+                    }
+                }
+                content: blocks {
+                    __typename
+                    ...blocksContent @relay(mask: false)
+                }
             }
         }
 

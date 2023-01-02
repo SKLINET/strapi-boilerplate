@@ -49,18 +49,62 @@ module.exports = ({ env }) => ({
     },
     "preview-button": {
         enabled: true,
+        openTarget: "_blank",
         config: {
-            baseUrl: process.env.STRAPI_PREVIEW_URL,
             contentTypes: [
                 {
                     uid: "api::page.page",
-                    targetField: "url",
-                    type: "pages",
+                    draft: {
+                        url: env(
+                            "STRAPI_PREVIEW_DRAFT_URL",
+                            "http://localhost:3000/api/preview"
+                        ),
+                        query: {
+                            type: "pages",
+                            slug: "{url}",
+                            pageId: "{id}",
+                            locale: "{locale}",
+                        },
+                    },
+                    published: {
+                        url: env(
+                            "STRAPI_PREVIEW_PUBLISHED_URL",
+                            "http://localhost:3000/api/preview"
+                        ),
+                        query: {
+                            type: "pages",
+                            slug: "{slug}",
+                            pageId: "{id}",
+                            locale: "{locale}",
+                        },
+                    },
                 },
                 {
                     uid: "api::article.article",
-                    targetField: "slug",
-                    type: "articles",
+                    draft: {
+                        url: env(
+                            "STRAPI_PREVIEW_DRAFT_URL",
+                            "http://localhost:3000/api/preview"
+                        ),
+                        query: {
+                            type: "articles",
+                            slug: "{slug}",
+                            itemId: "{id}",
+                            locale: "{locale}",
+                        },
+                    },
+                    published: {
+                        url: env(
+                            "STRAPI_PREVIEW_PUBLISHED_URL",
+                            "http://localhost:3000/api/preview"
+                        ),
+                        query: {
+                            type: "articles",
+                            slug: "{slug}",
+                            itemId: "{id}",
+                            locale: "{locale}",
+                        },
+                    },
                 },
             ],
         },

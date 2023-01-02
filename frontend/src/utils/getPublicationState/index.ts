@@ -1,5 +1,3 @@
-import isStaging from '../isStaging';
-
-export default function getPublicationState(): 'PREVIEW' | 'LIVE' {
-    return isStaging() ? 'PREVIEW' : 'LIVE';
+export default function getPublicationState(preview: boolean | undefined): 'PREVIEW' | 'LIVE' {
+    return preview ? 'PREVIEW' : 'LIVE';
 }

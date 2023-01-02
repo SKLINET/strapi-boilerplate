@@ -1,35 +1,26 @@
 diff --git a/node_modules/strapi-plugin-slugify/server/graphql/types.js b/node_modules/strapi-plugin-slugify/server/graphql/types.js
-index 0aeef95..a607b6c 100644
+index 6174ae7..335d4be 100644
 --- a/node_modules/strapi-plugin-slugify/server/graphql/types.js
 +++ b/node_modules/strapi-plugin-slugify/server/graphql/types.js
 @@ -48,10 +48,11 @@ const getCustomTypes = (strapi, nexus) => {
  						modelName: nexus.stringArg('The model name of the content type'),
  						slug: nexus.stringArg('The slug to query for'),
  						publicationState: nexus.stringArg('The publication state of the entry'),
+-					},
 +                        locale: nexus.stringArg('Language')
- 					},
++                    },
  					resolve: async (_parent, args, ctx) => {
- 						const { models } = getPluginService(strapi, 'settingsService').get();
+ 						const { modelsByName } = getPluginService('settingsService').get();
 -						const { modelName, slug, publicationState } = args;
 +						const { modelName, slug, publicationState, locale } = args;
  						const { auth } = ctx.state;
  
  						isValidFindSlugParams({
-@@ -61,6 +62,9 @@ const getCustomTypes = (strapi, nexus) => {
- 							publicationState,
- 						});
- 
-+                        if (locale) {
-+                            query.locale = locale;
-+                        }
- 						const { uid, field, contentType } = models[modelName];
- 
- 						await hasRequiredModelScopes(strapi, uid, auth);
-@@ -72,6 +76,10 @@ const getCustomTypes = (strapi, nexus) => {
+@@ -72,6 +73,10 @@ const getCustomTypes = (strapi, nexus) => {
  							},
  						};
  
-+                        if (locale) {
++                        if(locale){
 +                            query.locale = locale;
 +                        }
 +

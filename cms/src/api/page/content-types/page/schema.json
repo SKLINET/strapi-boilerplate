@@ -50,7 +50,8 @@
         "block.latest-articles-block",
         "block.video-block",
         "block.youtube-vimeo-block",
-        "block.test-block"
+        "block.test-block",
+        "block.template-block"
       ],
       "pluginOptions": {
         "i18n": {

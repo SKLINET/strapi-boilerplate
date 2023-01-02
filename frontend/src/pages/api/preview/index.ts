@@ -10,13 +10,12 @@ import { formatPageObject } from '../../../utils/formatPageObject';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const { locale, type, slug } = req.query;
+    const { locale, type, slug, pageId, itemId } = req.query;
     const environment = createRelayEnvironment({});
     const data = await fetchQuery<previewSettingsQuery>(environment, PreviewSettingsQuery, {
         publicationState: 'PREVIEW',
         locale: locale || 'cs',
     }).toPromise();
-
     const settings = data?.webSetting?.data?.attributes || null;
     let url = locale === 'en' ? `/${locale}` : '';
 
@@ -24,9 +23,10 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 
     switch (type) {
         case 'articles':
-            url += `${getPageUrl(
-                formatPageObject(settings?.articleDetailPage?.data?.attributes?.url || '') || homepage,
-            )?.replace(':slug', String(slug))}`;
+            url += `${getPageUrl(settings?.articleDetailPage?.data?.attributes?.url || '')?.replace(
+                ':slug',
+                String(slug),
+            )}`;
             break;
     }
 
@@ -37,12 +37,12 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
             pattern: getPagePattern(slug || ''),
         }).toPromise();
         if (p?.findPage) {
-            url += `${getPageUrl(formatPageObject(p?.findPage?.url || '') || homepage)}`;
+            url += `${getPageUrl(p?.findPage?.url || homepage?.data?.attributes?.url || '')}`;
         }
     }
 
-    res.setPreviewData({});
+    res.setPreviewData({ pageId: pageId, itemId: itemId, itemSlug: slug, pageSlug: slug });
     res.statusCode = 307;
-    res.setHeader('Location', url);
+    res.setHeader('Location', url || '/');
     res.end();
 };

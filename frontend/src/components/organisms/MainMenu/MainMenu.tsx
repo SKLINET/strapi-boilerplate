@@ -18,7 +18,7 @@ function renderMenu(menuItems: readonly MenuItem[]): ReactElement {
                     <MenuLink
                         href={
                             item?.page?.data?.attributes?.url
-                                ? getPageUrl(formatPageObject(item?.page?.data?.attributes?.url))
+                                ? getPageUrl(item?.page?.data?.attributes?.url || '')
                                 : item?.externalUrl
                         }
                         target={(item?.target as LinkTarget) || '_self'}

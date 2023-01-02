@@ -5,7 +5,7 @@ import { Image } from '../Image/Image';
 import { ImageProps } from '../../../types/image';
 import { getImageUrl } from '../../../utils/getImageUrl';
 
-const Lightbox = dynamic(() => import('react-image-lightbox'));
+const Lightbox = dynamic(() => import('react-18-image-lightbox'));
 
 export interface GalleryProps {
     images: {
