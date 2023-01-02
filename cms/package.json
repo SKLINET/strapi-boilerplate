@@ -15,6 +15,7 @@
     "@notum-cz/strapi-plugin-content-versioning": "^0.4.7",
     "@sklinet/strapi-plugin-block-gallery": "^1.0.1",
     "@sklinet/strapi-plugin-tinymce": "^1.0.4",
+    "@sklinet/strapi-plugin-video-field": "^1.0.3",
     "@strapi/plugin-email": "4.5.4",
     "@strapi/plugin-graphql": "4.5.4",
     "@strapi/plugin-i18n": "4.5.4",

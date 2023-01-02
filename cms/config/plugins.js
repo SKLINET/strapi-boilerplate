@@ -176,6 +176,5 @@ module.exports = ({ env }) => ({
     },
     "video-field": {
         enabled: true,
-        resolve: "./src/plugins/video-field",
     },
 });
