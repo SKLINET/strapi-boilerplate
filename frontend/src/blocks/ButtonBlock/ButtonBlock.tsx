@@ -1,43 +1,40 @@
 import React, { ReactElement } from 'react';
 import { graphql } from 'react-relay';
 import Button from '../../components/blocks/Button/Button';
-import { BaseBlockProps } from '../../types/block';
+import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { ButtonBlock_content } from './__generated__/ButtonBlock_content.graphql';
+import { PageProps } from '../../types/page';
+import { WebSettingsProps } from '../../types/webSettings';
+import { ISystemResources } from '../../types/systemResources';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ButtonBlockStaticProps {}
+
+export interface ButtonBlockContent extends OmitRefType<ButtonBlock_content> {
+    __typename: 'ComponentBlockButtonBlock';
+}
+
+export interface ButtonBlockProps extends ButtonBlockStaticProps {
+    blocksData: ButtonBlockContent;
+    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+}
 
 graphql`
     fragment ButtonBlock_content on ComponentBlockButtonBlock {
         file {
-            data {
-                attributes {
-                    url
-                    width
-                    height
-                    alternativeText
-                }
-            }
+            ...appImageFragment @relay(mask: false)
         }
         icon {
-            data {
-                attributes {
-                    codename
-                }
-            }
+            ...appIconFragment @relay(mask: false)
         }
         page {
-            data {
-                attributes {
-                    url
-                }
-            }
+            ...appPageFragment @relay(mask: false)
         }
         label
     }
 `;
 
-const ButtonBlock = ({ blocksData, ...otherProps }: BaseBlockProps): ReactElement => <Button {...blocksData} />;
-
-if (typeof window === 'undefined') {
-    // put your getStaticProps or getStaticPaths here
-}
+const ButtonBlock = ({ blocksData, app }: ButtonBlockProps): ReactElement => <Button {...blocksData} />;
 
 ButtonBlock.whyDidYouRender = true;
 

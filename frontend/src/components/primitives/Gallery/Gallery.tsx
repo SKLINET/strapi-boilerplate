@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { GalleryBlock_content } from '../../../blocks/GalleryBlock/__generated__/GalleryBlock_content.graphql';
 
 import { Image } from '../Image/Image';
-import { ImageProps } from '../../../types/image';
 import { getImageUrl } from '../../../utils/getImageUrl';
 
 const Lightbox = dynamic(() => import('react-18-image-lightbox'));
 
 export interface GalleryProps {
-    images: {
-        attributes: {
-            url: string;
-            width: number;
-            height: number;
-            alternativeText: string;
-        };
-    }[];
+    data: GalleryBlock_content['assets'];
 }
 
-const Gallery = ({ images }: GalleryProps): JSX.Element => {
+const Gallery = ({ data }: GalleryProps): JSX.Element => {
+    const images = data?.data || [];
+
     const [isOpen, setIsOpen] = useState(false);
     const [active, setActive] = useState(0);
     const activeImageUrl = getImageUrl(images[active]?.attributes?.url);
@@ -36,7 +31,7 @@ const Gallery = ({ images }: GalleryProps): JSX.Element => {
                             }}
                             className="relative m-4 cursor-pointer object-cover flex-grow-0 flex-shrink-0"
                         >
-                            <Image image={image} />
+                            <Image image={image} alt="Image" />
                         </div>
                     );
                 })}

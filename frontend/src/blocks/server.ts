@@ -6,6 +6,12 @@ import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Providers } from '../types/providers';
 import { Locale } from '../types/locale';
+
+/**
+ * Define fragment for blocks to load with app data
+ */
+import { graphql } from 'relay-runtime';
+
 import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';
 import ButtonBlock from './ButtonBlock/ButtonBlock';
@@ -19,10 +25,7 @@ import RichTextBlock from './RichTextBlock/RichTextBlock';
 import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
-/**
- * Define fragment for blocks to load with app data
- */
-import { graphql } from 'relay-runtime';
+
 graphql`
     fragment serverBlocksContent on PageBlocksDynamicZone {
         __typename

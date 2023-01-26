@@ -1,7 +1,7 @@
 {
   "collectionName": "components_block_articles_list_blocks",
   "info": {
-    "displayName": "ArticlesListBlock",
+    "displayName": "Výpis článků",
     "icon": "list-alt"
   },
   "options": {},

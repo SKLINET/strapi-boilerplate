@@ -22,7 +22,8 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "items": {
       "displayName": "MenuItem",
@@ -33,7 +34,9 @@
           "localized": true
         }
       },
-      "component": "menu.menu-item"
+      "component": "menu.menu-item",
+      "min": 1,
+      "required": true
     }
   }
 }

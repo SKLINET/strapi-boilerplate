@@ -14,96 +14,22 @@ graphql`
                 mailFrom
                 mailSubject
                 homePage {
-                    data {
-                        id
-                        attributes {
-                            url
-                        }
-                    }
+                    ...appPageFragment @relay(mask: false)
                 }
                 articlesPage {
-                    data {
-                        id
-                        attributes {
-                            url
-                        }
-                    }
+                    ...appPageFragment @relay(mask: false)
                 }
                 articleDetailPage {
-                    data {
-                        id
-                        attributes {
-                            url
-                        }
-                    }
+                    ...appPageFragment @relay(mask: false)
                 }
                 mainMenu {
-                    data {
-                        attributes {
-                            items {
-                                title
-                                page {
-                                    data {
-                                        attributes {
-                                            url
-                                        }
-                                    }
-                                }
-                                externalUrl
-                                target
-                                showMegaMenu
-                            }
-                        }
-                    }
+                    ...appMenuFragment @relay(mask: false)
                 }
                 footerMenu {
-                    data {
-                        attributes {
-                            items {
-                                title
-                                page {
-                                    data {
-                                        attributes {
-                                            url
-                                        }
-                                    }
-                                }
-                                externalUrl
-                                target
-                                showMegaMenu
-                            }
-                        }
-                    }
+                    ...appMenuFragment @relay(mask: false)
                 }
                 seo {
-                    title
-                    metaTitle
-                    metaDescription
-                    metaSocial {
-                        socialNetwork
-                        title
-                        description
-                        image {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
-                        }
-                    }
-                    keywords
-                    metaRobots
-                    structuredData
-                    metaViewport
-                    canonicalURL
-                    meta {
-                        name
-                        content
-                    }
-                    preventIndexing
+                    ...appSeoFragment @relay(mask: false)
                 }
             }
         }

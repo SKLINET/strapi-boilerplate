@@ -7,6 +7,7 @@ import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Providers } from '../types/providers';
 import { Locale } from '../types/locale';
+
 /**
  * Define fragment for blocks to load with app data
  */
@@ -25,6 +26,7 @@ import RichTextBlock from './RichTextBlock/RichTextBlock';
 import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
+
 graphql`
     fragment blocksContent on PageBlocksDynamicZone {
         __typename

@@ -7,9 +7,10 @@ import { Heading } from '../../primitives/Heading/Heading';
 import { ImageProps } from '../../../types/image';
 import { VideoProps } from '../../../types/video';
 import { getImageUrl } from '../../../utils/getImageUrl';
+import { CarouselBlock_content } from '../../../blocks/CarouselBlock/__generated__/CarouselBlock_content.graphql';
 
 interface BannerInterface {
-    id: string;
+    id: string | null;
     headline?: string | null;
     description?: string | null;
     textAlign?: string | null;
@@ -19,34 +20,7 @@ interface BannerInterface {
 
 export type TextAlignCms = 'vlevo' | 'vpravo';
 
-export interface CarouselProps {
-    readonly id: string;
-    readonly textAlign: string | null;
-    readonly autoplay: boolean | null;
-    readonly interval: number | null;
-    readonly banners: ReadonlyArray<{
-        readonly id: string;
-        readonly image: {
-            readonly url: string;
-            readonly width: number | null;
-            readonly height: number | null;
-            readonly alt: string | null;
-            readonly title: string | null;
-        } | null;
-        readonly video: {
-            readonly width: number | null;
-            readonly height: number | null;
-            readonly video: {
-                readonly streamingUrl: string;
-                readonly thumbnailUrl: string;
-            } | null;
-        } | null;
-        readonly headline: string | null;
-        readonly description: string | null;
-        readonly textAlign: string | null;
-    }>;
-    className?: string;
-}
+export type CarouselProps = Omit<CarouselBlock_content, ' $refType'>;
 
 function getAlign(bannerAlign?: string | null, sliderAlign?: string | null): string {
     if (bannerAlign === 'dědit' || bannerAlign === 'inherit') {
@@ -127,7 +101,6 @@ const Carousel = ({
     textAlign = 'left',
     autoplay = true,
     interval = 10,
-    className,
 }: CarouselProps): ReactElement | null => {
     if (!Array.isArray(banners) || banners.length < 1) {
         return null;
@@ -139,7 +112,7 @@ const Carousel = ({
     } else {
         return (
             <CarouselComponent
-                className={`w-full h-full ${className}`}
+                className={`w-full h-full`}
                 showArrows={true}
                 autoPlay={autoplay}
                 interval={interval ? interval * 1000 : undefined}

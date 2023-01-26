@@ -5,10 +5,6 @@ export interface ImageProps {
             width: number;
             height: number;
             alternativeText: string;
-            focalPoints?: {
-                readonly x: number | null;
-                readonly y: number | null;
-            } | null;
         };
     };
 }

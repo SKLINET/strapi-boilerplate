@@ -9,54 +9,17 @@ export const pageDetailQuery = graphql`
                 url
                 publishedAt
                 pages {
-                    data {
-                        attributes {
-                            url
-                        }
-                    }
+                    ...appPagesFragment @relay(mask: false)
                 }
                 parent {
-                    data {
-                        attributes {
-                            url
-                        }
-                    }
+                    ...appPageFragment @relay(mask: false)
                 }
                 seo {
-                    title
-                    metaTitle
-                    metaDescription
-                    metaSocial {
-                        socialNetwork
-                        title
-                        description
-                        image {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
-                        }
-                    }
-                    keywords
-                    metaRobots
-                    structuredData
-                    metaViewport
-                    canonicalURL
-                    meta {
-                        name
-                        content
-                    }
-                    preventIndexing
+                    ...appSeoFragment @relay(mask: false)
                 }
 
                 sitemap {
-                    enabled
-                    changeFrequency
-                    priority
+                    ...appSitemapFragment @relay(mask: false)
                 }
                 content: blocks {
                     ...blocksContent @relay(mask: false)
@@ -82,9 +45,7 @@ export const pageStaticPathsQuery = graphql`
                         ...blocksContent @relay(mask: false)
                     }
                     sitemap {
-                        enabled
-                        changeFrequency
-                        priority
+                        ...appSitemapFragment @relay(mask: false)
                     }
                 }
             }
@@ -108,53 +69,17 @@ export const pageListQuery = graphql`
                     title
                     url
                     pages {
-                        data {
-                            attributes {
-                                url
-                            }
-                        }
+                        ...appPagesFragment @relay(mask: false)
                     }
                     parent {
-                        data {
-                            attributes {
-                                url
-                            }
-                        }
+                        ...appPageFragment @relay(mask: false)
                     }
                     seo {
-                        metaTitle
-                        metaDescription
-                        metaSocial {
-                            socialNetwork
-                            title
-                            description
-                            image {
-                                data {
-                                    attributes {
-                                        url
-                                        width
-                                        height
-                                        alternativeText
-                                    }
-                                }
-                            }
-                        }
-                        keywords
-                        metaRobots
-                        structuredData
-                        metaViewport
-                        canonicalURL
-                        meta {
-                            name
-                            content
-                        }
-                        preventIndexing
+                        ...appSeoFragment @relay(mask: false)
                     }
 
                     sitemap {
-                        enabled
-                        changeFrequency
-                        priority
+                        ...appSitemapFragment @relay(mask: false)
                     }
                     content: blocks {
                         ...blocksContent @relay(mask: false)
@@ -172,9 +97,7 @@ export const SitemapPagesQuery = graphql`
                 attributes {
                     url
                     sitemap {
-                        enabled
-                        changeFrequency
-                        priority
+                        ...appSitemapFragment @relay(mask: false)
                     }
                 }
             }
@@ -189,9 +112,7 @@ export const SitemapArticlesQuery = graphql`
                 attributes {
                     slug
                     sitemap {
-                        enabled
-                        changeFrequency
-                        priority
+                        ...appSitemapFragment @relay(mask: false)
                     }
                 }
             }

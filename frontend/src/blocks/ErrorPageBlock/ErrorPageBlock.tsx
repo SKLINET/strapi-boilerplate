@@ -2,7 +2,23 @@ import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Error404 } from '../../components/blocks/Error404/Error404';
-import { BaseBlockProps } from '../../types/block';
+import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { ErrorPageBlock_content } from './__generated__/ErrorPageBlock_content.graphql';
+import { PageProps } from '../../types/page';
+import { WebSettingsProps } from '../../types/webSettings';
+import { ISystemResources } from '../../types/systemResources';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ErrorPageBlockStaticProps {}
+
+export interface ErrorPageBlockContent extends OmitRefType<ErrorPageBlock_content> {
+    __typename: 'ComponentBlockErrorPageBlock';
+}
+
+export interface ErrorPageBlockProps extends ErrorPageBlockStaticProps {
+    blocksData: ErrorPageBlockContent;
+    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+}
 
 graphql`
     fragment ErrorPageBlock_content on ComponentBlockErrorPageBlock {
@@ -11,27 +27,13 @@ graphql`
     }
 `;
 
-function ErrorPageBlock({ blocksData, ...rest }: BaseBlockProps): ReactElement {
+const ErrorPageBlock = ({ blocksData, app }: ErrorPageBlockProps): ReactElement => {
     return (
-        <BlockWrapper {...rest}>
+        <BlockWrapper>
             <Error404 headline={blocksData?.headline} description={blocksData?.description} />
         </BlockWrapper>
     );
-}
-
-if (typeof window === 'undefined') {
-    // put your getStaticProps or getStaticPaths
-    /*
-    Error404Block.getStaticProps = async ({
-        locale,
-        providers,
-    }: StaticBlockContext): Promise<StaticProps> => {
-        const provider = providers.x;
-
-        return {};
-    };
-    */
-}
+};
 
 ErrorPageBlock.whyDidYouRender = true;
 

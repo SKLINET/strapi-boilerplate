@@ -1,7 +1,7 @@
 import React, { ReactElement, useMemo } from 'react';
-import { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { GetStaticPaths, GetStaticPathsResult, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
@@ -10,7 +10,6 @@ import blocks from '../blocks/server';
 import { Blocks } from '../components/base/Blocks/Blocks';
 import { Head } from '../components/base/Head/Head';
 import { Layout } from '../components/base/Layout/Layout';
-import { Navbar } from '../components/organisms/Navbar/Navbar';
 import { CALENDAR_FORMATS } from '../constants';
 import providers from '../providers';
 import config from '../../sklinet.config.json';
@@ -18,24 +17,23 @@ import { Logger } from '@symbio/headless/services';
 import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
-import { MenuItem } from '../types/menu';
 import NextNprogress from 'nextjs-progressbar';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { getSlug } from '@symbio/headless/utils';
+import { getMenuType } from '../utils/getMenuType';
+import { ISystemResources } from '../types/systemResources';
 
-const GridHelper = dynamic<unknown>(() =>
-    import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
-);
+const GridHelper = dynamic(import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper));
 
-const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => {
-    const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview } = props;
+const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources): ReactElement => {
+    const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview, systemResources } = props;
     const { gtm, tz } = config;
     let item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
     if (!item && blocksPropsMap && Object.keys(blocksPropsMap)?.length > 0) {
         const firstKey = Object.keys(blocksPropsMap)[0];
         item = ((blocksPropsMap as Record<string, any>)[firstKey].item as Record<string, any>) || undefined;
     }
-    const menuItems = webSetting?.data?.attributes?.mainMenu?.data?.attributes?.items || [];
+
     const router = useRouter();
     const locale = router.locale || router.defaultLocale;
     const currentUrl =
@@ -51,6 +49,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
             item,
             webSetting,
             redirect,
+            systemResources,
         }),
         [page],
     );
@@ -68,19 +67,21 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps>): ReactElement => 
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
+    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
+    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
+
     return (
         <>
             <Head site={webSetting} page={page} item={item} />
             <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
-            <Layout>
-                <Navbar menuItems={menuItems as readonly MenuItem[]} />
+            <Layout navbarData={{ menu: _mainMenu }} footerData={{ menu: _footerMenu }}>
                 {page && (
                     <Blocks blocksData={page?.attributes?.content || []} initialProps={blocksPropsMap} app={app} />
                 )}
             </Layout>
 
             {preview && page && <PreviewToolbar page={page} item={item} locale={locale} preview={preview} />}
-            {preview && <GridHelper />}
+            {process.env.NODE_ENV === 'development' && <GridHelper />}
 
             {gtm.code && (
                 <noscript

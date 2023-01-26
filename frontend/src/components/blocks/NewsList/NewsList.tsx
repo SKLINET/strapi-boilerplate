@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import Calendar from 'dayjs/plugin/calendar';
 import { Heading } from '../../primitives/Heading/Heading';
 import { Link } from '../../primitives/Link/Link';
+import { getPageUrl } from '../../../utils/getPageUrl';
 
 interface NewsListProps {
     headline?: string | null;
@@ -37,7 +38,10 @@ const NewsList = ({
             <ul className="flex p-0 flex-wrap gap-x-4">
                 {items?.map((item, i) => {
                     return (
-                        <Link key={`article-item-${i}`} href={detailUrl?.replace(':slug', item?.attributes?.url) || ''}>
+                        <Link
+                            key={`article-item-${i}`}
+                            href={getPageUrl(detailUrl?.replace(':slug', item?.attributes?.url) || '')}
+                        >
                             {item?.attributes.title}
                         </Link>
                     );

@@ -1,3 +1,7 @@
+export interface IVideo {
+    url: string;
+}
+
 export interface VideoProps {
     data?: {
         attributes?: {
@@ -6,7 +10,7 @@ export interface VideoProps {
             height?: number;
             alternativeText?: string;
         };
-    };
+    } | null;
     url: string;
     provider: string;
     providerUid: string;
@@ -14,5 +18,5 @@ export interface VideoProps {
     height?: number;
     title?: string;
     thumbnailUrl?: string;
-    videoId: string;
+    videoId?: string | null;
 }
