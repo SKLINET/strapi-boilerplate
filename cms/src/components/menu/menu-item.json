@@ -7,30 +7,22 @@
   },
   "options": {},
   "attributes": {
-    "title": {
-      "type": "string"
+    "label": {
+      "type": "string",
+      "required": true
     },
     "page": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::page.page"
     },
-    "active": {
-      "type": "boolean"
-    },
     "externalUrl": {
       "type": "string"
     },
-    "target": {
-      "type": "enumeration",
-      "enum": [
-        "_self",
-        "_blank"
-      ]
-    },
-    "showMegaMenu": {
+    "openInNewTab": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "required": false
     }
   }
 }

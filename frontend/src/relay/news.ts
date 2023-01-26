@@ -13,52 +13,16 @@ export const newsDetailQuery = graphql`
                         publishedAt
                         perex
                         image: mainImage {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
+                            ...appImageFragment @relay(mask: false)
                         }
                         publishDate
                         content
                         author
                         seo {
-                            title
-                            metaTitle
-                            metaDescription
-                            metaSocial {
-                                socialNetwork
-                                title
-                                description
-                                image {
-                                    data {
-                                        attributes {
-                                            url
-                                            width
-                                            height
-                                            alternativeText
-                                        }
-                                    }
-                                }
-                            }
-                            keywords
-                            metaRobots
-                            structuredData
-                            metaViewport
-                            canonicalURL
-                            meta {
-                                name
-                                content
-                            }
-                            preventIndexing
+                            ...appSeoFragment @relay(mask: false)
                         }
                         sitemap {
-                            enabled
-                            changeFrequency
-                            priority
+                            ...appSitemapFragment @relay(mask: false)
                         }
                     }
                 }
@@ -94,14 +58,7 @@ export const newsListQuery = graphql`
                     url: slug
                     date: publishDate
                     image: mainImage {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                 }
             }
@@ -125,19 +82,10 @@ export const newsStaticPathsQuery = graphql`
                     slug
                     date: publishDate
                     image: mainImage {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                     sitemap {
-                        enabled
-                        changeFrequency
-                        priority
+                        ...appSitemapFragment @relay(mask: false)
                     }
                 }
             }

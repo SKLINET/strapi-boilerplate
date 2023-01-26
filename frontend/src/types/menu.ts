@@ -1,13 +1,12 @@
-export interface MenuItem {
-    readonly title: string;
-    readonly page: {
-        readonly data: {
-            readonly attributes: {
-                readonly url: string;
-            };
-        };
-    };
-    readonly externalUrl?: string;
-    readonly target: string;
-    readonly showMegaMenu: boolean;
+export interface IMenu {
+    id: string;
+    title: string;
+    items: IMenuItem[];
+}
+
+export interface IMenuItem {
+    id: string;
+    label: string;
+    href: string;
+    openInNewTab: boolean;
 }

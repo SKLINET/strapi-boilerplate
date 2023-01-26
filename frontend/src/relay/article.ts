@@ -41,14 +41,7 @@ export const ArticleListQuery = graphql`
                 attributes {
                     title
                     mainImage {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                     publishDate
                     perex
@@ -72,49 +65,13 @@ graphql`
                 publishedAt
                 author
                 mainImage {
-                    data {
-                        attributes {
-                            url
-                            alternativeText
-                            width
-                            height
-                        }
-                    }
+                    ...appImageFragment @relay(mask: false)
                 }
                 seo {
-                    title
-                    metaTitle
-                    metaDescription
-                    metaSocial {
-                        socialNetwork
-                        title
-                        description
-                        image {
-                            data {
-                                attributes {
-                                    url
-                                    width
-                                    height
-                                    alternativeText
-                                }
-                            }
-                        }
-                    }
-                    keywords
-                    metaRobots
-                    structuredData
-                    metaViewport
-                    canonicalURL
-                    meta {
-                        name
-                        content
-                    }
-                    preventIndexing
+                    ...appSeoFragment @relay(mask: false)
                 }
                 sitemap {
-                    enabled
-                    changeFrequency
-                    priority
+                    ...appSitemapFragment @relay(mask: false)
                 }
             }
         }

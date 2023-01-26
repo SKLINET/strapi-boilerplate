@@ -7,8 +7,9 @@
   },
   "options": {},
   "attributes": {
-    "text": {
-      "type": "string"
+    "label": {
+      "type": "string",
+      "required": true
     },
     "page": {
       "type": "relation",
@@ -17,6 +18,10 @@
     },
     "linkExternal": {
       "type": "string"
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

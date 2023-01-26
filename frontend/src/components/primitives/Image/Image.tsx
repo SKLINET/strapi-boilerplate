@@ -64,7 +64,7 @@ export const Image = ({
     ...props
 }: ImageProps): ReactElement | null => {
     const params = imgixParams
-        ? serializeImageParams(imgixParams, image?.data?.attributes?.focalPoints, props.objectFit)
+        ? serializeImageParams(imgixParams, { x: imgixParams.fpX || null, y: imgixParams.fpY || null }, props.objectFit)
         : undefined;
 
     const imageUrl = getImageUrl(image?.data?.attributes?.url);

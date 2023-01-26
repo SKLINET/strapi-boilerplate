@@ -4,7 +4,7 @@
     "info": {
         "singularName": "message",
         "pluralName": "messages",
-        "displayName": "Kontaktný formulár",
+        "displayName": "Odeslané zprávy",
         "description": ""
     },
     "options": {

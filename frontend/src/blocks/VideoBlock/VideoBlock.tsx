@@ -1,36 +1,45 @@
 import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
-import { Video } from '../../components/organisms/Video/Video';
+import { UploadedVideo } from '../../components/primitives/UploadedVideo/UploadedVideo';
 import styles from './VideoBlock.module.scss';
-import { BaseBlockProps } from '../../types/block';
+import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { VideoBlock_content } from './__generated__/VideoBlock_content.graphql';
+import { PageProps } from '../../types/page';
+import { WebSettingsProps } from '../../types/webSettings';
+import { ISystemResources } from '../../types/systemResources';
+import { VideoProps } from '../../types/video';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface VideoBlockStaticProps {}
+
+export interface VideoBlockContent extends OmitRefType<VideoBlock_content> {
+    __typename: 'ComponentBlockVideoBlock';
+}
+
+export interface VideoBlockProps extends VideoBlockStaticProps {
+    blocksData: VideoBlockContent;
+    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+}
 
 graphql`
     fragment VideoBlock_content on ComponentBlockVideoBlock {
         autoplay
         video {
-            data {
-                attributes {
-                    url
-                    width
-                    height
-                    alternativeText
-                }
-            }
+            ...appVideoFragment @relay(mask: false)
         }
         videoId
         thumbnailUrl
     }
 `;
 
-function VideoBlock({ blocksData, ...rest }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
-    const { autoplay, video } = blocksData;
+const VideoBlock = ({ blocksData: { video, autoplay, thumbnailUrl, videoId }, app }: VideoBlockProps): ReactElement => {
     return (
-        <BlockWrapper className={styles.wrapper} {...rest}>
-            <Video video={video} autoPlay={autoplay} />
+        <BlockWrapper className={styles.wrapper}>
+            {video && <UploadedVideo video={video as VideoProps} autoPlay={autoplay || false} />}
         </BlockWrapper>
     );
-}
+};
 
 VideoBlock.whyDidYouRender = true;
 

@@ -19,14 +19,7 @@ export const LatestArticlesQuery = graphql`
                 attributes {
                     title
                     mainImage {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                     publishDate
                     perex

@@ -6,6 +6,25 @@ import { getSlug } from '@symbio/headless/utils';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
 import { NewsDetail } from '../../components/blocks/NewsDetail/NewsDetail';
 import { ArticlePreviewQuery } from '../../relay/article';
+import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { ArticleDetailBlock_content } from './__generated__/ArticleDetailBlock_content.graphql';
+import { PageProps } from '../../types/page';
+import { WebSettingsProps } from '../../types/webSettings';
+import { ISystemResources } from '../../types/systemResources';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ArticleDetailBlockStaticProps {
+    item: any;
+}
+
+export interface ArticleDetailBlockContent extends OmitRefType<ArticleDetailBlock_content> {
+    __typename: 'ComponentBlockArticleDetailBlock';
+}
+
+export interface ArticleDetailBlockProps extends ArticleDetailBlockStaticProps {
+    blocksData: ArticleDetailBlockContent;
+    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+}
 
 graphql`
     fragment ArticleDetailBlock_content on ComponentBlockArticleDetailBlock {
@@ -14,27 +33,24 @@ graphql`
     }
 `;
 
-function ArticleDetailBlock({ blocksData, item, app }: BaseBlockProps): ReactElement<BaseBlockProps, 'BaseBlock'> {
-    const className = '';
-    const article = item.attributes;
+const ArticleDetailBlock = ({ blocksData, app, item }: ArticleDetailBlockProps): ReactElement => {
     return (
         <BlockWrapper className={`flex-col ${styles.wrapper}`}>
-            {article && article.content && (
+            {item.attributes && item.attributes.content && (
                 <NewsDetail
                     item={{
-                        ...article,
-                        dateFrom: String(article.date),
-                        title: String(article.title),
-                        slug: String(article.url),
-                        content: article.content as never,
+                        ...item.attributes,
+                        dateFrom: String(item.attributes.date),
+                        title: String(item.attributes.title),
+                        slug: String(item.attributes.url),
+                        content: item.attributes.content as never,
                     }}
                     app={app}
-                    className={className}
                 />
             )}
         </BlockWrapper>
     );
-}
+};
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({

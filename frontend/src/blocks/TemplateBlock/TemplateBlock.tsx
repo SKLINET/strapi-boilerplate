@@ -23,14 +23,7 @@ graphql`
     fragment TemplateBlock_content on ComponentBlockTemplateBlock {
         id
         template {
-            data {
-                attributes {
-                    content {
-                        __typename
-                        ...ButtonBlock_content @relay(mask: false)
-                    }
-                }
-            }
+            ...appTemplateFragment @relay(mask: false)
         }
     }
 `;

@@ -1,29 +1,19 @@
 import React, { ReactElement } from 'react';
-import { LinkTarget } from '../../../types/linkTarget';
-import { MenuItem } from '../../../types/menu';
-import { formatPageObject } from '../../../utils/formatPageObject';
-import { getPageUrl } from '../../../utils/getPageUrl';
+import { IMenu } from '../../../types/menu';
 import { MenuLink } from '../../primitives/MenuLink/MenuLink';
 import styles from './MainMenu.module.scss';
 
 interface MainMenuProps {
-    menu: readonly MenuItem[];
+    menu: IMenu;
 }
 
-function renderMenu(menuItems: readonly MenuItem[]): ReactElement {
+function renderMenu(menu: IMenu): ReactElement {
     return (
         <ul className={styles.topMenu}>
-            {menuItems.map((item, i) => (
-                <li key={i}>
-                    <MenuLink
-                        href={
-                            item?.page?.data?.attributes?.url
-                                ? getPageUrl(item?.page?.data?.attributes?.url || '')
-                                : item?.externalUrl
-                        }
-                        target={(item?.target as LinkTarget) || '_self'}
-                    >
-                        {item.title}
+            {menu.items.map((item) => (
+                <li key={item.id}>
+                    <MenuLink href={item.href} target={item.openInNewTab ? '_blank' : '_self'}>
+                        {item.label}
                     </MenuLink>
                 </li>
             ))}

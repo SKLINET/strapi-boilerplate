@@ -1,7 +1,7 @@
 {
   "collectionName": "components_block_article_detail_blocks",
   "info": {
-    "displayName": "ArticleDetailBlock",
+    "displayName": "Detail článku",
     "icon": "align-justify"
   },
   "options": {},
