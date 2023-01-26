@@ -2,7 +2,7 @@ import React, { Fragment, ReactElement } from 'react';
 import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import { v4 } from 'uuid';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { List } from '../List/List';
 import { Link } from '../Link/Link';
 import { Heading } from '../Heading/Heading';

@@ -11,7 +11,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
     i18n,
     images,
-    swcMinify: true,
     compiler: {
         relay: {
             src: './',
