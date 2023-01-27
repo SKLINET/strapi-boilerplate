@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import NextLink from 'next/link';
 import cn from 'classnames';
-import styles from './MenuLink.module.scss';
 import { LinkTarget } from '../../../types/linkTarget';
 import { getLinkTarget } from '../../../utils/getLinkTarget';
 
@@ -29,6 +28,7 @@ const MenuLink = ({ children, className, href, target = '_self', onClick }: Link
                 }
             }}
             className={cn(className)}
+            legacyBehavior
         >
             {children}
         </NextLink>

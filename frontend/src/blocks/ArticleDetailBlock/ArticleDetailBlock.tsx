@@ -5,12 +5,12 @@ import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { getSlug } from '@symbio/headless/utils';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
 import { NewsDetail } from '../../components/blocks/NewsDetail/NewsDetail';
-import { ArticlePreviewQuery } from '../../relay/article';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
 import { ArticleDetailBlock_content } from './__generated__/ArticleDetailBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
+import { newsPreviewQuery } from '../../relay/news';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ArticleDetailBlockStaticProps {
@@ -77,7 +77,7 @@ if (typeof window === 'undefined') {
             slug: slug,
         };
         if (previewData?.itemId && slug === previewData?.itemSlug) {
-            provider.setFindOneQuery(ArticlePreviewQuery);
+            provider.setFindOneQuery(newsPreviewQuery);
             variables.id = previewData?.itemId || '';
         }
         const item = await provider.findOne(variables);
