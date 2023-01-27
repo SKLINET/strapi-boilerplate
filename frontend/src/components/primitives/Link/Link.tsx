@@ -55,7 +55,6 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
                 }
                 return true;
             }}
-            legacyBehavior
         >
             {typeof realChildren === 'string' ? nbsp(realChildren) : realChildren}
         </NextLink>

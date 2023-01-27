@@ -28,7 +28,6 @@ const MenuLink = ({ children, className, href, target = '_self', onClick }: Link
                 }
             }}
             className={cn(className)}
-            legacyBehavior
         >
             {children}
         </NextLink>
