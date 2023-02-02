@@ -3,7 +3,9 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const appDir = require('path');
 const axios = require('axios');
+
 dotenv.config();
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.STRAPI_API_TOKEN_FULL}`;
 
 async function generateModels() {
     console.log('Downloading models from Strapi');

@@ -6,6 +6,7 @@ const appDir = process.cwd();
 const axios = require('axios');
 
 dotenv.config();
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.STRAPI_API_TOKEN_FULL}`;
 
 const toPascal = (s) => {
     s = s.charAt(0).toUpperCase() + s.slice(1);
@@ -155,7 +156,7 @@ generateModels().then(() => {
                     names.sort();
                     await fs.writeFile(
                         `./src/blocks/index.ts`,
-`/**
+                        `/**
  * Import blocks which should be included in SSR
  */
 import dynamic from 'next/dynamic';
@@ -170,11 +171,11 @@ import { Locale } from '../types/locale';
 import { graphql } from 'relay-runtime';
 
 ${names
-   .reduce((acc, [name]) => {
-       acc.push(`import ${name} from './${name}/${name}';`);
-       return acc;
-   }, [])
-   .join('\n')}
+    .reduce((acc, [name]) => {
+        acc.push(`import ${name} from './${name}/${name}';`);
+        return acc;
+    }, [])
+    .join('\n')}
 graphql\`
     fragment blocksContent on PageBlocksDynamicZone {
         __typename
@@ -189,9 +190,7 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
         ? {
 ${names
     .reduce((acc, [name]) => {
-        acc.push(
-            `              ${name}: dynamic(() => import('./${name}/${name}')),`,
-        );
+        acc.push(`              ${name}: dynamic(() => import('./${name}/${name}')),`);
         return acc;
     }, [])
     .join('\n')}
@@ -206,9 +205,9 @@ ${names
           };
 export default blocks;
 `,
-        );
+                    );
                     await fs.writeFile(
-                    `./src/blocks/server.ts`,
+                        `./src/blocks/server.ts`,
                         `/**
  * Import blocks which should be included in SSR
  */
@@ -217,9 +216,7 @@ import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Providers } from '../types/providers';
 import { Locale } from '../types/locale';
-${names
-   .map(([name]) => `import ${name} from './${name}/${name}';`)
-   .join('\n')}
+${names.map(([name]) => `import ${name} from './${name}/${name}';`).join('\n')}
 /**
  * Define fragment for blocks to load with app data
  */
@@ -228,11 +225,9 @@ graphql\`
     fragment serverBlocksContent on PageBlocksDynamicZone {
         __typename
 ${names
-   ?.map(([name, fields]) =>
-       fields.length > 0 ? `        ...${name}_content @relay(mask: false)` : '',
-   )
-   .filter((a) => a)
-   .join('\n')}
+    ?.map(([name, fields]) => (fields.length > 0 ? `        ...${name}_content @relay(mask: false)` : ''))
+    .filter((a) => a)
+    .join('\n')}
     }
 \`;
 const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
