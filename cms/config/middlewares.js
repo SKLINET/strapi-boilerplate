@@ -6,6 +6,15 @@ module.exports = [
             contentSecurityPolicy: {
                 useDefaults: true,
                 directives: {
+                    "frame-src": [
+                      "'self'",
+                      "youtube.com",
+                      "www.youtube.com",
+                      "vimeo.com",
+                      "*.vimeo.com",
+                      "facebook.com",
+                      "www.facebook.com",
+                    ],
                     "script-src": [
                         "'self'",
                         "*.tinymce.com",
@@ -18,6 +27,7 @@ module.exports = [
                         "*.tinymce.com",
                         "*.tiny.cloud",
                         "blob:",
+                        "*.strapi.io",
                     ],
                     "img-src": [
                         "'self'",
@@ -27,6 +37,7 @@ module.exports = [
                         "blob:",
                         "cdn.jsdelivr.net",
                         "strapi.io",
+                        "dl.airtable.com",
                         "s3.amazonaws.com",
                     ],
                     "style-src": [
@@ -46,16 +57,7 @@ module.exports = [
             },
         },
     },
-    {
-        name: "strapi::cors",
-        config: {
-            origin: [
-                "http://localhost:1337",
-                "http://localhost:3000",
-                "http://localhost:8000",
-            ],
-        },
-    },
+    "strapi::cors",
     "strapi::poweredBy",
     "strapi::logger",
     "strapi::query",

@@ -3,8 +3,8 @@
         "code": false
     },
     "i18n": {
-        "locales": ["sk", "cs"],
-        "defaultLocale": "sk",
+        "locales": ["cs"],
+        "defaultLocale": "cs",
         "localeDetection": false
     },
     "images": {

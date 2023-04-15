@@ -1,8 +1,6 @@
 import sk from "./extensions/translations/sk.json";
 import cs from "./extensions/translations/sk.json";
-import logo from "./extensions/logo.svg";
-import menuLogo from "./extensions/menuLogo.png";
-import favicon from "./extensions/favicon.ico";
+import logo from "./extensions/assets/logo.svg";
 
 export default {
     config: {
@@ -19,13 +17,13 @@ export default {
             logo: logo,
         },
 
-        head: {
-            favicon: favicon,
-        },
-
-        menu: {
-            logo: menuLogo,
-        },
+        // head: {
+        //     favicon: favicon,
+        // },
+        //
+        // menu: {
+        //     logo: menuLogo,
+        // },
 
         theme: {
             colors: {
