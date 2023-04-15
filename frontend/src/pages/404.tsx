@@ -56,6 +56,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
 
     const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
     const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
+    const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (
         <>
@@ -69,11 +70,11 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
             {preview && page && <PreviewToolbar page={page} locale={locale} />}
             {process.env.NODE_ENV === 'development' && <GridHelper />}
 
-            {gtm.code && (
+            {gtmCode && (
                 <noscript
                     dangerouslySetInnerHTML={{
                         __html: `<!-- Google Tag Manager (noscript) -->
-                        <iframe src="https://www.googletagmanager.com/ns.html?id=${gtm.code}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+                        <iframe src="https://www.googletagmanager.com/ns.html?id=${gtmCode}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
                         <!-- End Google Tag Manager (noscript) -->`,
                     }}
                 />

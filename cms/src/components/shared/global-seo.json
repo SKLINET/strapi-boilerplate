@@ -12,17 +12,16 @@
     "titleSuffix": {
       "type": "string"
     },
-    "facebookPageUrl": {
-      "type": "string"
+    "description": {
+      "type": "text"
     },
-    "twitterAccount": {
-      "type": "string"
-    },
-    "fallbackSeo": {
-      "displayName": "FallbackSeo",
-      "type": "component",
-      "repeatable": false,
-      "component": "shared.fallback-seo"
+    "sharingImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "favicon": {
       "allowedTypes": [
@@ -31,11 +30,15 @@
       "type": "media",
       "multiple": false
     },
-    "faviconMetaTags": {
-      "displayName": "FaviconMetaTag",
+    "preventIndexing": {
+      "type": "boolean",
+      "default": false
+    },
+    "metaTags": {
+      "displayName": "meta",
       "type": "component",
       "repeatable": true,
-      "component": "shared.favicon-meta-tag"
+      "component": "shared.meta"
     }
   }
 }

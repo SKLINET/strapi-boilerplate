@@ -28,8 +28,35 @@ graphql`
                 footerMenu {
                     ...appMenuFragment @relay(mask: false)
                 }
-                seo {
-                    ...appSeoFragment @relay(mask: false)
+                globalSeo {
+                    siteName
+                    titleSuffix
+                    description
+                    favicon {
+                        data {
+                            attributes {
+                                url
+                                width
+                                height
+                                alternativeText
+                            }
+                        }
+                    }
+                    sharingImage {
+                        data {
+                            attributes {
+                                url
+                                width
+                                height
+                                alternativeText
+                            }
+                        }
+                    }
+                    preventIndexing
+                    metaTags {
+                        name
+                        content
+                    }
                 }
             }
         }

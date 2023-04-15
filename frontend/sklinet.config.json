@@ -19,8 +19,7 @@
             "vercel.app",
             "http://localhost:3000"
         ],
-        "loader": "imgix",
-        "path": ""
+        "loader": "custom"
     },
     "mailer": {
         "from": "no-reply@example.com",

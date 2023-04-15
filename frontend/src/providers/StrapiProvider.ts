@@ -124,7 +124,7 @@ export default class StrapiProvider<
         const result = await fetchQuery<TOne>(
             this.getEnvironment(!!options?.preview),
             this.node,
-            this.isLocalizable()
+            this.isLocalizable() || options?.locale
                 ? {
                       locale: options?.locale,
                   }

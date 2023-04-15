@@ -120,7 +120,8 @@
       "relation": "oneToOne",
       "target": "api::page.page"
     },
-    "seo": {
+    "globalSeo": {
+      "displayName": "GlobalSeo",
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
@@ -131,7 +132,7 @@
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.global-seo"
     },
     "footerMenu": {
       "type": "relation",

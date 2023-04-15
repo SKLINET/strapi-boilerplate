@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { i18n, images } = require('./sklinet.config');
-// const withPWA = require('next-pwa');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -79,7 +78,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337",
+                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337 https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com",
                     },
                     {
                         key: 'Referrer-Policy',
@@ -108,5 +107,4 @@ const nextConfig = {
     },
 };
 
-// module.exports = withBundleAnalyzer(withPWA(nextConfig));
 module.exports = withBundleAnalyzer(nextConfig);

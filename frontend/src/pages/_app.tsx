@@ -33,10 +33,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
             router.events.off('routeChangeComplete', trackPage);
         };
     }, [router.asPath, router.defaultLocale, router.events, router.locale]);
+    const gtmCode = pageProps?.webSetting?.attributes?.gtmCode || config.gtm.code || null;
 
     return (
         <CustomCursorProvider>
-            {config.gtm.code && (
+            {gtmCode && (
                 <Script
                     id="gtm-script"
                     strategy="afterInteractive"
@@ -46,7 +47,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer', '${config.gtm.code}');
+            })(window,document,'script','dataLayer', '${gtmCode}');
           `,
                     }}
                 />
