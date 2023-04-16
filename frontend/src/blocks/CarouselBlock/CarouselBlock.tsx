@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Carousel } from '../../components/organisms/Carousel/Carousel';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { CarouselBlock_content } from './__generated__/CarouselBlock_content.graphql';
+import { CarouselBlock_content$data } from './__generated__/CarouselBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -11,7 +11,7 @@ import { ISystemResources } from '../../types/systemResources';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CarouselBlockStaticProps {}
 
-export interface CarouselBlockContent extends OmitRefType<CarouselBlock_content> {
+export interface CarouselBlockContent extends OmitRefType<CarouselBlock_content$data> {
     __typename: 'ComponentBlockCarouselBlock';
 }
 

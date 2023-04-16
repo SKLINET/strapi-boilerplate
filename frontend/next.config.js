@@ -2,11 +2,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { i18n, images } = require('./sklinet.config');
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
 
+const { parsed: myEnv } = require('dotenv').config({
+    path: path.join(__dirname, '.env'),
+});
+
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
     i18n,
     images,
@@ -31,12 +39,7 @@ const nextConfig = {
             };
         }
         config.plugins = [...config.plugins];
-        // Read the .env file
-        config.plugins.push(
-            new Dotenv({
-                path: path.join(__dirname, '.env'),
-            }),
-        );
+        config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
 
         return config;
     },

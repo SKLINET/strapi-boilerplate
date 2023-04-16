@@ -1,8 +1,8 @@
-import { appSystemResourceFragment } from '../relay/__generated__/appSystemResourceFragment.graphql';
+import { appSystemResourceFragment$data } from '../relay/__generated__/appSystemResourceFragment.graphql';
 
 export type ISystemResources =
     | {
-          systemResources: appSystemResourceFragment | null | undefined;
+          systemResources: appSystemResourceFragment$data | null | undefined;
       }
     | null
     | undefined;

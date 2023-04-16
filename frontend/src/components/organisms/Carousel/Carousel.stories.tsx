@@ -1,6 +1,6 @@
 import React from 'react';
 import { Carousel as CarouselComponent, CarouselProps, TextAlignCms } from './Carousel';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: CarouselComponent,

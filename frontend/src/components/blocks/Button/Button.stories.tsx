@@ -1,6 +1,6 @@
 import React from 'react';
 import Component, { ButtonProps } from './Button';
-import { Meta, Story } from '@storybook/react/types-6-0';
+import { Meta, Story } from '@storybook/react';
 
 export default {
     component: Component,

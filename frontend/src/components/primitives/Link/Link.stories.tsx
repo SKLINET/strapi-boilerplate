@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link as LinkComponent, LinkProps } from './Link';
-import { Story } from '@storybook/react/types-6-0';
+import { Link as LinkComponent } from './Link';
 
 export default {
     component: LinkComponent,
@@ -16,6 +15,6 @@ export default {
     },
 };
 
-const Template: Story<LinkProps> = (args) => <LinkComponent {...args} />;
+const Template: any = (args: any) => <LinkComponent {...args} />;
 
 export const Link = Template.bind({});

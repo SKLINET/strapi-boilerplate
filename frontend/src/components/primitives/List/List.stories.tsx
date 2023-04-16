@@ -1,6 +1,6 @@
 import React from 'react';
 import { List as ListComponent, ListProps } from './List';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: ListComponent,

@@ -11,7 +11,7 @@ const Button = ({ className, app, ...props }: ButtonProps): ReactElement => (
         <Heading tag={'h2'} className="mt-6">
             {props?.label}
         </Heading>
-        <pre className="p-8 bg-gray-300 w-full">{JSON.stringify(props, undefined, '    ')}</pre>
+        <pre className="p-8 bg-gray-300 w-full">{JSON.stringify(props, null, '    ')}</pre>
     </BlockWrapper>
 );
 

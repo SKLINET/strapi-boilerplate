@@ -1,6 +1,6 @@
 import React from 'react';
 import { Gallery as GalleryComponent, GalleryProps } from './Gallery';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: GalleryComponent,

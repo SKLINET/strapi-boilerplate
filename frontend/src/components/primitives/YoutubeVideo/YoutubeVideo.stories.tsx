@@ -1,6 +1,6 @@
 import React from 'react';
 import { YoutubeVideo as YoutubeVideoComponent, YoutubeVideoProps } from './YoutubeVideo';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: YoutubeVideoComponent,

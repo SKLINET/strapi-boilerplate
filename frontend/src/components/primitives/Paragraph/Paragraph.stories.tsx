@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paragraph as ParagraphComponent, ParagraphProps } from './Paragraph';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: ParagraphComponent,

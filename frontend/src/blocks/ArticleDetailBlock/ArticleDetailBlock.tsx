@@ -6,7 +6,7 @@ import { getSlug } from '@symbio/headless/utils';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
 import { NewsDetail } from '../../components/blocks/NewsDetail/NewsDetail';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { ArticleDetailBlock_content } from './__generated__/ArticleDetailBlock_content.graphql';
+import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -17,7 +17,7 @@ export interface ArticleDetailBlockStaticProps {
     item: any;
 }
 
-export interface ArticleDetailBlockContent extends OmitRefType<ArticleDetailBlock_content> {
+export interface ArticleDetailBlockContent extends OmitRefType<ArticleDetailBlock_content$data> {
     __typename: 'ComponentBlockArticleDetailBlock';
 }
 

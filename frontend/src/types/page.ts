@@ -1,6 +1,6 @@
-import { pageDetailQueryResponse } from '../relay/__generated__/pageDetailQuery.graphql';
+import { pageDetailQuery$data } from '../relay/__generated__/pageDetailQuery.graphql';
 
-export type PageProps = NonNullable<pageDetailQueryResponse['item'] & { url: string; id: string }>;
+export type PageProps = NonNullable<pageDetailQuery$data['item'] & { url: string; id: string }>;
 
 export interface IPage {
     data: {

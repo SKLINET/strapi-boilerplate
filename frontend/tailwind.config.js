@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lineClamp = require('@tailwindcss/line-clamp');
-
 module.exports = {
     content: [
         './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -80,5 +77,5 @@ module.exports = {
     variants: {
         extend: {},
     },
-    plugins: [lineClamp],
+    plugins: [],
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { UploadedVideo as UploadedVideoComponent, UploadedVideoI } from './UploadedVideo';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: UploadedVideoComponent,

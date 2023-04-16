@@ -1,6 +1,6 @@
 import React from 'react';
 import { PasswordInput as PasswordInputComponent, PasswordInputProps } from './PasswordInput';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

@@ -10,7 +10,7 @@ const Icon = dynamic<IconProps>(import('../../primitives/Icon/Icon').then((mod) 
 const Link = dynamic<LinkProps>(import('../Link/Link').then((mod) => mod.Link));
 
 export type ButtonProps = {
-    children: ReactNode;
+    children: any;
     type?: 'primary' | 'secondary';
     loader?: boolean;
     stretchOnMobile?: boolean;

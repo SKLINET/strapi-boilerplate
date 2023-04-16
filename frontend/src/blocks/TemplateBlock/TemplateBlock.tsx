@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { graphql } from 'react-relay';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { TemplateBlock_content } from './__generated__/TemplateBlock_content.graphql';
+import { TemplateBlock_content$data } from './__generated__/TemplateBlock_content.graphql';
 import { Template } from '../../components/blocks/Template/Template';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
@@ -9,7 +9,7 @@ import { WebSettingsProps } from '../../types/webSettings';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TemplateBlockStaticProps {}
 
-export interface TemplateBlockContent extends OmitRefType<TemplateBlock_content> {
+export interface TemplateBlockContent extends OmitRefType<TemplateBlock_content$data> {
     __typename: 'ComponentBlockTemplateBlock';
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Slider as SliderComponent, SliderProps } from './Slider';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 import { Icon } from '../../primitives/Icon/Icon';
 
 // eslint-disable-next-line import/no-anonymous-default-export

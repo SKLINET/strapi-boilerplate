@@ -4,7 +4,7 @@ import busboy from 'busboy';
 import { commitMutation, fetchQuery } from 'relay-runtime';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import { appQuery, appQueryResponse } from '../../../relay/__generated__/appQuery.graphql';
+import { appQuery, appQuery$data } from '../../../relay/__generated__/appQuery.graphql';
 import { AppQuery } from '../../../relay/app';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 import { FormMutation } from '../../../relay/api/contact';
@@ -47,7 +47,7 @@ export default (req: NextApiRequest, res: NextApiResponse): void => {
             const { webSetting } = (await fetchQuery<appQuery>(environment, AppQuery, {
                 publicationState: getPublicationState(req.preview),
                 locale: data.locale || 'cs',
-            }).toPromise()) as appQueryResponse;
+            }).toPromise()) as appQuery$data;
 
             const transporter = nodemailer.createTransport(process.env.SMTP || '');
 

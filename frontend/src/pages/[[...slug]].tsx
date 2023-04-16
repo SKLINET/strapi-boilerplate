@@ -67,8 +67,8 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
-    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
-    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
+    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu as any);
+    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu as any);
     const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (
@@ -81,7 +81,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
                 )}
             </Layout>
 
-            {preview && page && <PreviewToolbar page={page} item={item} locale={locale} preview={preview} />}
+            {preview && page && <PreviewToolbar page={page} item={item} locale={locale || ''} preview={preview} />}
             {process.env.NODE_ENV === 'development' && <GridHelper />}
 
             {gtmCode && (

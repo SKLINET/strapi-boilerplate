@@ -4,7 +4,7 @@ import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { UploadedVideo } from '../../components/primitives/UploadedVideo/UploadedVideo';
 import styles from './VideoBlock.module.scss';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { VideoBlock_content } from './__generated__/VideoBlock_content.graphql';
+import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -13,7 +13,7 @@ import { VideoProps } from '../../types/video';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VideoBlockStaticProps {}
 
-export interface VideoBlockContent extends OmitRefType<VideoBlock_content> {
+export interface VideoBlockContent extends OmitRefType<VideoBlock_content$data> {
     __typename: 'ComponentBlockVideoBlock';
 }
 

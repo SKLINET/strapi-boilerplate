@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch as SwitchComponent, SwitchProps } from './Switch';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

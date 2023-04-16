@@ -45,7 +45,7 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
         <NextLink
             href={'/[[...slug]]'}
             as={realHref}
-            locale={locale}
+            locale={locale || ''}
             passHref
             {...attrs}
             {...rest}

@@ -7,7 +7,7 @@ import { getPageUrl } from '../../utils/getPageUrl';
 import { getSlug } from '@symbio/headless/utils';
 import getPublicationState from '../../utils/getPublicationState';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { LatestArticlesBlock_content } from './__generated__/LatestArticlesBlock_content.graphql';
+import { LatestArticlesBlock_content$data } from './__generated__/LatestArticlesBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -17,7 +17,7 @@ export interface LatestArticlesBlockStaticProps {
     data: any;
 }
 
-export interface LatestArticlesBlockContent extends OmitRefType<LatestArticlesBlock_content> {
+export interface LatestArticlesBlockContent extends OmitRefType<LatestArticlesBlock_content$data> {
     __typename: 'ComponentBlockLatestArticlesBlock';
 }
 

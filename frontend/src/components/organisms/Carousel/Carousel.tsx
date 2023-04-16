@@ -7,7 +7,7 @@ import { Heading } from '../../primitives/Heading/Heading';
 import { ImageProps } from '../../../types/image';
 import { VideoProps } from '../../../types/video';
 import { getImageUrl } from '../../../utils/getImageUrl';
-import { CarouselBlock_content } from '../../../blocks/CarouselBlock/__generated__/CarouselBlock_content.graphql';
+import { CarouselBlock_content$data } from '../../../blocks/CarouselBlock/__generated__/CarouselBlock_content.graphql';
 
 interface BannerInterface {
     id: string | null;
@@ -20,7 +20,7 @@ interface BannerInterface {
 
 export type TextAlignCms = 'vlevo' | 'vpravo';
 
-export type CarouselProps = Omit<CarouselBlock_content, ' $refType'>;
+export type CarouselProps = Omit<CarouselBlock_content$data, ' $refType'>;
 
 function getAlign(bannerAlign?: string | null, sliderAlign?: string | null): string {
     if (bannerAlign === 'dědit' || bannerAlign === 'inherit') {

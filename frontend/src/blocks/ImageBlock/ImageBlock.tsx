@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Image } from '../../components/primitives/Image/Image';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { ImageBlock_content } from './__generated__/ImageBlock_content.graphql';
+import { ImageBlock_content$data } from './__generated__/ImageBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -12,7 +12,7 @@ import { getImageType } from '../../utils/getImageType';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ImageBlockStaticProps {}
 
-export interface ImageBlockContent extends OmitRefType<ImageBlock_content> {
+export interface ImageBlockContent extends OmitRefType<ImageBlock_content$data> {
     __typename: 'ComponentBlockImageBlock';
 }
 
@@ -30,7 +30,7 @@ graphql`
 `;
 
 const ImageBlock = ({ blocksData: { image } }: ImageBlockProps): ReactElement => {
-    const _image = getImageType(image);
+    const _image = getImageType(image as any);
 
     return (
         <BlockWrapper>

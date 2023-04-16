@@ -1,6 +1,6 @@
 import React from 'react';
 import { CardSlider as CardSliderComponent, CardSliderProps } from './CardSlider';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

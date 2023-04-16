@@ -1,6 +1,6 @@
 import React from 'react';
 import { GoogleMap as GoogleMapComponent, GoogleMapProps } from './GoogleMap';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: GoogleMapComponent,

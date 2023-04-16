@@ -1,15 +1,15 @@
-import { appMenuFragment } from '../relay/__generated__/appMenuFragment.graphql';
-import { appMenuItemFragment } from '../relay/__generated__/appMenuItemFragment.graphql';
+import { appMenuFragment$data } from '../relay/__generated__/appMenuFragment.graphql';
+import { appMenuItemFragment$data } from '../relay/__generated__/appMenuItemFragment.graphql';
 import { IMenu, IMenuItem } from '../types/menu';
 import { getPageType } from './getPageType';
 import { getPageUrl } from './getPageUrl';
 
-export const getMenuItemType = (e: Omit<appMenuItemFragment, ' $refType'> | null): IMenuItem | null => {
+export const getMenuItemType = (e: Omit<appMenuItemFragment$data, ' $refType'> | null): IMenuItem | null => {
     if (!e) return null;
 
     const { id, label, page, externalUrl, openInNewTab } = e;
 
-    const _page = getPageType(page);
+    const _page = getPageType(page as any);
 
     if (!_page && !externalUrl) return null;
 
@@ -21,7 +21,7 @@ export const getMenuItemType = (e: Omit<appMenuItemFragment, ' $refType'> | null
     };
 };
 
-export const getMenuType = (e: Omit<appMenuFragment, ' $refType'> | null | undefined): IMenu | null => {
+export const getMenuType = (e: Omit<appMenuFragment$data, ' $refType'> | null | undefined): IMenu | null => {
     if (!e || !e.data || !e.data.attributes) return null;
 
     const _items: IMenuItem[] = [];
@@ -34,7 +34,7 @@ export const getMenuType = (e: Omit<appMenuFragment, ' $refType'> | null | undef
     if (!items) return null;
 
     items.forEach((e) => {
-        const _item = getMenuItemType(e);
+        const _item = getMenuItemType(e as any);
 
         if (!_item) return;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button as ButtonComponent, ButtonProps } from './Button';
-import { Story } from '@storybook/react/types-6-0';
+import { Story } from '@storybook/react';
 
 export default {
     component: ButtonComponent,
@@ -21,6 +21,6 @@ export default {
     },
 };
 
-const Template: Story<ButtonProps> = (args) => <ButtonComponent {...args} />;
+const Template: Story<ButtonProps> = (args: any) => <ButtonComponent {...args} />;
 
 export const Button = Template.bind({});

@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Video } from '../../components/organisms/Video/Video';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { YoutubeVimeoBlock_content } from './__generated__/YoutubeVimeoBlock_content.graphql';
+import { YoutubeVimeoBlock_content$data } from './__generated__/YoutubeVimeoBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -12,7 +12,7 @@ import { VideoProps } from '../../types/video';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface YoutubeVimeoBlockStaticProps {}
 
-export interface YoutubeVimeoBlockContent extends OmitRefType<YoutubeVimeoBlock_content> {
+export interface YoutubeVimeoBlockContent extends OmitRefType<YoutubeVimeoBlock_content$data> {
     __typename: 'ComponentBlockYoutubeVimeoBlock';
 }
 

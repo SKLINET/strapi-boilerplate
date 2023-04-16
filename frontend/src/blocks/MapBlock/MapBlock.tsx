@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { GoogleMap } from '../../components/primitives/GoogleMap/GoogleMap';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { MapBlock_content } from './__generated__/MapBlock_content.graphql';
+import { MapBlock_content$data } from './__generated__/MapBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -11,7 +11,7 @@ import { ISystemResources } from '../../types/systemResources';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MapBlockStaticProps {}
 
-export interface MapBlockContent extends OmitRefType<MapBlock_content> {
+export interface MapBlockContent extends OmitRefType<MapBlock_content$data> {
     __typename: 'ComponentBlockMapBlock';
 }
 

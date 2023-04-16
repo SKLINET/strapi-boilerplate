@@ -8,7 +8,7 @@ import { Locale } from '../../types/locale';
 import { NewsList } from '../../components/blocks/NewsList/NewsList';
 import getPublicationState from '../../utils/getPublicationState';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
-import { ArticlesListBlock_content } from './__generated__/ArticlesListBlock_content.graphql';
+import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
@@ -19,7 +19,7 @@ export interface ArticlesListBlockStaticProps {
     count: number;
 }
 
-export interface ArticlesListBlockContent extends OmitRefType<ArticlesListBlock_content> {
+export interface ArticlesListBlockContent extends OmitRefType<ArticlesListBlock_content$data> {
     __typename: 'ComponentBlockArticlesListBlock';
 }
 

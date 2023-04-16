@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { GalleryBlock_content } from '../../../blocks/GalleryBlock/__generated__/GalleryBlock_content.graphql';
+import { GalleryBlock_content$data } from '../../../blocks/GalleryBlock/__generated__/GalleryBlock_content.graphql';
 
 import { Image } from '../Image/Image';
 import { getImageUrl } from '../../../utils/getImageUrl';
-
-const Lightbox = dynamic(() => import('react-18-image-lightbox'));
+import Lightbox from 'react-18-image-lightbox';
 
 export interface GalleryProps {
-    data: GalleryBlock_content['assets'];
+    data: GalleryBlock_content$data['assets'];
 }
 
 const Gallery = ({ data }: GalleryProps): JSX.Element => {
