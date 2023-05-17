@@ -18,8 +18,7 @@
             "test.sklinet.com",
             "vercel.app",
             "http://localhost:3000"
-        ],
-        "loader": "custom"
+        ]
     },
     "mailer": {
         "from": "no-reply@example.com",

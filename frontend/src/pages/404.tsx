@@ -16,7 +16,7 @@ import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
-import { getMenuType } from '../utils/getMenuType';
+import { getMenuType } from '../utils/strapi/getMenuType';
 import { ISystemResources } from '../types/systemResources';
 
 const GridHelper = dynamic(import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper));

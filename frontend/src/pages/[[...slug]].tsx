@@ -20,7 +20,7 @@ import { WebSettingsProps } from '../types/webSettings';
 import NextNprogress from 'nextjs-progressbar';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { getSlug } from '@symbio/headless/utils';
-import { getMenuType } from '../utils/getMenuType';
+import { getMenuType } from '../utils/strapi/getMenuType';
 import { ISystemResources } from '../types/systemResources';
 
 const GridHelper = dynamic(import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper));

@@ -45,7 +45,7 @@ const Banner = ({
         {video?.data?.attributes?.url || video?.url ? (
             <Video video={video} autoPlay loop className="w-full h-full object-cover" />
         ) : (
-            <Image image={image} layout="fill" className="w-full h-full object-cover" />
+            <Image image={image} alt="Image" fill className="w-full h-full object-cover" />
         )}
 
         <div
