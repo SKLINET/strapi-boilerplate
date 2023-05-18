@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import dynamic from 'next/dynamic';
 import { TemplateBlockContent, TemplateBlockProps } from '../../../blocks/TemplateBlock/TemplateBlock';
 
-const Button = dynamic(import('../Button/Button'));
+const Button = dynamic(() => import('../Button/Button'));
 
 export type TemplateProps = {
     blocksData: Omit<TemplateBlockProps, 'content'> & Omit<TemplateBlockContent, 'id' | '__typename'>;

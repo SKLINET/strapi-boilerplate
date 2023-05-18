@@ -7,8 +7,8 @@ import { nbsp } from '../../../utils/nbsp';
 import { IconProps } from '../../primitives/Icon/Icon';
 import { LinkProps } from '../Link/Link';
 
-const Icon = dynamic<IconProps>(import('../../primitives/Icon/Icon').then((mod) => mod.Icon));
-const Link = dynamic<LinkProps>(import('../Link/Link').then((mod) => mod.Link));
+const Icon = dynamic<IconProps>(() => import('../Icon/Icon').then((mod) => mod.Icon));
+const Link = dynamic<LinkProps>(() => import('../Link/Link').then((mod) => mod.Link));
 
 export type ButtonProps = {
     children: any;

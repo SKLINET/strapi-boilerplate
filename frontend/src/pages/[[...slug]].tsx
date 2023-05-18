@@ -23,7 +23,9 @@ import { getSlug } from '@symbio/headless/utils';
 import { getMenuType } from '../utils/strapi/getMenuType';
 import { ISystemResources } from '../types/systemResources';
 
-const GridHelper = dynamic(import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper));
+const GridHelper = dynamic(() =>
+    import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
+);
 
 const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview, systemResources } = props;

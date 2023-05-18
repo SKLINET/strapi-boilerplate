@@ -4,17 +4,17 @@ import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import config from '../../../../sklinet.config.json';
 
-const ArrowLeft = dynamic(import('../../../../public/icons/arrow-left.svg'));
-const ArrowRight = dynamic(import('../../../../public/icons/arrow-right.svg'));
-const Hide = dynamic(import('../../../../public/icons/hide.svg'));
-const Loader = dynamic(import('../../../../public/icons/loader.svg'));
-const Show = dynamic(import('../../../../public/icons/show.svg'));
-const Sklinet = dynamic(import('../../../../public/icons/sklinet.svg'));
-const Tick = dynamic(import('../../../../public/icons/tick.svg'));
-const Trash = dynamic(import('../../../../public/icons/trash.svg'));
-const SklinetRound = dynamic(import('../../../../public/icons/sklinet-logo.svg'));
-const Exit = dynamic(import('../../../../public/icons/exit.svg'));
-const Edit = dynamic(import('../../../../public/icons/edit.svg'));
+const ArrowLeft = dynamic(() => import('../../../../public/icons/arrow-left.svg'));
+const ArrowRight = dynamic(() => import('../../../../public/icons/arrow-right.svg'));
+const Hide = dynamic(() => import('../../../../public/icons/hide.svg'));
+const Loader = dynamic(() => import('../../../../public/icons/loader.svg'));
+const Show = dynamic(() => import('../../../../public/icons/show.svg'));
+const Sklinet = dynamic(() => import('../../../../public/icons/sklinet.svg'));
+const Tick = dynamic(() => import('../../../../public/icons/tick.svg'));
+const Trash = dynamic(() => import('../../../../public/icons/trash.svg'));
+const SklinetRound = dynamic(() => import('../../../../public/icons/sklinet-logo.svg'));
+const Exit = dynamic(() => import('../../../../public/icons/exit.svg'));
+const Edit = dynamic(() => import('../../../../public/icons/edit.svg'));
 
 export type Icons =
     | 'arrowLeft'
