@@ -6,7 +6,6 @@ import * as l from '../relay/__generated__/pageListQuery.graphql';
 import * as s from '../relay/__generated__/pageStaticPathsQuery.graphql';
 import { AppQuery } from '../relay/app';
 import { BlockType, getPagePattern, getStaticParamsFromBlocks } from '@symbio/headless';
-import { ParsedUrlQuery } from 'querystring';
 import providers from './index';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
@@ -83,6 +82,9 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                     if (String(page?.attributes?.url) === '404') {
                         continue;
                     }
+                    if (String(page?.attributes?.url) === '500') {
+                        continue;
+                    }
                     const url = page?.attributes?.url;
                     if (url && blocks) {
                         const blocksParams = await getStaticParamsFromBlocks<
@@ -149,6 +151,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
     }
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default new PageProvider(pageDetailQuery, pageListQuery, {
     id: '',
     apiKey: 'page',

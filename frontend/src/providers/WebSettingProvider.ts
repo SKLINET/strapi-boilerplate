@@ -5,6 +5,7 @@ import StrapiProvider from './StrapiProvider';
 
 class WebSettingProvider extends StrapiProvider<any, any> {}
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default new WebSettingProvider(
     webSettingQuery as unknown as GraphQLTaggedNode,
     webSettingQuery as unknown as GraphQLTaggedNode,

@@ -40,6 +40,7 @@ class NewsProvider extends StrapiProvider<any, any> {
     }
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default new NewsProvider(newsDetailQuery, newsListQuery, {
     locales: config.i18n.locales,
     id: '',
