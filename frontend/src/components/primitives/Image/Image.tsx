@@ -7,6 +7,7 @@ import { getImageUrl } from '../../../utils/getImageUrl';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;
+    placeholder?: 'empty' | 'blur';
     className?: string;
     style?: CSSProperties;
 } & (
@@ -66,6 +67,7 @@ const Image = ({
     alt,
     title,
     imgixParams,
+    placeholder = 'empty',
     fill,
     width,
     height,
@@ -128,7 +130,7 @@ const Image = ({
                 src={staticImage}
                 {...sizeProps}
                 {...generalProps}
-                placeholder="blur"
+                placeholder={placeholder}
                 quality={75}
             />
         );
@@ -145,10 +147,14 @@ const Image = ({
                 src={_src}
                 {...sizeProps}
                 {...generalProps}
-                blurDataURL={resolveBlurUrl(_src, image.data.attributes.width, image.data.attributes.height)}
+                blurDataURL={
+                    placeholder === 'blur'
+                        ? resolveBlurUrl(_src, image.data.attributes.width, image.data.attributes.height)
+                        : undefined
+                }
+                placeholder={placeholder}
                 loader={myLoader}
                 quality={75}
-                placeholder="blur"
             />
         );
     }
@@ -164,10 +170,10 @@ const Image = ({
                 src={_src}
                 {...sizeProps}
                 {...generalProps}
-                blurDataURL={resolveBlurUrl(_src)}
+                blurDataURL={placeholder === 'blur' ? resolveBlurUrl(_src) : undefined}
+                placeholder={placeholder}
                 loader={myLoader}
                 quality={75}
-                placeholder="blur"
             />
         );
     }
