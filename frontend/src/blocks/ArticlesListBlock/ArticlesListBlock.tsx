@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
+import styles from './ArticlesListBlock.module.scss';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
-import styles from './ArticlesListBlock.module.scss';
 import { StaticBlockContext } from '@symbio/headless';
 import { Providers } from '../../types/providers';
 import { Locale } from '../../types/locale';
@@ -61,6 +62,6 @@ if (typeof window === 'undefined') {
     };
 }
 
-ArticlesListBlock.whyDidYouRender = true;
+ArticlesListBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ArticlesListBlock;

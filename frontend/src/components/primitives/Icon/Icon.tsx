@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 import styles from './Icon.module.scss';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
+import config from '../../../../sklinet.config.json';
 
 const ArrowLeft = dynamic(import('../../../../public/icons/arrow-left.svg'));
 const ArrowRight = dynamic(import('../../../../public/icons/arrow-right.svg'));
@@ -95,6 +96,6 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
     );
 };
 
-Icon.whyDidYouRender = true;
+Icon.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Icon };

@@ -1,8 +1,9 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import styles from './Button.module.scss';
-import dynamic from 'next/dynamic';
 import clsx from 'clsx';
-import nbsp from '../../../utils/nbsp';
+import dynamic from 'next/dynamic';
+import config from '../../../../sklinet.config.json';
+import { nbsp } from '../../../utils/nbsp';
 import { IconProps } from '../../primitives/Icon/Icon';
 import { LinkProps } from '../Link/Link';
 
@@ -89,6 +90,6 @@ const Button = ({
     return <div className={allClassNames}>{getContent()}</div>;
 };
 
-Button.whyDidYouRender = true;
+Button.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Button };

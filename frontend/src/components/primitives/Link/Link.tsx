@@ -1,4 +1,5 @@
 import React, { AnchorHTMLAttributes, memo } from 'react';
+import config from '../../../../sklinet.config.json';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { UrlObject } from 'url';
@@ -61,6 +62,6 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
     );
 };
 
-_Link.whyDidYouRender = true;
+_Link.whyDidYouRender = config.whyDidYouRender.active;
 
 export const Link = memo(_Link);

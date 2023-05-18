@@ -1,11 +1,10 @@
+import React, { ReactElement } from 'react';
+import config from '../../../../sklinet.config.json';
 import dayjs from 'dayjs';
 import timeZone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import React, { ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 import { Heading } from '../../primitives/Heading/Heading';
 import { RichText } from '../../primitives/RichText/RichText';
-import config from '../../../../sklinet.config.json';
 
 // const Blocks = dynamic<BlocksProps>(() => import('../../base/Blocks/Blocks').then((mod) => mod.Blocks));
 
@@ -26,6 +25,6 @@ const NewsDetail = ({ item, app }: NewsDetailProps): ReactElement => {
     );
 };
 
-NewsDetail.whyDidYouRender = true;
+NewsDetail.whyDidYouRender = config.whyDidYouRender.active;
 
 export { NewsDetail };

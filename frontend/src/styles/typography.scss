@@ -1,3 +1,14 @@
+/* Import local font theme:
+@font-face {
+    font-family: 'Modern Gothic';
+    font-style: normal;
+    font-weight: 300;
+    src: local(''), url('/fonts/Modern-Gothic/Modern-Gothic-Light.woff2') format('woff2'),
+        url('/fonts/Modern-Gothic/Modern-Gothic-Light.otf') format('opentype');
+    font-display: fallback;
+}
+*/
+
 /* devanagari */
 @layer base {
     @font-face {

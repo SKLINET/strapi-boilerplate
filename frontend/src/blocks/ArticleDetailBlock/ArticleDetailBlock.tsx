@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
 import styles from './ArticleDetailBlock.module.scss';
+import config from '../../../sklinet.config.json';
+import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { getSlug } from '@symbio/headless/utils';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
@@ -90,6 +91,6 @@ if (typeof window === 'undefined') {
     };
 }
 
-ArticleDetailBlock.whyDidYouRender = true;
+ArticleDetailBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ArticleDetailBlock;

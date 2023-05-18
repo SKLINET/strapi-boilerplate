@@ -1,5 +1,6 @@
-import dynamic from 'next/dynamic';
 import React, { ReactElement, ReactNode } from 'react';
+import config from '../../../../sklinet.config.json';
+import dynamic from 'next/dynamic';
 import { Image } from '../../primitives/Image/Image';
 import { VideoComponentProps } from '../Video/Video';
 import { RichText } from '../../primitives/RichText/RichText';
@@ -131,6 +132,6 @@ const Carousel = ({
     }
 };
 
-Carousel.whyDidYouRender = true;
+Carousel.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Carousel };

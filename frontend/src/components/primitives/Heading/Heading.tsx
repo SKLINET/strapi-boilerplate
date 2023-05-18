@@ -1,6 +1,6 @@
-import React, { ReactElement } from 'react';
-import { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import styles from './Heading.module.scss';
+import config from '../../../../sklinet.config.json';
 
 export interface HeadingProps {
     tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -42,6 +42,6 @@ const Heading = ({
     return <CustomTag className={classes.join(' ')}>{children}</CustomTag>;
 };
 
-Heading.whyDidYouRender = true;
+Heading.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Heading };

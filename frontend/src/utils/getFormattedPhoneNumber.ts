@@ -1,3 +1,2 @@
-export default function getFormattedPhoneNumber(phoneNumber: string): string {
-    return phoneNumber.replace('(', '').replace(')', '').replace(/ /g, '');
-}
+export const getFormattedPhoneNumber = (phoneNumber: string): string =>
+    phoneNumber.replace('(', '').replace(')', '').replace(/ /g, '');

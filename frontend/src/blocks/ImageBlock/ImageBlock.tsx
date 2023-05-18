@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Image } from '../../components/primitives/Image/Image';
@@ -41,6 +42,6 @@ const ImageBlock = ({ blocksData: { image } }: ImageBlockProps): ReactElement =>
     );
 };
 
-ImageBlock.whyDidYouRender = true;
+ImageBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ImageBlock;

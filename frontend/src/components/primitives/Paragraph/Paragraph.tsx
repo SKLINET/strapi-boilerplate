@@ -1,5 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 import styles from './Paragraph.module.scss';
+import config from '../../../../sklinet.config.json';
 
 export interface ParagraphProps {
     children: ReactNode;
@@ -9,6 +10,6 @@ const Paragraph = ({ children }: ParagraphProps): ReactElement<ParagraphProps, '
     return <p className={styles.paragraph}>{children}</p>;
 };
 
-Paragraph.whyDidYouRender = true;
+Paragraph.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Paragraph };

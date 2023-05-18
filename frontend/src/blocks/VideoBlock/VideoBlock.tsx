@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { UploadedVideo } from '../../components/primitives/UploadedVideo/UploadedVideo';
@@ -41,6 +42,6 @@ const VideoBlock = ({ blocksData: { video, autoplay, thumbnailUrl, videoId }, ap
     );
 };
 
-VideoBlock.whyDidYouRender = true;
+VideoBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default VideoBlock;

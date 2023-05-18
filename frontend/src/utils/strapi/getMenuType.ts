@@ -4,7 +4,9 @@ import { IMenu, IMenuItem } from '../../types/menu';
 import { getPageType } from './getPageType';
 import { getPageUrl } from '.././getPageUrl';
 
-export const getMenuItemType = (e: Omit<appMenuItemFragment$data, ' $fragmentType'> | null): IMenuItem | null => {
+export const getMenuItemType = (
+    e: Omit<appMenuItemFragment$data, ' $fragmentType'> | null | undefined,
+): IMenuItem | null => {
     if (!e) return null;
 
     const { id, label, page, externalUrl, openInNewTab } = e;

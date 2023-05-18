@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Gallery } from '../../components/primitives/Gallery/Gallery';
@@ -43,6 +44,6 @@ const GalleryBlock = ({ blocksData, app }: GalleryBlockProps): ReactElement => {
     );
 };
 
-GalleryBlock.whyDidYouRender = true;
+GalleryBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default GalleryBlock;

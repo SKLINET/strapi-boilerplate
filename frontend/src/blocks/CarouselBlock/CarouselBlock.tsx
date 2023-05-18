@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Carousel } from '../../components/organisms/Carousel/Carousel';
@@ -53,6 +54,6 @@ const CarouselBlock = ({ blocksData, app }: CarouselBlockProps): ReactElement =>
     );
 };
 
-CarouselBlock.whyDidYouRender = true;
+CarouselBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default CarouselBlock;

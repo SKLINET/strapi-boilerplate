@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Error404 } from '../../components/blocks/Error404/Error404';
@@ -35,6 +36,6 @@ const ErrorPageBlock = ({ blocksData, app }: ErrorPageBlockProps): ReactElement 
     );
 };
 
-ErrorPageBlock.whyDidYouRender = true;
+ErrorPageBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ErrorPageBlock;

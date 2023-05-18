@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import { graphql } from 'react-relay';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
 import { {BLOCK_NAME}_content } from './__generated__/{BLOCK_NAME}_content.graphql';
@@ -45,6 +46,6 @@ if (typeof window === 'undefined') {
     */
 }
 
-{BLOCK_NAME}.whyDidYouRender = true;
+{BLOCK_NAME}.whyDidYouRender = config.whyDidYouRender.active;
 
 export default {BLOCK_NAME};

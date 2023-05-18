@@ -1,6 +1,7 @@
 import React from 'react';
-import clsx from 'clsx';
 import styles from './YoutubeVideo.module.scss';
+import clsx from 'clsx';
+import config from '../../../../sklinet.config.json';
 
 export interface YoutubeVideoProps {
     uid: string;
@@ -22,6 +23,6 @@ const YoutubeVideo = ({ uid, className, width, height }: YoutubeVideoProps): JSX
     </div>
 );
 
-YoutubeVideo.whyDidYouRender = true;
+YoutubeVideo.whyDidYouRender = config.whyDidYouRender.active;
 
 export { YoutubeVideo };

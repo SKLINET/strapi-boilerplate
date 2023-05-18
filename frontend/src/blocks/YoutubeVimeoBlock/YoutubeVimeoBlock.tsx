@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Video } from '../../components/organisms/Video/Video';
@@ -41,6 +42,6 @@ const YoutubeVimeoBlock = ({ blocksData, app }: YoutubeVimeoBlockProps): ReactEl
     );
 };
 
-YoutubeVimeoBlock.whyDidYouRender = true;
+YoutubeVimeoBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default YoutubeVimeoBlock;

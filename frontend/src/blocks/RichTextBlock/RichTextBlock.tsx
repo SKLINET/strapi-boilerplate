@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import styles from './RichTextBlock.module.scss';
@@ -35,6 +36,6 @@ const RichTextBlock = ({ blocksData: { content }, app }: RichTextBlockProps): Re
     );
 };
 
-RichTextBlock.whyDidYouRender = true;
+RichTextBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default RichTextBlock;

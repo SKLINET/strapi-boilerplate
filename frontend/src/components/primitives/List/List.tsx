@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
-import clsx from 'clsx';
 import styles from './List.module.scss';
+import clsx from 'clsx';
+import config from '../../../../sklinet.config.json';
 
 export interface ListProps {
     tag: 'ol' | 'ul';
@@ -12,6 +13,6 @@ const List = ({ tag, children }: ListProps): JSX.Element => {
     return <Tag className={clsx(styles.list, styles[tag])}>{children}</Tag>;
 };
 
-List.whyDidYouRender = true;
+List.whyDidYouRender = config.whyDidYouRender.active;
 
 export { List };
