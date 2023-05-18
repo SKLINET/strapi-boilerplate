@@ -1,23 +1,21 @@
 import { useEffect, RefObject } from 'react';
 
-const useOutsideClick = (ref: RefObject<any>, additionRef: RefObject<any> | null, callback: () => void) => {
-    const handleClick = (e: any) => {
-        if (ref.current && !ref.current.contains(e.target)) {
-            if (additionRef?.current && additionRef.current.contains(e.target)) {
-                return null;
-            }
-
-            callback();
-        }
-    };
-
+export const useOutsideClick = (ref: RefObject<any>, additionRef: RefObject<any> | null, callback: () => void) => {
     useEffect(() => {
-        document.addEventListener('click', handleClick);
+        const handleClick = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                if (additionRef?.current && additionRef.current.contains(e.target)) {
+                    return null;
+                }
+
+                callback();
+            }
+        };
+
+        document.addEventListener('click', (e) => handleClick(e), { passive: true });
 
         return () => {
-            document.removeEventListener('click', handleClick);
+            document.removeEventListener('click', (e) => handleClick(e));
         };
-    });
+    }, []);
 };
-
-export default useOutsideClick;
