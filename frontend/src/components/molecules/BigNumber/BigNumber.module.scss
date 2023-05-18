@@ -1,0 +1,24 @@
+.wrapper {
+
+}
+
+.valueWrapper {
+    @apply table mx-auto relative;
+
+    .value {
+        @apply text-[3rem] text-black;
+        @apply desktop:text-[5rem];
+
+        &.fake {
+            @apply opacity-0 pointer-events-none;
+        }
+
+        &.real {
+            @apply absolute top-0 right-0 bottom-0 text-right;
+        }
+    }
+}
+
+.content {
+    @apply text-[1rem] text-center text-white mt-4 whitespace-pre-line;
+}

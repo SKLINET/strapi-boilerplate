@@ -1,15 +1,16 @@
 import React, { ReactElement, ReactNode } from 'react';
 import styles from './Heading.module.scss';
-import config from '../../../../sklinet.config.json';
+import clsx from 'clsx';
+import { nbsp } from '../../../utils/nbsp';
 
 export interface HeadingProps {
     tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
-    className?: string;
     children: ReactNode;
+    className?: string;
 }
 
-function getSizeFromTag(tag: string): string {
+export const getSizeFromTag = (tag: string): string => {
     switch (tag) {
         case 'h1':
             return 'xl';
@@ -25,23 +26,16 @@ function getSizeFromTag(tag: string): string {
         default:
             return 'md';
     }
-}
-
-const Heading = ({
-    tag,
-    size,
-    className,
-    children,
-}: HeadingProps): ReactElement<HeadingProps, HeadingProps['tag']> | null => {
-    const CustomTag = tag;
-    const realSize = size || getSizeFromTag(tag);
-    const classes = [styles[realSize]];
-    className && classes.push(className);
-    classes.push(styles['heading']);
-
-    return <CustomTag className={classes.join(' ')}>{children}</CustomTag>;
 };
 
-Heading.whyDidYouRender = config.whyDidYouRender.active;
+const Heading = ({ tag, size, className, children }: HeadingProps): ReactElement => {
+    const Tag = tag;
+
+    return (
+        <Tag className={clsx(styles.wrapper, styles[size ? size : getSizeFromTag(tag)], className)}>
+            {typeof children === 'string' ? nbsp(children) : children}
+        </Tag>
+    );
+};
 
 export { Heading };

@@ -6,7 +6,6 @@ export const GridHelper = (): ReactElement => {
     const [visible, setVisible] = useState(false);
 
     const ctrlGListener = (e: KeyboardEvent) => {
-        console.log('here');
         if (e.ctrlKey && e.key === 'g') {
             setVisible(!visible);
         }
@@ -19,15 +18,9 @@ export const GridHelper = (): ReactElement => {
     });
 
     return (
-        <div
-            className={clsx(
-                'fixed grid w-full h-full z-40 pointer-events-none inset-0 py-0 px-6 tablet:px-0',
-                styles.wrapper,
-                visible || 'hidden',
-            )}
-        >
+        <div className={clsx(styles.wrapper, visible ? 'visible' : 'invisible')}>
             {Array.from(Array(16).keys()).map((e) => (
-                <div key={e} className="w-full bg-red bg-opacity-10" />
+                <div key={e} className={styles.column} />
             ))}
         </div>
     );
