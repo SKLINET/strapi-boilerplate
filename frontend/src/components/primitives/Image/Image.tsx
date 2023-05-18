@@ -8,6 +8,10 @@ import { getImageUrl } from '../../../utils/getImageUrl';
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;
     placeholder?: 'empty' | 'blur';
+    sizes?: string;
+    quality?: number;
+    priority?: boolean;
+    loading?: 'lazy' | 'eager';
     className?: string;
     style?: CSSProperties;
 } & (
@@ -68,6 +72,10 @@ const Image = ({
     title,
     imgixParams,
     placeholder = 'empty',
+    sizes = '100vw',
+    quality = 75,
+    priority = false,
+    loading = 'lazy',
     fill,
     width,
     height,
@@ -118,20 +126,31 @@ const Image = ({
         // When we provide path to image ("/images/bg.png")
         if (typeof staticImage === 'string') {
             return (
-                <NextImage sizes="100vw" {...props} src={staticImage} {...sizeProps} {...generalProps} quality={75} />
+                <NextImage
+                    {...props}
+                    src={staticImage}
+                    {...sizeProps}
+                    {...generalProps}
+                    sizes={sizes}
+                    quality={quality}
+                    priority={priority}
+                    loading={loading}
+                />
             );
         }
 
         // When we use next image import (import IMAGE from "/images/bg.png")
         return (
             <NextImage
-                sizes="100vw"
                 {...props}
                 src={staticImage}
                 {...sizeProps}
                 {...generalProps}
                 placeholder={placeholder}
-                quality={75}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
             />
         );
     }
@@ -142,7 +161,6 @@ const Image = ({
 
         return (
             <NextImage
-                sizes="100vw"
                 {...props}
                 src={_src}
                 {...sizeProps}
@@ -154,7 +172,10 @@ const Image = ({
                 }
                 placeholder={placeholder}
                 loader={myLoader}
-                quality={75}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
             />
         );
     }
@@ -165,7 +186,6 @@ const Image = ({
 
         return (
             <NextImage
-                sizes="100vw"
                 {...props}
                 src={_src}
                 {...sizeProps}
@@ -173,7 +193,10 @@ const Image = ({
                 blurDataURL={placeholder === 'blur' ? resolveBlurUrl(_src) : undefined}
                 placeholder={placeholder}
                 loader={myLoader}
-                quality={75}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
             />
         );
     }
