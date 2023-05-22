@@ -1,5 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 import styles from './Table.module.scss';
+import config from '../../../../sklinet.config.json';
 
 export interface TableProps {
     readonly children: ReactNode;
@@ -13,6 +14,6 @@ const Table = ({ children }: TableProps): ReactElement<TableProps, 'div'> => {
     );
 };
 
-Table.whyDidYouRender = true;
+Table.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Table };

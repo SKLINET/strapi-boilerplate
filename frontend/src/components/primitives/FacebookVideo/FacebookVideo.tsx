@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FacebookVideo.module.scss';
 import clsx from 'clsx';
+import config from '../../../../sklinet.config.json';
 
 export interface FacebookVideoProps {
     url: string;
@@ -25,6 +26,6 @@ const FacebookVideo = ({ url, className, width, height }: FacebookVideoProps): J
     </div>
 );
 
-FacebookVideo.whyDidYouRender = true;
+FacebookVideo.whyDidYouRender = config.whyDidYouRender.active;
 
 export { FacebookVideo };

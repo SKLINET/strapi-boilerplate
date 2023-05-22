@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
+import styles from './MainMenu.module.scss';
+import config from '../../../../sklinet.config.json';
 import { IMenu } from '../../../types/menu';
 import { MenuLink } from '../../primitives/MenuLink/MenuLink';
-import styles from './MainMenu.module.scss';
 
 interface MainMenuProps {
     menu: IMenu;
@@ -23,6 +24,6 @@ function renderMenu(menu: IMenu): ReactElement {
 
 const MainMenu = ({ menu }: MainMenuProps): ReactElement => renderMenu(menu);
 
-MainMenu.whyDidYouRender = true;
+MainMenu.whyDidYouRender = config.whyDidYouRender.active;
 
 export { MainMenu };

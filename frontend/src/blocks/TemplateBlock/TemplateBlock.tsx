@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import { graphql } from 'react-relay';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
 import { TemplateBlock_content$data } from './__generated__/TemplateBlock_content.graphql';
@@ -32,6 +33,6 @@ const TemplateBlock = ({ content, ...otherProps }: TemplateBlockProps): ReactEle
     <Template {...{ ...content, id: undefined, __typename: undefined }} {...otherProps} />
 );
 
-TemplateBlock.whyDidYouRender = true;
+TemplateBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default TemplateBlock;

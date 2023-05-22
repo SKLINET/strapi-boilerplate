@@ -1,17 +1,20 @@
 import React, { Fragment, ReactElement } from 'react';
+import styles from './RichText.module.scss';
+import dynamic from 'next/dynamic';
+import config from '../../../../sklinet.config.json';
 import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import { v4 } from 'uuid';
-import Image from 'next/legacy/image';
-import { List } from '../List/List';
-import { Link } from '../Link/Link';
-import { Heading } from '../Heading/Heading';
-import { Table } from '../Table/Table';
-import { Paragraph } from '../Paragraph/Paragraph';
-import { Blockquote } from '../Blockquote/Blockquote';
-import styles from './RichText.module.scss';
 import { nbsp } from '@symbio/headless/utils';
 import { isInternalLink } from '@symbio/headless';
+
+const Heading = dynamic(() => import('../Heading/Heading').then((mod) => mod.Heading));
+const Paragraph = dynamic(() => import('../Paragraph/Paragraph').then((mod) => mod.Paragraph));
+const Blockquote = dynamic(() => import('../Blockquote/Blockquote').then((mod) => mod.Blockquote));
+const Link = dynamic(() => import('../Link/Link').then((mod) => mod.Link));
+const Image = dynamic(() => import('../Image/Image').then((mod) => mod.Image));
+const List = dynamic(() => import('../List/List').then((mod) => mod.List));
+const Table = dynamic(() => import('../Table/Table').then((mod) => mod.Table));
 
 export interface RichTextProps {
     content: string;
@@ -114,7 +117,6 @@ const parserOptions = new (class implements HTMLReactParserOptions {
 
                 case 'img': {
                     const attribs = domNode.attribs;
-                    const layout: 'fill' | 'intrinsic' | 'responsive' | 'fixed' = 'fill';
                     if (attribs) {
                         const src = attribs.src;
                         const alt = attribs.alt;
@@ -122,7 +124,7 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                         delete attribs.alt;
                         return (
                             <div className={styles.image}>
-                                <Image src={src} alt={alt} layout={layout} {...attribs} />
+                                <Image src={src} alt={alt} {...attribs} />
                             </div>
                         );
                     }
@@ -152,6 +154,6 @@ const RichText = ({ content }: RichTextProps): ReactElement<RichTextProps, 'div'
     <>{parse(content, parserOptions)}</>
 );
 
-RichText.whyDidYouRender = true;
+RichText.whyDidYouRender = config.whyDidYouRender.active;
 
 export { RichText };

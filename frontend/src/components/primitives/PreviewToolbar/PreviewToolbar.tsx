@@ -1,14 +1,9 @@
-import clsx from 'clsx';
-import Link from 'next/link';
 import React, { ReactElement, useState, useEffect } from 'react';
-import { fetchQuery } from 'react-relay';
-import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
-import { PageIdQuery } from '../../../relay/page';
-import { pageIdQuery } from '../../../relay/__generated__/pageIdQuery.graphql';
-import { PageProps } from '../../../types/page';
-import getPublicationState from '../../../utils/getPublicationState';
-import { Icon } from '../Icon/Icon';
 import styles from './PreviewToolbar.module.scss';
+import clsx from 'clsx';
+import config from '../../../../sklinet.config.json';
+import { PageProps } from '../../../types/page';
+import { Icon } from '../Icon/Icon';
 
 interface PreviewToolbarProps {
     page: PageProps;
@@ -82,6 +77,6 @@ const PreviewToolbar = ({ page, item, locale }: PreviewToolbarProps): ReactEleme
     );
 };
 
-PreviewToolbar.whyDidYouRender = true;
+PreviewToolbar.whyDidYouRender = config.whyDidYouRender.active;
 
 export { PreviewToolbar };

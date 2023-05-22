@@ -25,3 +25,10 @@ export enum ASYNC_STATES {
 }
 
 export const STRAPI_MAX_LIMIT = 100;
+
+export const MOBILE_LANDSCAPE = 576;
+export const TABLET_BREAKPOINT = 768;
+export const TABLET_LANDSCAPE_BREAKPOINT = 1024;
+export const DESKTOP_BREAKPOINT = 1280;
+export const LARGE_DESKTOP_BREAKPOINT = 1440;
+export const FULL_HD_BREAKPOINT = 1920;

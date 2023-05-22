@@ -52,6 +52,8 @@ module.exports = {
             },
             padding: {
                 '16/9': '56.25%',
+                2.5: '0.625rem',
+                5: '1.25rem',
             },
             transitionProperty: {
                 width: 'width',
@@ -68,6 +70,7 @@ module.exports = {
                 2: '2',
                 3: '3',
                 4: '4',
+                100: '100',
                 9997: '9997',
                 9998: '9998',
                 9999: '9999',

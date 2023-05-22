@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import config from '../../../../sklinet.config.json';
 import { useRouter } from 'next/router';
 import { IMenu } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
@@ -50,6 +51,6 @@ const Navbar = ({ menu }: NavbarProps): ReactElement<null, 'div'> | null => {
     );
 };
 
-Navbar.whyDidYouRender = true;
+Navbar.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Navbar };

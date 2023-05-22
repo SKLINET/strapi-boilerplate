@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Image } from '../../components/primitives/Image/Image';
@@ -7,7 +8,7 @@ import { ImageBlock_content$data } from './__generated__/ImageBlock_content.grap
 import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
 import { ISystemResources } from '../../types/systemResources';
-import { getImageType } from '../../utils/getImageType';
+import { getImageType } from '../../utils/strapi/getImageType';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ImageBlockStaticProps {}
@@ -30,7 +31,7 @@ graphql`
 `;
 
 const ImageBlock = ({ blocksData: { image } }: ImageBlockProps): ReactElement => {
-    const _image = getImageType(image as any);
+    const _image = getImageType(image);
 
     return (
         <BlockWrapper>
@@ -41,6 +42,6 @@ const ImageBlock = ({ blocksData: { image } }: ImageBlockProps): ReactElement =>
     );
 };
 
-ImageBlock.whyDidYouRender = true;
+ImageBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ImageBlock;

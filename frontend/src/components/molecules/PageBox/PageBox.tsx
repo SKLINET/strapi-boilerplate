@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../../sklinet.config.json';
 import { Link } from '../../primitives/Link/Link';
 
 export interface PageBoxProps {
@@ -17,6 +18,6 @@ const PageBox = ({ page, className }: PageBoxProps): ReactElement => {
     );
 };
 
-PageBox.whyDidYouRender = true;
+PageBox.whyDidYouRender = config.whyDidYouRender.active;
 
 export { PageBox };

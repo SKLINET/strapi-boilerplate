@@ -1,14 +1,14 @@
-import { IButton } from '../types/button';
+import { IButton } from '../../types/button';
 import { getPageType } from './getPageType';
-import { getPageUrl } from './getPageUrl';
-import { appButtonFragment$data } from '../relay/__generated__/appButtonFragment.graphql';
+import { getPageUrl } from '.././getPageUrl';
+import { appButtonFragment$data } from '../../relay/__generated__/appButtonFragment.graphql';
 
-export const getButtonType = (e: Omit<appButtonFragment$data, ' $refType'> | null): IButton | null => {
+export const getButtonType = (e: Omit<appButtonFragment$data, ' $fragmentType'> | null | undefined): IButton | null => {
     if (!e) return null;
 
     const { id, label, page, linkExternal, openInNewTab } = e;
 
-    const _page = getPageType(page as any);
+    const _page = getPageType(page);
 
     if (!_page && !linkExternal) return null;
 

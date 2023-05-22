@@ -7,8 +7,8 @@ import { UseFormRegister } from 'react-hook-form';
 import { IconProps } from '../Icon/Icon';
 import { ButtonProps } from '../Button/Button';
 
-const Icon = dynamic<IconProps>(import('../Icon/Icon').then((mod) => mod.Icon));
-const Button = dynamic<ButtonProps>(import('../Button/Button').then((mod) => mod.Button));
+const Icon = dynamic<IconProps>(() => import('../Icon/Icon').then((mod) => mod.Icon));
+const Button = dynamic<ButtonProps>(() => import('../Button/Button').then((mod) => mod.Button));
 
 export type IFile = File | undefined;
 export type IFiles = File[];

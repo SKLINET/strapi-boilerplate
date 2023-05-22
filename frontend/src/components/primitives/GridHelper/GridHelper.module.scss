@@ -1,5 +1,13 @@
 .wrapper {
+    @apply w-full h-full fixed grid z-100 pointer-events-none inset-0 py-0 px-2.5;
+    @apply tablet:px-5;
+
     grid-gap: 0 var(--grid-gap);
     grid-template-columns: repeat(auto-fill, var(--grid-column));
     grid-template-rows: 1fr;
+}
+
+.column {
+    @apply w-full border-x border-red border-opacity-30;
+    @apply tablet:border-0 tablet:bg-red tablet:bg-opacity-10;
 }

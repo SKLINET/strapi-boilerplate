@@ -5,8 +5,8 @@ import { DefaultCursor } from '../../cursors/DefaultCursor/DefaultCursor';
 import { NavbarProps } from '../../organisms/Navbar/Navbar';
 import { FooterProps } from '../../organisms/Footer/Footer';
 
-const Navbar = dynamic(import('../../organisms/Navbar/Navbar').then((mod) => mod.Navbar));
-const Footer = dynamic(import('../../organisms/Footer/Footer').then((mod) => mod.Footer));
+const Navbar = dynamic(() => import('../../organisms/Navbar/Navbar').then((mod) => mod.Navbar));
+const Footer = dynamic(() => import('../../organisms/Footer/Footer').then((mod) => mod.Footer));
 
 interface LayoutProps {
     navbarData: NavbarProps;

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import { graphql } from 'react-relay';
 import Button from '../../components/blocks/Button/Button';
 import { AppContextProps, OmitRefType } from '@symbio/headless';
@@ -36,6 +37,6 @@ graphql`
 
 const ButtonBlock = ({ blocksData, app }: ButtonBlockProps): ReactElement => <Button {...blocksData} />;
 
-ButtonBlock.whyDidYouRender = true;
+ButtonBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default ButtonBlock;

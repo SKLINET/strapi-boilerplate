@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import NextImage, { ImageLoaderProps, ImageProps as NextImageProps } from 'next/legacy/image';
+import React, { ReactElement, CSSProperties } from 'react';
+import NextImage, { StaticImageData, ImageLoaderProps, ImageProps as NextImageProps } from 'next/image';
 import { ImgixProps } from '@symbio/headless';
 import { kebabCase } from '@symbio/headless/utils';
 import { ImageProps as StrapiImageProps } from '../../../types/image';
@@ -7,12 +7,26 @@ import { getImageUrl } from '../../../utils/getImageUrl';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;
+    placeholder?: 'empty' | 'blur';
+    sizes?: string;
+    quality?: number;
+    priority?: boolean;
+    loading?: 'lazy' | 'eager';
+    className?: string;
+    style?: CSSProperties;
 } & (
         | {
+              staticImage: StaticImageData | string;
+              image?: never;
+              src?: never;
+          }
+        | {
+              staticImage?: never;
               image: StrapiImageProps;
               src?: never;
           }
         | {
+              staticImage?: never;
               image?: never;
               src: string;
           }
@@ -24,7 +38,6 @@ export const serializeImageParams = (
         readonly x: number | null;
         readonly y: number | null;
     } | null,
-    objectFit?: NextImageProps['objectFit'],
 ): string => {
     const str = [];
     for (const [key, value] of Object.entries(obj)) {
@@ -33,7 +46,7 @@ export const serializeImageParams = (
         }
     }
 
-    if (fp && (objectFit !== 'cover' || obj.crop === 'focalpoint')) {
+    if (fp && obj.crop === 'focalpoint') {
         if (!obj.fpX && fp.x) {
             str.push(`fp-x=${encodeURIComponent(fp.x)}`);
         }
@@ -51,103 +64,144 @@ export const serializeImageParams = (
     return str.join('&');
 };
 
-export const Image = ({
+const Image = ({
+    staticImage,
     image,
     src,
     alt,
     title,
-    layout,
+    imgixParams,
+    placeholder = 'empty',
+    sizes = '100vw',
+    quality = 75,
+    priority = false,
+    loading = 'lazy',
+    fill,
     width,
     height,
-    imgixParams,
     onContextMenu = (e) => e.preventDefault(),
+    className,
+    style,
     ...props
-}: ImageProps): ReactElement | null => {
+}: ImageProps): ReactElement => {
+    // Imgix params
     const params = imgixParams
-        ? serializeImageParams(imgixParams, { x: imgixParams.fpX || null, y: imgixParams.fpY || null }, props.objectFit)
+        ? serializeImageParams(imgixParams, { x: imgixParams.fpX || null, y: imgixParams.fpY || null })
         : undefined;
 
-    const imageUrl = getImageUrl(image?.data?.attributes?.url);
+    // Next/image loader
+    const myLoader = ({ src, width, quality }: ImageLoaderProps): string =>
+        `${src}?w=${width}&q=${quality || 75}${params ? `&${params}` : ''}`;
 
-    const myLoader = ({ src, width, quality }: ImageLoaderProps) => {
-        return `${src}?auto=format,compress&w=${width}&q=${quality || 75}${params ? `&${params}` : ''}`;
+    const resolveBlurUrl = (url: string, width?: number | null, height?: number | null) => {
+        return `${url}?w=50&h=${(50 / ((width || 1) / (height || 1))).toFixed(
+            0,
+        )}&q=5,loseless=true&auto=format,compress&fit=fillmax`;
     };
 
-    // 1) if no image is passed, use src and directly next/image
-    if (!image?.data?.attributes?.url) {
-        if (src) {
-            const nextImageProps: NextImageProps = {
-                ...props,
-                src,
-                alt,
-                title,
-                layout,
-                ...((typeof width === 'string' || typeof width === 'number') && layout !== 'fill' ? { width } : {}),
-                ...((typeof height === 'string' || typeof height === 'number') && layout !== 'fill' ? { height } : {}),
-                loader: myLoader,
-            } as NextImageProps;
-            return <NextImage onContextMenu={onContextMenu} {...nextImageProps} />;
-        } else {
-            return null;
-        }
-    }
+    // General props
+    const generalProps = {
+        title,
+        alt,
+        onContextMenu,
+        className,
+        style,
+    };
 
-    if (layout !== 'fill') {
-        // 2) if width and height are passed use it to size image
-        if (
-            (typeof width === 'string' || typeof width === 'number') &&
-            (typeof height === 'string' || typeof height === 'number')
-        ) {
+    // Size props
+    const sizeProps = fill
+        ? {
+              fill: true,
+              width: undefined,
+              height: undefined,
+          }
+        : {
+              fill: false,
+              width: image?.data?.attributes?.width || width || 0,
+              height: image?.data?.attributes?.height || height || 0,
+          };
+
+    // 1) For static images (public folder)
+    if (staticImage) {
+        // When we provide path to image ("/images/bg.png")
+        if (typeof staticImage === 'string') {
             return (
                 <NextImage
-                    src={imageUrl}
-                    alt={alt || image?.data?.attributes?.alternativeText || ''}
-                    title={title || undefined}
-                    layout={layout}
-                    width={width}
-                    height={height}
-                    loader={myLoader}
-                    onContextMenu={onContextMenu}
-                    {...(props as Omit<NextImageProps, 'src'> & { placeholder: 'blur'; blurDataURL: string })}
+                    {...props}
+                    src={staticImage}
+                    {...sizeProps}
+                    {...generalProps}
+                    sizes={sizes}
+                    quality={quality}
+                    priority={priority}
+                    loading={loading}
                 />
             );
         }
 
-        // 3) if image has width and height, pass it to the next image with default layout responsive
-        if (typeof image?.data?.attributes?.width === 'number' && typeof image?.data?.attributes?.height === 'number') {
-            return (
-                <NextImage
-                    src={imageUrl}
-                    alt={alt || image?.data?.attributes?.url || ''}
-                    title={title || undefined}
-                    layout={layout}
-                    width={image?.data?.attributes.width}
-                    height={image?.data?.attributes.height}
-                    loader={myLoader}
-                    onContextMenu={onContextMenu}
-                    {...(props as Omit<NextImageProps, 'src'> & { placeholder: 'blur'; blurDataURL: string })}
-                />
-            );
-        }
+        // When we use next image import (import IMAGE from "/images/bg.png")
+        return (
+            <NextImage
+                {...props}
+                src={staticImage}
+                {...sizeProps}
+                {...generalProps}
+                placeholder={placeholder}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
+            />
+        );
     }
 
-    // 4) otherwise (no width & height) use layout fill
-    return (
-        <NextImage
-            src={imageUrl}
-            alt={alt || image?.data?.attributes?.alternativeText || ''}
-            title={title || undefined}
-            layout={'fill' as ImageProps['layout']}
-            loader={myLoader}
-            onContextMenu={onContextMenu}
-            {...(props as Omit<NextImageProps, 'src'> & {
-                placeholder: 'blur';
-                blurDataURL: string;
-                width: number;
-                height: number;
-            })}
-        />
-    );
+    // 2) For strapi image
+    if (image) {
+        const _src = getImageUrl(image.data.attributes.url);
+
+        return (
+            <NextImage
+                {...props}
+                src={_src}
+                {...sizeProps}
+                {...generalProps}
+                blurDataURL={
+                    placeholder === 'blur'
+                        ? resolveBlurUrl(_src, image.data.attributes.width, image.data.attributes.height)
+                        : undefined
+                }
+                placeholder={placeholder}
+                loader={myLoader}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
+            />
+        );
+    }
+
+    // 3) When is src property provided
+    if (src) {
+        const _src = src.startsWith('http://') || src.startsWith('https://') ? src : getImageUrl(src);
+
+        return (
+            <NextImage
+                {...props}
+                src={_src}
+                {...sizeProps}
+                {...generalProps}
+                blurDataURL={placeholder === 'blur' ? resolveBlurUrl(_src) : undefined}
+                placeholder={placeholder}
+                loader={myLoader}
+                sizes={sizes}
+                quality={quality}
+                priority={priority}
+                loading={loading}
+            />
+        );
+    }
+
+    return <></>;
 };
 
-Image.whyDidYouRender = true;
+export { Image };

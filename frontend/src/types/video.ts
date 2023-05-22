@@ -1,5 +1,6 @@
 export interface IVideo {
     url: string;
+    type: string;
 }
 
 export interface VideoProps {

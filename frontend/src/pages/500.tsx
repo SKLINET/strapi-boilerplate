@@ -103,7 +103,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     try {
         return await getBlocksProps(
-            { ...context, params: { ...context.params, slug: ['404'] } },
+            { ...context, params: { ...context.params, slug: ['500'] } },
             providers,
             renamedBlocks,
             config.ssg,

@@ -1,48 +1,49 @@
-import { useEffect } from 'react';
+import { useEffect, RefObject } from 'react';
 
-const useOnScroll = (ref: any, triggerPosition: 'middle' | 'middle-bottom' | 'bottom', callback: () => void) => {
-    const handleScroll = () => {
-        if (ref.current) {
-            let refToTop = 0;
+export type ITriggerPosition = 'middle' | 'middle-bottom' | 'bottom';
 
-            let element = ref.current;
-            while (element.localName !== 'body') {
-                refToTop += element.offsetTop;
-                element = element.parentNode;
-            }
-            const windowToTop = window.scrollY;
-            const windowHeight = window.innerHeight;
+export const useOnScroll = (
+    ref: RefObject<any> | null | undefined,
+    triggerPosition: ITriggerPosition,
+    callback: () => void,
+) => {
+    useEffect(() => {
+        let timeout: NodeJS.Timeout | null = null;
+
+        const handleScroll = () => {
+            if (!ref || !ref.current) return;
+
+            const { innerHeight, pageYOffset } = window;
+
+            const topOffset = Math.round(pageYOffset + ref.current.getBoundingClientRect().top);
 
             switch (triggerPosition) {
                 case 'middle':
-                    if (windowToTop + (windowHeight * 1) / 2 >= refToTop) {
+                    if (pageYOffset + (innerHeight * 1) / 2 >= topOffset) {
                         callback();
                     }
                     break;
                 case 'middle-bottom':
-                    if (windowToTop + (windowHeight * 3) / 4 >= refToTop) {
+                    if (pageYOffset + (innerHeight * 3) / 4 >= topOffset) {
                         callback();
                     }
                     break;
                 case 'bottom':
-                    if (windowToTop + windowHeight >= refToTop) {
+                    if (pageYOffset + innerHeight >= topOffset) {
                         callback();
                     }
                     break;
                 default:
                     break;
             }
-        }
-    };
+        };
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        setTimeout(() => handleScroll(), 100);
+        timeout = setTimeout(() => handleScroll(), 150);
+        window.addEventListener('scroll', () => handleScroll(), { passive: true });
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            if (timeout) clearTimeout(timeout);
+            window.removeEventListener('scroll', () => handleScroll());
         };
-    });
+    }, []);
 };
-
-export { useOnScroll };

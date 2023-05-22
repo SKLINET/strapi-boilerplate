@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { NewsList } from '../../components/blocks/NewsList/NewsList';
@@ -75,6 +76,6 @@ if (typeof window === 'undefined') {
     };
 }
 
-LatestArticlesBlock.whyDidYouRender = true;
+LatestArticlesBlock.whyDidYouRender = config.whyDidYouRender.active;
 
 export default LatestArticlesBlock;

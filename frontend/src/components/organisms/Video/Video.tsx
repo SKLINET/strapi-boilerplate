@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../../../../sklinet.config.json';
 import { VideoProps } from '../../../types/video';
 import { FacebookVideo } from '../../primitives/FacebookVideo/FacebookVideo';
 import { UploadedVideo } from '../../primitives/UploadedVideo/UploadedVideo';
@@ -44,6 +45,6 @@ const Video = ({ video, autoPlay, objectFit, loop, className }: VideoComponentPr
     return <></>;
 };
 
-Video.whyDidYouRender = true;
+Video.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Video };

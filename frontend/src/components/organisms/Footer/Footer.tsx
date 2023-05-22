@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import config from '../../../../sklinet.config.json';
 import { IMenu } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
 
@@ -14,6 +15,6 @@ const Footer = ({ menu }: FooterProps): ReactElement<null, 'div'> | null => {
     );
 };
 
-Footer.whyDidYouRender = true;
+Footer.whyDidYouRender = config.whyDidYouRender.active;
 
 export { Footer };

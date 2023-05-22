@@ -3,7 +3,6 @@ import { AbstractProvider, CmsItem, FindOneParams, FindParams, SingletonBaseReco
 import { STRAPI_MAX_LIMIT } from '../constants';
 import { createRelayEnvironment } from '../relay/createRelayEnvironment';
 import { FindOperationType, FindResponse, OneOperationType, ProviderOptions, BaseRecord } from '../index';
-import getPublicationState from '../utils/getPublicationState';
 
 export default class StrapiProvider<
     TOne extends OneOperationType,
