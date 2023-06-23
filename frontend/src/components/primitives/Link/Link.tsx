@@ -1,5 +1,4 @@
 import React, { AnchorHTMLAttributes, memo } from 'react';
-import config from '../../../../sklinet.config.json';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { UrlObject } from 'url';
@@ -36,7 +35,7 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
 
     if (plain || (realHref && realHref.startsWith('http')) || target === '_blank') {
         return (
-            <a href={realHref} {...attrs}>
+            <a href={realHref} {...attrs} target={target}>
                 {typeof realChildren === 'string' ? nbsp(realChildren) : realChildren}
             </a>
         );
@@ -50,6 +49,7 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
             passHref
             {...attrs}
             {...rest}
+            target={target}
             onClick={(e) => {
                 if (typeof attrs.onClick === 'function') {
                     return attrs.onClick(e);
@@ -62,6 +62,6 @@ const _Link = ({ className, href, page, locale, children, target, plain, ...rest
     );
 };
 
-_Link.whyDidYouRender = config.whyDidYouRender.active;
+_Link.whyDidYouRender = true;
 
 export const Link = memo(_Link);

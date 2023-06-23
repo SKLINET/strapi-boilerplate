@@ -1,13 +1,10 @@
 import React, { ReactElement } from 'react';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { GoogleMap } from '../../components/primitives/GoogleMap/GoogleMap';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { MapBlock_content$data } from './__generated__/MapBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
+import { IApp } from '../../types/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MapBlockStaticProps {}
@@ -18,7 +15,8 @@ export interface MapBlockContent extends OmitRefType<MapBlock_content$data> {
 
 export interface MapBlockProps extends MapBlockStaticProps {
     blocksData: MapBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -49,6 +47,6 @@ const MapBlock = ({ blocksData: { bubbleText, gps }, app }: MapBlockProps): Reac
     );
 };
 
-MapBlock.whyDidYouRender = config.whyDidYouRender.active;
+MapBlock.whyDidYouRender = true;
 
 export default MapBlock;

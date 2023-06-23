@@ -8,7 +8,7 @@ import '../styles/global.scss';
 import config from '../../sklinet.config.json';
 import { CustomCursorProvider } from '../components/primitives/CustomCursor/CustomCursorProvider';
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && config.whyDidYouRender.active === true) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const whyDidYouRender = require('@welldone-software/why-did-you-render');
     whyDidYouRender(React, {

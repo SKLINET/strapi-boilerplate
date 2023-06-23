@@ -1,7 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import styles from './PreviewToolbar.module.scss';
 import clsx from 'clsx';
-import config from '../../../../sklinet.config.json';
 import { PageProps } from '../../../types/page';
 import { Icon } from '../Icon/Icon';
 
@@ -77,6 +76,6 @@ const PreviewToolbar = ({ page, item, locale }: PreviewToolbarProps): ReactEleme
     );
 };
 
-PreviewToolbar.whyDidYouRender = config.whyDidYouRender.active;
+PreviewToolbar.whyDidYouRender = true;
 
 export { PreviewToolbar };

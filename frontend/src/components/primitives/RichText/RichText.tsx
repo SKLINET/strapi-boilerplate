@@ -1,7 +1,6 @@
 import React, { Fragment, ReactElement } from 'react';
 import styles from './RichText.module.scss';
 import dynamic from 'next/dynamic';
-import config from '../../../../sklinet.config.json';
 import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import { v4 } from 'uuid';
@@ -37,9 +36,9 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                             );
                         } else {
                             return (
-                                <Link key={v4()} {...linkParams}>
+                                <a key={v4()} {...linkParams}>
                                     {domToReact(domNode.children, parserOptions)}
-                                </Link>
+                                </a>
                             );
                         }
                     } else {
@@ -154,6 +153,6 @@ const RichText = ({ content }: RichTextProps): ReactElement<RichTextProps, 'div'
     <>{parse(content, parserOptions)}</>
 );
 
-RichText.whyDidYouRender = config.whyDidYouRender.active;
+RichText.whyDidYouRender = true;
 
 export { RichText };

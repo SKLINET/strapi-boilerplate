@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import styles from './Pagination.module.scss';
 import clsx from 'clsx';
-import config from '../../../../sklinet.config.json';
 import { Link } from '../../primitives/Link/Link';
 
 export interface PaginationProps {
@@ -61,6 +60,6 @@ const Pagination = ({ className, page = 1, total = 0, callback }: PaginationProp
     );
 };
 
-Pagination.whyDidYouRender = config.whyDidYouRender.active;
+Pagination.whyDidYouRender = true;
 
 export { Pagination };

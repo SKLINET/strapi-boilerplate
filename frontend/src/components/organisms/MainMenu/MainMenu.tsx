@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import styles from './MainMenu.module.scss';
-import config from '../../../../sklinet.config.json';
 import { IMenu } from '../../../types/menu';
 import { MenuLink } from '../../primitives/MenuLink/MenuLink';
 
@@ -24,6 +23,6 @@ function renderMenu(menu: IMenu): ReactElement {
 
 const MainMenu = ({ menu }: MainMenuProps): ReactElement => renderMenu(menu);
 
-MainMenu.whyDidYouRender = config.whyDidYouRender.active;
+MainMenu.whyDidYouRender = true;
 
 export { MainMenu };

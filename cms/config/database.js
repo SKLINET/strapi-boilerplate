@@ -23,6 +23,8 @@ module.exports = ({ env }) => {
             true
           ),
         },
+        charset: "utf8mb4",
+        collation: "utf8mb4_unicode_ci",
       },
       pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
     },

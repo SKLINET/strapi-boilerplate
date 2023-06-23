@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
-import config from '../../../../sklinet.config.json';
 import { Heading } from '../../primitives/Heading/Heading';
 import { RichText } from '../../primitives/RichText/RichText';
 
@@ -17,6 +16,6 @@ const Error404 = ({ className, headline, description }: Error404Props): ReactEle
     </div>
 );
 
-Error404.whyDidYouRender = config.whyDidYouRender.active;
+Error404.whyDidYouRender = true;
 
 export { Error404 };

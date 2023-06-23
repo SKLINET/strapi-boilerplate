@@ -1,14 +1,13 @@
 import React, { ReactElement } from 'react';
 import { getBlockName } from '@symbio/headless/utils';
 import blocks from '../../../blocks';
-import { AppContextProps, BlocksPropsMap } from '@symbio/headless';
-import { PageProps } from '../../../types/page';
-import { WebSettingsProps } from '../../../types/webSettings';
+import { BlocksPropsMap } from '@symbio/headless';
+import { IApp } from '../../../types/app';
 
 interface BlocksProps {
     blocksData: readonly any[] | null;
     initialProps?: BlocksPropsMap;
-    app: AppContextProps<PageProps, WebSettingsProps>;
+    app: IApp;
 }
 
 export const Blocks = ({ blocksData, initialProps, app }: BlocksProps): ReactElement => (

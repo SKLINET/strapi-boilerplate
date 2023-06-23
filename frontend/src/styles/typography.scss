@@ -1,13 +1,20 @@
 /* Import local font theme:
 @font-face {
-    font-family: 'Modern Gothic';
+    font-family: 'Poppins';
     font-style: normal;
-    font-weight: 300;
-    src: local(''), url('/fonts/Modern-Gothic/Modern-Gothic-Light.woff2') format('woff2'),
-        url('/fonts/Modern-Gothic/Modern-Gothic-Light.otf') format('opentype');
+    font-weight: 200;
+    src: local(''), url('/fonts/Poppins/truetype/Poppins-ExtraLight.ttf') format('truetype');
     font-display: fallback;
-}
-*/
+}*/
+
+/* Import local font theme:
+@font-face {
+    font-family: 'Poppins';
+    font-style: italic;
+    font-weight: 200;
+    src: local(''), url('/fonts/Poppins/truetype/Poppins-ExtraLightItalic.ttf') format('truetype');
+    font-display: fallback;
+}*/
 
 /* devanagari */
 @layer base {

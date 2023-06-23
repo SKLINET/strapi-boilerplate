@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './VimeoVideo.module.scss';
 import clsx from 'clsx';
-import config from '../../../../sklinet.config.json';
 
 export interface VimeoVideoProps {
     uid: string;
@@ -23,6 +22,6 @@ const VimeoVideo = ({ uid, className, width, height }: VimeoVideoProps) => (
     </div>
 );
 
-VimeoVideo.whyDidYouRender = config.whyDidYouRender.active;
+VimeoVideo.whyDidYouRender = true;
 
 export { VimeoVideo };

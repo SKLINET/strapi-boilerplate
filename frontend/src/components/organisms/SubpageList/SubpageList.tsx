@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import styles from './SubpageList.module.scss';
-import config from '../../../../sklinet.config.json';
 import { PageBox } from '../../molecules/PageBox/PageBox';
 import { Pagination } from '../Pagination/Pagination';
 
@@ -44,6 +43,6 @@ const SubpageList = ({ page, count, items, setPage, pages }: SubpageListProps): 
     </div>
 );
 
-SubpageList.whyDidYouRender = config.whyDidYouRender.active;
+SubpageList.whyDidYouRender = true;
 
 export { SubpageList };

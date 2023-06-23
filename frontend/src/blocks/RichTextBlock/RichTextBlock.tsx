@@ -1,14 +1,11 @@
 import React, { ReactElement } from 'react';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import styles from './RichTextBlock.module.scss';
 import { RichText } from '../../components/primitives/RichText/RichText';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { RichTextBlock_content$data } from './__generated__/RichTextBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
+import { IApp } from '../../types/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RichTextBlockStaticProps {}
@@ -19,7 +16,8 @@ export interface RichTextBlockContent extends OmitRefType<RichTextBlock_content$
 
 export interface RichTextBlockProps extends RichTextBlockStaticProps {
     blocksData: RichTextBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -36,6 +34,6 @@ const RichTextBlock = ({ blocksData: { content }, app }: RichTextBlockProps): Re
     );
 };
 
-RichTextBlock.whyDidYouRender = config.whyDidYouRender.active;
+RichTextBlock.whyDidYouRender = true;
 
 export default RichTextBlock;

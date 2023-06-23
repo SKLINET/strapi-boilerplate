@@ -1,14 +1,13 @@
 import React, { ReactElement } from 'react';
 import dynamic from 'next/dynamic';
-import { TemplateBlockContent, TemplateBlockProps } from '../../../blocks/TemplateBlock/TemplateBlock';
+import { TemplateBlockProps } from '../../../blocks/TemplateBlock/TemplateBlock';
 
 const Button = dynamic(() => import('../Button/Button'));
 
-export type TemplateProps = {
-    blocksData: Omit<TemplateBlockProps, 'content'> & Omit<TemplateBlockContent, 'id' | '__typename'>;
-};
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TemplateProps = TemplateBlockProps & {};
 
-const Template = ({ blocksData }: TemplateProps): ReactElement => (
+const Template = ({ blocksData, app }: TemplateProps): ReactElement => (
     <>
         {blocksData.template?.data?.attributes?.content.map((e) => {
             if (!e) return null;

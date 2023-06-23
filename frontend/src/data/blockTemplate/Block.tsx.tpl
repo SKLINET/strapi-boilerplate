@@ -46,6 +46,6 @@ if (typeof window === 'undefined') {
     */
 }
 
-{BLOCK_NAME}.whyDidYouRender = config.whyDidYouRender.active;
+{BLOCK_NAME}.whyDidYouRender = true;
 
 export default {BLOCK_NAME};
