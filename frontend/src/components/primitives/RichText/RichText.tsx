@@ -1,5 +1,4 @@
 import React, { Fragment, ReactElement } from 'react';
-import styles from './RichText.module.scss';
 import dynamic from 'next/dynamic';
 import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
@@ -121,11 +120,7 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                         const alt = attribs.alt;
                         delete attribs.src;
                         delete attribs.alt;
-                        return (
-                            <div className={styles.image}>
-                                <Image src={src} alt={alt} {...attribs} />
-                            </div>
-                        );
+                        return <Image src={src} alt={alt} {...attribs} />;
                     }
                     break;
                 }
