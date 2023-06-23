@@ -1,5 +1,5 @@
-export const getProgress = (startY: number, endY: number, triggerY: number): number => {
-    const value = Math.min(1, Math.max(0, (triggerY - startY) / (endY - startY)));
+export const getProgress = (start: number, end: number, trigger: number): number => {
+    const value = Math.min(1, Math.max(0, (trigger - start) / (end - start)));
 
     return Math.round(value * 100) / 100;
 };
