@@ -30,6 +30,7 @@ graphql`
 const TemplateBlock = ({ blocksData, app }: TemplateBlockProps): ReactElement => (
     <Template blocksData={blocksData} app={app} />
 );
+
 TemplateBlock.whyDidYouRender = true;
 
 export default TemplateBlock;
