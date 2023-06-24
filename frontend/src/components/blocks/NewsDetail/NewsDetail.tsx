@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import config from '../../../../sklinet.config.json';
 import dayjs from 'dayjs';
 import timeZone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -25,6 +24,6 @@ const NewsDetail = ({ item, app }: NewsDetailProps): ReactElement => {
     );
 };
 
-NewsDetail.whyDidYouRender = config.whyDidYouRender.active;
+NewsDetail.whyDidYouRender = true;
 
 export { NewsDetail };

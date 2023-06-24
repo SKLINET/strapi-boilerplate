@@ -12,18 +12,19 @@ import { Head } from '../components/base/Head/Head';
 import { Layout } from '../components/base/Layout/Layout';
 import { CALENDAR_FORMATS } from '../constants';
 import providers from '../providers';
-import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
+import { AppStore, getBlocksProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { getMenuType } from '../utils/strapi/getMenuType';
-import { ISystemResources } from '../types/systemResources';
+import { IApp } from '../types/app';
+import { IPageProps } from '../types/page';
 
 const GridHelper = dynamic(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
 );
 
-const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources): ReactElement => {
+const Page = (props: IPageProps): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview, systemResources } = props;
     const { gtm, tz } = config;
     const router = useRouter();
@@ -33,7 +34,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
             ? router.asPath
             : '';
 
-    const app = {
+    const app: IApp = {
         currentUrl,
         hostname,
         page,
@@ -56,8 +57,8 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
-    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu as any);
-    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu as any);
+    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
+    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
     const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (

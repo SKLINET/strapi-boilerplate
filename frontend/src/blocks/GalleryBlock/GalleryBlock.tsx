@@ -1,13 +1,10 @@
 import React, { ReactElement } from 'react';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Gallery } from '../../components/primitives/Gallery/Gallery';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { GalleryBlock_content$data } from './__generated__/GalleryBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
+import { IApp } from '../../types/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface GalleryBlockStaticProps {}
@@ -18,7 +15,8 @@ export interface GalleryBlockContent extends OmitRefType<GalleryBlock_content$da
 
 export interface GalleryBlockProps extends GalleryBlockStaticProps {
     blocksData: GalleryBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -44,6 +42,6 @@ const GalleryBlock = ({ blocksData, app }: GalleryBlockProps): ReactElement => {
     );
 };
 
-GalleryBlock.whyDidYouRender = config.whyDidYouRender.active;
+GalleryBlock.whyDidYouRender = true;
 
 export default GalleryBlock;

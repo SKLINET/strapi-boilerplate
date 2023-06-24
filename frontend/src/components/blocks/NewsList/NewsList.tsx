@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import config from '../../../../sklinet.config.json';
 import dayjs from 'dayjs';
 import Calendar from 'dayjs/plugin/calendar';
 import { Heading } from '../../primitives/Heading/Heading';
@@ -53,6 +52,6 @@ const NewsList = ({
     );
 };
 
-NewsList.whyDidYouRender = config.whyDidYouRender.active;
+NewsList.whyDidYouRender = true;
 
 export { NewsList };

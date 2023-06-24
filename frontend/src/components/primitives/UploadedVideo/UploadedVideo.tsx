@@ -1,5 +1,4 @@
 import React, { DetailedHTMLProps, ReactElement, useEffect, useRef, VideoHTMLAttributes } from 'react';
-import config from '../../../../sklinet.config.json';
 import { VideoProps } from '../../../types/video';
 import { getHLSVideo } from '@symbio/headless/utils';
 
@@ -42,6 +41,6 @@ const UploadedVideo = ({ video, objectFit, objectPosition, autoPlay, ...rest }: 
     );
 };
 
-UploadedVideo.whyDidYouRender = config.whyDidYouRender.active;
+UploadedVideo.whyDidYouRender = true;
 
 export { UploadedVideo };

@@ -1,13 +1,10 @@
 import React, { ReactElement } from 'react';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Carousel } from '../../components/organisms/Carousel/Carousel';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { CarouselBlock_content$data } from './__generated__/CarouselBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
+import { IApp } from '../../types/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CarouselBlockStaticProps {}
@@ -18,7 +15,8 @@ export interface CarouselBlockContent extends OmitRefType<CarouselBlock_content$
 
 export interface CarouselBlockProps extends CarouselBlockStaticProps {
     blocksData: CarouselBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -54,6 +52,6 @@ const CarouselBlock = ({ blocksData, app }: CarouselBlockProps): ReactElement =>
     );
 };
 
-CarouselBlock.whyDidYouRender = config.whyDidYouRender.active;
+CarouselBlock.whyDidYouRender = true;
 
 export default CarouselBlock;

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import styles from './ArticlesListBlock.module.scss';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { StaticBlockContext } from '@symbio/headless';
@@ -8,13 +7,11 @@ import { Providers } from '../../types/providers';
 import { Locale } from '../../types/locale';
 import { NewsList } from '../../components/blocks/NewsList/NewsList';
 import getPublicationState from '../../utils/getPublicationState';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
-import { PageProps } from '../../types/page';
 import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
+import { IApp } from '../../types/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ArticlesListBlockStaticProps {
     data: any[];
     count: number;
@@ -26,7 +23,8 @@ export interface ArticlesListBlockContent extends OmitRefType<ArticlesListBlock_
 
 export interface ArticlesListBlockProps extends ArticlesListBlockStaticProps {
     blocksData: ArticlesListBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -62,6 +60,6 @@ if (typeof window === 'undefined') {
     };
 }
 
-ArticlesListBlock.whyDidYouRender = config.whyDidYouRender.active;
+ArticlesListBlock.whyDidYouRender = true;
 
 export default ArticlesListBlock;

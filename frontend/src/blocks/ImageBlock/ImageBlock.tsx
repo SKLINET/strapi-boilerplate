@@ -1,14 +1,11 @@
 import React, { ReactElement } from 'react';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { Image } from '../../components/primitives/Image/Image';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { ImageBlock_content$data } from './__generated__/ImageBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
 import { getImageType } from '../../utils/strapi/getImageType';
+import { IApp } from '../../types/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ImageBlockStaticProps {}
@@ -19,7 +16,8 @@ export interface ImageBlockContent extends OmitRefType<ImageBlock_content$data> 
 
 export interface ImageBlockProps extends ImageBlockStaticProps {
     blocksData: ImageBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -42,6 +40,6 @@ const ImageBlock = ({ blocksData: { image } }: ImageBlockProps): ReactElement =>
     );
 };
 
-ImageBlock.whyDidYouRender = config.whyDidYouRender.active;
+ImageBlock.whyDidYouRender = true;
 
 export default ImageBlock;

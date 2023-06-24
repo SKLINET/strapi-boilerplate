@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import config from '../../../../sklinet.config.json';
 import { GalleryBlock_content$data } from '../../../blocks/GalleryBlock/__generated__/GalleryBlock_content.graphql';
 
 import { Image } from '../Image/Image';
@@ -48,6 +47,6 @@ const Gallery = ({ data }: GalleryProps): JSX.Element => {
     );
 };
 
-Gallery.whyDidYouRender = config.whyDidYouRender.active;
+Gallery.whyDidYouRender = true;
 
 export { Gallery };

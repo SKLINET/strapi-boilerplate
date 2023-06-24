@@ -1,19 +1,15 @@
 import React, { ReactElement } from 'react';
 import styles from './ArticleDetailBlock.module.scss';
-import config from '../../../sklinet.config.json';
 import graphql from 'graphql-tag';
 import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
 import { getSlug } from '@symbio/headless/utils';
 import { BaseBlockProps, StaticBlockContext } from '../../types/block';
 import { NewsDetail } from '../../components/blocks/NewsDetail/NewsDetail';
-import { AppContextProps, OmitRefType } from '@symbio/headless';
+import { OmitRefType } from '@symbio/headless';
 import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { ISystemResources } from '../../types/systemResources';
 import { newsPreviewQuery } from '../../relay/news';
+import { IApp } from '../../types/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ArticleDetailBlockStaticProps {
     item: any;
 }
@@ -24,7 +20,8 @@ export interface ArticleDetailBlockContent extends OmitRefType<ArticleDetailBloc
 
 export interface ArticleDetailBlockProps extends ArticleDetailBlockStaticProps {
     blocksData: ArticleDetailBlockContent;
-    app?: AppContextProps<PageProps, WebSettingsProps> & ISystemResources;
+    app?: IApp;
+    className?: string;
 }
 
 graphql`
@@ -91,6 +88,6 @@ if (typeof window === 'undefined') {
     };
 }
 
-ArticleDetailBlock.whyDidYouRender = config.whyDidYouRender.active;
+ArticleDetailBlock.whyDidYouRender = true;
 
 export default ArticleDetailBlock;

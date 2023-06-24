@@ -43,7 +43,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
             publicationState,
             entityId: this.entityId ? parseInt(this.entityId) : null,
         }).toPromise();
-        return { ...data, page: { ...data?.page, ...data?.page?.attributes } };
+        return { ...data, page: data?.page ? { ...data?.page, ...data?.page?.attributes } : null };
     }
 
     async getStaticPaths(

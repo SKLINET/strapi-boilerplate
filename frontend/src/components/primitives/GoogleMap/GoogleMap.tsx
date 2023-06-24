@@ -1,5 +1,4 @@
 import React, { useState, ReactElement } from 'react';
-import config from '../../../../sklinet.config.json';
 import parse from 'html-react-parser';
 import { GoogleMap as GoogleMapComponent, Marker, LoadScript, InfoBox } from '@react-google-maps/api';
 
@@ -60,6 +59,6 @@ const GoogleMap = ({
     );
 };
 
-GoogleMap.whyDidYouRender = config.whyDidYouRender.active;
+GoogleMap.whyDidYouRender = true;
 
 export { GoogleMap };

@@ -14,20 +14,21 @@ import { CALENDAR_FORMATS } from '../constants';
 import providers from '../providers';
 import config from '../../sklinet.config.json';
 import { Logger } from '@symbio/headless/services';
-import { AppStore, getBlocksProps, MyPageProps } from '@symbio/headless';
+import { AppStore, getBlocksProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import NextNprogress from 'nextjs-progressbar';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { getSlug } from '@symbio/headless/utils';
 import { getMenuType } from '../utils/strapi/getMenuType';
-import { ISystemResources } from '../types/systemResources';
+import { IApp } from '../types/app';
+import { IPageProps } from '../types/page';
 
 const GridHelper = dynamic(() =>
     import('../components/primitives/GridHelper/GridHelper').then((mod) => mod.GridHelper),
 );
 
-const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources): ReactElement => {
+const Page = (props: IPageProps): ReactElement => {
     const { hostname, site, page, webSetting, blocksPropsMap, redirect, preview, systemResources } = props;
     const { tz } = config;
     let item = Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0 ? blocksPropsMap[0].item : undefined;
@@ -42,7 +43,7 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
         '/' + (router.locale === router.defaultLocale ? '' : router.locale) + router.asPath !== '/'
             ? router.asPath
             : '';
-    const app = useMemo(
+    const app: IApp = useMemo(
         () => ({
             currentUrl,
             hostname,
@@ -69,8 +70,8 @@ const Page = (props: MyPageProps<PageProps, WebSettingsProps> & ISystemResources
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
-    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu as any);
-    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu as any);
+    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
+    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
     const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (

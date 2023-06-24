@@ -18,10 +18,12 @@ export const GridHelper = (): ReactElement => {
     });
 
     return (
-        <div className={clsx(styles.wrapper, visible ? 'visible' : 'invisible')}>
-            {Array.from(Array(16).keys()).map((e) => (
-                <div key={e} className={styles.column} />
-            ))}
+        <div className={clsx(styles.wrapper, visible && styles.show)}>
+            <div className={styles.inner}>
+                {Array.from(Array(16).keys()).map((e) => (
+                    <div key={e} className={styles.column} />
+                ))}
+            </div>
         </div>
     );
 };
