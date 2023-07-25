@@ -20,7 +20,7 @@
     "@strapi/plugin-i18n": "^4.9.1",
     "@strapi/plugin-seo": "^1.8.0",
     "@strapi/plugin-users-permissions": "^4.9.1",
-    "@strapi/strapi": "^4.9.1",
+    "@strapi/strapi": "^4.10.8",
     "knex": "2.4.2",
     "mysql": "2.18.1",
     "patch-package": "^6.5.1",
