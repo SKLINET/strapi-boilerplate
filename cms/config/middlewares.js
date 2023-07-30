@@ -28,6 +28,9 @@ module.exports = [
                         "*.tiny.cloud",
                         "blob:",
                         "*.strapi.io",
+                        "ws:",
+                        "wss:",
+                        "https:"
                     ],
                     "img-src": [
                         "'self'",

@@ -1,5 +1,5 @@
 import sk from "./extensions/translations/sk.json";
-import cs from "./extensions/translations/sk.json";
+import cs from "./extensions/translations/cs.json";
 import logo from "./extensions/assets/logo.svg";
 
 export default {

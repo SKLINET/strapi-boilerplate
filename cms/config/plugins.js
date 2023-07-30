@@ -24,6 +24,7 @@ module.exports = ({env}) => ({
     enabled: true,
     openTarget: "_blank",
     config: {
+      injectListViewColumn: false,
       contentTypes: [
         {
           uid: "api::page.page",
@@ -146,7 +147,16 @@ module.exports = ({env}) => ({
       },
     },
   },
-  i18n: {
+  'record-locking': {
     enabled: true,
   },
+  publisher: {
+    enabled: true,
+  },
+  'entity-notes': {
+    enabled: true,
+  },
+  i18n: {
+    enabled: true,
+  }
 });

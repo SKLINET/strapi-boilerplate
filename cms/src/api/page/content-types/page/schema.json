@@ -38,8 +38,8 @@
     "blocks": {
       "type": "dynamiczone",
       "components": [
-        "block.error-page-block",
         "block.rich-text-block",
+        "block.error-page-block",
         "block.button-block",
         "block.carousel-block",
         "block.gallery-block",
