@@ -1,4 +1,4 @@
-module.exports = ({env}) => ({
+module.exports = ({ env }) => ({
   slugify: {
     enabled: true,
     config: {
@@ -89,8 +89,8 @@ module.exports = ({env}) => ({
   "email-designer": {
     enabled: false,
   },
-  "video-field":{
-    enabled:true
+  "video-field": {
+    enabled: true,
   },
   seo: {
     enabled: true,
@@ -123,19 +123,19 @@ module.exports = ({env}) => ({
             {
               title: "Headings",
               items: [
-                {title: "h1", block: "h1"},
-                {title: "h2", block: "h2"},
-                {title: "h3", block: "h3"},
-                {title: "h4", block: "h4"},
-                {title: "h5", block: "h5"},
-                {title: "h6", block: "h6"},
+                { title: "h1", block: "h1" },
+                { title: "h2", block: "h2" },
+                { title: "h3", block: "h3" },
+                { title: "h4", block: "h4" },
+                { title: "h5", block: "h5" },
+                { title: "h6", block: "h6" },
               ],
             },
 
             {
               title: "Text",
               items: [
-                {title: "Paragraph", block: "p"},
+                { title: "Paragraph", block: "p" },
                 {
                   title: "Paragraph with small letters",
                   block: "small",
@@ -147,16 +147,16 @@ module.exports = ({env}) => ({
       },
     },
   },
-  'record-locking': {
-    enabled: true,
+  "record-locking": {
+    enabled: false,
   },
   publisher: {
-    enabled: true,
+    enabled: false,
   },
-  'entity-notes': {
-    enabled: true,
+  "entity-notes": {
+    enabled: false,
   },
   i18n: {
     enabled: true,
-  }
+  },
 });
