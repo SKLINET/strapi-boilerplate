@@ -4,27 +4,26 @@ import clsx from 'clsx';
 
 export interface FacebookVideoProps {
     url: string;
+    loaded: () => void;
     className?: string;
-    width?: number | null;
-    height?: number | null;
+    width?: number;
+    height?: number;
 }
 
-const FacebookVideo = ({ url, className, width, height }: FacebookVideoProps): JSX.Element => (
-    <div
-        className={styles.wrapper}
-        style={height && width ? { padding: `0 0 ${(height / width) * 100}% 0` } : undefined}
-    >
+const FacebookVideo = ({ url, loaded, className, width, height }: FacebookVideoProps): JSX.Element => (
+    <div className={clsx(styles.wrapper, className)}>
         <iframe
-            className={clsx(styles.iframe, className)}
-            src={`https://www.facebook.com/plugins/video.php?href=${url}&show_text=false&t=0`}
+            onLoad={() => loaded()}
+            className={styles.iframe}
+            width={width}
+            height={height}
+            src={`https://www.facebook.com/plugins/video.php?href=${url}&autoplay=1`}
             frameBorder="0"
             scrolling="no"
             allowFullScreen
-            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share fullscreen;"
         />
     </div>
 );
-
-FacebookVideo.whyDidYouRender = true;
 
 export { FacebookVideo };

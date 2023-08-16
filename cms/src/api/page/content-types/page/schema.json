@@ -48,7 +48,6 @@
         "block.articles-list-block",
         "block.latest-articles-block",
         "block.video-block",
-        "block.youtube-vimeo-block",
         "block.template-block",
         "block.error-block"
       ],

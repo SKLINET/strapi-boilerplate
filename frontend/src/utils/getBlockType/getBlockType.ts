@@ -20,8 +20,6 @@ export function getBlockType(type: string | undefined): string {
             return 'RichTextBlock';
         case 'ComponentBlockVideoBlock':
             return 'VideoBlock';
-        case 'ComponentBlockYoutubeVimeoBlock':
-            return 'YoutubeVimeoBlock';
         case 'ComponentBlockErrorBlock':
             return 'ErrorBlock';
     }

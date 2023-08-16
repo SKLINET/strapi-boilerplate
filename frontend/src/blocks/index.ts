@@ -25,7 +25,6 @@ import MapBlock from './MapBlock/MapBlock';
 import RichTextBlock from './RichTextBlock/RichTextBlock';
 import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
-import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
 
 graphql`
     fragment blocksContent on PageBlocksDynamicZone {
@@ -42,7 +41,6 @@ graphql`
         ...RichTextBlock_content @relay(mask: false)
         ...TemplateBlock_content @relay(mask: false)
         ...VideoBlock_content @relay(mask: false)
-        ...YoutubeVimeoBlock_content @relay(mask: false)
     }
 `;
 const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } =
@@ -60,7 +58,6 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               RichTextBlock: dynamic(() => import('./RichTextBlock/RichTextBlock')),
               TemplateBlock: dynamic(() => import('./TemplateBlock/TemplateBlock')),
               VideoBlock: dynamic(() => import('./VideoBlock/VideoBlock')),
-              YoutubeVimeoBlock: dynamic(() => import('./YoutubeVimeoBlock/YoutubeVimeoBlock')),
           }
         : {
               ArticleDetailBlock,
@@ -75,6 +72,6 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               RichTextBlock,
               TemplateBlock,
               VideoBlock,
-              YoutubeVimeoBlock,
           };
+
 export default blocks;

@@ -7,25 +7,12 @@
   },
   "options": {},
   "attributes": {
-    "autoplay": {
-      "type": "boolean"
-    },
     "video": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "videos"
-      ]
-    },
-    "videoId": {
-      "type": "string"
-    },
-    "url": {
-      "type": "string"
-    },
-    "thumbnailUrl": {
-      "type": "string"
+      "displayName": "Video",
+      "type": "component",
+      "repeatable": false,
+      "component": "complementary.video",
+      "required": true
     }
   }
 }

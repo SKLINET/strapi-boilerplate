@@ -58,6 +58,7 @@ module.exports = {
             transitionProperty: {
                 width: 'width',
                 'transform-color': 'transform, color',
+                'visibility-opacity': 'visibility, opacity',
             },
             width: {
                 2.5: '0.625rem',
