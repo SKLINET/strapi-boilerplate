@@ -1,0 +1,10 @@
+@import '../../../styles/mixins/responsive.scss';
+@import '../../../styles/layout.scss';
+
+.wrapper {
+    @apply w-full;
+
+    &.isVisible {
+        //
+    }
+}

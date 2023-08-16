@@ -2,15 +2,9 @@
   "collectionName": "components_block_latest_articles_blocks",
   "info": {
     "displayName": "Výpis nejnovějších článků",
-    "icon": "list-ul"
+    "icon": "list-ul",
+    "description": ""
   },
   "options": {},
-  "attributes": {
-    "heading": {
-      "type": "string"
-    },
-    "buttonLabel": {
-      "type": "string"
-    }
-  }
+  "attributes": {}
 }

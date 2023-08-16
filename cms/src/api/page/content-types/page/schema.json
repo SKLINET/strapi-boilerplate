@@ -4,7 +4,7 @@
   "info": {
     "singularName": "page",
     "pluralName": "pages",
-    "displayName": "Stránky",
+    "displayName": "📝 Stránky",
     "description": ""
   },
   "options": {
@@ -39,7 +39,6 @@
       "type": "dynamiczone",
       "components": [
         "block.rich-text-block",
-        "block.error-page-block",
         "block.button-block",
         "block.carousel-block",
         "block.gallery-block",
@@ -50,8 +49,8 @@
         "block.latest-articles-block",
         "block.video-block",
         "block.youtube-vimeo-block",
-        "block.test-block",
-        "block.template-block"
+        "block.template-block",
+        "block.error-block"
       ],
       "pluginOptions": {
         "i18n": {
@@ -96,6 +95,13 @@
         }
       },
       "component": "shared.sitemap"
+    },
+    "isVisibleInListView": {
+      "writable": true,
+      "configurable": false,
+      "visible": true,
+      "type": "boolean",
+      "default": true
     }
   }
 }

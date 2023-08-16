@@ -16,7 +16,7 @@ export interface VideoBlockContent extends OmitRefType<VideoBlock_content$data> 
 }
 
 export interface VideoBlockProps extends VideoBlockStaticProps {
-    blocksData: VideoBlockContent;
+    blocksData: Omit<VideoBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }

@@ -16,7 +16,7 @@ import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';
 import ButtonBlock from './ButtonBlock/ButtonBlock';
 import CarouselBlock from './CarouselBlock/CarouselBlock';
-import ErrorPageBlock from './ErrorPageBlock/ErrorPageBlock';
+import ErrorBlock from './ErrorBlock/ErrorBlock';
 import GalleryBlock from './GalleryBlock/GalleryBlock';
 import ImageBlock from './ImageBlock/ImageBlock';
 import LatestArticlesBlock from './LatestArticlesBlock/LatestArticlesBlock';
@@ -33,7 +33,7 @@ graphql`
         ...ArticlesListBlock_content @relay(mask: false)
         ...ButtonBlock_content @relay(mask: false)
         ...CarouselBlock_content @relay(mask: false)
-        ...ErrorPageBlock_content @relay(mask: false)
+        ...ErrorBlock_content @relay(mask: false)
         ...GalleryBlock_content @relay(mask: false)
         ...ImageBlock_content @relay(mask: false)
         ...LatestArticlesBlock_content @relay(mask: false)
@@ -49,7 +49,7 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
     ArticlesListBlock,
     ButtonBlock,
     CarouselBlock,
-    ErrorPageBlock,
+    ErrorBlock,
     GalleryBlock,
     ImageBlock,
     LatestArticlesBlock,

@@ -42,7 +42,11 @@ const BigNumber = ({
 
         interval = setInterval(() => {
             if (realValueRef && realValueRef.current) {
-                const _newValue = Number(realValueRef.current.innerText) + _increment;
+                let _newValue = Number(realValueRef.current.innerText) + _increment;
+
+                if (_newValue > value) {
+                    _newValue = value;
+                }
 
                 realValueRef.current.innerText = _newValue.toString();
 

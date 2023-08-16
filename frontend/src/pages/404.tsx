@@ -16,7 +16,6 @@ import { AppStore, getBlocksProps } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
-import { getMenuType } from '../utils/strapi/getMenuType';
 import { IApp } from '../types/app';
 import { IPageProps } from '../types/page';
 
@@ -57,14 +56,12 @@ const Page = (props: IPageProps): ReactElement => {
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
-    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
-    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
     const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (
         <>
             <Head site={webSetting} page={page} />
-            <Layout navbarData={{ menu: _mainMenu }} footerData={{ menu: _footerMenu }}>
+            <Layout app={app}>
                 {page?.attributes?.content && (
                     <Blocks blocksData={page?.attributes?.content || []} initialProps={blocksPropsMap} app={app} />
                 )}

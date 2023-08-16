@@ -4,7 +4,7 @@
     "info": {
         "singularName": "redirect",
         "pluralName": "redirects",
-        "displayName": "Presmerovania"
+        "displayName": "🔀 Přesměrování"
     },
     "options": {
         "draftAndPublish": true

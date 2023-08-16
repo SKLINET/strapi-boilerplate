@@ -14,7 +14,7 @@ export interface GalleryBlockContent extends OmitRefType<GalleryBlock_content$da
 }
 
 export interface GalleryBlockProps extends GalleryBlockStaticProps {
-    blocksData: GalleryBlockContent;
+    blocksData: Omit<GalleryBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }

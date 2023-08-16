@@ -4,7 +4,7 @@
   "info": {
     "singularName": "article",
     "pluralName": "articles",
-    "displayName": "Články",
+    "displayName": "📙 Články",
     "description": ""
   },
   "options": {
@@ -19,18 +19,26 @@
     }
   },
   "attributes": {
+    "isVisibleInListView": {
+      "writable": true,
+      "configurable": false,
+      "visible": true,
+      "type": "boolean",
+      "default": true
+    },
     "title": {
       "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "required": true
     },
-    "mainImage": {
+    "image": {
       "type": "media",
       "multiple": false,
-      "required": false,
+      "required": true,
       "allowedTypes": [
         "images"
       ],

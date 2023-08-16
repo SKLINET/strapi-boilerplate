@@ -127,14 +127,12 @@ graphql`
 `;
 
 graphql`
-    fragment appMenuFragment on MenuEntityResponse {
-        data {
-            id
-            attributes {
-                title
-                items {
-                    ...appMenuItemFragment @relay(mask: false)
-                }
+    fragment appMenuEntityFragment on MenuEntity {
+        id
+        attributes {
+            title
+            items {
+                ...appMenuItemFragment @relay(mask: false)
             }
         }
     }

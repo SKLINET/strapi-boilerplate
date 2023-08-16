@@ -1,11 +1,9 @@
 import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
-import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
-import styles from './RichTextBlock.module.scss';
-import { RichText } from '../../components/primitives/RichText/RichText';
 import { OmitRefType } from '@symbio/headless';
 import { RichTextBlock_content$data } from './__generated__/RichTextBlock_content.graphql';
 import { IApp } from '../../types/app';
+import { RichText } from '../../components/blocks/RichText/RichText';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RichTextBlockStaticProps {}
@@ -15,24 +13,21 @@ export interface RichTextBlockContent extends OmitRefType<RichTextBlock_content$
 }
 
 export interface RichTextBlockProps extends RichTextBlockStaticProps {
-    blocksData: RichTextBlockContent;
+    blocksData: Omit<RichTextBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }
 
 graphql`
     fragment RichTextBlock_content on ComponentBlockRichTextBlock {
+        id
         content
     }
 `;
 
-const RichTextBlock = ({ blocksData: { content }, app }: RichTextBlockProps): ReactElement => {
-    return (
-        <BlockWrapper className={`flex-col ${styles.wrapper}`}>
-            {content && <RichText content={content} />}
-        </BlockWrapper>
-    );
-};
+const RichTextBlock = ({ blocksData, app }: RichTextBlockProps): ReactElement => (
+    <RichText blocksData={blocksData} app={app} />
+);
 
 RichTextBlock.whyDidYouRender = true;
 

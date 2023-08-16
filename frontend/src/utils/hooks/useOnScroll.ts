@@ -45,5 +45,5 @@ export const useOnScroll = (
             if (timeout) clearTimeout(timeout);
             window.removeEventListener('scroll', () => handleScroll());
         };
-    }, []);
+    }, [callback, ref, triggerPosition]);
 };

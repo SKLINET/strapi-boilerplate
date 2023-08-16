@@ -1,8 +1,10 @@
-import { appMenuFragment$data } from '../../relay/__generated__/appMenuFragment.graphql';
 import { appMenuItemFragment$data } from '../../relay/__generated__/appMenuItemFragment.graphql';
 import { IMenu, IMenuItem } from '../../types/menu';
 import { getPageType } from './getPageType';
 import { getPageUrl } from '.././getPageUrl';
+import { appMenuEntityFragment$data } from '../../relay/__generated__/appMenuEntityFragment.graphql';
+
+type StrapiMenuFragment = Omit<appMenuEntityFragment$data, ' $fragmentType'>;
 
 export const getMenuItemType = (
     e: Omit<appMenuItemFragment$data, ' $fragmentType'> | null | undefined,
@@ -23,15 +25,15 @@ export const getMenuItemType = (
     };
 };
 
-export const getMenuType = (e: Omit<appMenuFragment$data, ' $fragmentType'> | null | undefined): IMenu | null => {
-    if (!e || !e.data || !e.data.attributes) return null;
+export const getMenuType = (e: StrapiMenuFragment | null | undefined): IMenu | null => {
+    if (!e || !e.attributes) return null;
 
     const _items: IMenuItem[] = [];
 
     const {
         id,
         attributes: { title, items },
-    } = e.data;
+    } = e;
 
     if (!items) return null;
 
@@ -50,4 +52,18 @@ export const getMenuType = (e: Omit<appMenuFragment$data, ' $fragmentType'> | nu
         title: title,
         items: _items,
     };
+};
+
+export const getMenuListType = (e: ReadonlyArray<StrapiMenuFragment | null> | null | undefined): IMenu[] => {
+    const data: IMenu[] = [];
+
+    e?.forEach((k) => {
+        const _menu = getMenuType(k);
+
+        if (!_menu) return;
+
+        data.push(_menu);
+    });
+
+    return data;
 };

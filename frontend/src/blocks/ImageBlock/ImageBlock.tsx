@@ -15,7 +15,7 @@ export interface ImageBlockContent extends OmitRefType<ImageBlock_content$data> 
 }
 
 export interface ImageBlockProps extends ImageBlockStaticProps {
-    blocksData: ImageBlockContent;
+    blocksData: Omit<ImageBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }

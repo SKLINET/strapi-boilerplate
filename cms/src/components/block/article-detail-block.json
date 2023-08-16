@@ -2,12 +2,9 @@
   "collectionName": "components_block_article_detail_blocks",
   "info": {
     "displayName": "Detail článku",
-    "icon": "align-justify"
+    "icon": "align-justify",
+    "description": ""
   },
   "options": {},
-  "attributes": {
-    "sectionId": {
-      "type": "string"
-    }
-  }
+  "attributes": {}
 }

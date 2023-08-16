@@ -1,20 +1,20 @@
 import dayjs from 'dayjs';
 import { fetchQuery } from 'react-relay';
 import { GetStaticPathsResult } from 'next';
-import { newsDetailQuery, newsListQuery, newsStaticPathsQuery } from '../relay/news';
-import * as s from '../relay/__generated__/newsStaticPathsQuery.graphql';
+import { ArticleDetailQuery, ArticleListQuery, ArticleStaticPathsQuery } from '../relay/article';
+import * as s from '../relay/__generated__/articleStaticPathsQuery.graphql';
 import config from '../../sklinet.config.json';
 import StrapiProvider from './StrapiProvider';
 import { StaticPathsParams } from '../types/staticPathsParams';
 
-class NewsProvider extends StrapiProvider<any, any> {
+class ArticleProvider extends StrapiProvider<any, any> {
     getFilterParams(): Record<string, Record<string, string | boolean>> {
         return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
 
     async getStaticPaths(locale: string): Promise<GetStaticPathsResult['paths']> {
         const items = [];
-        const data = await fetchQuery<s.newsStaticPathsQuery>(this.getEnvironment(), newsStaticPathsQuery, {
+        const data = await fetchQuery<s.articleStaticPathsQuery>(this.getEnvironment(), ArticleStaticPathsQuery, {
             locale: locale,
         }).toPromise();
 
@@ -22,7 +22,7 @@ class NewsProvider extends StrapiProvider<any, any> {
             for (const news of data.articles?.data || []) {
                 items.push({
                     params: {
-                        slug: [news.attributes?.url || ''],
+                        slug: [news.attributes?.slug || ''],
                         locale,
                         sitemap: {
                             enabled: news?.attributes?.sitemap?.enabled || false,
@@ -41,7 +41,7 @@ class NewsProvider extends StrapiProvider<any, any> {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default new NewsProvider(newsDetailQuery, newsListQuery, {
+export default new ArticleProvider(ArticleDetailQuery, ArticleListQuery, {
     locales: config.i18n.locales,
     id: '',
     apiKey: 'article',

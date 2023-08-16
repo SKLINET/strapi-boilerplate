@@ -20,7 +20,7 @@ interface BannerInterface {
 
 export type TextAlignCms = 'vlevo' | 'vpravo';
 
-export type CarouselProps = Omit<CarouselBlock_content$data, ' $refType'>;
+export type CarouselProps = Omit<CarouselBlock_content$data, ' $fragmentType'>;
 
 function getAlign(bannerAlign?: string | null, sliderAlign?: string | null): string {
     if (bannerAlign === 'dědit' || bannerAlign === 'inherit') {

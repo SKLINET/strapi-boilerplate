@@ -1,17 +1,20 @@
 import React, { ReactElement, useState } from 'react';
-import { useRouter } from 'next/router';
-import { IMenu } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
 import { Link } from '../../primitives/Link/Link';
+import { IApp } from '../../../types/app';
+import { useRouter } from 'next/router';
+import { getMenuType } from '../../../utils/strapi/getMenuType';
 
-export interface NavbarProps {
-    menu: IMenu | null;
+interface NavbarProps {
+    app: IApp;
 }
 
-const Navbar = ({ menu }: NavbarProps): ReactElement<null, 'div'> | null => {
+const Navbar = ({ app }: NavbarProps): ReactElement => {
     const { locale, locales } = useRouter();
 
     const [languageSelectorOpen, setLanguageSelectorOpen] = useState<boolean>(false);
+
+    const menu = getMenuType(app?.webSetting?.data?.attributes?.mainMenu?.data);
 
     return (
         <div className=" w-full flex items-center flex-row justify-center text-white bg-black p-10 h-20">

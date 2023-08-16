@@ -1,2 +1,32 @@
 .wrapper {
+    @apply font-bold;
+
+    &.withRichText {
+        @apply font-normal;
+
+        b,
+        strong {
+            @apply font-bold;
+        }
+    }
+
+    &.xl {
+        //
+    }
+
+    &.lg {
+        //
+    }
+
+    &.md {
+        //
+    }
+
+    &.sm {
+        //
+    }
+
+    &.xs {
+        //
+    }
 }

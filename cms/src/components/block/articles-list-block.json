@@ -2,12 +2,9 @@
   "collectionName": "components_block_articles_list_blocks",
   "info": {
     "displayName": "Výpis článků",
-    "icon": "list-alt"
+    "icon": "list-alt",
+    "description": ""
   },
   "options": {},
-  "attributes": {
-    "sectionId": {
-      "type": "string"
-    }
-  }
+  "attributes": {}
 }

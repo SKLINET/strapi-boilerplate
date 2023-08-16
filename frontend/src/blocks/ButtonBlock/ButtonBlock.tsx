@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 import { graphql } from 'react-relay';
-import Button from '../../components/blocks/Button/Button';
 import { OmitRefType } from '@symbio/headless';
 import { ButtonBlock_content$data } from './__generated__/ButtonBlock_content.graphql';
 import { IApp } from '../../types/app';
+import { Button } from '../../components/blocks/Button/Button';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ButtonBlockStaticProps {}
@@ -13,13 +13,14 @@ export interface ButtonBlockContent extends OmitRefType<ButtonBlock_content$data
 }
 
 export interface ButtonBlockProps extends ButtonBlockStaticProps {
-    blocksData: ButtonBlockContent;
+    blocksData: Omit<ButtonBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }
 
 graphql`
     fragment ButtonBlock_content on ComponentBlockButtonBlock {
+        id
         file {
             ...appImageFragment @relay(mask: false)
         }
@@ -33,7 +34,9 @@ graphql`
     }
 `;
 
-const ButtonBlock = ({ blocksData, app }: ButtonBlockProps): ReactElement => <Button {...blocksData} />;
+const ButtonBlock = ({ blocksData, app }: ButtonBlockProps): ReactElement => (
+    <Button blocksData={blocksData} app={app} />
+);
 
 ButtonBlock.whyDidYouRender = true;
 

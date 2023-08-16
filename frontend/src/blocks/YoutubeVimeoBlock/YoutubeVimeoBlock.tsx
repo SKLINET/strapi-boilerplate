@@ -15,7 +15,7 @@ export interface YoutubeVimeoBlockContent extends OmitRefType<YoutubeVimeoBlock_
 }
 
 export interface YoutubeVimeoBlockProps extends YoutubeVimeoBlockStaticProps {
-    blocksData: YoutubeVimeoBlockContent;
+    blocksData: Omit<YoutubeVimeoBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }
