@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
         './src/pages/**/*.{js,ts,jsx,tsx}',
@@ -13,6 +14,10 @@ module.exports = {
             desktop: '80rem',
             'large-desktop': '90rem',
             fullhd: '120rem',
+        },
+        fontFamily: {
+            primary: ['Exo'],
+            secondary: ['Poppins'],
         },
         extend: {
             colors: {
