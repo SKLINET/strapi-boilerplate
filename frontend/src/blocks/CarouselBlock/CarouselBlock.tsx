@@ -14,7 +14,7 @@ export interface CarouselBlockContent extends OmitRefType<CarouselBlock_content$
 }
 
 export interface CarouselBlockProps extends CarouselBlockStaticProps {
-    blocksData: CarouselBlockContent;
+    blocksData: Omit<CarouselBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }

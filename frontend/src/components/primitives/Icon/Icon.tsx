@@ -5,28 +5,30 @@ import dynamic from 'next/dynamic';
 
 const ArrowLeft = dynamic(() => import('../../../../public/icons/arrow-left.svg'));
 const ArrowRight = dynamic(() => import('../../../../public/icons/arrow-right.svg'));
+const Edit = dynamic(() => import('../../../../public/icons/edit.svg'));
+const Exit = dynamic(() => import('../../../../public/icons/exit.svg'));
 const Hide = dynamic(() => import('../../../../public/icons/hide.svg'));
 const Loader = dynamic(() => import('../../../../public/icons/loader.svg'));
+const Play = dynamic(() => import('../../../../public/icons/play.svg'));
 const Show = dynamic(() => import('../../../../public/icons/show.svg'));
+const SklinetRound = dynamic(() => import('../../../../public/icons/sklinet-logo.svg'));
 const Sklinet = dynamic(() => import('../../../../public/icons/sklinet.svg'));
 const Tick = dynamic(() => import('../../../../public/icons/tick.svg'));
 const Trash = dynamic(() => import('../../../../public/icons/trash.svg'));
-const SklinetRound = dynamic(() => import('../../../../public/icons/sklinet-logo.svg'));
-const Exit = dynamic(() => import('../../../../public/icons/exit.svg'));
-const Edit = dynamic(() => import('../../../../public/icons/edit.svg'));
 
 export type Icons =
     | 'arrowLeft'
     | 'arrowRight'
+    | 'edit'
+    | 'exit'
     | 'hide'
     | 'loader'
+    | 'play'
     | 'show'
+    | 'sklinet-round'
     | 'sklinet'
     | 'tick'
     | 'trash'
-    | 'sklinet-round'
-    | 'exit'
-    | 'edit'
     | '';
 
 export const getIconName = (name: string): Icons => {
@@ -35,15 +37,16 @@ export const getIconName = (name: string): Icons => {
     switch (name) {
         case 'arrowLeft':
         case 'arrowRight':
+        case 'edit':
+        case 'exit':
         case 'hide':
         case 'loader':
+        case 'play':
         case 'show':
+        case 'sklinet-round':
         case 'sklinet':
         case 'tick':
         case 'trash':
-        case 'sklinet-round':
-        case 'exit':
-        case 'edit':
             _name = name;
             break;
     }
@@ -66,24 +69,26 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
                 return <ArrowLeft />;
             case 'arrowRight':
                 return <ArrowRight />;
+            case 'edit':
+                return <Edit />;
+            case 'exit':
+                return <Exit />;
             case 'hide':
                 return <Hide />;
             case 'loader':
                 return <Loader />;
+            case 'play':
+                return <Play />;
             case 'show':
                 return <Show />;
+            case 'sklinet-round':
+                return <SklinetRound />;
             case 'sklinet':
                 return <Sklinet />;
             case 'tick':
                 return <Tick />;
             case 'trash':
                 return <Trash />;
-            case 'sklinet-round':
-                return <SklinetRound />;
-            case 'exit':
-                return <Exit />;
-            case 'edit':
-                return <Edit />;
             default:
                 return <></>;
         }

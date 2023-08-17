@@ -2,9 +2,9 @@ import { appVideoFragment$data } from '../../relay/__generated__/appVideoFragmen
 import { IVideo } from '../../types/video';
 import { getImageUrl } from '.././getImageUrl';
 
-export const getVideoType = (
-    video: Omit<appVideoFragment$data, ' $fragmentType'> | null | undefined,
-): IVideo | null => {
+type StrapiVideoFragment = Omit<appVideoFragment$data, ' $fragmentType'>;
+
+export const getVideoType = (video: StrapiVideoFragment | null | undefined): IVideo | null => {
     if (!video || !video.data || !video.data.attributes || !video.data.attributes.url) return null;
 
     const { url } = video.data.attributes;

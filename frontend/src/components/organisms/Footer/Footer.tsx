@@ -1,12 +1,15 @@
 import React, { ReactElement } from 'react';
-import { IMenu } from '../../../types/menu';
 import { MainMenu } from '../MainMenu/MainMenu';
+import { IApp } from '../../../types/app';
+import { getMenuType } from '../../../utils/strapi/getMenuType';
 
-export interface FooterProps {
-    menu: IMenu | null;
+interface FooterProps {
+    app: IApp;
 }
 
-const Footer = ({ menu }: FooterProps): ReactElement<null, 'div'> | null => {
+const Footer = ({ app }: FooterProps): ReactElement => {
+    const menu = getMenuType(app?.webSetting?.data?.attributes?.footerMenu?.data);
+
     return (
         <div className=" w-full flex items-center flex-row justify-center text-white bg-black p-10 h-20">
             {menu && <MainMenu menu={menu} />}

@@ -17,7 +17,7 @@ import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';
 import ButtonBlock from './ButtonBlock/ButtonBlock';
 import CarouselBlock from './CarouselBlock/CarouselBlock';
-import ErrorPageBlock from './ErrorPageBlock/ErrorPageBlock';
+import ErrorBlock from './ErrorBlock/ErrorBlock';
 import GalleryBlock from './GalleryBlock/GalleryBlock';
 import ImageBlock from './ImageBlock/ImageBlock';
 import LatestArticlesBlock from './LatestArticlesBlock/LatestArticlesBlock';
@@ -25,7 +25,6 @@ import MapBlock from './MapBlock/MapBlock';
 import RichTextBlock from './RichTextBlock/RichTextBlock';
 import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
-import YoutubeVimeoBlock from './YoutubeVimeoBlock/YoutubeVimeoBlock';
 
 graphql`
     fragment blocksContent on PageBlocksDynamicZone {
@@ -34,7 +33,7 @@ graphql`
         ...ArticlesListBlock_content @relay(mask: false)
         ...ButtonBlock_content @relay(mask: false)
         ...CarouselBlock_content @relay(mask: false)
-        ...ErrorPageBlock_content @relay(mask: false)
+        ...ErrorBlock_content @relay(mask: false)
         ...GalleryBlock_content @relay(mask: false)
         ...ImageBlock_content @relay(mask: false)
         ...LatestArticlesBlock_content @relay(mask: false)
@@ -42,7 +41,6 @@ graphql`
         ...RichTextBlock_content @relay(mask: false)
         ...TemplateBlock_content @relay(mask: false)
         ...VideoBlock_content @relay(mask: false)
-        ...YoutubeVimeoBlock_content @relay(mask: false)
     }
 `;
 const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } =
@@ -52,7 +50,7 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               ArticlesListBlock: dynamic(() => import('./ArticlesListBlock/ArticlesListBlock')),
               ButtonBlock: dynamic(() => import('./ButtonBlock/ButtonBlock')),
               CarouselBlock: dynamic(() => import('./CarouselBlock/CarouselBlock')),
-              ErrorPageBlock: dynamic(() => import('./ErrorPageBlock/ErrorPageBlock')),
+              ErrorBlock: dynamic(() => import('./ErrorBlock/ErrorBlock')),
               GalleryBlock: dynamic(() => import('./GalleryBlock/GalleryBlock')),
               ImageBlock: dynamic(() => import('./ImageBlock/ImageBlock')),
               LatestArticlesBlock: dynamic(() => import('./LatestArticlesBlock/LatestArticlesBlock')),
@@ -60,14 +58,13 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               RichTextBlock: dynamic(() => import('./RichTextBlock/RichTextBlock')),
               TemplateBlock: dynamic(() => import('./TemplateBlock/TemplateBlock')),
               VideoBlock: dynamic(() => import('./VideoBlock/VideoBlock')),
-              YoutubeVimeoBlock: dynamic(() => import('./YoutubeVimeoBlock/YoutubeVimeoBlock')),
           }
         : {
               ArticleDetailBlock,
               ArticlesListBlock,
               ButtonBlock,
               CarouselBlock,
-              ErrorPageBlock,
+              ErrorBlock,
               GalleryBlock,
               ImageBlock,
               LatestArticlesBlock,
@@ -75,6 +72,6 @@ const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers
               RichTextBlock,
               TemplateBlock,
               VideoBlock,
-              YoutubeVimeoBlock,
           };
+
 export default blocks;

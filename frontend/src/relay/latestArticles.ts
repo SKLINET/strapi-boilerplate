@@ -16,15 +16,7 @@ export const LatestArticlesQuery = graphql`
             sort: "publishDate:desc"
         ) {
             data {
-                attributes {
-                    title
-                    mainImage {
-                        ...appImageFragment @relay(mask: false)
-                    }
-                    publishDate
-                    perex
-                    slug
-                }
+                ...articleFragment @relay(mask: false)
             }
         }
     }

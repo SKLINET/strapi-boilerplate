@@ -13,7 +13,7 @@ export interface TemplateBlockContent extends OmitRefType<TemplateBlock_content$
 }
 
 export interface TemplateBlockProps extends TemplateBlockStaticProps {
-    blocksData: TemplateBlockContent;
+    blocksData: Omit<TemplateBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }

@@ -1,7 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { Image } from '../../primitives/Image/Image';
-import { VideoComponentProps } from '../Video/Video';
 import { RichText } from '../../primitives/RichText/RichText';
 import { Heading } from '../../primitives/Heading/Heading';
 import { ImageProps } from '../../../types/image';
@@ -20,7 +19,7 @@ interface BannerInterface {
 
 export type TextAlignCms = 'vlevo' | 'vpravo';
 
-export type CarouselProps = Omit<CarouselBlock_content$data, ' $refType'>;
+export type CarouselProps = Omit<CarouselBlock_content$data, ' $fragmentType'>;
 
 function getAlign(bannerAlign?: string | null, sliderAlign?: string | null): string {
     if (bannerAlign === 'dědit' || bannerAlign === 'inherit') {
@@ -29,24 +28,18 @@ function getAlign(bannerAlign?: string | null, sliderAlign?: string | null): str
     return bannerAlign === 'vlevo' || bannerAlign === 'left' ? 'left-0' : 'right-0';
 }
 
-const Video = dynamic<VideoComponentProps>(() => import('../Video/Video').then((mod) => mod.Video));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CarouselComponent = dynamic<any>(() => import('react-responsive-carousel').then((mod: any) => mod.Carousel));
 
 const Banner = ({
     image,
-    video,
     headline,
     description,
     textAlign,
     sliderTextAlign,
 }: BannerInterface & { sliderTextAlign: string | null }): ReactElement => (
     <article className="w-full h-full min-h-[40rem] relative bg-black">
-        {video?.data?.attributes?.url || video?.url ? (
-            <Video video={video} autoPlay loop className="w-full h-full object-cover" />
-        ) : (
-            <Image image={image} alt="Image" fill className="w-full h-full object-cover" />
-        )}
+        <Image image={image} alt="Image" fill className="w-full h-full object-cover" />
 
         <div
             className={`bg-white bg-opacity-80 absolute p-4 top-1/2 transform -translate-y-1/2 tablet:p-8 ${getAlign(

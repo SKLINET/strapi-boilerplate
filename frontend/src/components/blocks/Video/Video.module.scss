@@ -1,0 +1,55 @@
+@import '../../../styles/mixins/responsive.scss';
+@import '../../../styles/layout.scss';
+
+.wrapper {
+    @apply w-full p-8;
+
+    &.isVisible {
+        //
+    }
+}
+
+.videoWrapper {
+    @apply w-full relative bg-grey;
+
+    &.loaded {
+        .videoOverlay {
+            @apply opacity-0 invisible;
+        }
+    }
+
+    .video {
+        @apply w-full h-full;
+    }
+
+    .videoOverlay {
+        @apply transition-visibility-opacity ease-in-out duration-700;
+
+        .image {
+            @apply object-center object-cover z-2;
+        }
+
+        .playButton {
+            @apply w-16 h-16 rounded-full absolute z-3 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center bg-white transition-colors ease-in-out duration-300;
+
+            .icon {
+                @apply text-black;
+
+                &.isLoader {
+                    @apply w-5;
+                    animation: spin 1s linear infinite;
+                }
+
+                &.isPlay {
+                    @apply w-4 ml-0.5;
+                }
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

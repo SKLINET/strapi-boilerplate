@@ -1,12 +1,9 @@
 import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
-import { BlockWrapper } from '../../components/base/BlockWrapper/BlockWrapper';
-import { UploadedVideo } from '../../components/primitives/UploadedVideo/UploadedVideo';
-import styles from './VideoBlock.module.scss';
 import { OmitRefType } from '@symbio/headless';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
-import { VideoProps } from '../../types/video';
 import { IApp } from '../../types/app';
+import { Video } from '../../components/blocks/Video/Video';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VideoBlockStaticProps {}
@@ -16,29 +13,28 @@ export interface VideoBlockContent extends OmitRefType<VideoBlock_content$data> 
 }
 
 export interface VideoBlockProps extends VideoBlockStaticProps {
-    blocksData: VideoBlockContent;
+    blocksData: Omit<VideoBlockContent, ' $fragmentType'>;
     app?: IApp;
     className?: string;
 }
 
 graphql`
     fragment VideoBlock_content on ComponentBlockVideoBlock {
-        autoplay
+        id
         video {
-            ...appVideoFragment @relay(mask: false)
+            id
+            uploadedVideo {
+                ...appVideoFragment @relay(mask: false)
+            }
+            externalVideo
+            optionalImage {
+                ...appImageFragment @relay(mask: false)
+            }
         }
-        videoId
-        thumbnailUrl
     }
 `;
 
-const VideoBlock = ({ blocksData: { video, autoplay, thumbnailUrl, videoId }, app }: VideoBlockProps): ReactElement => {
-    return (
-        <BlockWrapper className={styles.wrapper}>
-            {video && <UploadedVideo video={video as VideoProps} autoPlay={autoplay || false} />}
-        </BlockWrapper>
-    );
-};
+const VideoBlock = ({ blocksData, app }: VideoBlockProps): ReactElement => <Video blocksData={blocksData} app={app} />;
 
 VideoBlock.whyDidYouRender = true;
 

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_block_error_blocks",
+  "info": {
+    "displayName": "Chyba"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

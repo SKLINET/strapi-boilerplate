@@ -1,46 +1,44 @@
-import React, { DetailedHTMLProps, ReactElement, useEffect, useRef, VideoHTMLAttributes } from 'react';
-import { VideoProps } from '../../../types/video';
-import { getHLSVideo } from '@symbio/headless/utils';
+import React, { ReactElement, useEffect, useRef } from 'react';
+import styles from './UploadedVideo.module.scss';
+import clsx from 'clsx';
+import { IVideo } from '../../../types/video';
 
-export interface UploadedVideoI extends DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement> {
-    video?: VideoProps;
-    objectFit?: 'cover' | 'contain';
-    objectPosition?: 'top' | 'bottom';
+interface UploadedVideoProps {
+    video: IVideo;
+    loaded: () => void;
+    className?: string;
 }
 
-const UploadedVideo = ({ video, objectFit, objectPosition, autoPlay, ...rest }: UploadedVideoI): ReactElement => {
+const UploadedVideo = ({ video: { url, type }, loaded, className }: UploadedVideoProps): ReactElement => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        if (video && videoRef.current) {
-            getHLSVideo(video?.url, videoRef.current);
-        }
-    }, [video, videoRef]);
+        const onLoadedMetadata = () => {
+            if (!videoRef || !videoRef.current) return;
 
-    const classNames: string[] = ['w-full', 'h-full', 'outline-none'];
-    if (objectFit) {
-        classNames.push('object-' + objectFit);
-        if (objectPosition) {
-            classNames.push('object-' + objectPosition);
-        }
-    }
+            videoRef.current.pause();
+            videoRef.current.currentTime = 0;
+            videoRef.current.play();
+
+            loaded();
+        };
+
+        videoRef.current?.addEventListener('loadedmetadata', () => onLoadedMetadata(), { passive: true });
+
+        return () => videoRef.current?.removeEventListener('loadedmetadata', () => onLoadedMetadata());
+    }, [videoRef, loaded]);
 
     return (
         <video
-            id={`video-${video?.videoId || rest.id}`}
             ref={videoRef}
-            className={classNames.join(' ')}
-            poster={video?.thumbnailUrl ? video.thumbnailUrl + '?time=0' : undefined}
-            autoPlay={autoPlay}
-            muted={autoPlay}
-            controls={!autoPlay}
-            {...rest}
+            autoPlay={false}
+            muted={false}
+            controls={true}
+            className={clsx(styles.wrapper, className)}
         >
-            <source src={video?.url} type="application/vnd.apple.mpegURL" />
+            <source src={url} type={type} />
         </video>
     );
 };
-
-UploadedVideo.whyDidYouRender = true;
 
 export { UploadedVideo };

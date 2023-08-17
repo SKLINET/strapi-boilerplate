@@ -23,34 +23,24 @@ graphql`
                     ...appPageFragment @relay(mask: false)
                 }
                 mainMenu {
-                    ...appMenuFragment @relay(mask: false)
+                    data {
+                        ...appMenuEntityFragment @relay(mask: false)
+                    }
                 }
                 footerMenu {
-                    ...appMenuFragment @relay(mask: false)
+                    data {
+                        ...appMenuEntityFragment @relay(mask: false)
+                    }
                 }
                 globalSeo {
                     siteName
                     titleSuffix
                     description
                     favicon {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                     sharingImage {
-                        data {
-                            attributes {
-                                url
-                                width
-                                height
-                                alternativeText
-                            }
-                        }
+                        ...appImageFragment @relay(mask: false)
                     }
                     preventIndexing
                     metaTags {

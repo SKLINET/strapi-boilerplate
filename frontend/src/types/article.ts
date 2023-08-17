@@ -1,27 +1,9 @@
-import { Media } from './media';
-import { Meta } from './meta';
+import { ImageProps } from './image';
 
-export interface Article {
+export interface IArticle {
+    id: string;
     title: string;
-    perex?: string;
-    slug?: string;
-    meta: Meta;
-    introText?: string;
-    mainImage: Media;
-    label?: string;
-    heading?: string;
-    author?: {
-        firstName: string;
-        lastName: string;
-    };
-    publishDate: Date;
-    content?: string;
-}
-
-export interface ReadOnlyArticle {
-    readonly title: string | null;
-    readonly slug?: string | null;
-    readonly image: {
-        readonly fileName: string | null;
-    } | null;
+    perex: string | null;
+    href: string;
+    image: ImageProps;
 }

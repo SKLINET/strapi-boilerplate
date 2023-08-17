@@ -68,7 +68,7 @@ html {
 html,
 body {
     font-size: 100%;
-    font-family: 'Hind', sans-serif;
+    @apply font-secondary;
 
     @include fullhd {
         font-size: 0.8333333333vw;

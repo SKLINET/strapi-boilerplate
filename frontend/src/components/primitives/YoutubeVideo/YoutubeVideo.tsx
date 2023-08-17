@@ -4,24 +4,25 @@ import clsx from 'clsx';
 
 export interface YoutubeVideoProps {
     uid: string;
+    loaded: () => void;
     className?: string;
     width?: number;
     height?: number;
 }
 
-const YoutubeVideo = ({ uid, className, width, height }: YoutubeVideoProps): JSX.Element => (
-    <div className={styles.wrapper}>
+const YoutubeVideo = ({ uid, loaded, className, width, height }: YoutubeVideoProps): JSX.Element => (
+    <div className={clsx(styles.wrapper, className)}>
         <iframe
-            className={clsx(styles.iframe, className)}
+            onLoad={() => loaded()}
+            className={styles.iframe}
             width={width}
             height={height}
-            src={`https://youtube.com/embed/${uid}`}
+            src={`https://youtube.com/embed/${uid}?autoplay=1`}
             frameBorder="0"
             allowFullScreen
+            allow="autoplay; fullscreen"
         />
     </div>
 );
-
-YoutubeVideo.whyDidYouRender = true;
 
 export { YoutubeVideo };

@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blocks",
+  "info": {
+    "singularName": "block",
+    "pluralName": "blocks",
+    "displayName": "🔨 Bloky",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "blockName": {
+      "type": "string"
+    },
+    "externalUrl": {
+      "type": "string"
+    }
+  }
+}

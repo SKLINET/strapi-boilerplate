@@ -20,7 +20,6 @@ import { WebSettingsProps } from '../types/webSettings';
 import NextNprogress from 'nextjs-progressbar';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { getSlug } from '@symbio/headless/utils';
-import { getMenuType } from '../utils/strapi/getMenuType';
 import { IApp } from '../types/app';
 import { IPageProps } from '../types/page';
 
@@ -70,15 +69,13 @@ const Page = (props: IPageProps): ReactElement => {
 
     AppStore.getInstance<PageProps, WebSettingsProps>(app);
 
-    const _mainMenu = getMenuType(webSetting?.data?.attributes?.mainMenu);
-    const _footerMenu = getMenuType(webSetting?.data?.attributes?.footerMenu);
     const gtmCode = webSetting?.data?.attributes?.gtmCode || config.gtm.code;
 
     return (
         <>
             <Head site={webSetting} page={page} item={item} />
             <NextNprogress color="#00B5EC" options={{ showSpinner: false }} />
-            <Layout navbarData={{ menu: _mainMenu }} footerData={{ menu: _footerMenu }}>
+            <Layout app={app}>
                 {page && (
                     <Blocks blocksData={page?.attributes?.content || []} initialProps={blocksPropsMap} app={app} />
                 )}
