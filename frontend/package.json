@@ -97,7 +97,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.32.2",
         "lint-staged": "^13.2.1",
-        "postcss": "^8.4.21",
+        "postcss": "^8.4.31",
         "prettier": "^2.8.7",
         "relay-compiler": "^15.0.0",
         "relay-compiler-language-typescript": "^15.0.1",
