@@ -38,7 +38,8 @@
         "block.article-detail-block",
         "block.articles-list-block",
         "block.template-block",
-        "block.video-block"
+        "block.video-block",
+        "block.contact-form-block"
       ],
       "pluginOptions": {
         "i18n": {

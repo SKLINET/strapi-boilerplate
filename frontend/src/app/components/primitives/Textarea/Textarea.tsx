@@ -17,19 +17,17 @@ export interface TextareaProps {
 
 const Textarea = ({ name, register, error, disabled = false, placeholder, className }: TextareaProps): ReactElement => (
     <div className={clsx(styles.wrapper, className)}>
-        <textarea
-            {...register(name)}
-            placeholder={placeholder}
-            disabled={disabled}
-            autoComplete="off"
-            rows={4}
-            className={styles.textarea}
-        />
-        {error && (
-            <div className={styles.error}>
-                <Paragraph className={styles.label}>{error}</Paragraph>
-            </div>
-        )}
+        <div className={styles.inner}>
+            <textarea
+                {...register(name)}
+                placeholder={placeholder}
+                disabled={disabled}
+                autoComplete="off"
+                rows={4}
+                className={styles.textarea}
+            />
+        </div>
+        {error && <Paragraph className={styles.error}>{error}</Paragraph>}
     </div>
 );
 

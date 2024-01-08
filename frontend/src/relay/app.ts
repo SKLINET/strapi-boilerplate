@@ -251,6 +251,7 @@ graphql`
             attributes {
                 content {
                     __typename
+                    ...ContactFormBlock_content @relay(mask: false)
                     ...VideoBlock_content @relay(mask: false)
                 }
             }

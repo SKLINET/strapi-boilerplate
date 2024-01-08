@@ -4,6 +4,8 @@ graphql`
     fragment contactFormFragment on ContactFormEntityResponse {
         data {
             attributes {
+                successMessage
+                errorMessage
                 mailFrom
                 mailTo
                 mailSubject

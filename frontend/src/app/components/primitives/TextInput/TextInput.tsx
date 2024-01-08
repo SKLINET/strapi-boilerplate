@@ -34,11 +34,7 @@ const TextInput = ({
             autoComplete="off"
             className={styles.input}
         />
-        {error && (
-            <div className={styles.error}>
-                <Paragraph className={styles.label}>{error}</Paragraph>
-            </div>
-        )}
+        {error && <Paragraph className={styles.error}>{error}</Paragraph>}
     </div>
 );
 

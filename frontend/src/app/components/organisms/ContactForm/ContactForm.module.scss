@@ -1,0 +1,47 @@
+.wrapper {
+    //
+}
+
+.title {
+    @apply w-full text-center;
+}
+
+.form {
+    @apply w-full;
+
+    .errorMessage {
+        @apply w-full flex gap-4 mb-4;
+
+        .icon {
+            @apply w-6 h-6 text-red shrink-0;
+        }
+
+        .label {
+            @apply text-red text-14 text-left mt-0.5;
+        }
+    }
+
+    .fields {
+        @apply flex flex-col gap-y-2;
+    }
+
+    .button {
+        @apply mt-2;
+    }
+}
+
+.success {
+    @apply w-full mx-auto;
+
+    .description {
+        @apply text-16 leading-1.5 font-light text-black text-opacity-60;
+    }
+
+    .button {
+        @apply mt-2;
+    }
+}
+
+.skeleton {
+    @apply w-full;
+}

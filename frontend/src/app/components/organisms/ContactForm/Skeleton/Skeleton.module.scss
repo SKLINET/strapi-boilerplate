@@ -1,0 +1,20 @@
+.wrapper {
+    @apply animate-pulse;
+}
+
+.fields {
+    @apply w-full flex flex-col gap-y-2 animate-pulse;
+
+    .field {
+        @apply w-full border border-grey bg-grey rounded-xl;
+        height: calc(3rem + 2px);
+
+        &.large {
+            height: calc(7.5rem + 2px); 
+        }
+    }
+}
+
+.button {
+    @apply w-48 h-14 bg-grey rounded-xl mt-2;
+}

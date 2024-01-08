@@ -2,8 +2,7 @@
 @import '../../../../styles/keyframes/spin.scss';
 
 .wrapper {
-    @apply w-fit block px-10 py-4 text-center rounded-xl relative overflow-hidden transition-colors ease-in-out duration-500;
-    @apply desktop:text-18;
+    @apply w-fit block px-10 py-4 text-16 text-center bg-black text-white rounded-xl relative overflow-hidden transition-colors ease-in-out duration-500;
 
     &.loading {
         @apply cursor-not-allowed;

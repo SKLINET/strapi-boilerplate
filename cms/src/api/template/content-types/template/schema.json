@@ -33,7 +33,8 @@
       },
       "type": "dynamiczone",
       "components": [
-        "block.video-block"
+        "block.video-block",
+        "block.contact-form-block"
       ],
       "required": false
     }

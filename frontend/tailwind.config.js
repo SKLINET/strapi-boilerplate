@@ -19,6 +19,7 @@ module.exports = {
             primary: ['Poppins'],
         },
         fontSize: {
+            14: '0.875rem',
             16: '1rem',
         },
         lineHeight: {

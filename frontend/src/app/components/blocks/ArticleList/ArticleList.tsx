@@ -10,6 +10,7 @@ import { getItemId } from '../../../../utils/getItemId';
 import { fetchArticles } from '../../../actions/fetch-articles';
 import { getArticleCategoryListType } from '../../../../utils/strapi/getArticleCategoryType';
 import { getPageUrl } from '../../../../utils/getPageUrl';
+import { Button } from '../../primitives/Button/Button';
 
 const ArticleList = ({
     blocksData: { countOnPage },
@@ -77,6 +78,15 @@ const ArticleList = ({
                     </a>
                 ))}
             </div>
+            {_canLoadMore && (
+                <Button
+                    loading={isPending}
+                    onClick={() => !isPending && loadMore(page + 1)}
+                    className={styles.loadMoreButton}
+                >
+                    {'Load more'}
+                </Button>
+            )}
         </section>
     );
 };

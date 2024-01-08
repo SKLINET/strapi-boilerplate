@@ -7,10 +7,11 @@ import { createRelayEnvironment } from '../../relay/createRelayEnvironment';
 import { FormMutation } from '../../relay/api/contact';
 import { contactMutation } from '../../relay/api/__generated__/contactMutation.graphql';
 import { IApp } from '../../types/app';
+import { ContactFormData } from '../components/organisms/ContactForm/ContactForm';
 
 dotenv.config();
 
-export const contactAction = async (data: any, app: IApp): Promise<boolean> => {
+export const contactAction = async (data: ContactFormData, app: IApp): Promise<boolean> => {
     try {
         const environment = createRelayEnvironment({});
         await commitMutation<contactMutation>(environment, {
