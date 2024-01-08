@@ -251,6 +251,7 @@ graphql`
             attributes {
                 content {
                     __typename
+                    ...VideoBlock_content @relay(mask: false)
                 }
             }
         }

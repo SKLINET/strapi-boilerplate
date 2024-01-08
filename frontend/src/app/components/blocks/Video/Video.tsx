@@ -6,12 +6,7 @@ import { Video as _Video } from '../../molecules/Video/Video';
 
 const Video = ({ blocksData: { video }, app }: VideoBlockProps): ReactElement => {
     const _video = getVideoType(video);
-    return (
-        <section className={styles.wrapper}>
-            <h2>Video block</h2>
-            {_video && <_Video data={_video} />}
-        </section>
-    );
+    return <section className={styles.wrapper}>{_video && <_Video data={_video} />}</section>;
 };
 
 export { Video };
