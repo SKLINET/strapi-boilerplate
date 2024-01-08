@@ -4,7 +4,7 @@ const { get } = require('lodash/fp');
 
 const utils = require('@strapi/utils');
 
-const { sanitize, pipeAsync } = utils;
+const { sanitize, validate, pipeAsync } = utils;
 const { ApplicationError } = utils.errors;
 
 module.exports = ({ strapi }) => {
@@ -21,14 +21,14 @@ module.exports = ({ strapi }) => {
 
       if (!attribute) {
         throw new ApplicationError(
-          `Failed to build an association resolver for ${contentTypeUID}::${attributeName}`
+            `Failed to build an association resolver for ${contentTypeUID}::${attributeName}`
         );
       }
 
       const isMediaAttribute = isMedia(attribute);
       const isMorphAttribute = isMorphRelation(attribute);
 
-      const targetUID = isMediaAttribute ? 'plugins::upload.file' : attribute.target;
+      const targetUID = isMediaAttribute ? 'plugin::upload.file' : attribute.target;
       const isToMany = isMediaAttribute ? attribute.multiple : attribute.relation.endsWith('Many');
 
       const targetContentType = strapi.getModel(targetUID);
@@ -41,15 +41,18 @@ module.exports = ({ strapi }) => {
           usePagination: true,
         });
 
+        await validate.contentAPI.query(transformedArgs, targetContentType, {
+          auth,
+        });
         const sanitizedQuery = await sanitize.contentAPI.query(transformedArgs, targetContentType, {
           auth,
         });
 
         const data = await strapi.entityService.load(
-          contentTypeUID,
-          { ...parent, id: typeof parent?.id === 'string' ? parent?.id?.replace(/.*_/gi, '') : parent?.id },
-          attributeName,
-          sanitizedQuery
+            contentTypeUID,
+            { ...parent, id: typeof parent?.id === 'string' ? parent?.id?.replace(/.*_/gi, '') : parent?.id },
+            attributeName,
+            sanitizedQuery
         );
 
         const info = {

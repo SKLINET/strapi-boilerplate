@@ -3,11 +3,13 @@ import { IMenu, IMenuItem } from '../../types/menu';
 import { getPageType } from './getPageType';
 import { getPageUrl } from '.././getPageUrl';
 import { appMenuEntityFragment$data } from '../../relay/__generated__/appMenuEntityFragment.graphql';
+import { IApp } from '../../types/app';
 
-type StrapiMenuFragment = Omit<appMenuEntityFragment$data, ' $fragmentType'>;
+type Fragment = Omit<appMenuEntityFragment$data, ' $fragmentType'>;
 
 export const getMenuItemType = (
     e: Omit<appMenuItemFragment$data, ' $fragmentType'> | null | undefined,
+    app: IApp,
 ): IMenuItem | null => {
     if (!e) return null;
 
@@ -17,15 +19,17 @@ export const getMenuItemType = (
 
     if (!_page && !externalUrl) return null;
 
+    const href = _page ? getPageUrl(_page.data.attributes.url, app.locale) : externalUrl || '';
+
     return {
         id: id,
         label: label,
-        href: _page ? getPageUrl(_page.data.attributes.url) : externalUrl || '',
+        href: href,
         openInNewTab: openInNewTab || false,
     };
 };
 
-export const getMenuType = (e: StrapiMenuFragment | null | undefined): IMenu | null => {
+export const getMenuType = (e: Fragment | null | undefined, app: IApp): IMenu | null => {
     if (!e || !e.attributes) return null;
 
     const _items: IMenuItem[] = [];
@@ -38,11 +42,11 @@ export const getMenuType = (e: StrapiMenuFragment | null | undefined): IMenu | n
     if (!items) return null;
 
     items.forEach((e) => {
-        const _item = getMenuItemType(e);
+        const el = getMenuItemType(e, app);
 
-        if (!_item) return;
+        if (!el) return;
 
-        _items.push(_item);
+        _items.push(el);
     });
 
     if (!id || !title || _items.length === 0) return null;
@@ -54,15 +58,15 @@ export const getMenuType = (e: StrapiMenuFragment | null | undefined): IMenu | n
     };
 };
 
-export const getMenuListType = (e: ReadonlyArray<StrapiMenuFragment | null> | null | undefined): IMenu[] => {
+export const getMenuListType = (e: ReadonlyArray<Fragment | null> | null | undefined, app: IApp): IMenu[] => {
     const data: IMenu[] = [];
 
     e?.forEach((k) => {
-        const _menu = getMenuType(k);
+        const el = getMenuType(k, app);
 
-        if (!_menu) return;
+        if (!el) return;
 
-        data.push(_menu);
+        data.push(el);
     });
 
     return data;

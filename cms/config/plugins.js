@@ -1,7 +1,10 @@
 module.exports = ({ env }) => ({
   slugify: {
     enabled: true,
+    resolve: "./src/plugins/slugify",
     config: {
+      shouldUpdateSlug: true,
+      slugifyWithCount: true,
       contentTypes: {
         article: {
           field: "slug",
@@ -84,7 +87,8 @@ module.exports = ({ env }) => ({
     },
   },
   "content-versioning": {
-    enabled: true,
+    enabled: false,
+    resolve: "./src/plugins/content-versioning",
   },
   "email-designer": {
     enabled: false,
@@ -94,6 +98,11 @@ module.exports = ({ env }) => ({
   },
   seo: {
     enabled: true,
+  },
+  "strapi-plugin-populate-deep": {
+    config: {
+      defaultDepth: 4,
+    },
   },
   tinymce: {
     enabled: true,
@@ -147,13 +156,7 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  "record-locking": {
-    enabled: false,
-  },
   publisher: {
-    enabled: false,
-  },
-  "entity-notes": {
     enabled: false,
   },
   i18n: {

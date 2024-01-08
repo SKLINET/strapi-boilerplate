@@ -7,7 +7,7 @@
         "displayName": "📩 Prihlášky k NL"
     },
     "options": {
-        "draftAndPublish": true
+        "draftAndPublish": false
     },
     "pluginOptions": {},
     "attributes": {

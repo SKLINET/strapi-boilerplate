@@ -1,0 +1,27 @@
+@import "../../../../styles/mixins/hover.scss";
+
+.wrapper {
+    @apply flex flex-wrap items-center gap-2.5;
+}
+
+.parent {
+    @apply w-fit flex;
+
+    .link {
+        @apply w-fit inline-flex text-black transition-colors ease-in-out duration-300;
+
+        @include hover {
+            &:hover {
+                @apply text-opacity-100;
+            }
+        }
+    }
+}
+
+.round {
+    @apply w-1 h-1 rounded-full bg-black bg-opacity-30;
+}
+
+.label {
+    @apply text-black;
+}

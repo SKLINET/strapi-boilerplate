@@ -1,48 +1,53 @@
 import { IArticle } from '../../types/article';
 import { articleFragment$data } from '../../relay/__generated__/articleFragment.graphql';
-import { IApp } from '../../types/app';
+import { IApp } from '../..//types/app';
 import { getImageType } from './getImageType';
 import { getItemUrl } from '../getItemUrl';
+import { getArticleCategoryType } from './getArticleCategoryType';
+import { getReadingTime } from '../getReadingTime';
 
-type StrapiArticleFragment = Omit<articleFragment$data, ' $fragmentType'>;
+type Fragment = Omit<articleFragment$data, ' $fragmentType'>;
 
-export const getArticleType = (e: StrapiArticleFragment | null | undefined, app: IApp): IArticle | null => {
+export const getArticleType = (e: Fragment | null | undefined, app: IApp): IArticle | null => {
     if (!e || !e.attributes) return null;
 
     const {
         id,
-        attributes: { title, perex, image },
+        attributes: { title, category, image, content, publishDate },
     } = e;
 
+    const _category = getArticleCategoryType(category?.data);
     const _image = getImageType(image);
 
+    const _totalTime = getReadingTime(content || '');
+
     const _href = app?.webSetting?.data?.attributes?.articleDetailPage
-        ? getItemUrl(app?.webSetting?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '', e)
+        ? getItemUrl(app?.webSetting?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '', e, app)
         : null;
 
-    if (!_image || !_href) return null;
+    if (!_image || !_href || !publishDate) return null;
 
     return {
         id: id || '',
         title: title,
-        perex: perex,
         href: _href,
+        category: _category,
         image: _image,
+        totalTime: _totalTime,
+        publishDate: publishDate,
+        content: content || null,
     };
 };
 
-export const getArticleListType = (
-    e: ReadonlyArray<StrapiArticleFragment | null> | null | undefined,
-    app: IApp,
-): IArticle[] => {
+export const getArticleListType = (e: ReadonlyArray<Fragment | null> | null | undefined, app: IApp): IArticle[] => {
     const data: IArticle[] = [];
 
     e?.forEach((k) => {
-        const _house = getArticleType(k, app);
+        const el = getArticleType(k, app);
 
-        if (!_house) return;
+        if (!el) return;
 
-        data.push(_house);
+        data.push(el);
     });
 
     return data;

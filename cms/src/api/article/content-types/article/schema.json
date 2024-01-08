@@ -11,21 +11,11 @@
     "draftAndPublish": true
   },
   "pluginOptions": {
-    "versions": {
-      "versioned": true
-    },
     "i18n": {
       "localized": true
     }
   },
   "attributes": {
-    "isVisibleInListView": {
-      "writable": true,
-      "configurable": false,
-      "visible": true,
-      "type": "boolean",
-      "default": true
-    },
     "title": {
       "type": "string",
       "pluginOptions": {
@@ -65,35 +55,18 @@
       }
     },
     "slug": {
-      "type": "uid",
-      "targetField": "title"
-    },
-    "perex": {
-      "type": "text",
       "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "author": {
-      "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "required": false
     },
     "seo": {
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
@@ -104,14 +77,17 @@
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.sitemap"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::article-category.article-category",
+      "inversedBy": "articles"
     }
   }
 }

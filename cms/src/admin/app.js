@@ -11,7 +11,7 @@ export default {
         },
         tutorials: false,
 
-        notifications: { release: false },
+        notifications: { releases: false },
 
         auth: {
             logo: logo,

@@ -1,16 +1,19 @@
 import { useState, useEffect, RefObject } from 'react';
 import { ITriggerPosition } from './useOnScroll';
 import { useOnScroll } from './useOnScroll';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
-export const useIsVisible = (ref: RefObject<any>, triggerPosition: ITriggerPosition = 'middle-bottom'): [boolean] => {
+export const useIsVisible = (
+    ref: RefObject<any>,
+    triggerPosition: ITriggerPosition = 'middle-bottom',
+): { isVisible: boolean } => {
+    const asPath = usePathname();
+
     const [isVisible, setIsVisible] = useState(false);
-
-    const { asPath } = useRouter();
 
     useEffect(() => setIsVisible(false), [asPath]);
 
     useOnScroll(ref, triggerPosition, () => setIsVisible(true));
 
-    return [isVisible];
+    return { isVisible };
 };

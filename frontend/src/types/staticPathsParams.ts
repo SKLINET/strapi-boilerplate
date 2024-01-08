@@ -1,4 +1,4 @@
-import { ENUM_COMPONENTSHAREDSITEMAP_CHANGEFREQUENCY } from '../relay/__generated__/pageStaticPathsQuery.graphql';
+import { ENUM_COMPONENTSHAREDSITEMAP_CHANGEFREQUENCY } from '../../src/relay/__generated__/pageStaticPathsQuery.graphql';
 
 export interface StaticPathsParams {
     params: {

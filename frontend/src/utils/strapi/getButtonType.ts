@@ -2,10 +2,11 @@ import { IButton } from '../../types/button';
 import { getPageType } from './getPageType';
 import { getPageUrl } from '.././getPageUrl';
 import { appButtonFragment$data } from '../../relay/__generated__/appButtonFragment.graphql';
+import { IApp } from '../../types/app';
 
-type StrapiButtonFragment = Omit<appButtonFragment$data, ' $fragmentType'>;
+type Fragment = Omit<appButtonFragment$data, ' $fragmentType'>;
 
-export const getButtonType = (e: StrapiButtonFragment | null | undefined): IButton | null => {
+export const getButtonType = (e: Fragment | null | undefined, app: IApp): IButton | null => {
     if (!e) return null;
 
     const { id, label, page, linkExternal, openInNewTab } = e;
@@ -14,23 +15,28 @@ export const getButtonType = (e: StrapiButtonFragment | null | undefined): IButt
 
     if (!_page && !linkExternal) return null;
 
+    const href = _page ? getPageUrl(_page.data.attributes.url, app.locale) : linkExternal || '';
+
     return {
         id: id,
         label: label,
-        href: _page ? getPageUrl(_page.data.attributes.url) : linkExternal || '',
+        href: href,
         openInNewTab: openInNewTab || false,
     };
 };
 
-export const getButtonListType = (e: ReadonlyArray<StrapiButtonFragment | null> | null | undefined): IButton[] => {
+export const getButtonListType = (
+    e: ReadonlyArray<Fragment | null | undefined> | null | undefined,
+    app: IApp,
+): IButton[] => {
     const data: IButton[] = [];
 
     e?.forEach((k) => {
-        const _button = getButtonType(k);
+        const el = getButtonType(k, app);
 
-        if (!_button) return;
+        if (!el) return;
 
-        data.push(_button);
+        data.push(el);
     });
 
     return data;

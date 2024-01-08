@@ -1,0 +1,31 @@
+.wrapper {
+}
+
+.textarea {
+    /*
+    @apply w-full flex bg-transparent border-0 border-b border-grey rounded-none px-0 py-6 outline-none text-16 leading-1.12 text-black transition-colors-shadow-opacity ease-in-out duration-500;
+
+    &::placeholder {
+        @apply text-black text-opacity-60;
+    }
+
+    &:focus {
+        @apply border-red;
+        box-shadow: 0px 1px 0px 0px var(--red);
+    }
+
+    &:disabled {
+        @apply opacity-60 cursor-not-allowed;
+    }
+    */
+}
+
+.error {
+    /*
+    @apply w-full mt-4 flex items-center justify-end gap-3;
+
+    .label {
+        @apply text-red text-14 text-right;
+    }
+    */
+}

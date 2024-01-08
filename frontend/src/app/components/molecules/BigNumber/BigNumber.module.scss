@@ -1,0 +1,19 @@
+.wrapper {
+    @apply block;
+}
+
+.valueWrapper {
+    @apply table mx-auto relative;
+
+    .value {
+        @apply text-black;
+
+        &.fake {
+            @apply opacity-0 pointer-events-none;
+        }
+
+        &.real {
+            @apply absolute top-0 right-0 bottom-0 text-right;
+        }
+    }
+}

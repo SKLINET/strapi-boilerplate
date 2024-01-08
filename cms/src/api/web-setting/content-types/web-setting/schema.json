@@ -13,53 +13,10 @@
   "pluginOptions": {
     "i18n": {
       "localized": true
-    },
-    "versions": {
-      "versioned": true
     }
   },
   "attributes": {
     "gtmCode": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "facebook": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "twitter": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "instagram": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "pinterest": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "youtube": {
       "type": "string",
       "pluginOptions": {
         "i18n": {
@@ -77,39 +34,6 @@
       "relation": "oneToOne",
       "target": "api::page.page"
     },
-    "mailFrom": {
-      "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
-    "mailTo": {
-      "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
-    "mailSubject": {
-      "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
     "mainMenu": {
       "type": "relation",
       "relation": "oneToOne",
@@ -125,19 +49,11 @@
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.global-seo"
-    },
-    "footerMenu": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::menu.menu"
     }
   }
 }

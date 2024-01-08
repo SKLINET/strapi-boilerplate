@@ -1,0 +1,34 @@
+.wrapper {
+    @apply font-bold break-words whitespace-pre-line;
+
+    /*
+    &.withRichText {
+        b,
+        strong {
+            @apply text-red font-light;
+        }
+    }
+    */
+
+    // Size
+    /*
+    &.xl {
+        @apply text-48 leading-1.12;
+        @apply desktop:text-96;
+    }
+
+    &.lg {
+        @apply text-36 leading-1.12;
+        @apply desktop:text-56;
+    }
+
+    &.md {
+        @apply text-24 leading-1.28;
+        @apply desktop:text-32;
+    }
+
+    &.sm {
+        @apply text-18 leading-1.28;
+    }
+    */
+}

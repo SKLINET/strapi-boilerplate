@@ -11,9 +11,6 @@
     "draftAndPublish": true
   },
   "pluginOptions": {
-    "versions": {
-      "versioned": true
-    },
     "i18n": {
       "localized": true
     }
@@ -38,18 +35,10 @@
     "blocks": {
       "type": "dynamiczone",
       "components": [
-        "block.rich-text-block",
-        "block.button-block",
-        "block.carousel-block",
-        "block.gallery-block",
-        "block.image-block",
-        "block.map-block",
         "block.article-detail-block",
         "block.articles-list-block",
-        "block.latest-articles-block",
-        "block.video-block",
         "block.template-block",
-        "block.error-block"
+        "block.video-block"
       ],
       "pluginOptions": {
         "i18n": {
@@ -73,9 +62,6 @@
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
@@ -86,21 +72,11 @@
       "type": "component",
       "repeatable": false,
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }
       },
       "component": "shared.sitemap"
-    },
-    "isVisibleInListView": {
-      "writable": true,
-      "configurable": false,
-      "visible": true,
-      "type": "boolean",
-      "default": true
     }
   }
 }

@@ -1,0 +1,6 @@
+@import '../../../../styles/mixins/hover.scss';
+
+.wrapper {
+    @apply text-white;
+    font-size: 1.25rem;
+}

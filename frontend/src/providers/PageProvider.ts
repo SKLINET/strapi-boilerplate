@@ -1,49 +1,73 @@
-import { GetStaticPathsResult } from 'next';
-import { fetchQuery } from 'react-relay';
+import { GetStaticPathsResult, PreviewData } from 'next';
+import { fetchQuery } from 'relay-runtime';
 import { pageDetailQuery, pageListQuery, pageStaticPathsQuery } from '../relay/page';
 import * as d from '../relay/__generated__/pageDetailQuery.graphql';
 import * as l from '../relay/__generated__/pageListQuery.graphql';
 import * as s from '../relay/__generated__/pageStaticPathsQuery.graphql';
 import { AppQuery } from '../relay/app';
-import { BlockType, getPagePattern, getStaticParamsFromBlocks } from '@symbio/headless';
+import { BlockType, getStaticParamsFromBlocks } from '@symbio/headless';
 import providers from './index';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Locale } from '../types/locale';
-import config from '../../sklinet.config.json';
 import { Providers } from '../types/providers';
 import getPublicationState from '../utils/getPublicationState';
-import StrapiProvider from './StrapiProvider';
 import { AppData } from '../index';
 import { StaticPathsParams } from '../types/staticPathsParams';
+import AbstractStrapiProvider from '../lib/provider/AbstractStrapiProvider';
+import { getPagePattern } from '../lib/routing/getPagePattern';
 
-class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
-    private entityId: string | null = null;
-
-    public setEntityId(id: string | null) {
-        this.entityId = id;
+class PageProvider extends AbstractStrapiProvider<
+    d.pageDetailQuery,
+    l.pageListQuery,
+    NonNullable<d.pageDetailQuery$data['item']>,
+    any
+> {
+    getApiKey(): string {
+        return 'page';
     }
+
+    isSitemapEnabled(): boolean {
+        return true;
+    }
+
+    getId(): string {
+        return 'api::page.page';
+    }
+
     /**
      * Special function returning Page and Site data
      * @param locale
      * @param slug
      * @param preview
+     * @param previewData
      */
-    // ** TODO ** fix any, Strapi GQL structure doesn't match our needs in PageProps
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
         preview: boolean | undefined,
-    ): Promise<AppData<PageProps, WebSettingsProps> | undefined> {
+        previewData?: PreviewData,
+    ): Promise<AppData<any, WebSettingsProps> | undefined> {
+        const prvData = previewData as Record<string, unknown>;
         const pattern = getPagePattern(slug);
         const publicationState = getPublicationState(preview);
+        const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
+        let entityId = null;
+        if (prvData?.pageId) {
+            entityId = parseInt(String(prvData.pageId));
+        }
         const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
+            redirect,
             pattern,
             publicationState,
-            entityId: this.entityId ? parseInt(this.entityId) : null,
+            entityId,
         }).toPromise();
-        return { ...data, page: data?.page ? { ...data?.page, ...data?.page?.attributes } : null };
+        return {
+            ...data,
+            redirect: data?.redirect ? { ...data?.redirect, permanent: data?.redirect?.statusCode === '301' } : null,
+            page: data?.page ? { ...data?.page, ...data?.page?.attributes } : null,
+        };
     }
 
     async getStaticPaths(
@@ -92,7 +116,7 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
                             WebSettingsProps,
                             Providers,
                             Locale
-                        >(page.attributes.content, locale ?? '', providers, blocks);
+                        >(page?.attributes?.content as any, locale ?? '', providers, blocks);
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;
@@ -152,8 +176,4 @@ class PageProvider extends StrapiProvider<d.pageDetailQuery, l.pageListQuery> {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default new PageProvider(pageDetailQuery, pageListQuery, {
-    id: '',
-    apiKey: 'page',
-    locales: config.i18n.locales,
-});
+export default new PageProvider(pageDetailQuery, pageListQuery);

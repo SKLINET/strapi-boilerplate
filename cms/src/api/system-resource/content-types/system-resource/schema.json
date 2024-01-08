@@ -13,17 +13,11 @@
   "pluginOptions": {
     "i18n": {
       "localized": true
-    },
-    "versions": {
-      "versioned": true
     }
   },
   "attributes": {
     "name": {
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": false
         }
@@ -33,9 +27,6 @@
     },
     "codename": {
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": false
         }
@@ -45,9 +36,6 @@
     },
     "value": {
       "pluginOptions": {
-        "versions": {
-          "versioned": true
-        },
         "i18n": {
           "localized": true
         }

@@ -1,22 +1,18 @@
 import { graphql } from 'relay-runtime';
 
 export const ArticleDetailQuery = graphql`
-    query articleDetailQuery($locale: String, $slug: String, $publicationState: String) {
-        item: findSlug(modelName: "article", slug: $slug, locale: $locale, publicationState: $publicationState) {
+    query articleDetailQuery($slug: String, $id: String, $locale: String, $publicationState: String) {
+        item: findSlug(
+            modelName: "article"
+            slug: $slug
+            id: $id
+            locale: $locale
+            publicationState: $publicationState
+        ) {
             ... on ArticleEntityResponse {
                 data {
                     ...articleDetailFragment @relay(mask: false)
                 }
-            }
-        }
-    }
-`;
-
-export const ArticlePreviewQuery = graphql`
-    query articlePreviewQuery($id: ID, $locale: I18NLocaleCode) {
-        item: article(id: $id, locale: $locale) {
-            data {
-                ...articleDetailFragment @relay(mask: false)
             }
         }
     }
@@ -29,11 +25,12 @@ export const ArticleListQuery = graphql`
         $limit: Int
         $filter: ArticleFiltersInput
         $publicationState: PublicationState
+        $sort: [String] = ["publishDate:desc", "publishedAt:desc"]
     ) {
         items: articles(
             locale: $locale
             pagination: { start: $start, limit: $limit }
-            sort: "publishedAt:desc"
+            sort: $sort
             filters: $filter
             publicationState: $publicationState
         ) {
@@ -70,10 +67,16 @@ graphql`
         attributes {
             title
             slug
+            publishDate
+            category {
+                data {
+                    ...articleCategoryFragment @relay(mask: false)
+                }
+            }
             image {
                 ...appImageFragment @relay(mask: false)
             }
-            perex
+            content
         }
     }
 `;
@@ -85,10 +88,14 @@ graphql`
             title
             slug
             publishDate
+            category {
+                data {
+                    ...articleCategoryFragment @relay(mask: false)
+                }
+            }
             image {
                 ...appImageFragment @relay(mask: false)
             }
-            perex
             content
             seo {
                 ...appSeoFragment @relay(mask: false)
