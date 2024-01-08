@@ -31,18 +31,17 @@ export const getSizeFromTag = (tag: string): string => {
 const Heading = ({ tag, size, className, children }: HeadingProps): ReactElement => {
     const Tag = tag;
 
-    const withRichText = typeof children === 'string' && children.includes('<b>');
-
     return (
-        <Tag
-            className={clsx(
-                styles.wrapper,
-                styles[size ? size : getSizeFromTag(tag)],
-                withRichText && styles.withRichText,
-                className,
+        <Tag className={clsx(styles.wrapper, styles[size ? size : getSizeFromTag(tag)], className)}>
+            {typeof children === 'string' ? (
+                children.includes('<b>') ? (
+                    <RichText content={children} />
+                ) : (
+                    nbsp(children)
+                )
+            ) : (
+                children
             )}
-        >
-            {typeof children === 'string' ? withRichText ? <RichText content={children} /> : nbsp(children) : children}
         </Tag>
     );
 };

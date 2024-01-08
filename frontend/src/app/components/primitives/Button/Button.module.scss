@@ -10,7 +10,7 @@
 }
 
 .loader {
-    @apply absolute inset-0 flex items-center justify-center opacity-0 invisible transition-visibility-opacity ease-in-out duration-300;
+    @apply bg-black absolute inset-0 flex items-center justify-center opacity-0 invisible transition-visibility-opacity ease-in-out duration-300;
 
     &.show {
         @apply opacity-100 visible;
