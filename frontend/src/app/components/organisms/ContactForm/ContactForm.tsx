@@ -15,6 +15,7 @@ import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 import { Skeleton } from './Skeleton/Skeleton';
 import { contactAction } from '../../../actions/contact';
 import { Icon } from '../../primitives/Icon/Icon';
+import { Checkbox } from '../../primitives/Checkbox/Checkbox';
 
 interface ContactFormProps {
     app: IApp;
@@ -27,6 +28,7 @@ export interface ContactFormData {
     email: string;
     phoneNumber: string;
     message: string;
+    allowGdpr: boolean;
 }
 
 const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
@@ -51,6 +53,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                 .required(getSystemResource('required_field', app?.systemResources))
                 .min(9, getSystemResource('invalid_phone_number', app?.systemResources)),
             message: yup.string().required(getSystemResource('required_field', app?.systemResources)),
+            allowGdpr: yup.boolean().isTrue(getSystemResource('required_field', app?.systemResources)),
         })
         .required();
 
@@ -59,6 +62,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
     } = useForm<ContactFormData>({
         defaultValues: {
@@ -67,10 +71,11 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
             email: '',
             phoneNumber: '',
             message: '',
+            allowGdpr: false,
         },
         resolver: yupResolver(schema) as Resolver<ContactFormData>,
         mode: 'onSubmit',
-        reValidateMode: 'onBlur',
+        reValidateMode: 'onChange',
     });
 
     const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
@@ -85,6 +90,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
 
     const successMessage = app?.contactForm?.data?.attributes?.successMessage || '';
     const errorMessage = app?.contactForm?.data?.attributes?.errorMessage || '';
+    const checkboxLabel = app?.contactForm?.data?.attributes?.checkboxLabel || '';
 
     return (
         <div className={clsx(styles.wrapper, className)}>
@@ -149,6 +155,14 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     register={register}
                                     error={errors.message?.message}
                                     placeholder={getSystemResource('message', app?.systemResources)}
+                                    disabled={isPending}
+                                />
+                                <Checkbox
+                                    name="allowGdpr"
+                                    register={register}
+                                    checked={watch('allowGdpr')}
+                                    error={errors.allowGdpr?.message}
+                                    label={checkboxLabel}
                                     disabled={isPending}
                                 />
                             </div>

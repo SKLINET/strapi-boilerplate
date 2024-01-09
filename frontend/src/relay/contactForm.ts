@@ -6,6 +6,7 @@ graphql`
             attributes {
                 successMessage
                 errorMessage
+                checkboxLabel
                 mailFrom
                 mailTo
                 mailSubject

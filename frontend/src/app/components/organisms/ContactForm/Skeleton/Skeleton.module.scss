@@ -15,6 +15,10 @@
     }
 }
 
+.checkbox {
+    @apply w-80 h-6 bg-grey rounded-xl mt-2;
+}
+
 .button {
     @apply w-48 h-14 bg-grey rounded-xl mt-2;
 }

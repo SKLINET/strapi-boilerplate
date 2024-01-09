@@ -15,6 +15,7 @@ const Skeleton = ({ className }: SkeletonProps): ReactElement => (
             <div className={styles.field} />
             <div className={clsx(styles.field, styles.large)} />
         </div>
+        <div className={styles.checkbox} />
         <div className={styles.button} />
     </div>
 );
