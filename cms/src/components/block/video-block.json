@@ -2,13 +2,11 @@
   "collectionName": "components_block_video_blocks",
   "info": {
     "displayName": "Video",
-    "icon": "video",
-    "description": ""
+    "icon": "play"
   },
   "options": {},
   "attributes": {
     "video": {
-      "displayName": "Video",
       "type": "component",
       "repeatable": false,
       "component": "complementary.video",

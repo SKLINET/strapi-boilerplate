@@ -1,23 +1,13 @@
+import { ImageProps } from './image';
+
 export interface IVideo {
-    url: string;
-    type: string;
+    id: string;
+    uploadedVideo: IUploadedVideo | null;
+    externalVideo: any | null;
+    image: ImageProps | null;
 }
 
-export interface VideoProps {
-    data?: {
-        attributes?: {
-            url?: string;
-            width?: number;
-            height?: number;
-            alternativeText?: string;
-        };
-    } | null;
+export interface IUploadedVideo {
     url: string;
-    provider: string;
-    providerUid: string;
-    width?: number;
-    height?: number;
-    title?: string;
-    thumbnailUrl?: string;
-    videoId?: string | null;
+    type: string;
 }

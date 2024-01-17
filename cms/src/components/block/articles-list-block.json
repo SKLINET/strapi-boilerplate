@@ -2,9 +2,16 @@
   "collectionName": "components_block_articles_list_blocks",
   "info": {
     "displayName": "Výpis článků",
-    "icon": "list-alt",
+    "icon": "grid",
     "description": ""
   },
   "options": {},
-  "attributes": {}
+  "attributes": {
+    "countOnPage": {
+      "type": "integer",
+      "required": true,
+      "default": 5,
+      "min": 1
+    }
+  }
 }

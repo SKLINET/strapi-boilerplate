@@ -16,20 +16,25 @@ module.exports = {
             fullhd: '120rem',
         },
         fontFamily: {
-            primary: ['Exo'],
-            secondary: ['Poppins'],
+            primary: ['Poppins'],
+        },
+        fontSize: {
+            14: '0.875rem',
+            16: '1rem',
+        },
+        lineHeight: {
+            1: '1',
+            1.5: '1.5',
         },
         extend: {
             colors: {
-                secondary: '#ffffff',
-                red: '#ff0000',
-                error: '#ff0000',
-                logo: '#f60',
-                white: '#ffffff',
+                red: '#e41f47',
                 black: '#000000',
-                primary: '#000000',
-                grey: '#F2F3F4',
-                darkGrey: '#636363',
+                white: '#ffffff',
+                grey: '#ececec',
+            },
+            gap: {
+                'grid-gap': 'var(--grid-gap)',
             },
             gridColumnEnd: {
                 13: '13',
@@ -40,45 +45,37 @@ module.exports = {
             },
             height: {
                 '56.25vw': '56.25vw',
-                2.5: '0.625rem',
-                3.5: '0.875rem',
-                5: '1.25rem',
-                5.5: '1.375rem',
             },
             margin: {
-                0.25: '0.0625rem',
-                0.5: '0.125rem',
+                //
             },
             maxHeight: {
                 '16-9': '56.25vw',
             },
             maxWidth: {
-                120: '30rem',
+                //
             },
             padding: {
                 '16/9': '56.25%',
-                2.5: '0.625rem',
-                5: '1.25rem',
+            },
+            spacing: {
+                //
             },
             transitionProperty: {
                 width: 'width',
-                'transform-color': 'transform, color',
+                height: 'height',
                 'visibility-opacity': 'visibility, opacity',
             },
             width: {
-                2.5: '0.625rem',
-                3.5: '0.875rem',
-                5: '1.25rem',
-                5.5: '1.375rem',
+                //
             },
             zIndex: {
                 1: '1',
                 2: '2',
                 3: '3',
                 4: '4',
+                5: '5',
                 100: '100',
-                9997: '9997',
-                9998: '9998',
                 9999: '9999',
             },
         },

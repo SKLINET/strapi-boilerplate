@@ -1,0 +1,85 @@
+@import '../../../../styles/mixins/responsive.scss';
+@import '../../../../styles/functions/layout.scss';
+@import '../../../../styles/mixins/hover.scss';
+
+.wrapper {
+    & > * {
+        &:first-child {
+            margin-top: 0 !important;
+
+            img {
+                margin-top: 0 !important;
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 0 !important;
+
+            img {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+
+    p {
+        @apply text-16 text-opacity-70;
+    }
+
+    a {
+        @apply underline;
+
+        @include hover {
+            &:hover {
+                @apply no-underline;
+            }
+        }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply my-6;
+    }
+
+    p {
+        @apply text-black my-6;
+    }
+
+    ul,
+    ol {
+        @apply text-black my-10;
+    }
+
+    p:has(> img),
+    p:has(> iframe) {
+        @apply my-10;
+    }
+
+    .image {
+        width: auto !important;
+        max-width: 100% !important;
+    }
+
+    img {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    iframe {
+        @apply w-full aspect-video;
+    }
+
+    /*
+    table {
+        @apply mb-4 relative;
+    }
+
+    div:has(> table) {
+        @apply relative px-4 -left-4;
+        width: calc(100% + 2rem);
+    }
+    */
+}

@@ -1,13 +1,24 @@
 import dayjs from 'dayjs';
-import { fetchQuery } from 'react-relay';
+import { fetchQuery } from 'relay-runtime';
 import { GetStaticPathsResult } from 'next';
-import { ArticleDetailQuery, ArticleListQuery, ArticleStaticPathsQuery } from '../relay/article';
 import * as s from '../relay/__generated__/articleStaticPathsQuery.graphql';
-import config from '../../sklinet.config.json';
-import StrapiProvider from './StrapiProvider';
+import AbstractStrapiProvider from '../lib/provider/AbstractStrapiProvider';
 import { StaticPathsParams } from '../types/staticPathsParams';
+import { ArticleDetailQuery, ArticleListQuery, ArticleStaticPathsQuery } from '../relay/article';
 
-class ArticleProvider extends StrapiProvider<any, any> {
+class ArticleProvider extends AbstractStrapiProvider<any, any> {
+    getApiKey(): string {
+        return 'article';
+    }
+
+    isSitemapEnabled(): boolean {
+        return true;
+    }
+
+    getId(): string {
+        return 'api::article.article';
+    }
+
     getFilterParams(): Record<string, Record<string, string | boolean>> {
         return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
@@ -19,15 +30,15 @@ class ArticleProvider extends StrapiProvider<any, any> {
         }).toPromise();
 
         if (data) {
-            for (const news of data.articles?.data || []) {
+            for (const article of data.articles?.data || []) {
                 items.push({
                     params: {
-                        slug: [news.attributes?.slug || ''],
+                        slug: [article.attributes?.slug || ''],
                         locale,
                         sitemap: {
-                            enabled: news?.attributes?.sitemap?.enabled || false,
-                            changeFrequency: news?.attributes?.sitemap?.changeFrequency || 'monthly',
-                            priority: news?.attributes?.sitemap?.priority || 0.3,
+                            enabled: article?.attributes?.sitemap?.enabled || false,
+                            changeFrequency: article?.attributes?.sitemap?.changeFrequency || 'monthly',
+                            priority: article?.attributes?.sitemap?.priority || 0.3,
                         },
                     },
                 });
@@ -39,10 +50,5 @@ class ArticleProvider extends StrapiProvider<any, any> {
         }));
     }
 }
-
 // eslint-disable-next-line import/no-anonymous-default-export
-export default new ArticleProvider(ArticleDetailQuery, ArticleListQuery, {
-    locales: config.i18n.locales,
-    id: '',
-    apiKey: 'article',
-});
+export default new ArticleProvider(ArticleDetailQuery, ArticleListQuery);

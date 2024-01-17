@@ -1,0 +1,27 @@
+.wrapper {
+    //
+}
+
+.inner {
+    @apply flex;
+}
+
+.textarea {
+    @apply w-full bg-transparent border border-black border-opacity-40 rounded-none px-6 py-3 outline-none rounded-xl text-16 leading-1.5 text-black;
+
+    &::placeholder {
+        @apply text-black text-opacity-60;
+    }
+
+    &:focus {
+        //
+    }
+
+    &:disabled {
+        @apply opacity-60 cursor-not-allowed;
+    }
+}
+
+.error {
+    @apply text-red text-14 text-left mt-1;
+}

@@ -1,18 +1,10 @@
-import graphql from 'graphql-tag';
+import { graphql } from 'relay-runtime';
 
 graphql`
     fragment webSettingFragment on WebSettingEntityResponse {
         data {
             attributes {
                 gtmCode
-                facebook
-                twitter
-                instagram
-                pinterest
-                youtube
-                mailTo
-                mailFrom
-                mailSubject
                 homePage {
                     ...appPageFragment @relay(mask: false)
                 }
@@ -23,11 +15,6 @@ graphql`
                     ...appPageFragment @relay(mask: false)
                 }
                 mainMenu {
-                    data {
-                        ...appMenuEntityFragment @relay(mask: false)
-                    }
-                }
-                footerMenu {
                     data {
                         ...appMenuEntityFragment @relay(mask: false)
                     }

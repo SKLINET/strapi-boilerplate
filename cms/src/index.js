@@ -66,7 +66,7 @@ module.exports = {
                                 }
                             );
                             for (const it of data) {
-                                if (it?.url?.match(pattern)) {
+                                if (it?.redirectFrom?.match(redirectFrom)) {
                                     return it;
                                 }
                             }
@@ -130,57 +130,12 @@ module.exports = {
                     });
                 },
             });
-            const sendTemplatedEmail = nexus.extendType({
-                type: "Query",
-                auth: false,
-                definition(t) {
-                    t.field("sendEmail", {
-                        type: "Boolean",
-                        auth: false,
-                        args: {
-                            emailTo: "String",
-                            emailTemplate: "Int",
-                            email: "String",
-                            firstName: "String",
-                        },
-
-                        async resolve(parent, args) {
-                            const { emailTo, emailTemplate, email, firstName } =
-                                args;
-                            if (args) {
-                                try {
-                                    await strapi
-                                        .plugin("email-designer")
-                                        .service("email")
-                                        .sendTemplatedEmail(
-                                            { to: emailTo },
-                                            {
-                                                templateReferenceId:
-                                                    emailTemplate,
-                                            },
-                                            {
-                                                email,
-                                                firstName,
-                                            }
-                                        );
-
-                                    return true;
-                                } catch (err) {
-                                    console.log(err);
-                                    return false;
-                                }
-                            } else return false;
-                        },
-                    });
-                },
-            });
 
             return {
                 types: [
                     pageQuery,
                     redirectQuery,
                     onePageQuery,
-                    sendTemplatedEmail,
                 ],
                 resolversConfig: {
                     "Query.findPage": {

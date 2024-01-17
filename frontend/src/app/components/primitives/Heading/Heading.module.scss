@@ -1,0 +1,29 @@
+.wrapper {
+    @apply font-bold break-words whitespace-pre-line;
+
+    /*
+    &.withRichText {
+        b,
+        strong {
+            @apply text-red font-light;
+        }
+    }
+    */
+
+    // Size
+    &.xl {
+        //
+    }
+
+    &.lg {
+        //
+    }
+
+    &.md {
+       //
+    }
+
+    &.sm {
+        //
+    }
+}

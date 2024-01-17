@@ -1,0 +1,46 @@
+@import '../../../../styles/mixins/hover.scss';
+@import '../../../../styles/keyframes/spin.scss';
+
+.wrapper {
+    @apply w-full aspect-video shrink-0 bg-grey relative mx-auto;
+
+    &.showVideo {
+        .overlay {
+            @apply opacity-0 invisible;
+        }
+    }
+}
+
+.video {
+    @apply w-full h-full inset-0;
+    position: absolute !important;
+}
+
+.overlay {
+    @apply absolute inset-0 transition-visibility-opacity ease-in-out duration-500;
+
+    .controlButton {
+        @apply w-14 h-14 flex items-center justify-center bg-red text-white rounded-full overflow-hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-3 transition-colors ease-in-out duration-500;
+
+        .icon {
+            &.play {
+                @apply w-4 h-4;
+            }
+
+            &.loader {
+                @apply w-5 h-5;
+                animation: spin 1s linear infinite;
+            }
+        }
+
+        @include hover {
+            &:hover {
+                @apply bg-black text-white;
+            }
+        }
+    }
+
+    .image {
+        @apply object-center object-cover z-2;
+    }
+}

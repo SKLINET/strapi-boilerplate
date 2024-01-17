@@ -4,52 +4,20 @@
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 400;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-Regular.ttf') format('truetype');
+        src:
+            local(''),
+            url('/fonts/Poppins/truetype/Poppins-Regular.ttf') format('truetype');
         font-display: fallback;
     }
 
-    /* Poppins - 400, italic */
+    /* Poppins - 400 - italic */
     @font-face {
         font-family: 'Poppins';
         font-style: italic;
         font-weight: 400;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-Italic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Poppins - 500 */
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 500;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-Medium.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Poppins - 500, italic */
-    @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-weight: 500;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-MediumItalic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Poppins - 600 */
-    @font-face {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 600;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-SemiBold.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Poppins - 600, italic */
-    @font-face {
-        font-family: 'Poppins';
-        font-style: italic;
-        font-weight: 600;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-Poppins-SemiBoldItalic.ttf') format('truetype');
+        src:
+            local(''),
+            url('/fonts/Poppins/truetype/Poppins-Italic.ttf') format('truetype');
         font-display: fallback;
     }
 
@@ -58,178 +26,20 @@
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 700;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-Bold.ttf') format('truetype');
+        src:
+            local(''),
+            url('/fonts/Poppins/truetype/Poppins-Bold.ttf') format('truetype');
         font-display: fallback;
     }
 
-    /* Poppins - 700, italic */
+    /* Poppins - 700 - italic */
     @font-face {
         font-family: 'Poppins';
         font-style: italic;
         font-weight: 700;
-        src: local(''), url('/fonts/Poppins/truetype/Poppins-BoldItalic.ttf') format('truetype');
+        src:
+            local(''),
+            url('/fonts/Poppins/truetype/Poppins-BoldItalic.ttf') format('truetype');
         font-display: fallback;
     }
-
-    /* Exo - 100
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 100;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Thin.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 100 - italic
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 100;
-        src: local(''), url('/fonts/Exo/truetype/Exo-ThinItalic.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 200
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 200;
-        src: local(''), url('/fonts/Exo/truetype/Exo-ExtraLight.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 200 - italic
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 200;
-        src: local(''), url('/fonts/Exo/truetype/Exo-ExtraLightItalic.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 300
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 300;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Light.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 300 - italic
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 300;
-        src: local(''), url('/fonts/Exo/truetype/Exo-LightItalic.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 400 */
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 400;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Regular.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 400 - italic */
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 400;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Italic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 500 */
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 500;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Medium.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 500 - italic */
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 500;
-        src: local(''), url('/fonts/Exo/truetype/Exo-MediumItalic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 600 */
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 600;
-        src: local(''), url('/fonts/Exo/truetype/Exo-SemiBold.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 600 - italic */
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 600;
-        src: local(''), url('/fonts/Exo/truetype/Exo-SemiBoldItalic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 700 */
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 700;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Bold.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 700 - italic */
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 700;
-        src: local(''), url('/fonts/Exo/truetype/Exo-BoldItalic.ttf') format('truetype');
-        font-display: fallback;
-    }
-
-    /* Exo - 800
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 800;
-        src: local(''), url('/fonts/Exo/truetype/Exo-ExtraBold.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 800 - italic
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 800;
-        src: local(''), url('/fonts/Exo/truetype/Exo-ExtraBoldItalic.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 900
-    @font-face {
-        font-family: 'Exo';
-        font-style: normal;
-        font-weight: 900;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Black.ttf') format('truetype');
-        font-display: fallback;
-    }*/
-
-    /* Exo - 900 - italic
-    @font-face {
-        font-family: 'Exo';
-        font-style: italic;
-        font-weight: 900;
-        src: local(''), url('/fonts/Exo/truetype/Exo-Black.ttf') format('truetype');
-        font-display: fallback;
-    }*/
 }

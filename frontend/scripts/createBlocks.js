@@ -185,17 +185,7 @@ ${names
     .join('\n')}
     }
 \`;
-const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } =
-    process.env.NODE_ENV === 'production'
-        ? {
-${names
-    .reduce((acc, [name]) => {
-        acc.push(`              ${name}: dynamic(() => import('./${name}/${name}')),`);
-        return acc;
-    }, [])
-    .join('\n')}
-          }
-        : {
+const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
 ${names
     .reduce((acc, [name]) => {
         acc.push(`              ${name},`);

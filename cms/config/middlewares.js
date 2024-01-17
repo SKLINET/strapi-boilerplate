@@ -30,6 +30,7 @@ module.exports = [
             "*.strapi.io",
             "ws:",
             "wss:",
+            "http:",
             "https:"
           ],
           "img-src": [
@@ -42,6 +43,15 @@ module.exports = [
             "strapi.io",
             "dl.airtable.com",
             "s3.amazonaws.com",
+            'market-assets.strapi.io',
+            'res.cloudinary.com'
+          ],
+          'media-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'market-assets.strapi.io',
+            'res.cloudinary.com',
           ],
           "style-src": [
             "'self'",
@@ -64,7 +74,7 @@ module.exports = [
   "strapi::poweredBy",
   "strapi::logger",
   "strapi::query",
-  "strapi::body",
+  { name: "strapi::body", config: { includeUnparsed: true } },
   "strapi::session",
   "strapi::favicon",
   "strapi::public",

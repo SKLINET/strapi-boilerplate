@@ -22,7 +22,40 @@ export const AppQuery = graphql`
                     ...appPagesFragment @relay(mask: false)
                 }
                 parent {
-                    ...appPageFragment @relay(mask: false)
+                    data {
+                        id
+                        attributes {
+                            title
+                            url
+                            seo {
+                                ...appSeoFragment @relay(mask: false)
+                            }
+                            parent {
+                                data {
+                                    id
+                                    attributes {
+                                        title
+                                        url
+                                        seo {
+                                            ...appSeoFragment @relay(mask: false)
+                                        }
+                                        parent {
+                                            data {
+                                                id
+                                                attributes {
+                                                    title
+                                                    url
+                                                    seo {
+                                                        ...appSeoFragment @relay(mask: false)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 seo {
                     ...appSeoFragment @relay(mask: false)
@@ -46,14 +79,18 @@ export const AppQuery = graphql`
             }
         }
 
-        findRedirect(redirectFrom: $redirect, publicationState: $publicationState) {
+        redirect: findRedirect(redirectFrom: $redirect, publicationState: $publicationState) {
             redirectFrom
-            redirectTo
+            to: redirectTo
             statusCode
         }
 
         webSetting(publicationState: $publicationState, locale: $locale) {
             ...webSettingFragment @relay(mask: false)
+        }
+
+        contactForm(publicationState: $publicationState, locale: $locale) {
+            ...contactFormFragment @relay(mask: false)
         }
     }
 `;
@@ -94,7 +131,20 @@ graphql`
 `;
 
 graphql`
-    fragment appVideoFragment on UploadFileEntityResponse {
+    fragment appVideoFragment on ComponentComplementaryVideo {
+        id
+        uploadedVideo {
+            ...appUploadedVideoFragment @relay(mask: false)
+        }
+        externalVideo
+        optionalImage {
+            ...appImageFragment @relay(mask: false)
+        }
+    }
+`;
+
+graphql`
+    fragment appUploadedVideoFragment on UploadFileEntityResponse {
         data {
             attributes {
                 url
@@ -151,13 +201,6 @@ graphql`
 `;
 
 graphql`
-    fragment appGpsFragment on ComponentComplementaryGpsCoordinates {
-        latitude
-        longitude
-    }
-`;
-
-graphql`
     fragment appSeoFragment on ComponentSharedSeo {
         title
         metaTitle
@@ -208,7 +251,8 @@ graphql`
             attributes {
                 content {
                     __typename
-                    ...ButtonBlock_content @relay(mask: false)
+                    ...ContactFormBlock_content @relay(mask: false)
+                    ...VideoBlock_content @relay(mask: false)
                 }
             }
         }

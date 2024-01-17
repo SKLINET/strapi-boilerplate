@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -24,7 +24,7 @@
     "message": {
       "type": "text"
     },
-    "city": {
+    "company": {
       "type": "string"
     }
   }

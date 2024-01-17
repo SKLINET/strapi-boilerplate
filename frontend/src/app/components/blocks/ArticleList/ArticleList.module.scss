@@ -1,0 +1,31 @@
+.wrapper {
+    @apply w-full p-12;
+}
+
+.filters {
+    @apply w-full flex items-center justify-center flex-wrap gap-4;
+
+    .button {
+        @apply text-16 block;
+
+        &.active {
+            @apply underline;
+        }
+    }
+}
+
+.list {
+    @apply w-full flex justify-center items-start gap-6 mt-4;
+
+    .article {
+        @apply w-64 block bg-grey px-8 py-6 rounded-xl;
+
+        .title {
+            @apply font-bold;
+        }
+    }
+}
+
+.loadMoreButton {
+    @apply mx-auto mt-6;
+}

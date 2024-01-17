@@ -2,12 +2,13 @@ import { Environment } from 'relay-runtime';
 import { ParsedUrlQuery } from 'querystring';
 import { PageText } from './pageText';
 import { GeneralText } from './generalText';
-import { Menu } from './menu';
+import { IMenu } from './menu';
 import { Setting } from './setting';
 import { Locale } from './locale';
-import { appQueryResponse } from '../relay/__generated__/appQuery.graphql';
+import { appQuery$data } from '../../src/relay/__generated__/appQuery.graphql';
 import { Meta } from './meta';
-export type AppData = appQueryResponse;
+
+export type AppData = appQuery$data;
 
 export interface PageDefault {
     id: string;
@@ -33,7 +34,7 @@ interface MyPageContext extends MyPageProps {
     environment?: Environment;
 }
 
-export interface MyPageProps extends AppData {
+export type MyPageProps = AppData & {
     redirect?: Redirect;
     page?: PageDefault;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,13 +44,13 @@ export interface MyPageProps extends AppData {
     variables?: Record<string, any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     blocksProps?: any;
-}
+};
 
 export interface APIPageProps {
     findPage?: PageDefault;
     findRedirect?: Redirect;
     generalTexts: GeneralText[];
-    menus: Menu[];
+    menus: IMenu[];
     settings: Setting[];
     locales: Locale[];
 }

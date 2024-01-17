@@ -68,7 +68,8 @@ export interface ProviderOptions {
 export interface Provider {
     getId?: () => string;
     getApiKey?: () => string;
-    getStaticPaths: (locale: string, blocks?: Record<string, any>) => Promise<GetStaticPathsResult['paths']>;
+    isSitemapEnabled: () => boolean;
+    getStaticPaths?: (locale: string, blocks?: Record<string, any>) => Promise<GetStaticPathsResult['paths']>;
     getPathsToRevalidate?: (
         item: {
             id: string;

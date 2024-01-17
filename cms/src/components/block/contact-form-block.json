@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_block_contact_form_blocks",
+  "info": {
+    "displayName": "Kontaktní formulář",
+    "icon": "envelop"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

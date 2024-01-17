@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { i18n, images } = require('./sklinet.config');
+const { images } = require('./sklinet.config');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -16,7 +16,6 @@ const { parsed: myEnv } = require('dotenv').config({
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-    i18n,
     images,
     compiler: {
         relay: {
@@ -44,7 +43,7 @@ const nextConfig = {
         return config;
     },
     eslint: {
-        dirs: ['src/components', 'src/lib', 'src/pages', 'src/providers', 'src/utils'],
+        dirs: ['src/app', 'src/lib', 'src/providers', 'src/utils'],
     },
     async rewrites() {
         return [

@@ -1,0 +1,20 @@
+.table {
+    @apply w-full mb-12;
+}
+
+.table th,
+.table td {
+    @apply py-4 px-6;
+}
+
+.table th {
+    //
+}
+
+.table td {
+    @apply border-b border-solid border-current;
+}
+
+.overflowWrapper {
+    @apply w-full overflow-x-auto overflow-y-hidden;
+}
