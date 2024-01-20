@@ -3,9 +3,10 @@
 ############################
 
 .DS_Store
+.cache
 .AppleDouble
 .LSOverride
-
+Icon
 .Spotlight-V100
 .Trashes
 ._*
@@ -67,7 +68,7 @@ $RECYCLE.BIN/
 
 .tmp
 *.log
-
+*.sql
 *.sqlite
 *.sqlite3
 
@@ -99,7 +100,6 @@ node_modules
 # Tests
 ############################
 
-testApp
 coverage
 
 ############################
@@ -109,9 +109,7 @@ coverage
 .env
 license.txt
 exports
-*.cache
+.strapi
+dist
 build
 .strapi-updater.json
-
-src/extensions/documentation/documentation/1.0.0/full_documentation.json
-src/**/documentation/**/*.json

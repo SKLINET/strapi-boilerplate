@@ -26,7 +26,7 @@ npm i @notum-cz/strapi-plugin-content-versioning
 ```
 yarn add @notum-cz/strapi-plugin-content-versioning
 ```
-2. Create or modify file `config/plugins.js` and include the following code snippet:
+2. Create or modify file `config/plugins.ts` and include the following code snippet:
 
 ```
 module.exports = ({ env }) => ({

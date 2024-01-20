@@ -27,6 +27,17 @@ export interface BlockArticlesListBlock extends Schema.Component {
   };
 }
 
+export interface BlockContactFormBlock extends Schema.Component {
+  collectionName: 'components_block_contact_form_blocks';
+  info: {
+    displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
+    icon: 'envelop';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+  };
+}
+
 export interface BlockTemplateBlock extends Schema.Component {
   collectionName: 'components_block_template_blocks';
   info: {
@@ -230,6 +241,7 @@ declare module '@strapi/types' {
     export interface Components {
       'block.article-detail-block': BlockArticleDetailBlock;
       'block.articles-list-block': BlockArticlesListBlock;
+      'block.contact-form-block': BlockContactFormBlock;
       'block.template-block': BlockTemplateBlock;
       'block.video-block': BlockVideoBlock;
       'complementary.button': ComplementaryButton;

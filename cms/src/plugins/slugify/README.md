@@ -28,7 +28,7 @@ yarn add strapi-plugin-slugify
 
 ## Configuration
 
-The plugin configuration is stored in a config file located at `./config/plugins.js`.
+The plugin configuration is stored in a config file located at `./config/plugins.ts`.
 
 > Please note that the field referenced in the configuration file must exist. You can add it using the Strapi Admin UI. Also note that adding a field at a later point in time will require you to unpublish, change, save and republish the entry/entries in order for this plugin to work correctly.
 
