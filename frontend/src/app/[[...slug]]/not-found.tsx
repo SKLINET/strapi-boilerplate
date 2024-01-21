@@ -11,7 +11,7 @@ import config from '../../../sklinet.config.json';
 import { GridHelper } from '../components/primitives/GridHelper/GridHelper';
 import { PreviewToolbar } from '../components/primitives/PreviewToolbar/PreviewToolbar';
 import { Layout } from '../components/base/Layout/Layout';
-
+import { GoogleTagManager } from '@next/third-parties/google';
 export const Page = async () => {
     const context = { params: { slug: ['404'] }, searchParams: {} };
     const data = await getStaticProps(context);
@@ -37,6 +37,7 @@ export const Page = async () => {
 
     return (
         <>
+            {gtmCode && <GoogleTagManager gtmId={String(gtmCode)} />}
             <Layout app={app}>
                 {app.page && (
                     <Blocks

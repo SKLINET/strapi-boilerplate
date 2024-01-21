@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+export const dynamic = 'force-dynamic';
 import dayjs from 'dayjs';
-import { TLSSocket } from 'tls';
 import { toCamel } from '@symbio/headless/utils';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';
@@ -14,22 +13,18 @@ interface SitemapItem {
     priority: number;
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const basepath = (req.socket instanceof TLSSocket ? 'https' : 'http') + '://' + req.headers.host;
-    const { provider } = req.query;
+export async function GET(req: Request, context: Record<string, any>) {
+    const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
+    const { provider } = context.params;
     const { i18n } = config;
     if (typeof provider !== 'string') {
-        res.statusCode = 404;
-        res.end();
-        return;
+        return new Response('Sitemap not found', { status: 404 });
     }
 
     const p = findProvider(provider.replace('.xml', ''));
 
     if (!p || !p.getStaticPaths) {
-        res.statusCode = 404;
-        res.end();
-        return;
+        return new Response('Sitemap not found', { status: 404 });
     }
 
     const items: SitemapItem[] = [];
@@ -66,7 +61,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
                 }
             }
         } else {
-            const ws = await providers.webSetting.get(locale, req.preview);
+            const ws = await providers.webSetting.get(locale, false);
             const pageKey = toCamel(p.getApiKey()) + 'DetailPage';
             const webSetting: any = ws?.data?.attributes;
             if (webSetting && Object.prototype.hasOwnProperty.call(webSetting, pageKey)) {
@@ -89,11 +84,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
         }
     }
     const lastmod = dayjs().startOf('day').format();
-
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('Cache-Control', 's-maxage=21600, stale-while-revalidate');
-    res.end(`<?xml version='1.0' encoding='UTF-8'?>
+    return new Response(
+        `<?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${items
     .map(
@@ -106,7 +98,13 @@ ${items
     )
     .join('\n')}
 </urlset>
-`);
-};
-
-export default handler;
+`,
+        {
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8',
+                'Cache-Control': 's-maxage=21600, stale-while-revalidate',
+            },
+            status: 200,
+        },
+    );
+}

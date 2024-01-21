@@ -1,18 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import providers from '../../../providers';
+export const dynamic = 'force-dynamic';
+import { NextApiRequest } from 'next';
+import providers from '../../providers';
 import { TLSSocket } from 'tls';
-import { Provider } from '../../../index';
+import { Provider } from '../../index';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const basepath =
-        (req.socket instanceof TLSSocket || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http') +
-        '://' +
-        req.headers.host;
+export async function GET(req: NextApiRequest) {
+    const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
 
-    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.statusCode = 200;
-    res.setHeader('Cache-Control', 's-maxage=21600, stale-while-revalidate');
-    res.end(
+    return new Response(
         `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${Object.values(
             providers,
         )
@@ -27,7 +22,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
                 }
             })
             .join('')}</sitemapindex>`,
+        {
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8',
+                'Cache-Control': 's-maxage=21600, stale-while-revalidate',
+            },
+            status: 200,
+        },
     );
-};
-
-export default handler;
+}

@@ -48,16 +48,12 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                source: '/robots.txt',
-                destination: '/api/robots',
-            },
-            {
                 source: '/sitemap.xml',
-                destination: '/api/sitemap',
+                destination: '/sitemap',
             },
             {
                 source: '/sitemap/:provider',
-                destination: '/api/sitemap/:provider',
+                destination: '/sitemap/:provider',
             },
         ];
     },
