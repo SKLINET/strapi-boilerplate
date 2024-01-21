@@ -12,7 +12,7 @@ export default ({ strapi }: Context) => ({
   }) {
     return async (parent: any) => {
       // @ts-ignore
-      const data: any = strapi.entityService!.load(contentTypeUID, parent, attributeName);
+      const data: any = await strapi.entityService!.load(contentTypeUID, parent, attributeName);
       if (data) {
         if (Array.isArray(data)) {
           for (const it of data) {
