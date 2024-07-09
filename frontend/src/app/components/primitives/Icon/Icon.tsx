@@ -9,9 +9,20 @@ import Loader from '../../../../../public/icons/loader.svg';
 import Play from '../../../../../public/icons/play.svg';
 import SklinetRound from '../../../../../public/icons/sklinet-logo.svg';
 import Sklinet from '../../../../../public/icons/sklinet.svg';
+import Symbio from '../../../../../public/icons/symbio.svg';
 import Tick from '../../../../../public/icons/tick.svg';
 
-export type Icons = 'alert' | 'edit' | 'exit' | 'loader' | 'play' | 'sklinet-round' | 'sklinet' | 'tick' | '';
+export type Icons =
+    | 'alert'
+    | 'edit'
+    | 'exit'
+    | 'loader'
+    | 'play'
+    | 'sklinet-round'
+    | 'sklinet'
+    | 'symbio'
+    | 'tick'
+    | '';
 
 export const getIconName = (name: string): Icons => {
     let _name: Icons = '';
@@ -48,6 +59,8 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
                 return <SklinetRound />;
             case 'sklinet':
                 return <Sklinet />;
+            case 'symbio':
+                return <Symbio />;
             case 'tick':
                 return <Tick />;
             default:

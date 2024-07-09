@@ -25,8 +25,6 @@ graphql`
     }
 `;
 
-const ContactFormBlock = ({ blocksData, app }: ContactFormBlockProps): ReactElement => (
-    <ContactForm blocksData={blocksData} app={app} />
-);
+const ContactFormBlock = (props: ContactFormBlockProps): ReactElement => <ContactForm {...props} />;
 
 export default ContactFormBlock;

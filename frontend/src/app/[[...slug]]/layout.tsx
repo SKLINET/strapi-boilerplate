@@ -7,6 +7,7 @@ import { getItemFromPageResponse } from '../../utils/base/getItemFromPageRespons
 import { getMetaFromItem } from '../../utils/base/getMetaFromItem';
 import { getImageUrl } from '../../utils/getImageUrl';
 import { getSocialNetworksType } from '../../utils/strapi/getSocialNetworksType';
+import { redirect, permanentRedirect } from 'next/navigation';
 import localFont from 'next/font/local';
 
 import '../../styles/global.scss';
@@ -50,6 +51,14 @@ export function generateViewport(context: ContextProps): Viewport {
 
 export async function generateMetadata(context: ContextProps): Promise<Metadata> {
     const data = await getStaticProps(context);
+
+    if (data?.redirect?.to) {
+        if ((data?.redirect as any)?.permanent) {
+            permanentRedirect(data.redirect.to);
+        } else {
+            redirect(data.redirect.to);
+        }
+    }
 
     const item = getItemFromPageResponse(data);
 

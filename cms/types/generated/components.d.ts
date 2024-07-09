@@ -155,13 +155,13 @@ export interface SharedGlobalSeo extends Schema.Component {
   info: {
     displayName: 'GlobalSeo';
     icon: 'address-card';
+    description: '';
   };
   attributes: {
     siteName: Attribute.String;
     titleSuffix: Attribute.String;
     description: Attribute.Text;
     sharingImage: Attribute.Media;
-    favicon: Attribute.Media;
     preventIndexing: Attribute.Boolean & Attribute.DefaultTo<false>;
     metaTags: Attribute.Component<'shared.meta', true>;
   };

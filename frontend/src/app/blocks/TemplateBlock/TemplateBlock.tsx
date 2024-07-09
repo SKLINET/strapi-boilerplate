@@ -35,8 +35,6 @@ graphql`
     }
 `;
 
-const TemplateBlock = ({ blocksData, app }: TemplateBlockProps): ReactElement => (
-    <Template blocksData={blocksData} app={app} />
-);
+const TemplateBlock = (props: TemplateBlockProps): ReactElement => <Template {...props} />;
 
 export default TemplateBlock;

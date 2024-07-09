@@ -15,7 +15,7 @@ const Navbar = ({ app }: NavbarProps): ReactElement => {
     return (
         <header className={styles.wrapper}>
             {menu?.items.map((e) => (
-                <Link key={e.id} href={e.href} openInNewTab={e.openInNewTab} className={styles.link}>
+                <Link key={e.id} href={e.href} openInNewTab={e.openInNewTab} className={styles.link} alt={e.label}>
                     {e.label}
                 </Link>
             ))}

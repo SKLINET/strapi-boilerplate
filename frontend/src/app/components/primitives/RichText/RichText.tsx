@@ -4,15 +4,13 @@ import clsx from 'clsx';
 import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import { v4 } from 'uuid';
-import { nbsp } from '@symbio/headless/utils';
-import { isInternalLink } from '@symbio/headless';
 import { Heading } from '../Heading/Heading';
 import { Paragraph } from '../Paragraph/Paragraph';
-import { Blockquote } from '../Blockquote/Blockquote';
 import { Link } from '../Link/Link';
 import { Image } from '../Image/Image';
 import { List } from '../List/List';
 import { Table } from '../Table/Table';
+import { nbsp } from '../../../../utils/nbsp';
 
 export interface RichTextProps {
     content: string;
@@ -44,25 +42,38 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                     const linkParams = domNode.attribs;
                     if (linkParams && domNode.children) {
                         delete linkParams.style;
+                        const href = linkParams.href || '';
+                        const target = linkParams.target || '_self';
+
                         if (
-                            isInternalLink(linkParams.href) &&
-                            !linkParams.href.startsWith('mailto') &&
-                            !linkParams.href.startsWith('tel')
+                            href.startsWith('http') ||
+                            href.startsWith('https') ||
+                            href.startsWith('mailto:') ||
+                            href.startsWith('tel:')
                         ) {
                             return (
-                                <Link key={v4()} href={linkParams.href} {...linkParams}>
+                                <a
+                                    href={href}
+                                    target={target}
+                                    key={v4()}
+                                    aria-label={linkParams.title || 'Rich text link'}
+                                >
                                     {domNode.children ? (
                                         <>{domToReact(domNode.children as DOMNode[], parserOptions)}</>
                                     ) : (
                                         <></>
                                     )}
-                                </Link>
+                                </a>
                             );
                         } else {
                             return (
-                                <a key={v4()} {...linkParams}>
+                                <Link
+                                    href={href}
+                                    openInNewTab={target === '_blank'}
+                                    alt={linkParams.title || 'Rich text link'}
+                                >
                                     {domToReact(domNode.children as DOMNode[], parserOptions)}
-                                </a>
+                                </Link>
                             );
                         }
                     } else {
@@ -78,7 +89,12 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                 case 'h6':
                     if (domNode.children) {
                         return (
-                            <Heading key={v4()} tag={domNode.name} className={clsx(align && styles[align])}>
+                            <Heading
+                                key={v4()}
+                                tag={domNode.name}
+                                className={clsx(align && styles[align])}
+                                withoutAutosize
+                            >
                                 {domToReact(domNode.children as DOMNode[], parserOptions)}
                             </Heading>
                         );
@@ -126,17 +142,6 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                         return <Fragment key={v4()} />;
                     }
 
-                case 'blockquote':
-                    if (domNode.children && domNode.children.length > 0) {
-                        return (
-                            <Blockquote key={v4()}>
-                                {domToReact(domNode.children as DOMNode[], parserOptions)}
-                            </Blockquote>
-                        );
-                    } else {
-                        return <Fragment key={v4()} />;
-                    }
-
                 case 'iframe': {
                     const attribs = domNode.attribs;
                     if (attribs) {
@@ -153,7 +158,7 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                         const alt = attribs.alt;
                         delete attribs.src;
                         delete attribs.alt;
-                        return <Image src={src} alt={alt} {...attribs} />;
+                        return <Image src={src} alt={alt} placeholder="blur" sizes="100vw" {...attribs} />;
                     }
                     break;
                 }

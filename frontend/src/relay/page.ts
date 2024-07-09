@@ -45,6 +45,7 @@ export const pageStaticPathsQuery = graphql`
                 id
                 attributes {
                     url
+                    publishedAt
                     content: blocks {
                         ...blocksContent @relay(mask: false)
                     }
@@ -72,6 +73,7 @@ export const pageListQuery = graphql`
                 attributes {
                     title
                     url
+                    publishedAt
                     pages {
                         data {
                             ...appPageFragment @relay(mask: false)
@@ -104,6 +106,7 @@ export const SitemapPagesQuery = graphql`
             data {
                 attributes {
                     url
+                    publishedAt
                     sitemap {
                         ...appSitemapFragment @relay(mask: false)
                     }
@@ -119,6 +122,7 @@ export const SitemapArticlesQuery = graphql`
             data {
                 attributes {
                     slug
+                    publishedAt
                     sitemap {
                         ...appSitemapFragment @relay(mask: false)
                     }

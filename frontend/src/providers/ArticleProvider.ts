@@ -19,7 +19,10 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
         return 'api::article.article';
     }
 
-    getFilterParams(): Record<string, Record<string, string | boolean>> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        if (publicationState?.toLowerCase() === 'preview') {
+            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' }, isVisibleInListView: { eq: true } };
+        }
         return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
 

@@ -11,7 +11,7 @@ interface PreviewToolbarProps {
     app: IApp;
 }
 
-const PreviewToolbar = ({ app: { item, page, locale, preview } }: PreviewToolbarProps): ReactElement | null => {
+const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): ReactElement | null => {
     const [isPublished, setIsPublished] = useState<boolean>(false);
     const [collection, setCollection] = useState<string>('');
     const [itemId, setItemId] = useState<number>(0);
@@ -20,7 +20,7 @@ const PreviewToolbar = ({ app: { item, page, locale, preview } }: PreviewToolbar
 
     useEffect(() => {
         if (item) {
-            setIsPublished(!!item?.attributes?.publishDate);
+            setIsPublished(!!item?.attributes?.publishedAt);
             if (item?.id) {
                 const id = getItemId(item?.id);
                 if (item?.id?.includes('Article')) {
@@ -33,21 +33,20 @@ const PreviewToolbar = ({ app: { item, page, locale, preview } }: PreviewToolbar
             const id = getItemId(page?.id || '');
             if (page?.attributes?.url) {
                 setCollection('api::page.page');
-                setItemId(Number(page?.id?.replace('Page_', '')));
                 setItemId(Number(id));
             }
         }
     }, [page, item]);
 
-    const editUrl = `${adminPath}/content-manager/collectionType/${collection}/${itemId}?plugins[i18n][locale]=${locale}`;
+    const editUrl = `${adminPath}/content-manager/collection-types/${collection}/${itemId}?plugins[i18n][locale]=${locale}`;
 
     return (
         <section className={styles.toolbar}>
             <section className={styles.toolbar__left}>
-                <a href={adminPath} className={styles.admin}>
-                    <Icon name={'sklinet-round'} className={styles.logo} />
+                <a href={adminPath} className={styles.admin} aria-label="Go to admin">
+                    <Icon name={'symbio'} className={styles.logo} />
                 </a>
-                <span className={styles.admin__text}>náhľad</span>
+                <span className={styles.admin__text}>náhled</span>
             </section>
 
             <section className={styles.toolbar__mid}>
@@ -55,15 +54,15 @@ const PreviewToolbar = ({ app: { item, page, locale, preview } }: PreviewToolbar
                     <span className={clsx(styles.indicator, isPublished && styles.indicator__active)} />
                     <span className={styles.title}>{title}</span>
                 </div>
-                <a className={styles.edit} href={editUrl}>
+                <a className={styles.edit} href={editUrl} aria-label="Go to entity detail">
                     <Icon className={styles.edit__icon} name={'edit'} />
-                    <span className={styles.link__title}>Upraviť</span>
+                    <span className={styles.link__title}>Upravit</span>
                 </a>
             </section>
 
-            <a href={'/api/exit-preview'} className={styles.toolbar__right}>
+            <a href={'/api/exit-preview'} className={styles.toolbar__right} aria-label="Exit preview mode">
                 <Icon name={'exit'} className={styles.exit} />
-                <span className={styles.link__title}>ukončiť náhľad</span>
+                <span className={styles.link__title}>ukončit náhled</span>
             </a>
         </section>
     );

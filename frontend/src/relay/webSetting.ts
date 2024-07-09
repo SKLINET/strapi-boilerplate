@@ -29,11 +29,6 @@ graphql`
                 siteName
                 titleSuffix
                 description
-                favicon {
-                    data {
-                        ...appImageFragment @relay(mask: false)
-                    }
-                }
                 sharingImage {
                     data {
                         ...appImageFragment @relay(mask: false)

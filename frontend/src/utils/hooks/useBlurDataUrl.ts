@@ -16,17 +16,29 @@ export const useBlurDataUrl = ({ image, allow }: UseBlurDataUrlProps) => {
     useEffect(() => {
         if (!image || !allow) return;
 
-        const getBlurDataURL = (src: string): string => {
-            const srcParts = src.split('upload');
-            if (srcParts.length !== 2) return src;
+        const getBlurDataURL = (src: string): string | null => {
+            // Image from Strapi
+            if (src.includes('uploads')) {
+                return null;
+            }
 
-            return `${srcParts[0]}upload/f_auto/fl_lossy/w_50/dpr_auto/q_10${srcParts[1]}`;
+            // Cloudinary optimization
+            if (src.includes('upload')) {
+                const srcParts = src.split('upload');
+                if (srcParts.length !== 2) return src;
+
+                return `${srcParts[0]}upload/f_auto/fl_lossy/w_50/dpr_auto/q_10${srcParts[1]}`;
+            }
+
+            return null;
         };
 
         const src = getBlurDataURL(getImageUrl(image.url));
 
         const getBase64Image = async () => {
             try {
+                if (!src) throw new Error();
+
                 const response = await fetch(src);
                 const buffer = await response.arrayBuffer();
                 const data = Buffer.from(buffer).toString('base64');
@@ -36,7 +48,6 @@ export const useBlurDataUrl = ({ image, allow }: UseBlurDataUrlProps) => {
                 setData(`data:image/webp;base64,${LIGHT_GREY_PLACEHOLDER}`);
             }
         };
-
         getBase64Image();
     }, [image, allow]);
 

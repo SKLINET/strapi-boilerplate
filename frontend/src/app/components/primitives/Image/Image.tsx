@@ -91,11 +91,21 @@ const Image = ({
 
     // Next/image loader
     const myLoader = ({ src, width }: ImageLoaderProps) => {
-        const srcParts = src.split('upload');
-        if (srcParts.length !== 2) return src;
-        const _w = maxWidth ? Math.min(width, maxWidth, 2560).toString() : 'auto';
+        // Image from Strapi
+        if (src.includes('uploads')) {
+            return src;
+        }
 
-        return `${srcParts[0]}upload/f_auto/fl_lossy/w_${_w}/dpr_auto/q_${quality}${srcParts[1]}`;
+        // Cloudinary optimization
+        if (src.includes('upload')) {
+            const srcParts = src.split('upload');
+            if (srcParts.length !== 2) return src;
+            const _w = maxWidth ? Math.min(width, maxWidth, 2560).toString() : 'auto';
+
+            return `${srcParts[0]}upload/f_auto/fl_lossy/w_${_w}/dpr_auto/q_${quality}${srcParts[1]}`;
+        }
+
+        return src;
     };
 
     // BlurDataURL to strapi image

@@ -27,6 +27,6 @@ graphql`
     }
 `;
 
-const VideoBlock = ({ blocksData, app }: VideoBlockProps): ReactElement => <Video blocksData={blocksData} app={app} />;
+const VideoBlock = (props: VideoBlockProps): ReactElement => <Video {...props} />;
 
 export default VideoBlock;

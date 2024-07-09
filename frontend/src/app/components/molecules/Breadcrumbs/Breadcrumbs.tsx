@@ -28,7 +28,7 @@ const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: Bre
             <>
                 {renderParent(parent as ParentProps)}
                 <div className={styles.parent}>
-                    <Link href={href} className={styles.link}>
+                    <Link href={href} className={styles.link} alt={label}>
                         {label}
                     </Link>
                 </div>

@@ -1,12 +1,12 @@
-import { IApp } from '../../types/base/app';
-import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
-import { Blocks } from '../components/base/Blocks/Blocks';
-import { getStaticProps } from '../../utils/base/getStaticProps';
-import config from '../../../sklinet.config.json';
-import { GridHelper } from '../components/base/GridHelper/GridHelper';
-import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
-import { Layout } from '../components/base/Layout/Layout';
 import { GoogleTagManager } from '@next/third-parties/google';
+import { Layout } from '../components/base/Layout/Layout';
+import { Blocks } from '../components/base/Blocks/Blocks';
+import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
+import { GridHelper } from '../components/base/GridHelper/GridHelper';
+import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
+import { getStaticProps } from '../../utils/base/getStaticProps';
+import { IApp } from '../../types/base/app';
+import config from '../../../sklinet.config.json';
 
 // Day JS
 import { CALENDAR_FORMATS } from '../../constants';

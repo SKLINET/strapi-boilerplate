@@ -67,6 +67,7 @@ graphql`
         attributes {
             title
             slug
+            publishedAt
             publishDate
             category {
                 data {
@@ -89,6 +90,7 @@ graphql`
         attributes {
             title
             slug
+            publishedAt
             publishDate
             category {
                 data {

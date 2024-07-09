@@ -28,6 +28,7 @@ const LanguageSelector = ({ app, className }: LanguageSelectorProps): ReactEleme
             type="button"
             onClick={() => changeLocale(app.locale === 'cs' ? 'en' : 'cs')}
             className={clsx(styles.wrapper, className)}
+            aria-label={'Change locale'}
         >
             {app.locale === 'cs' ? 'EN' : 'CS'}
         </button>

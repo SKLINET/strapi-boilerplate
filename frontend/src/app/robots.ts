@@ -2,7 +2,11 @@ import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
     const baseUrl = String(process.env.NEXT_PUBLIC_BASE_PATH);
-    if (process.env.NODE_ENV === 'production' && !baseUrl.includes('beneficiotest.cz')) {
+    if (
+        process.env.NODE_ENV === 'production' &&
+        !baseUrl.includes('symbio.agency') &&
+        !baseUrl.includes('beneficiotest.cz')
+    ) {
         return {
             rules: {
                 userAgent: '*',

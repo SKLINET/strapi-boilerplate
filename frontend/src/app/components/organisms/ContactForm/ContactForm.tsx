@@ -105,6 +105,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     reset();
                                 }}
                                 className={styles.button}
+                                alt="Back to contact form"
                             >
                                 {getSystemResource('back_to_the_form', app.systemResources?.data)}
                             </Button>
@@ -166,7 +167,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     disabled={isPending}
                                 />
                             </div>
-                            <Button submit loading={isPending} className={styles.button}>
+                            <Button submit loading={isPending} className={styles.button} alt="Submit contact form">
                                 {getSystemResource('submit', app?.systemResources?.data)}
                             </Button>
                         </form>

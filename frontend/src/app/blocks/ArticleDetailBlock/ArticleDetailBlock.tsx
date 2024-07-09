@@ -28,7 +28,7 @@ graphql`
     }
 `;
 
-const ArticleDetailBlock = (data: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...data} />;
+const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...props} />;
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({

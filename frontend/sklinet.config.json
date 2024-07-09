@@ -1,4 +1,12 @@
 {
+    "auth": {
+        "basic": [
+            {
+                "login": "sklinet",
+                "password": "sklinet2024"
+            }
+        ]
+    },
     "gtm": {
         "code": false
     },
@@ -18,7 +26,8 @@
             "test.sklinet.com",
             "vercel.app",
             "http://localhost:3000"
-        ]
+        ],
+        "formats": ["image/avif", "image/webp"]
     },
     "mailer": {
         "from": "no-reply@example.com",
