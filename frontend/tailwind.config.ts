@@ -31,6 +31,8 @@ const config: Config = {
                 black: '#000000',
                 white: '#ffffff',
                 grey: '#ececec',
+                green: '#14BA2F',
+                orange: '#ED702D',
             },
             gap: {
                 'grid-gap': 'var(--grid-gap)',
