@@ -36,9 +36,10 @@ const ArticleList = ({
     const loadMore = async (page: number) => {
         if (!isPending) {
             startTransition(async () => {
-                const { articles, canLoadMore } = await fetchArticles(page * countOnPage, app, {
-                    categoryId: categoryId,
-                });
+                const { articles, canLoadMore } = await fetchArticles(
+                    { limit: page * countOnPage, categoryId: categoryId },
+                    app,
+                );
 
                 setPage(page);
                 setArticles(articles);

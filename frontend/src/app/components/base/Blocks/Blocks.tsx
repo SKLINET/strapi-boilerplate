@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { getBlockName } from '@symbio/headless/utils';
 import blocks from '../../../blocks';
 import { BlocksPropsMap } from '@symbio/headless';
-import { IApp } from '../../../../types/app';
+import { IApp } from '../../../../types/base/app';
 
 interface BlocksProps {
     blocksData: readonly any[] | null;

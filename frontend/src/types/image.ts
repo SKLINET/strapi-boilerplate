@@ -1,10 +1,7 @@
-export interface ImageProps {
-    data: {
-        attributes: {
-            url: string;
-            width: number;
-            height: number;
-            alternativeText: string;
-        };
-    };
+export interface IImage {
+    id: string;
+    url: string;
+    alternativeText: string;
+    width: number;
+    height: number;
 }

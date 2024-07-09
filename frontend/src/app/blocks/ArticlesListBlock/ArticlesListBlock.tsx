@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
-import { StaticBlockContext } from '../../../types/block';
-import getPublicationState from '../../../utils/getPublicationState';
+import { StaticBlockContext } from '../../../types/base/block';
+import getPublicationState from '../../../utils/base/getPublicationState';
 import { OmitRefType } from '@symbio/headless';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
-import { IApp } from '../../../types/app';
+import { IApp } from '../../../types/base/app';
 import { articleListQuery$data } from '../../../relay/__generated__/articleListQuery.graphql';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
 import { getItemId } from '../../../utils/getItemId';

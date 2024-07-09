@@ -6,7 +6,7 @@ import { getPageUrl } from '../../../utils/getPageUrl';
 import { previewPageQuery } from '../../../relay/api/__generated__/previewPageQuery.graphql';
 import { getPagePattern } from '../../../lib/routing/getPagePattern';
 import { PreviewPageQuery, PreviewSettingsQuery } from '../../../relay/api/preview';
-import { formatPageObject } from '../../../utils/formatPageObject';
+import { formatPageObject } from '../../../utils/base/formatPageObject';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {

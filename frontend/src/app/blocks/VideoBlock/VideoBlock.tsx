@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { OmitRefType } from '@symbio/headless';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
 import { Video } from '../../components/blocks/Video/Video';
-import { IApp } from '../../../types/app';
+import { IApp } from '../../../types/base/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VideoBlockStaticProps {}

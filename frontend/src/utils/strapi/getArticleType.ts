@@ -1,6 +1,6 @@
 import { IArticle } from '../../types/article';
 import { articleFragment$data } from '../../relay/__generated__/articleFragment.graphql';
-import { IApp } from '../..//types/app';
+import { IApp } from '../../types/base/app';
 import { getImageType } from './getImageType';
 import { getItemUrl } from '../getItemUrl';
 import { getArticleCategoryType } from './getArticleCategoryType';
@@ -17,7 +17,7 @@ export const getArticleType = (e: Fragment | null | undefined, app: IApp): IArti
     } = e;
 
     const _category = getArticleCategoryType(category?.data);
-    const _image = getImageType(image);
+    const _image = getImageType(image?.data);
 
     const _totalTime = getReadingTime(content || '');
 
@@ -39,7 +39,10 @@ export const getArticleType = (e: Fragment | null | undefined, app: IApp): IArti
     };
 };
 
-export const getArticleListType = (e: ReadonlyArray<Fragment | null> | null | undefined, app: IApp): IArticle[] => {
+export const getArticleListType = (
+    e: ReadonlyArray<Fragment | null | undefined> | null | undefined,
+    app: IApp,
+): IArticle[] => {
     const data: IArticle[] = [];
 
     e?.forEach((k) => {

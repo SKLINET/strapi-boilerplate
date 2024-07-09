@@ -1,0 +1,9 @@
+.wrapper {
+    @apply w-full px-4 py-8;
+    @apply tablet:px-8;
+    @apply desktop:px-12 desktop:py-10;
+
+    pre {
+        @apply text-16 text-black bg-black bg-opacity-10 p-8 mt-6 overflow-x-auto;
+    }
+}

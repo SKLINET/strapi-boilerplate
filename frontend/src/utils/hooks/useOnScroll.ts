@@ -8,28 +8,26 @@ export const useOnScroll = (
     callback: () => void,
 ) => {
     useEffect(() => {
-        let timeout: NodeJS.Timeout | null = null;
-
         const handleScroll = () => {
             if (!ref || !ref.current) return;
 
-            const { innerHeight, pageYOffset } = window;
+            const { innerHeight, scrollY } = window;
 
-            const topOffset = Math.round(pageYOffset + ref.current.getBoundingClientRect().top);
+            const topOffset = Math.round(scrollY + ref.current.getBoundingClientRect().top);
 
             switch (triggerPosition) {
                 case 'middle':
-                    if (pageYOffset + (innerHeight * 1) / 2 >= topOffset) {
+                    if (scrollY + (innerHeight * 1) / 2 >= topOffset) {
                         callback();
                     }
                     break;
                 case 'middle-bottom':
-                    if (pageYOffset + (innerHeight * 3) / 4 >= topOffset) {
+                    if (scrollY + (innerHeight * 3) / 4 >= topOffset) {
                         callback();
                     }
                     break;
                 case 'bottom':
-                    if (pageYOffset + innerHeight >= topOffset) {
+                    if (scrollY + innerHeight >= topOffset) {
                         callback();
                     }
                     break;
@@ -38,12 +36,11 @@ export const useOnScroll = (
             }
         };
 
-        timeout = setTimeout(() => handleScroll(), 150);
-        window.addEventListener('scroll', () => handleScroll(), { passive: true });
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
 
         return () => {
-            if (timeout) clearTimeout(timeout);
-            window.removeEventListener('scroll', () => handleScroll());
+            window.removeEventListener('scroll', handleScroll);
         };
     }, [callback, ref, triggerPosition]);
 };

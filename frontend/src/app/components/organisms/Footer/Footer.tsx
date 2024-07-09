@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import styles from './Footer.module.scss';
-import { IApp } from '../../../..//types/app';
+import { IApp } from '../../../../types/base/app';
 
 interface FooterProps {
     app: IApp;

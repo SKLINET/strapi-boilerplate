@@ -74,7 +74,9 @@ graphql`
                 }
             }
             image {
-                ...appImageFragment @relay(mask: false)
+                data {
+                    ...appImageFragment @relay(mask: false)
+                }
             }
             content
         }
@@ -94,7 +96,9 @@ graphql`
                 }
             }
             image {
-                ...appImageFragment @relay(mask: false)
+                data {
+                    ...appImageFragment @relay(mask: false)
+                }
             }
             content
             seo {

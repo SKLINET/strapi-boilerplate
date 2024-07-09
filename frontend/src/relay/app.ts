@@ -8,10 +8,6 @@ export const AppQuery = graphql`
         $locale: I18NLocaleCode
         $entityId: Int
     ) {
-        systemResources(publicationState: $publicationState, locale: $locale) {
-            ...appSystemResourceFragment @relay(mask: false)
-        }
-
         page(locale: $locale, pattern: $pattern, publicationState: $publicationState, entityId: $entityId) {
             id
             attributes {
@@ -19,7 +15,9 @@ export const AppQuery = graphql`
                 url
                 publishedAt
                 pages {
-                    ...appPagesFragment @relay(mask: false)
+                    data {
+                        ...appPageFragment @relay(mask: false)
+                    }
                 }
                 parent {
                     data {
@@ -79,53 +77,50 @@ export const AppQuery = graphql`
             }
         }
 
+        webSetting(publicationState: $publicationState, locale: $locale) {
+            data {
+                ...webSettingFragment @relay(mask: false)
+            }
+        }
+
+        systemResources(publicationState: $publicationState, locale: $locale) {
+            data {
+                ...appSystemResourceFragment @relay(mask: false)
+            }
+        }
+
         redirect: findRedirect(redirectFrom: $redirect, publicationState: $publicationState) {
             redirectFrom
             to: redirectTo
             statusCode
         }
 
-        webSetting(publicationState: $publicationState, locale: $locale) {
-            ...webSettingFragment @relay(mask: false)
-        }
-
         contactForm(publicationState: $publicationState, locale: $locale) {
-            ...contactFormFragment @relay(mask: false)
-        }
-    }
-`;
-
-graphql`
-    fragment appPagesFragment on PageRelationResponseCollection {
-        data {
-            id
-            attributes {
-                url
+            data {
+                ...contactFormFragment @relay(mask: false)
             }
         }
     }
 `;
 
 graphql`
-    fragment appPageFragment on PageEntityResponse {
-        data {
-            id
-            attributes {
-                url
-            }
+    fragment appPageFragment on PageEntity {
+        id
+        attributes {
+            title
+            url
         }
     }
 `;
 
 graphql`
-    fragment appImageFragment on UploadFileEntityResponse {
-        data {
-            attributes {
-                url
-                alternativeText
-                width
-                height
-            }
+    fragment appImageFragment on UploadFileEntity {
+        id
+        attributes {
+            url
+            alternativeText
+            width
+            height
         }
     }
 `;
@@ -134,32 +129,34 @@ graphql`
     fragment appVideoFragment on ComponentComplementaryVideo {
         id
         uploadedVideo {
-            ...appUploadedVideoFragment @relay(mask: false)
+            data {
+                ...appUploadedVideoFragment @relay(mask: false)
+            }
         }
         externalVideo
         optionalImage {
-            ...appImageFragment @relay(mask: false)
-        }
-    }
-`;
-
-graphql`
-    fragment appUploadedVideoFragment on UploadFileEntityResponse {
-        data {
-            attributes {
-                url
+            data {
+                ...appImageFragment @relay(mask: false)
             }
         }
     }
 `;
 
 graphql`
-    fragment appIconFragment on IconEntityResponse {
-        data {
-            attributes {
-                title
-                codename
-            }
+    fragment appUploadedVideoFragment on UploadFileEntity {
+        id
+        attributes {
+            url
+        }
+    }
+`;
+
+graphql`
+    fragment appIconFragment on IconEntity {
+        id
+        attributes {
+            title
+            codename
         }
     }
 `;
@@ -169,7 +166,9 @@ graphql`
         id
         label
         page {
-            ...appPageFragment @relay(mask: false)
+            data {
+                ...appPageFragment @relay(mask: false)
+            }
         }
         linkExternal
         openInNewTab
@@ -193,7 +192,9 @@ graphql`
         id
         label
         page {
-            ...appPageFragment @relay(mask: false)
+            data {
+                ...appPageFragment @relay(mask: false)
+            }
         }
         externalUrl
         openInNewTab
@@ -205,13 +206,8 @@ graphql`
         title
         metaTitle
         metaDescription
-        metaSocial {
-            socialNetwork
-            title
-            description
-            image {
-                ...appImageFragment @relay(mask: false)
-            }
+        socialNetworks {
+            ...appSocialNetworksFragment @relay(mask: false)
         }
         keywords
         metaRobots
@@ -227,6 +223,31 @@ graphql`
 `;
 
 graphql`
+    fragment appSocialNetworksFragment on ComponentSharedSocialNetworks {
+        id
+        facebookMeta {
+            ...appMetaSocialFragment @relay(mask: false)
+        }
+        twitterMeta {
+            ...appMetaSocialFragment @relay(mask: false)
+        }
+    }
+`;
+
+graphql`
+    fragment appMetaSocialFragment on ComponentSharedMetaSocial {
+        id
+        title
+        description
+        image {
+            data {
+                ...appImageFragment @relay(mask: false)
+            }
+        }
+    }
+`;
+
+graphql`
     fragment appSitemapFragment on ComponentSharedSitemap {
         enabled
         changeFrequency
@@ -235,26 +256,20 @@ graphql`
 `;
 
 graphql`
-    fragment appSystemResourceFragment on SystemResourceEntityResponseCollection {
-        data {
-            attributes {
-                codename
-                value
-            }
+    fragment appSystemResourceFragment on SystemResourceEntity {
+        id
+        attributes {
+            codename
+            value
         }
     }
 `;
 
 graphql`
-    fragment appTemplateFragment on TemplateEntityResponse {
-        data {
-            attributes {
-                content {
-                    __typename
-                    ...ContactFormBlock_content @relay(mask: false)
-                    ...VideoBlock_content @relay(mask: false)
-                }
-            }
-        }
+    fragment appSendEmailFragment on ComponentComplementarySendEmail {
+        id
+        emailFrom
+        emailTo
+        subject
     }
 `;

@@ -1,21 +1,36 @@
+import { IImage } from '../../types/image';
 import { appImageFragment$data } from '../../relay/__generated__/appImageFragment.graphql';
-import { ImageProps } from '../../types/image';
+import { getImageUrl } from '../getImageUrl';
 
 type Fragment = Omit<appImageFragment$data, ' $fragmentType'>;
 
-export const getImageType = (image: Fragment | null | undefined): ImageProps | null => {
-    if (!image || !image.data || !image.data.attributes || !image.data.attributes.url) return null;
+export const getImageType = (e: Fragment | null | undefined, smallResolution = false): IImage | null => {
+    if (!e?.attributes) return null;
 
-    const { url, width, height, alternativeText } = image.data.attributes;
+    const {
+        id,
+        attributes: { url, alternativeText, width, height },
+    } = e;
 
     return {
-        data: {
-            attributes: {
-                url: url,
-                width: width || 0,
-                height: height || 0,
-                alternativeText: alternativeText || '',
-            },
-        },
+        id: id || '',
+        url: getImageUrl(url, smallResolution),
+        width: width || 0,
+        height: height || 0,
+        alternativeText: alternativeText || '',
     };
+};
+
+export const getImageListType = (e: ReadonlyArray<Fragment | null | undefined> | null | undefined): IImage[] => {
+    const data: IImage[] = [];
+
+    e?.forEach((k) => {
+        const el = getImageType(k);
+
+        if (!el) return;
+
+        data.push(el);
+    });
+
+    return data;
 };

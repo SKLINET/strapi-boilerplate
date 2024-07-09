@@ -3,7 +3,7 @@ import { fetchQuery } from 'relay-runtime';
 import { GetStaticPathsResult } from 'next';
 import * as s from '../relay/__generated__/articleStaticPathsQuery.graphql';
 import AbstractStrapiProvider from '../lib/provider/AbstractStrapiProvider';
-import { StaticPathsParams } from '../types/staticPathsParams';
+import { StaticPathsParams } from '../types/base/staticPathsParams';
 import { ArticleDetailQuery, ArticleListQuery, ArticleStaticPathsQuery } from '../relay/article';
 
 class ArticleProvider extends AbstractStrapiProvider<any, any> {

@@ -1,7 +1,18 @@
 import { appSystemResourceFragment$data } from '../../relay/__generated__/appSystemResourceFragment.graphql';
 
-export const getSystemResource = (key: string, e: appSystemResourceFragment$data | null | undefined): string => {
-    if (!e || !e.data) return '';
+type Fragment = Omit<appSystemResourceFragment$data, ' $fragmentType'>;
 
-    return e.data.find((k) => k.attributes?.codename.toString() === key.toString())?.attributes?.value || '';
+export const getSystemResource = (
+    key: string,
+    data: ReadonlyArray<Fragment | null | undefined> | null | undefined,
+): string => {
+    if (!data) return '';
+
+    const el = data.find((e) => {
+        if (!e?.attributes) return false;
+
+        return e.attributes.codename.toString() === key.toString();
+    });
+
+    return el?.attributes?.value || '';
 };

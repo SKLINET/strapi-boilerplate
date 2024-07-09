@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { toCamel } from '@symbio/headless/utils';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';
-import blocks from '../../blocks/server';
-import { StaticPathsParams } from '../../../types/staticPathsParams';
-import { findProvider } from '../../../utils/findProvider';
+import blocks from '../../blocks';
+import { StaticPathsParams } from '../../../types/base/staticPathsParams';
+import { findProvider } from '../../../utils/base/findProvider';
 
 interface SitemapItem {
     url: string;

@@ -9,10 +9,14 @@ export const pageDetailQuery = graphql`
                 url
                 publishedAt
                 pages {
-                    ...appPagesFragment @relay(mask: false)
+                    data {
+                        ...appPageFragment @relay(mask: false)
+                    }
                 }
                 parent {
-                    ...appPageFragment @relay(mask: false)
+                    data {
+                        ...appPageFragment @relay(mask: false)
+                    }
                 }
                 seo {
                     ...appSeoFragment @relay(mask: false)
@@ -69,10 +73,14 @@ export const pageListQuery = graphql`
                     title
                     url
                     pages {
-                        ...appPagesFragment @relay(mask: false)
+                        data {
+                            ...appPageFragment @relay(mask: false)
+                        }
                     }
                     parent {
-                        ...appPageFragment @relay(mask: false)
+                        data {
+                            ...appPageFragment @relay(mask: false)
+                        }
                     }
                     seo {
                         ...appSeoFragment @relay(mask: false)

@@ -4,8 +4,9 @@ import React, { ReactElement, CSSProperties } from 'react';
 import NextImage, { StaticImageData, ImageLoaderProps, ImageProps as NextImageProps } from 'next/image';
 import { ImgixProps } from '@symbio/headless';
 import { kebabCase } from '@symbio/headless/utils';
-import { ImageProps as StrapiImageProps } from '../../../../types/image';
+import { IImage } from '../../../../types/image';
 import { getImageUrl } from '../../../../utils/getImageUrl';
+import { useBlurDataUrl } from '../../../../utils/hooks/useBlurDataUrl';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;
@@ -24,7 +25,7 @@ export declare type ImageProps = Omit<NextImageProps, 'src'> & {
           }
         | {
               staticImage?: never;
-              image: StrapiImageProps;
+              image: IImage;
               src?: never;
           }
         | {
@@ -86,20 +87,19 @@ const Image = ({
     style,
     ...props
 }: ImageProps): ReactElement => {
-    // Imgix params
-    const params = imgixParams
-        ? serializeImageParams(imgixParams, { x: imgixParams.fpX || null, y: imgixParams.fpY || null })
-        : undefined;
+    const maxWidth = image?.width ? image.width : width ? Number(width) : null;
 
     // Next/image loader
-    const myLoader = ({ src, width, quality }: ImageLoaderProps): string =>
-        `${src}?w=${width}&q=${quality || 75}${params ? `&${params}` : ''}`;
+    const myLoader = ({ src, width }: ImageLoaderProps) => {
+        const srcParts = src.split('upload');
+        if (srcParts.length !== 2) return src;
+        const _w = maxWidth ? Math.min(width, maxWidth, 2560).toString() : 'auto';
 
-    const resolveBlurUrl = (url: string, width?: number | null, height?: number | null) => {
-        return `${url}?w=50&h=${(50 / ((width || 1) / (height || 1))).toFixed(
-            0,
-        )}&q=5,loseless=true&auto=format,compress&fit=fillmax`;
+        return `${srcParts[0]}upload/f_auto/fl_lossy/w_${_w}/dpr_auto/q_${quality}${srcParts[1]}`;
     };
+
+    // BlurDataURL to strapi image
+    const blurDataURL = useBlurDataUrl({ image, allow: placeholder === 'blur' });
 
     // General props
     const generalProps = {
@@ -119,8 +119,8 @@ const Image = ({
           }
         : {
               fill: false,
-              width: image?.data?.attributes?.width || width || 0,
-              height: image?.data?.attributes?.height || height || 0,
+              width: image?.width || width || 0,
+              height: image?.height || height || 0,
           };
 
     // 1) For static images (public folder)
@@ -159,25 +159,22 @@ const Image = ({
 
     // 2) For strapi image
     if (image) {
-        const _src = getImageUrl(image.data.attributes.url);
+        const { url, alternativeText } = image;
 
         return (
             <NextImage
                 {...props}
-                src={_src}
+                src={url}
                 {...sizeProps}
                 {...generalProps}
-                blurDataURL={
-                    placeholder === 'blur'
-                        ? resolveBlurUrl(_src, image.data.attributes.width, image.data.attributes.height)
-                        : undefined
-                }
+                blurDataURL={placeholder === 'blur' ? blurDataURL : undefined}
                 placeholder={placeholder}
                 loader={myLoader}
                 sizes={sizes}
                 quality={quality}
                 priority={priority}
                 loading={loading}
+                alt={alternativeText}
             />
         );
     }
@@ -192,8 +189,7 @@ const Image = ({
                 src={_src}
                 {...sizeProps}
                 {...generalProps}
-                blurDataURL={placeholder === 'blur' ? resolveBlurUrl(_src) : undefined}
-                placeholder={placeholder}
+                placeholder="empty"
                 loader={myLoader}
                 sizes={sizes}
                 quality={quality}

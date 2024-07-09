@@ -156,19 +156,14 @@ generateModels().then(() => {
                     names.sort();
                     await fs.writeFile(
                         `./src/blocks/index.ts`,
-                        `/**
- * Import blocks which should be included in SSR
- */
+                        `import { graphql } from 'relay-runtime';
+
 import dynamic from 'next/dynamic';
 import { BlockType } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Providers } from '../types/providers';
 import { Locale } from '../types/locale';
-/**
- * Define fragment for blocks to load with app data
- */
-import { graphql } from 'relay-runtime';
 
 ${names
     .reduce((acc, [name]) => {
@@ -193,36 +188,6 @@ ${names
     }, [])
     .join('\n')}
           };
-export default blocks;
-`,
-                    );
-                    await fs.writeFile(
-                        `./src/blocks/server.ts`,
-                        `/**
- * Import blocks which should be included in SSR
- */
-import { BlockType } from '@symbio/headless';
-import { PageProps } from '../types/page';
-import { WebSettingsProps } from '../types/webSettings';
-import { Providers } from '../types/providers';
-import { Locale } from '../types/locale';
-${names.map(([name]) => `import ${name} from './${name}/${name}';`).join('\n')}
-/**
- * Define fragment for blocks to load with app data
- */
-import { graphql } from 'relay-runtime';
-graphql\`
-    fragment serverBlocksContent on PageBlocksDynamicZone {
-        __typename
-${names
-    ?.map(([name, fields]) => (fields.length > 0 ? `        ...${name}_content @relay(mask: false)` : ''))
-    .filter((a) => a)
-    .join('\n')}
-    }
-\`;
-const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
-${names.map(([name]) => `    ${name},`).join('\n')}
-};
 export default blocks;
 `,
                     );

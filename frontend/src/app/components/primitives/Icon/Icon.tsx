@@ -17,14 +17,7 @@ export const getIconName = (name: string): Icons => {
     let _name: Icons = '';
 
     switch (name) {
-        case 'alert':
-        case 'edit':
-        case 'exit':
-        case 'loader':
-        case 'play':
-        case 'sklinet-round':
-        case 'sklinet':
-        case 'tick':
+        case '':
             _name = name;
             break;
     }

@@ -17,10 +17,10 @@
       "required": true,
       "maxLength": 160
     },
-    "metaSocial": {
+    "socialNetworks": {
       "type": "component",
-      "repeatable": true,
-      "component": "shared.meta-social"
+      "repeatable": false,
+      "component": "shared.social-networks"
     },
     "keywords": {
       "type": "text",

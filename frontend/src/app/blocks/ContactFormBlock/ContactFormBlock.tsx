@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { OmitRefType } from '@symbio/headless';
 import { ContactFormBlock_content$data } from './__generated__/ContactFormBlock_content.graphql';
 import { ContactForm } from '../../components/blocks/ContactForm/ContactForm';
-import { IApp } from '../../../types/app';
+import { IApp } from '../../../types/base/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ContactFormBlockStaticProps {}

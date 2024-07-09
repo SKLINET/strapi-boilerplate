@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import { subscribeMutation } from '../../../relay/api/__generated__/subscribeMutation.graphql';
 import { SubscribeFormMutation } from '../../../relay/api/subscribe';
 
-import getPublicationState from '../../../utils/getPublicationState';
+import getPublicationState from '../../../utils/base/getPublicationState';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 dotenv.config();
 

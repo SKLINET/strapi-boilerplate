@@ -3,8 +3,8 @@
 import React, { ReactElement, useCallback } from 'react';
 import styles from './LanguageSelector.module.scss';
 import clsx from 'clsx';
-import { IApp } from '../../../../types/app';
-import { getTranslatedUrl } from '../../../../utils/getTranslatedUrl';
+import { IApp } from '../../../../types/base/app';
+import { getTranslatedUrl } from '../../../../utils/base/getTranslatedUrl';
 
 interface LanguageSelectorProps {
     app: IApp;

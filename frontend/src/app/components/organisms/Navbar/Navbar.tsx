@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import styles from './Navbar.module.scss';
-import { IApp } from '../../../..//types/app';
+import { IApp } from '../../../../types/base/app';
 import { Link } from '../../primitives/Link/Link';
 import { getMenuType } from '../../../../utils/strapi/getMenuType';
 import { LanguageSelector } from '../../molecules/LanguageSelector/LanguageSelector';

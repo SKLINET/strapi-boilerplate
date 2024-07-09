@@ -1,9 +1,8 @@
 import { appMenuItemFragment$data } from '../../relay/__generated__/appMenuItemFragment.graphql';
 import { IMenu, IMenuItem } from '../../types/menu';
 import { getPageType } from './getPageType';
-import { getPageUrl } from '.././getPageUrl';
 import { appMenuEntityFragment$data } from '../../relay/__generated__/appMenuEntityFragment.graphql';
-import { IApp } from '../../types/app';
+import { IApp } from '../../types/base/app';
 
 type Fragment = Omit<appMenuEntityFragment$data, ' $fragmentType'>;
 
@@ -15,11 +14,11 @@ export const getMenuItemType = (
 
     const { id, label, page, externalUrl, openInNewTab } = e;
 
-    const _page = getPageType(page);
+    const _page = getPageType(page?.data, app);
 
-    if (!_page && !externalUrl) return null;
+    const href = _page?.href || externalUrl;
 
-    const href = _page ? getPageUrl(_page.data.attributes.url, app.locale) : externalUrl || '';
+    if (!href) return null;
 
     return {
         id: id,
@@ -58,7 +57,10 @@ export const getMenuType = (e: Fragment | null | undefined, app: IApp): IMenu | 
     };
 };
 
-export const getMenuListType = (e: ReadonlyArray<Fragment | null> | null | undefined, app: IApp): IMenu[] => {
+export const getMenuListType = (
+    e: ReadonlyArray<Fragment | null | undefined> | null | undefined,
+    app: IApp,
+): IMenu[] => {
     const data: IMenu[] = [];
 
     e?.forEach((k) => {

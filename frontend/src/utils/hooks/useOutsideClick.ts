@@ -12,10 +12,10 @@ export const useOutsideClick = (ref: RefObject<any>, additionRef: RefObject<any>
             }
         };
 
-        document.addEventListener('click', (e) => handleClick(e), { passive: true });
+        document.addEventListener('click', handleClick, { passive: true });
 
         return () => {
-            document.removeEventListener('click', (e) => handleClick(e));
+            document.removeEventListener('click', handleClick);
         };
     }, [additionRef, callback, ref]);
 };
