@@ -45,6 +45,7 @@
         "nodemailer": "^6.7.5",
         "react": "^18.2.0",
         "react-18-image-lightbox": "^5.1.4",
+        "react-countup": "^6.5.3",
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.48.2",
         "react-relay": "^16.0.0",
