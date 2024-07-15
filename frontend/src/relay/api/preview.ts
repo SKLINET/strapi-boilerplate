@@ -6,10 +6,14 @@ export const PreviewSettingsQuery = graphql`
             data {
                 attributes {
                     homePage {
-                        ...appPageFragment @relay(mask: false)
+                        data {
+                            ...appPageFragment @relay(mask: false)
+                        }
                     }
                     articleDetailPage {
-                        ...appPageFragment @relay(mask: false)
+                        data {
+                            ...appPageFragment @relay(mask: false)
+                        }
                     }
                 }
             }

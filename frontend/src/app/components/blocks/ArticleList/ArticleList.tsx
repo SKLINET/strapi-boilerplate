@@ -36,9 +36,10 @@ const ArticleList = ({
     const loadMore = async (page: number) => {
         if (!isPending) {
             startTransition(async () => {
-                const { articles, canLoadMore } = await fetchArticles(page * countOnPage, app, {
-                    categoryId: categoryId,
-                });
+                const { articles, canLoadMore } = await fetchArticles(
+                    { limit: page * countOnPage, categoryId: categoryId },
+                    app,
+                );
 
                 setPage(page);
                 setArticles(articles);
@@ -57,7 +58,11 @@ const ArticleList = ({
     return (
         <section className={styles.wrapper}>
             <div className={styles.filters}>
-                <a href={blogHref} className={clsx(styles.button, categoryId === null && styles.active)}>
+                <a
+                    href={blogHref}
+                    className={clsx(styles.button, categoryId === null && styles.active)}
+                    aria-label={'All articles'}
+                >
                     {app.locale === 'cs' ? 'Vše' : 'All'}
                 </a>
                 {_categories.map((e) => (
@@ -65,6 +70,7 @@ const ArticleList = ({
                         key={e.id}
                         href={blogHref + `?filter=${getItemId(e.id)}`}
                         className={clsx(styles.button, categoryId === getItemId(e.id) && styles.active)}
+                        aria-label={`Filter by ${e.title}`}
                     >
                         {e.title}
                     </a>
@@ -72,7 +78,7 @@ const ArticleList = ({
             </div>
             <div className={styles.list}>
                 {_articles.map((e) => (
-                    <a key={e.id} href={e.href} className={styles.article}>
+                    <a key={e.id} href={e.href} className={styles.article} aria-label={`Go to article ${e.title}`}>
                         <p className={styles.title}>{e.title}</p>
                         {e.category && <p className={styles.category}>{e.category?.title}</p>}
                     </a>
@@ -83,6 +89,7 @@ const ArticleList = ({
                     loading={isPending}
                     onClick={() => !isPending && loadMore(page + 1)}
                     className={styles.loadMoreButton}
+                    alt="Load more"
                 >
                     {'Load more'}
                 </Button>

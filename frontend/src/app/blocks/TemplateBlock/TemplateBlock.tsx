@@ -3,7 +3,7 @@ import graphql from 'graphql-tag';
 import { OmitRefType } from '@symbio/headless';
 import { TemplateBlock_content$data } from './__generated__/TemplateBlock_content.graphql';
 import { Template } from '../../components/blocks/Template/Template';
-import { IApp } from '../../../types/app';
+import { IApp } from '../../../types/base/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TemplateBlockStaticProps {}
@@ -22,13 +22,19 @@ graphql`
     fragment TemplateBlock_content on ComponentBlockTemplateBlock {
         id
         template {
-            ...appTemplateFragment @relay(mask: false)
+            data {
+                attributes {
+                    content {
+                        __typename
+                        ...ContactFormBlock_content @relay(mask: false)
+                        ...VideoBlock_content @relay(mask: false)
+                    }
+                }
+            }
         }
     }
 `;
 
-const TemplateBlock = ({ blocksData, app }: TemplateBlockProps): ReactElement => (
-    <Template blocksData={blocksData} app={app} />
-);
+const TemplateBlock = (props: TemplateBlockProps): ReactElement => <Template {...props} />;
 
 export default TemplateBlock;

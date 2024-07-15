@@ -8,6 +8,7 @@ export interface HeadingProps {
     tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     size?: 'xl' | 'lg' | 'md' | 'sm';
     children: ReactNode;
+    withoutAutosize?: boolean;
     className?: string;
 }
 
@@ -28,11 +29,18 @@ export const getSizeFromTag = (tag: string): string => {
     }
 };
 
-const Heading = ({ tag, size, className, children }: HeadingProps): ReactElement => {
+const Heading = ({ tag, size, children, withoutAutosize = false, className }: HeadingProps): ReactElement => {
     const Tag = tag;
 
     return (
-        <Tag className={clsx(styles.wrapper, styles[size ? size : getSizeFromTag(tag)], className)}>
+        <Tag
+            className={clsx(
+                styles.wrapper,
+                !withoutAutosize && styles.useSizes,
+                styles[size ? size : getSizeFromTag(tag)],
+                className,
+            )}
+        >
             {typeof children === 'string' ? (
                 children.includes('<b>') ? (
                     <RichText content={children} />

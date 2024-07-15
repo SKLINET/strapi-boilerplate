@@ -1,16 +1,9 @@
-/**
- * Import blocks which should be included in SSR
- */
-import { BlockType } from '@symbio/headless';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { Providers } from '../../types/providers';
-import { Locale } from '../../types/locale';
-
-/**
- * Define fragment for blocks to load with app data
- */
 import { graphql } from 'relay-runtime';
+import { BlockType } from '@symbio/headless';
+import { PageProps } from '../../types/base/page';
+import { WebSettingsProps } from '../../types/base/webSettings';
+import { Providers } from '../../types/base/providers';
+import { Locale } from '../../types/base/locale';
 
 import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';

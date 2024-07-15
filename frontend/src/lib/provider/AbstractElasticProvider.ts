@@ -5,8 +5,8 @@ import getElastic from '../elastic';
 import { Id, SearchHit, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types';
 import config from '../../../sklinet.config.json';
 import AbstractStrapiProvider, { FindResponse, StrapiRecord } from './AbstractStrapiProvider';
-import { AggregatedType, ElasticType } from '../../types/elastic';
-import getPublicationState from '../../utils/getPublicationState';
+import { AggregatedType, ElasticType } from '../../types/base/elastic';
+import getPublicationState from '../../utils/base/getPublicationState';
 
 export interface GetBodyProps {
     size?: number;

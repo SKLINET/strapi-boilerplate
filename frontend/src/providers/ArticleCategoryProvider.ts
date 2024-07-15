@@ -8,14 +8,17 @@ class ArticleCategoryProvider extends AbstractStrapiProvider<any, any> {
     }
 
     isSitemapEnabled(): boolean {
-        return true;
+        return false;
     }
 
     getId(): string {
         return 'api::article-category.article-category';
     }
 
-    getFilterParams(): Record<string, Record<string, string | boolean>> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        if (publicationState?.toLowerCase() === 'preview') {
+            return { publishedAt: { lte: dayjs().format() }, isVisibleInListView: { eq: true } };
+        }
         return { publishedAt: { lte: dayjs().format() } };
     }
 }

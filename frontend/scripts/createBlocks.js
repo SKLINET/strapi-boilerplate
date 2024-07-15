@@ -63,10 +63,10 @@ generateModels().then(() => {
                                 const fieldNames = Object.entries(block.schema);
                                 return fieldNames.map((name) => {
                                     if (name[1].type === 'media') {
-                                        return `${name[0]}{...appImageFragment @relay(mask: false)}`;
+                                        return `${name[0]}{data{...appImageFragment @relay(mask: false)}}`;
                                     } else if (name[1].type === 'component') {
                                         if (name[1].component.includes('button')) {
-                                            return `${name[0]}{...appButtonFragment @relay(mask: false)}`;
+                                            return `${name[0]}{data{...appButtonFragment @relay(mask: false)}}`;
                                         } else {
                                             const blocksComponent = name[1].component;
                                             const filteredComponent = allComponents.filter(
@@ -75,11 +75,11 @@ generateModels().then(() => {
                                             const componentFieldsArr = Object.entries(filteredComponent[0].schema);
                                             const componentFields = componentFieldsArr.map((field) => {
                                                 if (field[1].type === 'media') {
-                                                    return `${field[0]}{...appImageFragment @relay(mask: false)}`;
+                                                    return `${field[0]}{data{...appImageFragment @relay(mask: false)}}`;
                                                 } else if (field[1].type === 'relation') {
                                                     return `${field[0]}{${
                                                         field[1].target === 'api::icon.icon'
-                                                            ? '...appIconFragment @relay(mask: false)'
+                                                            ? 'data{...appIconFragment @relay(mask: false)}'
                                                             : 'data{id}'
                                                     }}`;
                                                 } else return field[0];
@@ -89,7 +89,7 @@ generateModels().then(() => {
                                     } else if (name[1].type === 'relation') {
                                         return `${name[0]}{${
                                             name[1].target === 'api::icon.icon'
-                                                ? '...appIconFragment @relay(mask: false)'
+                                                ? 'data{...appIconFragment @relay(mask: false)}'
                                                 : 'data{id}'
                                         }}`;
                                     } else return name[0];
@@ -156,19 +156,14 @@ generateModels().then(() => {
                     names.sort();
                     await fs.writeFile(
                         `./src/blocks/index.ts`,
-                        `/**
- * Import blocks which should be included in SSR
- */
+                        `import { graphql } from 'relay-runtime';
+
 import dynamic from 'next/dynamic';
 import { BlockType } from '@symbio/headless';
 import { PageProps } from '../types/page';
 import { WebSettingsProps } from '../types/webSettings';
 import { Providers } from '../types/providers';
 import { Locale } from '../types/locale';
-/**
- * Define fragment for blocks to load with app data
- */
-import { graphql } from 'relay-runtime';
 
 ${names
     .reduce((acc, [name]) => {
@@ -193,36 +188,6 @@ ${names
     }, [])
     .join('\n')}
           };
-export default blocks;
-`,
-                    );
-                    await fs.writeFile(
-                        `./src/blocks/server.ts`,
-                        `/**
- * Import blocks which should be included in SSR
- */
-import { BlockType } from '@symbio/headless';
-import { PageProps } from '../types/page';
-import { WebSettingsProps } from '../types/webSettings';
-import { Providers } from '../types/providers';
-import { Locale } from '../types/locale';
-${names.map(([name]) => `import ${name} from './${name}/${name}';`).join('\n')}
-/**
- * Define fragment for blocks to load with app data
- */
-import { graphql } from 'relay-runtime';
-graphql\`
-    fragment serverBlocksContent on PageBlocksDynamicZone {
-        __typename
-${names
-    ?.map(([name, fields]) => (fields.length > 0 ? `        ...${name}_content @relay(mask: false)` : ''))
-    .filter((a) => a)
-    .join('\n')}
-    }
-\`;
-const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
-${names.map(([name]) => `    ${name},`).join('\n')}
-};
 export default blocks;
 `,
                     );

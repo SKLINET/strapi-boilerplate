@@ -5,7 +5,7 @@ module.exports = {
     schema: './src/schema/schema.graphql',
     exclude: ['**/.next/**', '**/node_modules/**', '**/test/**', '**/__generated__/**', '**/schema/**'],
     language: 'typescript',
-    customScalars: {
+    customScalarTypes: {
         ItemId: 'string',
         BooleanType: 'boolean',
         UploadId: 'string',

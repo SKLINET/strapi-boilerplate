@@ -1000,24 +1000,6 @@ export interface ApiContactFormContactForm extends Schema.SingleType {
     };
   };
   attributes: {
-    mailFrom: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    mailTo: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    mailSubject: Attribute.String &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     successMessage: Attribute.String &
       Attribute.Required &
       Attribute.SetPluginOptions<{
@@ -1034,6 +1016,12 @@ export interface ApiContactFormContactForm extends Schema.SingleType {
       }>;
     checkboxLabel: Attribute.String &
       Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    sendEmail: Attribute.Component<'complementary.send-email'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1218,6 +1206,7 @@ export interface ApiPagePage extends Schema.CollectionType {
   };
   attributes: {
     title: Attribute.String &
+      Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

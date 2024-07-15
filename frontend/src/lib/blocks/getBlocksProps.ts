@@ -1,8 +1,8 @@
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import { AppData, BasePage } from '@symbio/cms';
 import { BlocksPropsMap, BlocksPropsPromisesMap, BlockType } from '@symbio/headless';
-import { Providers as ProvidersType } from '../../types/providers';
-import { getNormalizedSlug } from '../../utils/getSlug';
+import { Providers as ProvidersType } from '../../types/base/providers';
+import { getNormalizedSlug } from '../../utils/base/getSlug';
 
 function getBlockName(block: { __typename?: string } | null): string | undefined {
     return block?.__typename?.replace(/Record$/, 'Block').replace('BlockBlock', 'Block');

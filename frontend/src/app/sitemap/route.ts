@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { NextApiRequest } from 'next';
 import providers from '../../providers';
-import { TLSSocket } from 'tls';
 import { Provider } from '../../index';
 
 export async function GET(req: NextApiRequest) {

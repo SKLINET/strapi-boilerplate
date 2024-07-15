@@ -38,7 +38,7 @@ const nextConfig = {
             };
         }
         config.plugins = [...config.plugins];
-        config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
+        // config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
 
         return config;
     },

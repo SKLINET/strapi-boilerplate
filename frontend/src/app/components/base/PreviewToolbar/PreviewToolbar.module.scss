@@ -1,0 +1,52 @@
+.toolbar {
+    @apply fixed bottom-0 shadow-2xl shadow-black w-full py-2 px-4 tablet:px-8 bg-white flex items-center justify-between z-9999;
+    &__left {
+        @apply flex gap-2 items-center;
+    }
+    &__mid {
+        @apply flex gap-4 items-center;
+    }
+    &__right { 
+        @apply flex gap-2 uppercase items-center underline;
+        &:hover {
+            @apply no-underline;
+        }
+    }
+}
+
+.item {
+    @apply flex gap-2 items-center;
+}
+
+.indicator {
+    @apply w-4 h-4 rounded-full bg-yellow-300;
+    &__active {
+        @apply bg-green;
+    }
+}
+
+.admin__text {
+    @apply uppercase;
+}
+
+.logo {
+    @apply w-[2rem] h-[2rem];
+}
+
+.link__title {
+    @apply hidden mobile-landscape:block;
+}
+
+.exit {
+    @apply w-[1.7rem] h-[2rem];
+}
+
+.edit {
+    @apply flex items-center gap-2 underline  uppercase;
+    &:hover {
+        @apply no-underline;
+    }
+    &__icon {
+        @apply w-[1.7rem] h-[2rem] mt-[-0.5rem];
+    }
+}

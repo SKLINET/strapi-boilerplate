@@ -1,39 +1,43 @@
 import { graphql } from 'relay-runtime';
 
 graphql`
-    fragment webSettingFragment on WebSettingEntityResponse {
-        data {
-            attributes {
-                gtmCode
-                homePage {
+    fragment webSettingFragment on WebSettingEntity {
+        id
+        attributes {
+            gtmCode
+            homePage {
+                data {
                     ...appPageFragment @relay(mask: false)
                 }
-                articlesPage {
+            }
+            articlesPage {
+                data {
                     ...appPageFragment @relay(mask: false)
                 }
-                articleDetailPage {
+            }
+            articleDetailPage {
+                data {
                     ...appPageFragment @relay(mask: false)
                 }
-                mainMenu {
+            }
+            mainMenu {
+                data {
+                    ...appMenuEntityFragment @relay(mask: false)
+                }
+            }
+            globalSeo {
+                siteName
+                titleSuffix
+                description
+                sharingImage {
                     data {
-                        ...appMenuEntityFragment @relay(mask: false)
+                        ...appImageFragment @relay(mask: false)
                     }
                 }
-                globalSeo {
-                    siteName
-                    titleSuffix
-                    description
-                    favicon {
-                        ...appImageFragment @relay(mask: false)
-                    }
-                    sharingImage {
-                        ...appImageFragment @relay(mask: false)
-                    }
-                    preventIndexing
-                    metaTags {
-                        name
-                        content
-                    }
+                preventIndexing
+                metaTags {
+                    name
+                    content
                 }
             }
         }
@@ -43,7 +47,9 @@ graphql`
 export const webSettingQuery = graphql`
     query webSettingQuery($publicationState: PublicationState, $locale: I18NLocaleCode) {
         item: webSetting(publicationState: $publicationState, locale: $locale) {
-            ...webSettingFragment @relay(mask: false)
+            data {
+                ...webSettingFragment @relay(mask: false)
+            }
         }
     }
 `;

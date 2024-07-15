@@ -1,24 +1,15 @@
 import { graphql } from 'relay-runtime';
 
 graphql`
-    fragment contactFormFragment on ContactFormEntityResponse {
-        data {
-            attributes {
-                successMessage
-                errorMessage
-                checkboxLabel
-                mailFrom
-                mailTo
-                mailSubject
+    fragment contactFormFragment on ContactFormEntity {
+        id
+        attributes {
+            successMessage
+            errorMessage
+            checkboxLabel
+            sendEmail {
+                ...appSendEmailFragment @relay(mask: false)
             }
-        }
-    }
-`;
-
-export const contactFormQuery = graphql`
-    query contactFormQuery($publicationState: PublicationState, $locale: I18NLocaleCode) {
-        item: contactForm(publicationState: $publicationState, locale: $locale) {
-            ...contactFormFragment @relay(mask: false)
         }
     }
 `;

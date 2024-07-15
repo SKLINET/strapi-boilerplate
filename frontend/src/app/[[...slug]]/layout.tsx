@@ -1,25 +1,64 @@
 import { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
-import '../../styles/global.scss';
-import { ContextProps, ParamsProps } from '../../types/page';
-import { getLocale } from '../../utils/getLocal';
-import { getStaticProps } from '../../utils/getStaticProps';
-import { getItemFromPageResponse } from '../../utils/getItemFromPageResponse';
-import { getMetaFromItem } from '../../utils/getMetaFromItem';
+import { ContextProps, ParamsProps } from '../../types/base/page';
+import { getLocale } from '../../utils/base/getLocal';
+import { getStaticProps } from '../../utils/base/getStaticProps';
+import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
+import { getMetaFromItem } from '../../utils/base/getMetaFromItem';
 import { getImageUrl } from '../../utils/getImageUrl';
-import { getSocialShareMeta } from '../../utils/getSocialShareMeta';
+import { getSocialNetworksType } from '../../utils/strapi/getSocialNetworksType';
+import { redirect, permanentRedirect } from 'next/navigation';
+import localFont from 'next/font/local';
+
+import '../../styles/global.scss';
+
+const primary = localFont({
+    src: [
+        // 400
+        {
+            path: '../../../public/fonts/Poppins/truetype/Poppins-Regular.ttf',
+            weight: '400',
+            style: 'normal',
+        },
+        {
+            path: '../../../public/fonts/Poppins/truetype/Poppins-Italic.ttf',
+            weight: '400',
+            style: 'italic',
+        },
+        // 700
+        {
+            path: '../../../public/fonts/Poppins/truetype/Poppins-Bold.ttf',
+            weight: '700',
+            style: 'normal',
+        },
+        {
+            path: '../../../public/fonts/Poppins/truetype/Poppins-BoldItalic.ttf',
+            weight: '700',
+            style: 'italic',
+        },
+    ],
+    variable: '--font-primary',
+    display: 'fallback',
+});
 
 export function generateViewport(context: ContextProps): Viewport {
     return {
         themeColor: 'white',
         width: 'device-width',
         initialScale: 1,
-        maximumScale: 1,
     };
 }
 
 export async function generateMetadata(context: ContextProps): Promise<Metadata> {
     const data = await getStaticProps(context);
+
+    if (data?.redirect?.to) {
+        if ((data?.redirect as any)?.permanent) {
+            permanentRedirect(data.redirect.to);
+        } else {
+            redirect(data.redirect.to);
+        }
+    }
 
     const item = getItemFromPageResponse(data);
 
@@ -30,6 +69,11 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
     const itemMeta = getMetaFromItem(item);
 
     const locale = getLocale(context.params.slug);
+
+    const itemSharingImage = itemMeta?.image?.url ? getImageUrl(itemMeta.image.url, true) : null;
+    const globalSharingImage = globalSeo?.sharingImage?.data?.attributes?.url
+        ? getImageUrl(globalSeo.sharingImage.data.attributes.url, true)
+        : null;
 
     const metaData = {
         siteName: globalSeo?.siteName,
@@ -50,7 +94,7 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
         keyWords: itemMeta?.seo?.keywords || page?.attributes?.seo?.keywords || '',
         robots: itemMeta?.seo?.metaRobots || page?.attributes?.seo?.metaRobots || null,
         meta: itemMeta?.seo?.meta || page?.attributes?.seo?.meta || globalSeo?.metaTags || [],
-        social: itemMeta?.seo?.metaSocial || page?.attributes?.seo?.metaSocial || [],
+        social: itemMeta?.seo?.socialNetworks || page?.attributes?.seo?.socialNetworks || null,
         canonical: itemMeta?.seo?.canonicalURL || page?.attributes?.seo?.canonicalURL || null,
         viewPort: itemMeta?.seo?.metaViewport || page?.attributes?.seo?.metaViewport || null,
         preventIndexing:
@@ -58,15 +102,11 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
             globalSeo?.preventIndexing ||
             page?.attributes?.seo?.preventIndexing ||
             false,
-        sharingImage: itemMeta?.image?.data?.attributes?.url
-            ? getImageUrl(itemMeta.image.data.attributes.url, true)
-            : globalSeo?.sharingImage?.data?.attributes?.url
-              ? getImageUrl(globalSeo.sharingImage.data.attributes.url, true)
-              : null,
+        sharingImage: itemSharingImage || globalSharingImage || null,
         structuredData: itemMeta?.seo?.structuredData || page?.attributes?.seo?.structuredData || null,
     };
 
-    const share = getSocialShareMeta(metaData.social);
+    const share = getSocialNetworksType(metaData.social);
 
     const title = `${metaData.title.toString()}${metaData.suffix.toString()}`;
     const metaTitle = `${metaData.metaTitle.toString()}${metaData.suffix.toString()}`;
@@ -107,16 +147,16 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
                   follow: true,
                   nocache: true,
               },
-        metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_PATH || 'http://localhost:3000'),
+        metadataBase: new URL(String(process.env.NEXT_PUBLIC_BASE_PATH)),
         generator: metaData.siteName,
         applicationName: metaData.siteName,
         openGraph: {
-            title: share?.og?.title || metaTitle,
-            description: share?.og?.description || metaData.metaDescription,
+            title: share?.facebook?.title || metaTitle,
+            description: share?.facebook?.description || metaData.metaDescription,
             siteName: metaData.siteName || '',
             images: [
                 {
-                    url: share?.og.image || metaData.sharingImage || '',
+                    url: share?.facebook?.image.url || metaData.sharingImage || '',
                 },
             ],
             locale: locale,
@@ -129,7 +169,7 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
             description: share?.twitter?.description || metaData.metaDescription,
             images: [
                 {
-                    url: share?.twitter.image || metaData.sharingImage || '',
+                    url: share?.twitter?.image.url || metaData.sharingImage || '',
                 },
             ],
         },
@@ -147,8 +187,11 @@ interface RootLayoutProps {
 }
 
 const RootLayout = async ({ children, params }: RootLayoutProps) => (
-    <html lang={getLocale(params.slug)}>
-        <head></head>
+    <html lang={getLocale(params.slug)} className={`${primary.variable}`}>
+        <head>
+            <link rel="preconnect" href="https://res.cloudinary.com" />
+            <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        </head>
         <body>{children}</body>
     </html>
 );

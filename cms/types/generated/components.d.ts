@@ -109,6 +109,18 @@ export interface ComplementaryMailchimp extends Schema.Component {
   };
 }
 
+export interface ComplementarySendEmail extends Schema.Component {
+  collectionName: 'components_complementary_send_emails';
+  info: {
+    displayName: 'SendEmail';
+  };
+  attributes: {
+    emailFrom: Attribute.Email & Attribute.Required;
+    emailTo: Attribute.Email & Attribute.Required;
+    subject: Attribute.String & Attribute.Required;
+  };
+}
+
 export interface ComplementaryVideo extends Schema.Component {
   collectionName: 'components_complementary_videos';
   info: {
@@ -143,13 +155,13 @@ export interface SharedGlobalSeo extends Schema.Component {
   info: {
     displayName: 'GlobalSeo';
     icon: 'address-card';
+    description: '';
   };
   attributes: {
     siteName: Attribute.String;
     titleSuffix: Attribute.String;
     description: Attribute.Text;
     sharingImage: Attribute.Media;
-    favicon: Attribute.Media;
     preventIndexing: Attribute.Boolean & Attribute.DefaultTo<false>;
     metaTags: Attribute.Component<'shared.meta', true>;
   };
@@ -158,23 +170,12 @@ export interface SharedGlobalSeo extends Schema.Component {
 export interface SharedMetaSocial extends Schema.Component {
   collectionName: 'components_shared_meta_socials';
   info: {
-    displayName: 'metaSocial';
-    icon: 'project-diagram';
+    displayName: 'MetaSocial';
   };
   attributes: {
-    socialNetwork: Attribute.Enumeration<['Facebook', 'Twitter']> &
-      Attribute.Required;
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 60;
-      }>;
-    description: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 65;
-      }>;
-    image: Attribute.Media;
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.Text;
+    image: Attribute.Media & Attribute.Required;
   };
 }
 
@@ -208,7 +209,7 @@ export interface SharedSeo extends Schema.Component {
       Attribute.SetMinMaxLength<{
         maxLength: 160;
       }>;
-    metaSocial: Attribute.Component<'shared.meta-social', true>;
+    socialNetworks: Attribute.Component<'shared.social-networks'>;
     keywords: Attribute.Text;
     metaRobots: Attribute.String;
     structuredData: Attribute.JSON;
@@ -236,6 +237,17 @@ export interface SharedSitemap extends Schema.Component {
   };
 }
 
+export interface SharedSocialNetworks extends Schema.Component {
+  collectionName: 'components_shared_social_networks';
+  info: {
+    displayName: 'SocialNetworks';
+  };
+  attributes: {
+    facebookMeta: Attribute.Component<'shared.meta-social'>;
+    twitterMeta: Attribute.Component<'shared.meta-social'>;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -247,6 +259,7 @@ declare module '@strapi/types' {
       'complementary.button': ComplementaryButton;
       'complementary.ecomail': ComplementaryEcomail;
       'complementary.mailchimp': ComplementaryMailchimp;
+      'complementary.send-email': ComplementarySendEmail;
       'complementary.video': ComplementaryVideo;
       'menu.menu-item': MenuMenuItem;
       'shared.global-seo': SharedGlobalSeo;
@@ -254,6 +267,7 @@ declare module '@strapi/types' {
       'shared.meta': SharedMeta;
       'shared.seo': SharedSeo;
       'shared.sitemap': SharedSitemap;
+      'shared.social-networks': SharedSocialNetworks;
     }
   }
 }

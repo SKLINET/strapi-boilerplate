@@ -3,11 +3,11 @@ import { graphql } from 'react-relay';
 import { OmitRefType } from '@symbio/headless';
 import { {BLOCK_NAME}_content$data } from './__generated__/{BLOCK_NAME}_content.graphql';
 import { {COMPONENT_NAME} } from '../../components/blocks/{COMPONENT_NAME}/{COMPONENT_NAME}';
-import { PageProps } from '../../types/page';
-import { WebSettingsProps } from '../../types/webSettings';
-import { Providers } from '../../types/providers';
-import { Locale } from '../../types/locale';
-import { IApp } from '../../types/app';
+import { PageProps } from '../../types/base/page';
+import { WebSettingsProps } from '../../types/base/webSettings';
+import { Providers } from '../../types/base/providers';
+import { Locale } from '../../types/base/locale';
+import { IApp } from '../../types/base/app';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface {BLOCK_NAME}StaticProps {}

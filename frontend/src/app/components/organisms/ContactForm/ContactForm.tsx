@@ -3,7 +3,7 @@
 import React, { ReactElement, useState, useEffect, useTransition } from 'react';
 import styles from './ContactForm.module.scss';
 import clsx from 'clsx';
-import { IApp } from '../../../../types/app';
+import { IApp } from '../../../../types/base/app';
 import { Paragraph } from '../../primitives/Paragraph/Paragraph';
 import { useForm, SubmitHandler, Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +13,7 @@ import { Textarea } from '../../primitives/Textarea/Textarea';
 import { Button } from '../../primitives/Button/Button';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 import { Skeleton } from './Skeleton/Skeleton';
-import { contactAction } from '../../../actions/contact';
+import { contact } from '../../../actions/contact';
 import { Icon } from '../../primitives/Icon/Icon';
 import { Checkbox } from '../../primitives/Checkbox/Checkbox';
 
@@ -42,18 +42,18 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
     // Validation schema
     const schema = yup
         .object({
-            name: yup.string().required(getSystemResource('required_field', app?.systemResources)),
-            company: yup.string().required(getSystemResource('required_field', app?.systemResources)),
+            name: yup.string().required(getSystemResource('required_field', app?.systemResources?.data)),
+            company: yup.string().required(getSystemResource('required_field', app?.systemResources?.data)),
             email: yup
                 .string()
-                .required(getSystemResource('required_field', app?.systemResources))
-                .email(getSystemResource('invalid_email', app?.systemResources)),
+                .required(getSystemResource('required_field', app?.systemResources?.data))
+                .email(getSystemResource('invalid_email', app?.systemResources?.data)),
             phoneNumber: yup
                 .string()
-                .required(getSystemResource('required_field', app?.systemResources))
-                .min(9, getSystemResource('invalid_phone_number', app?.systemResources)),
-            message: yup.string().required(getSystemResource('required_field', app?.systemResources)),
-            allowGdpr: yup.boolean().isTrue(getSystemResource('required_field', app?.systemResources)),
+                .required(getSystemResource('required_field', app?.systemResources?.data))
+                .min(9, getSystemResource('invalid_phone_number', app?.systemResources?.data)),
+            message: yup.string().required(getSystemResource('required_field', app?.systemResources?.data)),
+            allowGdpr: yup.boolean().isTrue(getSystemResource('required_field', app?.systemResources?.data)),
         })
         .required();
 
@@ -81,7 +81,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
     const onSubmit: SubmitHandler<ContactFormData> = async (data) => {
         if (!isPending) {
             startTransition(async () => {
-                const success = await contactAction(data, app);
+                const success = await contact(data, app);
 
                 setState(success ? 'success' : 'error');
             });
@@ -105,8 +105,9 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     reset();
                                 }}
                                 className={styles.button}
+                                alt="Back to contact form"
                             >
-                                {getSystemResource('back_to_the_form', app.systemResources)}
+                                {getSystemResource('back_to_the_form', app.systemResources?.data)}
                             </Button>
                         </div>
                     ) : (
@@ -123,7 +124,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     type="text"
                                     register={register}
                                     error={errors.name?.message}
-                                    placeholder={getSystemResource('name', app?.systemResources)}
+                                    placeholder={getSystemResource('name', app?.systemResources?.data)}
                                     disabled={isPending}
                                 />
                                 <TextInput
@@ -131,7 +132,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     type="text"
                                     register={register}
                                     error={errors.company?.message}
-                                    placeholder={getSystemResource('company', app?.systemResources)}
+                                    placeholder={getSystemResource('company', app?.systemResources?.data)}
                                     disabled={isPending}
                                 />
                                 <TextInput
@@ -139,7 +140,7 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     type="email"
                                     register={register}
                                     error={errors.email?.message}
-                                    placeholder={getSystemResource('email', app?.systemResources)}
+                                    placeholder={getSystemResource('email', app?.systemResources?.data)}
                                     disabled={isPending}
                                 />
                                 <TextInput
@@ -147,14 +148,14 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     type="text"
                                     register={register}
                                     error={errors.phoneNumber?.message}
-                                    placeholder={getSystemResource('phone_number', app?.systemResources)}
+                                    placeholder={getSystemResource('phone_number', app?.systemResources?.data)}
                                     disabled={isPending}
                                 />
                                 <Textarea
                                     name="message"
                                     register={register}
                                     error={errors.message?.message}
-                                    placeholder={getSystemResource('message', app?.systemResources)}
+                                    placeholder={getSystemResource('message', app?.systemResources?.data)}
                                     disabled={isPending}
                                 />
                                 <Checkbox
@@ -166,8 +167,8 @@ const ContactForm = ({ app, className }: ContactFormProps): ReactElement => {
                                     disabled={isPending}
                                 />
                             </div>
-                            <Button submit loading={isPending} className={styles.button}>
-                                {getSystemResource('submit', app?.systemResources)}
+                            <Button submit loading={isPending} className={styles.button} alt="Submit contact form">
+                                {getSystemResource('submit', app?.systemResources?.data)}
                             </Button>
                         </form>
                     )}

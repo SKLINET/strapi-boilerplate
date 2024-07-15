@@ -16,30 +16,6 @@
     }
   },
   "attributes": {
-    "mailFrom": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
-    "mailTo": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
-    "mailSubject": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
-    },
     "successMessage": {
       "pluginOptions": {
         "i18n": {
@@ -66,6 +42,16 @@
       },
       "type": "string",
       "required": true
+    },
+    "sendEmail": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "complementary.send-email"
     }
   }
 }

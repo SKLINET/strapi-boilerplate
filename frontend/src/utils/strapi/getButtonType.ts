@@ -1,8 +1,7 @@
 import { IButton } from '../../types/button';
 import { getPageType } from './getPageType';
-import { getPageUrl } from '.././getPageUrl';
 import { appButtonFragment$data } from '../../relay/__generated__/appButtonFragment.graphql';
-import { IApp } from '../../types/app';
+import { IApp } from '../../types/base/app';
 
 type Fragment = Omit<appButtonFragment$data, ' $fragmentType'>;
 
@@ -11,11 +10,11 @@ export const getButtonType = (e: Fragment | null | undefined, app: IApp): IButto
 
     const { id, label, page, linkExternal, openInNewTab } = e;
 
-    const _page = getPageType(page);
+    const _page = getPageType(page?.data, app);
 
-    if (!_page && !linkExternal) return null;
+    const href = _page?.href || linkExternal;
 
-    const href = _page ? getPageUrl(_page.data.attributes.url, app.locale) : linkExternal || '';
+    if (!href) return null;
 
     return {
         id: id,

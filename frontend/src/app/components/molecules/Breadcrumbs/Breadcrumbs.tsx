@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import styles from './Breadcrumbs.module.scss';
 import clsx from 'clsx';
-import { IApp } from '../../../../types/app';
+import { IApp } from '../../../../types/base/app';
 import { articleDetailFragment$data } from '../../../../relay/__generated__/articleDetailFragment.graphql';
 import { Paragraph } from '../../primitives/Paragraph/Paragraph';
 import { appQuery$data } from '../../../../relay/__generated__/appQuery.graphql';
@@ -28,7 +28,7 @@ const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: Bre
             <>
                 {renderParent(parent as ParentProps)}
                 <div className={styles.parent}>
-                    <Link href={href} className={styles.link}>
+                    <Link href={href} className={styles.link} alt={label}>
                         {label}
                     </Link>
                 </div>

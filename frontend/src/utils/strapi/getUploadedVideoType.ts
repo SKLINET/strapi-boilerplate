@@ -5,9 +5,9 @@ import { getImageUrl } from '../getImageUrl';
 type Fragment = Omit<appUploadedVideoFragment$data, ' $fragmentType'>;
 
 export const getUploadedVideoType = (video: Fragment | null | undefined): IUploadedVideo | null => {
-    if (!video || !video.data || !video.data.attributes || !video.data.attributes.url) return null;
+    if (!video?.attributes?.url) return null;
 
-    const { url } = video.data.attributes;
+    const { url } = video.attributes;
 
     const type = url.split('.') || [];
 

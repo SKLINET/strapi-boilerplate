@@ -1,16 +1,23 @@
-/* eslint-disable import/no-anonymous-default-export */
-import { NextApiRequest, NextApiResponse } from 'next';
+// route handler with secret and slug
+import { draftMode } from 'next/headers';
+import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 import { fetchQuery } from 'relay-runtime';
 import { previewSettingsQuery } from '../../../relay/api/__generated__/previewSettingsQuery.graphql';
+import { PreviewPageQuery, PreviewSettingsQuery } from '../../../relay/api/preview';
+import { formatPageObject } from '../../../utils/base/formatPageObject';
 import { getPageUrl } from '../../../utils/getPageUrl';
 import { previewPageQuery } from '../../../relay/api/__generated__/previewPageQuery.graphql';
 import { getPagePattern } from '../../../lib/routing/getPagePattern';
-import { PreviewPageQuery, PreviewSettingsQuery } from '../../../relay/api/preview';
-import { formatPageObject } from '../../../utils/formatPageObject';
-import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
+import { NextResponse } from 'next/server';
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const { locale, type, slug, pageId, itemId } = req.query;
+export async function GET(request: Request) {
+    // Parse query string parameters
+    const { searchParams } = new URL(request.url);
+    const locale = searchParams.get('locale');
+    const slug = searchParams.get('slug');
+    const type = searchParams.get('type');
+    const pageId = searchParams.get('pageId');
+    const itemId = searchParams.get('itemId');
     const _locale = (locale || '').toString() || 'cs';
 
     const environment = createRelayEnvironment({});
@@ -43,8 +50,13 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         }
     }
 
-    res.setPreviewData({ pageId: pageId, itemId: itemId, itemSlug: slug, pageSlug: slug });
-    res.statusCode = 307;
-    res.setHeader('Location', url || '/');
-    res.end();
-};
+    // Enable Draft Mode by setting the cookie
+    draftMode().enable();
+
+    const headers = new Headers(request.headers);
+    headers.set(
+        'Set-Cookie',
+        `previewData=${JSON.stringify({ pageId, itemId, itemSlug: slug, pageSlug: slug, url: url })}`,
+    );
+    return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_BASE_PATH + url), { headers });
+}

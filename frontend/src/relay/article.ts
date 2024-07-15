@@ -67,6 +67,7 @@ graphql`
         attributes {
             title
             slug
+            publishedAt
             publishDate
             category {
                 data {
@@ -74,7 +75,9 @@ graphql`
                 }
             }
             image {
-                ...appImageFragment @relay(mask: false)
+                data {
+                    ...appImageFragment @relay(mask: false)
+                }
             }
             content
         }
@@ -87,6 +90,7 @@ graphql`
         attributes {
             title
             slug
+            publishedAt
             publishDate
             category {
                 data {
@@ -94,7 +98,9 @@ graphql`
                 }
             }
             image {
-                ...appImageFragment @relay(mask: false)
+                data {
+                    ...appImageFragment @relay(mask: false)
+                }
             }
             content
             seo {

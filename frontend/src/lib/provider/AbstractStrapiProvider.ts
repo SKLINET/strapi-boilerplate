@@ -83,8 +83,8 @@ export default abstract class AbstractStrapiProvider<
                           limit: 1,
                           offset: 0,
                           filter: options.filter
-                              ? { ...this.getFilterParams(), ...options.filter }
-                              : this.getFilterParams(),
+                              ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
+                              : this.getFilterParams(options?.publicationState || ''),
                           locale,
                       };
         }
@@ -114,7 +114,9 @@ export default abstract class AbstractStrapiProvider<
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
-            filter: options.filter ? { ...this.getFilterParams(), ...options.filter } : this.getFilterParams(),
+            filter: options.filter
+                ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
+                : this.getFilterParams(options?.publicationState || ''),
         };
 
         if (this.isLocalizable()) {
@@ -203,13 +205,9 @@ export default abstract class AbstractStrapiProvider<
         })) as unknown as TItems;
     }
 
-    getFilterParams(): Record<string, unknown> {
-        if (this.isLocalizable()) {
-            // return {
-            //     title: {
-            //         exists: true,
-            //     },
-            // };
+    getFilterParams(publicationState = ''): Record<string, unknown> {
+        if (publicationState?.toLowerCase() === 'preview') {
+            return { isVisibleInListView: { eq: true } };
         }
         return {};
     }

@@ -1,11 +1,26 @@
+import { getIconName, Icons } from '../../app/components/primitives/Icon/Icon';
 import { appIconFragment$data } from '../../relay/__generated__/appIconFragment.graphql';
 
 type Fragment = Omit<appIconFragment$data, ' $fragmentType'>;
 
-export const getIconType = (e: Fragment | null | undefined): string | null => {
-    if (!e || !e.data || !e.data.attributes || !e.data.attributes.codename) return null;
+export const getIconType = (e: Fragment | null | undefined): Icons | null => {
+    if (!e?.attributes?.codename) return null;
 
-    const { codename } = e.data.attributes;
+    const { codename } = e.attributes;
 
-    return codename || null;
+    return getIconName(codename);
+};
+
+export const getIconListType = (e: ReadonlyArray<Fragment | null | undefined> | null | undefined): Icons[] => {
+    const data: Icons[] = [];
+
+    e?.forEach((k) => {
+        const el = getIconType(k);
+
+        if (!el) return;
+
+        data.push(el);
+    });
+
+    return data;
 };

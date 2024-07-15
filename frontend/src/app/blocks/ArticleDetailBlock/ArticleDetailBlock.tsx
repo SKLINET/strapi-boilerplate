@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import graphql from 'graphql-tag';
 import { getSlug } from '@symbio/headless/utils';
-import { BaseBlockProps, StaticBlockContext } from '../../../types/block';
+import { BaseBlockProps, StaticBlockContext } from '../../../types/base/block';
 import { OmitRefType } from '@symbio/headless';
 import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
-import { IApp } from '../../../types/app';
+import { IApp } from '../../../types/base/app';
 import { articleDetailFragment$data } from '../../../relay/__generated__/articleDetailFragment.graphql';
 import { ArticleDetail } from '../../components/blocks/ArticleDetail/ArticleDetail';
 
@@ -28,7 +28,7 @@ graphql`
     }
 `;
 
-const ArticleDetailBlock = (data: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...data} />;
+const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...props} />;
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({

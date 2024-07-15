@@ -1,6 +1,6 @@
 import { ParsedUrlQuery } from 'querystring';
-import { BlockType } from '../../types/block';
-import { Providers } from '../../types/providers';
+import { BlockType } from '../../types/base/block';
+import { Providers } from '../../types/base/providers';
 
 export default interface Provider {
     /**

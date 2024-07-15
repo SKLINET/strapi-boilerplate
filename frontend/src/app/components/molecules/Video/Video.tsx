@@ -84,7 +84,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
             return (
                 <Image
                     image={image}
-                    alt={image.data.attributes.alternativeText}
+                    alt={image.alternativeText}
                     fill
                     placeholder="blur"
                     sizes="(max-width: 48rem) 100vw, 80vw"

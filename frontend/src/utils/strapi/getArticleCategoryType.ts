@@ -18,7 +18,7 @@ export const getArticleCategoryType = (e: Fragment | null | undefined): IArticle
 };
 
 export const getArticleCategoryListType = (
-    e: ReadonlyArray<Fragment | null> | null | undefined,
+    e: ReadonlyArray<Fragment | null | undefined> | null | undefined,
 ): IArticleCategory[] => {
     const data: IArticleCategory[] = [];
 

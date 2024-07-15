@@ -1,9 +1,9 @@
 .wrapper {
-    @apply block;
+    @apply flex;
 }
 
 .valueWrapper {
-    @apply table mx-auto relative;
+    @apply w-full flex relative;
 
     .value {
         @apply text-black;
@@ -13,7 +13,7 @@
         }
 
         &.real {
-            @apply absolute top-0 right-0 bottom-0 text-right;
+            @apply absolute left-0 top-0;
         }
     }
 }

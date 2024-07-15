@@ -7,6 +7,7 @@ import { nbsp } from '../../../../utils/nbsp';
 
 interface ButtonProps {
     children: ReactNode;
+    alt: string;
     onClick?: () => void;
     href?: string | null;
     openInNewTab?: boolean;
@@ -17,6 +18,7 @@ interface ButtonProps {
 
 const Button = ({
     children,
+    alt,
     onClick,
     href,
     openInNewTab,
@@ -37,7 +39,13 @@ const Button = ({
 
     if (onClick) {
         return (
-            <button type="button" onClick={() => onClick()} className={allClassNames} disabled={loading}>
+            <button
+                type="button"
+                onClick={() => onClick()}
+                className={allClassNames}
+                disabled={loading}
+                aria-label={alt}
+            >
                 {_children}
             </button>
         );
@@ -45,7 +53,7 @@ const Button = ({
 
     if (href) {
         return (
-            <Link href={href} openInNewTab={openInNewTab || false} className={allClassNames}>
+            <Link href={href} openInNewTab={openInNewTab || false} className={allClassNames} alt={alt}>
                 {_children}
             </Link>
         );
@@ -53,13 +61,13 @@ const Button = ({
 
     if (submit) {
         return (
-            <button type="submit" className={allClassNames} disabled={loading}>
+            <button type="submit" className={allClassNames} disabled={loading} aria-label={alt}>
                 {_children}
             </button>
         );
     }
 
-    return <></>;
+    return <div className={allClassNames}>{_children}</div>;
 };
 
 export { Button };

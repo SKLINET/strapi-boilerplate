@@ -3,14 +3,8 @@
 @tailwind utilities;
 
 @import './mixins/responsive.scss';
-@import './typography.scss';
 
 :root {
-    // Colors
-    --black: #141414;
-    --white: #ffffff;
-    --grey: #ececec;
-
     // Grid
     --grid-mobile-columns: 4;
     --grid-tablet-columns: 12;

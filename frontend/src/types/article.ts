@@ -1,11 +1,11 @@
-import { ImageProps } from './image';
+import { IImage } from './image';
 
 export interface IArticle {
     id: string;
     title: string;
     href: string;
     category: IArticleCategory | null;
-    image: ImageProps;
+    image: IImage;
     totalTime: number;
     publishDate: string;
     content: string | null;

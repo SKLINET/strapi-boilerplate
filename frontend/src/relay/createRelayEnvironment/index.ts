@@ -1,4 +1,3 @@
-import axios, { AxiosRequestConfig } from 'axios';
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
@@ -13,7 +12,7 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
             const vars = { ...variables };
 
             try {
-                const headersObj: AxiosRequestConfig['headers'] = {
+                const headersObj: any = {
                     'Content-Type': 'application/json',
                 };
 
@@ -24,12 +23,13 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
                 //     vars.publicationState = getPublicationState(true);
                 // }
 
-                const { data } = await axios(process.env.API_ENDPOINT, {
-                    data: JSON.stringify({ query: operation.text, variables: vars }),
+                const req = await fetch(process.env.API_ENDPOINT, {
+                    body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    responseType: 'json',
+                    cache: 'force-cache',
                 });
+                const data = await req.json();
                 return data;
             } catch (e) {
                 Logger.log('ERROR');

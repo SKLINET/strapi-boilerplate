@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import styles from './Navbar.module.scss';
-import { IApp } from '../../../..//types/app';
+import { IApp } from '../../../../types/base/app';
 import { Link } from '../../primitives/Link/Link';
 import { getMenuType } from '../../../../utils/strapi/getMenuType';
 import { LanguageSelector } from '../../molecules/LanguageSelector/LanguageSelector';
@@ -15,7 +15,7 @@ const Navbar = ({ app }: NavbarProps): ReactElement => {
     return (
         <header className={styles.wrapper}>
             {menu?.items.map((e) => (
-                <Link key={e.id} href={e.href} openInNewTab={e.openInNewTab} className={styles.link}>
+                <Link key={e.id} href={e.href} openInNewTab={e.openInNewTab} className={styles.link} alt={e.label}>
                     {e.label}
                 </Link>
             ))}

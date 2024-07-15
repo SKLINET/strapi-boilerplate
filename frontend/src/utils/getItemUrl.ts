@@ -1,4 +1,4 @@
-import { IApp } from '../types/app';
+import { IApp } from '../types/base/app';
 import { getPageUrl } from './getPageUrl';
 
 export function getItemUrl(baseUrl: string, item: Record<string, any>, app: IApp): string {
