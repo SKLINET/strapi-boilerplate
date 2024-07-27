@@ -1,7 +1,9 @@
 import config from '../../sklinet.config.json';
 
-export function getPageUrl(page: string | null | undefined, locale = config.i18n.defaultLocale): string {
+export function getPageUrl(page: string | null | undefined, locale: string, includeHost = false): string {
     const { locales, defaultLocale } = config.i18n;
+
+    const _locale = !locale || locale.length === 0 ? defaultLocale : locale;
 
     if (!page) return '';
 
@@ -15,9 +17,10 @@ export function getPageUrl(page: string | null | undefined, locale = config.i18n
     }
     pagePart = pagePart?.replace('homepage', '');
 
-    const localPart = locale === defaultLocale ? '/' : `/${locale}/`;
+    const basePart = includeHost ? `${process.env.NEXT_PUBLIC_BASE_PATH}` : '';
+    const localPart = _locale === defaultLocale ? '/' : `/${_locale}/`;
 
-    const href = localPart + (pagePart.startsWith('/') ? pagePart.slice(1) : pagePart);
+    const href = basePart + localPart + (pagePart.startsWith('/') ? pagePart.slice(1) : pagePart);
 
     return href;
 }

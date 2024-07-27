@@ -31,9 +31,9 @@ const Button = ({
     const _children = (
         <>
             {typeof children === 'string' ? nbsp(children) : children}
-            <div className={clsx(styles.loader, loading && styles.show)}>
+            <span className={clsx(styles.loader, loading && styles.show)}>
                 <Icon name="loader" className={styles.icon} />
-            </div>
+            </span>
         </>
     );
 
