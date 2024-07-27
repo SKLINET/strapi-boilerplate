@@ -13,12 +13,16 @@ import { GetStaticPropsContext, PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { IPageResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
+import { cookies, draftMode } from 'next/headers';
 
 type IContext = GetStaticPropsContext<ParsedUrlQuery, PreviewData> & {
     searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function getStaticProps({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> {
+    const { isEnabled } = draftMode();
+    const cookieStore = cookies();
+    const previewData = cookieStore.has('previewData') ? JSON.parse(cookieStore.get('previewData')?.value || '') : {};
     const {
         tz,
         i18n: { defaultLocale, locales },
@@ -32,8 +36,9 @@ export async function getStaticProps({ params: { slug }, searchParams }: Context
         defaultLocale,
         params: { slug: getNormalizedSlug(slug) },
         searchParams: searchParams,
-        preview: false,
-        draftMode: false,
+        previewData,
+        preview: isEnabled,
+        draftMode: isEnabled,
     };
 
     dayjs.extend(updateLocale);
@@ -53,11 +58,11 @@ export async function getStaticProps({ params: { slug }, searchParams }: Context
     try {
         const res = (await getBlocksProps(context, providers, renamedBlocks, config.ssg)) as any;
 
-        if (!res.props.page || res.notFound) {
+        if (!res?.redirect && (!res.props.page || res.notFound)) {
             throw new Error('Page not found!');
         }
 
-        if (res.props.blocksPropsMap) {
+        if (res?.props?.blocksPropsMap) {
             const blocks = Object.values(res.props.blocksPropsMap);
             if (blocks.some((block: any) => block.item === undefined && block.data === undefined)) {
                 throw new Error('Error in block!');
@@ -72,8 +77,8 @@ export async function getStaticProps({ params: { slug }, searchParams }: Context
                 locales,
                 defaultLocale,
                 params: { slug: ['404'] },
-                preview: false,
-                draftMode: false,
+                preview: isEnabled,
+                draftMode: isEnabled,
             },
             providers,
             renamedBlocks,
