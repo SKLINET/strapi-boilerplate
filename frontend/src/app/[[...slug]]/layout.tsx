@@ -9,6 +9,7 @@ import { getImageUrl } from '../../utils/getImageUrl';
 import { getSocialNetworksType } from '../../utils/strapi/getSocialNetworksType';
 import { redirect, permanentRedirect } from 'next/navigation';
 import localFont from 'next/font/local';
+import { TopLoader } from '../components/base/TopLoader/TopLoader';
 
 import '../../styles/global.scss';
 
@@ -192,7 +193,10 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => (
             <link rel="preconnect" href="https://res.cloudinary.com" />
             <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         </head>
-        <body>{children}</body>
+        <body>
+            <TopLoader />
+            {children}
+        </body>
     </html>
 );
 
