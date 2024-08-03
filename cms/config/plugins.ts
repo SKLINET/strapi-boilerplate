@@ -87,7 +87,7 @@ module.exports = ({ env }) => ({
     },
   },
   "content-versioning": {
-    enabled: false,
+    enabled: true,
     resolve: "./src/plugins/content-versioning",
   },
   "email-designer": {
@@ -109,14 +109,16 @@ module.exports = ({ env }) => ({
     config: {
       editor: {
         outputFormat: "html",
+        tinymceSrc: '/tinymce/tinymce.min.js',
         editorConfig: {
+          license_key: 'gpl',
           language: "cs",
           inline_styles: true,
           height: 500,
           menubar: false,
           valid_elements: "*[*]",
           // extended_valid_elements: "span, img, small",
-          forced_root_block: "",
+          forced_root_block: false,
           convert_urls: false,
           entity_encoding: "raw",
           plugins:
@@ -161,5 +163,19 @@ module.exports = ({ env }) => ({
   },
   i18n: {
     enabled: true,
+  },
+  upload: {
+    config: {
+      provider: "cloudinary",
+    },
+  },
+  cloudinary: {
+    enabled: true,
+    resolve: "./src/plugins/cloudinary",
+    config: {
+      cloud_name: env("CLOUDINARY_NAME"),
+      api_key: env("CLOUDINARY_KEY"),
+      api_secret: env("CLOUDINARY_SECRET"),
+    },
   },
 });

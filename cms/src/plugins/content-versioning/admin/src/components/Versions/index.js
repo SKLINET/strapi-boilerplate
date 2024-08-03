@@ -1,4 +1,5 @@
 import { Box } from "@strapi/design-system/Box";
+import { Button } from "@strapi/design-system/Button";
 import { Divider } from "@strapi/design-system/Divider";
 import { Stack } from "@strapi/design-system/Stack";
 import _ from "lodash";
@@ -11,7 +12,11 @@ import { Option, Select } from "@strapi/design-system/Select";
 import { Textarea } from "@strapi/design-system/Textarea";
 import { Typography } from "@strapi/design-system/Typography";
 
-import { useCMEditViewDataManager } from "@strapi/helper-plugin";
+import {
+  useCMEditViewDataManager,
+  useFetchClient,
+  useNotification,
+} from "@strapi/helper-plugin";
 import { format, parseISO } from "date-fns";
 
 import { getTrad } from "../../utils";
@@ -20,6 +25,7 @@ const Versions = () => {
   const { formatMessage } = useIntl();
   const { push, replace } = useHistory();
   const location = useLocation();
+  const toggleNotification = useNotification();
 
   const {
     initialData,
@@ -31,6 +37,8 @@ const Versions = () => {
     isDuplicatingEntry,
     onChange,
   } = useCMEditViewDataManager();
+
+  const { put } = useFetchClient();
 
   if (!_.get(layout, "pluginOptions.versions.versioned", false)) {
     return null;
@@ -53,10 +61,10 @@ const Versions = () => {
       const UrlSegments = location.pathname.split("/");
       const urlId = parseInt(UrlSegments[UrlSegments.length - 1]);
 
-      if (modifiedData.id !== urlId) {
+      if (modifiedData.id !== urlId && !UrlSegments?.includes('create')) {
         replace({
           search: location.search,
-          pathname: `/content-manager/collectionType/${slug}/${modifiedData.id}`,
+          pathname: `/content-manager/collection-types/${slug}/${modifiedData.id}`,
         });
       }
     }
@@ -108,11 +116,28 @@ const Versions = () => {
 
       push({
         search: location.search,
-        pathname: `/content-manager/collectionType/${slug}/${selectedVersion.id}`,
+        pathname: `/content-manager/collection-types/${slug}/${selectedVersion.id}`,
       });
     },
     [data, push, slug]
   );
+
+  const handleUpdateShowedVersion = () => {
+    put(
+      `/content-versioning/${slug}/${initialData.id}/update-version`,
+      modifiedData
+    ).then((r) => {
+      if (r?.status === 200) {
+        toggleNotification({
+          type: "success",
+          message: {
+            id: getTrad("plugin.schema.versions.versioned.versioning-button-update-message"),
+            defaultMessage: "Verze akualizována",
+          },
+        });
+      }
+    });
+  };
 
   return (
     <Box
@@ -161,7 +186,7 @@ const Versions = () => {
             </div>
           </div>
         )}
-        {!isCreatingEntry && (
+        {!isCreatingEntry && initialData?.createdAt && (
           <div style={{ marginBottom: 20 }}>
             <Typography fontWeight="bold">
               {formatMessage({
@@ -172,9 +197,15 @@ const Versions = () => {
             <div>
               <Typography variant="pi">v{initialData.versionNumber}</Typography>{" "}
               <Typography variant="pi" textColor="neutral600">
-                {format(parseISO(initialData.createdAt), "MMM d, yyyy HH:mm")}
+                {initialData.createdAt ? format(parseISO(initialData.createdAt), "MMM d, yyyy HH:mm") : ''}
               </Typography>
             </div>
+            <Button marginTop={4} onClick={handleUpdateShowedVersion}>
+              {formatMessage({
+                id: getTrad("containers.Edit.updateShowedVersion"),
+                defaultMessage: "Update showed version",
+              })}
+            </Button>
           </div>
         )}
         {!isDuplicatingEntry && data.length > 0 && (

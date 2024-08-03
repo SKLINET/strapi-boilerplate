@@ -29,6 +29,12 @@ function getPreviewUrls(entity, supportedType, baseUrl) {
     case "articles":
       slug = entity?.slug;
       break;
+    case "projects":
+      slug = entity?.slug;
+      break;
+    case "projectTypes":
+      slug = entity?.slug;
+      break;
     default:
       slug = entity?.slug;
   }

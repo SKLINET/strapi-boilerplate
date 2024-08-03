@@ -1,0 +1,26 @@
+{
+  "name": "plugin-cloudinary",
+  "version": "0.0.0",
+  "description": "This plugin provides the cloudinary SDK (API client and utilities).",
+  "strapi": {
+    "name": "cloudinary",
+    "description": "This plugin provides the cloudinary SDK (API client and utilities).",
+    "kind": "plugin",
+    "displayName": "Cloudinary"
+  },
+  "dependencies": {
+  },
+  "author": {
+    "name": "goodhoko"
+  },
+  "maintainers": [
+    {
+      "name": "goodhoko"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1 <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

@@ -31,12 +31,11 @@ export default {
     });
 
 
-
     // Hook that adds a column into the CM's LV table
-    // app.registerHook(
-    //   "Admin/CM/pages/ListView/inject-column-in-table",
-    //   addColumnToTableHook
-    // );
+    app.registerHook(
+      "Admin/CM/pages/ListView/inject-column-in-table",
+      addColumnToTableHook
+    );
 
     const ctbPlugin = app.getPlugin("content-type-builder");
 

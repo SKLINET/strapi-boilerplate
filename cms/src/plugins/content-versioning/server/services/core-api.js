@@ -11,7 +11,6 @@ const { getLatestValueByDB } = require("../utils");
 
 module.exports = {
   async createVersion(slug, data, user, options) {
-    console.log('HERE');
     const { createNewVersion } = getService("content-types");
 
     const model = await strapi.getModel(slug);
@@ -106,7 +105,7 @@ module.exports = {
     }
 
     // remove old ids
-    const newData = createNewVersion(slug, data);
+    const newData = await createNewVersion(slug, data, model);
     // Create Version
     const result = await strapi.entityService.create(slug, { data: newData });
 

@@ -5,7 +5,6 @@ const {
   getService,
   isLocalizedContentType,
   getLatestRawQuery,
-  sleep,
 } = require("../utils");
 const _ = require("lodash");
 const { getLatestValueByDB } = require("../utils");
@@ -98,11 +97,11 @@ const decorator = (service) => ({
     const collectionName = _.snakeCase(model.collectionName);
     const isLocalized = isLocalizedContentType(model);
     const { data } = opts;
+
     if (!isVersionedContentType(model)) {
       return service.create.call(this, uid, opts);
     }
-    if (isLocalized && data?.localizations?.length) {
-
+    if (isLocalized && data.localizations?.length) {
       const relatedLocaleItem = await strapi.db.query(uid).findOne({
         where: {
           id: data.localizations[0],
@@ -114,9 +113,9 @@ const decorator = (service) => ({
       data.vuid = relatedLocaleItem.vuid;
 
       const latestInLocales = await strapi.db.connection.raw(
-          `SELECT a.id, a.locale, a.version_number, a.published_at
-        FROM \`${collectionName}\` a WHERE NOT EXISTS (
-          SELECT 1 FROM \`${collectionName}\` WHERE locale != "${data.locale}" AND vuid=a.vuid AND (
+        `SELECT a.id, a.locale, a.version_number, a.published_at
+        FROM ${collectionName} a WHERE NOT EXISTS (
+          SELECT 1 FROM ${collectionName} WHERE locale != '${data.locale}' AND vuid=a.vuid AND (
            CASE WHEN a.published_at is null THEN (
              published_at is not null OR version_number > a.version_number
           )
@@ -142,8 +141,7 @@ const decorator = (service) => ({
       data.isVisibleInListView = true;
     }
 
-    const entry = await service.create.call(this, uid, opts);
-    return entry;
+    return await service.create.call(this, uid, opts);
   },
   /**
    * Updates an entry & update related versions
@@ -156,14 +154,10 @@ const decorator = (service) => ({
       getService("content-types");
     const model = strapi.getModel(uid);
 
-    const item = model.kind === 'singleType'
-        ? await strapi.entityService.findMany(uid, { where: { id: entityId }, populate: 'deep' })
-        : await strapi.entityService.findOne(uid, entityId, { populate: 'deep' })
-    ;
+    const item = await strapi.entityService.findOne(uid, entityId, { populate: model.__schema__.kind === "singleType" ? 'deep,3' : 'deep' });
+    item.versions = item?.versions?.map((v) => v.id) || [];
+
     const { data } = opts;
-    if (Object.keys(data).length === 1 && data?.vuid) {
-      return {};
-    }
     const isLocalized = isLocalizedContentType(model);
     const attrName = _.snakeCase(model.info.singularName);
     const collectionName = _.snakeCase(model.collectionName);
@@ -173,7 +167,7 @@ const decorator = (service) => ({
       },
     });
 
-    if (!isVersionedContentType(model) || data.hasOwnProperty("publishedAt")) {
+    if (!isVersionedContentType(model) || (data.hasOwnProperty("publishedAt") && !data.hasOwnProperty('preventCreate'))) {
       //Is not versioned content or is just publishing/unpublishing
       if (data.publishedAt && isVersionedContentType(model)) {
         const item = prevVersion;
@@ -194,7 +188,6 @@ const decorator = (service) => ({
           },
         };
         if (isLocalized) where.locale = item.locale;
-
         await strapi.db.query(uid).updateMany({
           where,
           data: {
@@ -207,8 +200,8 @@ const decorator = (service) => ({
         if (isLocalized) {
           const latestInLocales = await strapi.db.connection.raw(
             `SELECT a.id, a.locale, a.version_number, a.published_at
-        FROM \`${collectionName}\` a WHERE NOT EXISTS (
-          SELECT 1 FROM \`${collectionName}\` WHERE locale=a.locale AND vuid=a.vuid AND (
+        FROM ${collectionName} a WHERE NOT EXISTS (
+          SELECT 1 FROM ${collectionName} WHERE locale=a.locale AND vuid=a.vuid AND (
            CASE WHEN a.published_at is null THEN (
              published_at is not null OR version_number > a.version_number
           )
@@ -227,7 +220,7 @@ const decorator = (service) => ({
 
           // !set the current as latest in locale
           latestByLocale[item.locale] = item.id;
-          const allVersionsOtherLocales = await strapi.db.query(uid).findMany({
+          let allVersionsOtherLocales = await strapi.db.query(uid).findMany({
             where: {
               vuid: item.vuid,
               locale: {
@@ -236,6 +229,18 @@ const decorator = (service) => ({
             },
           });
 
+          allVersionsOtherLocales = allVersionsOtherLocales.sort((a, b) => {
+            if (a.isVisibleInListView && !b.isVisibleInListView) {
+              return -1;
+            }
+            if (a.id < b.id) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+
+          let i = 0;
           for (const entity of allVersionsOtherLocales) {
             await strapi.db.connection.raw(
               `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${entity.id} OR inv_${attrName}_id=${entity.id}`
@@ -246,18 +251,26 @@ const decorator = (service) => ({
             );
             const sqlValues = [];
             latestIds.map(
-                (latest) => {
-                  sqlValues.push(`(${entity.id}, ${latest})`);
-                  sqlValues.push(`(${latest}, ${entity.id})`);
-                });
+              (latest) => {
+                sqlValues.push(`(${entity.id}, ${latest}, ${i})`);
+                sqlValues.push(`(${latest}, ${entity.id}, ${i})`);
+              });
             if (!sqlValues?.length) continue;
+
             await strapi.db.connection.raw(
-              `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id) VALUES ` +
+              `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id, ${attrName}_order) VALUES ` +
                 sqlValues.join(",")
             );
+            i++;
           }
         }
       }
+      return service.update.call(this, uid, entityId, opts);
+    }
+    if (!data.id) {
+      return;
+    }
+    if (data.hasOwnProperty("preventCreate")) {
       return service.update.call(this, uid, entityId, opts);
     }
 
@@ -304,106 +317,108 @@ const decorator = (service) => ({
       }
     }
 
-    if (!data.publishedAt && hasPublishedVersion) {
-      data.isVisibleInListView = false;
-    } else {
-      data.isVisibleInListView = true;
-
-      const where = { vuid: data.vuid };
-      if (isLocalized) where.locale = data.locale;
-
-      await strapi.db.query(uid).updateMany({
-        where,
-        data: {
-          isVisibleInListView: false,
-          publishedAt: null,
-        },
-      });
+    let updateData = {
+      isVisibleInListView: false,
+    };
+    data.isVisibleInListView = true;
+    if (data.publishedAt && hasPublishedVersion) {
+      updateData.publishedAt = null;
     }
+    if (isLocalized) where.locale = data.locale;
+    await strapi.db.query(uid).updateMany({
+      where: { vuid: data.vuid, ...(isLocalized && {locale: data.locale}) },
+      data: updateData,
+    });
 
     data.versions = olderVersions.map((v) => v.id);
-    item.versions = item?.versions?.map((v) => v.id) || [];
 
     if (isLocalized) {
       // omit current locale
       data.localizations = Object.values(_.omit(latestByLocale, data.locale));
     }
-
     // remove old ids
-    const newData = createNewVersion(uid, data, item);
+    const newData = await createNewVersion(uid, data, model, item);
 
     // Create Version
     const result = await service.create.call(this, uid, {
       ...opts,
-      data: newData,
+      data: {
+        ...newData,
+        publishedAt: null,
+      },
     });
+
     // Relink all versions from other locales if result is The latest(published)!
     if (result.isVisibleInListView && isLocalized) {
       // !set the current as latest in locale
       latestByLocale[result.locale] = result.id;
 
-      const allVersionsOtherLocales = await strapi.db.query(uid).findMany({
+      let allVersionsOtherLocales = await strapi.db.query(uid).findMany({
         where: {
-          vuid: result.vuid,
-          locale: {
-            $ne: result.locale,
-          },
+          vuid: { $eq: result.vuid },
+          // locale: {
+          //   $ne: result.locale,
+          // },
         },
       });
+      await strapi.db.connection.raw(
+        `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${result.id} OR inv_${attrName}_id=${result.id}`
+      );
 
+      let i = 0;
+      const sqlValues = [];
+      const sqlValsStr = [];
       for (const entity of allVersionsOtherLocales) {
         await strapi.db.connection.raw(
-            `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${entity.id} OR inv_${attrName}_id=${entity.id}`
+          `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${entity.id} OR inv_${attrName}_id=${entity.id}`
         );
-
+      }
+      allVersionsOtherLocales = allVersionsOtherLocales.sort((a, b) => {
+        if (a.isVisibleInListView && !b.isVisibleInListView) {
+          return -1;
+        }
+        if (a.id < b.id) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      for (const entity of allVersionsOtherLocales) {
         const latestIds = Object.values(_.omit(latestByLocale, entity.locale));
-        const sqlValues = [];
         latestIds.map(
-            (latest) => {
-              sqlValues.push(`(${entity.id}, ${latest})`);
-              sqlValues.push(`(${latest}, ${entity.id})`);
-            });
-        if (!sqlValues?.length) continue;
-
-        await strapi.db.connection.raw(
-          `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id) VALUES ` +
+          (latest) => {
+            const strPred1 = `${entity.id},${latest}`;
+            const strPred2 = `${latest},${entity.id}`;
+            if (!sqlValsStr.includes(strPred1)) {
+              sqlValues.push(`(${entity.id}, ${latest}, ${i})`);
+              sqlValsStr.push(strPred1);
+            }
+            if (!sqlValsStr.includes(strPred2)) {
+              sqlValues.push(`(${latest}, ${entity.id}, ${i})`);
+              sqlValsStr.push(strPred2);
+            }
+          });
+        i++;
+      }
+      try {
+        if (sqlValues?.length > 0) {
+          await strapi.db.connection.raw(
+            `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id, ${attrName}_order) VALUES ` +
             sqlValues.join(",")
-        );
+          );
+        }
+      } catch (e) {
+        console.log('ERR', e);
       }
     }
 
-    const dbOlderVersions = await strapi.db.connection.raw(`SELECT ${attrName}_id, inv_${attrName}_id FROM ${collectionName}_versions_links WHERE ${attrName}_id=${result.id} OR inv_${attrName}_id=${result.id}`);
-    const dbOlderVersionsValues = [];
-    dbOlderVersions?.map(r => {
-      const rObj = r?.[0] || r || {};
-      if (rObj?.[`${attrName}_id`] && rObj?.[`inv_${attrName}_id`]) {
-        dbOlderVersionsValues.push(rObj);
-      }
-    });
-    for (const version of olderVersions) {
-      const sqlValues = [];
-      let v1Add = true;
-      let v2Add = true;
-      dbOlderVersionsValues?.map(v => {
-        if (v[`${attrName}_id`] === version.id && v[`inv_${attrName}_id`] === result.id) {
-          v1Add = false;
-        }
-        if (v[`${attrName}_id`] === result.id && v[`inv_${attrName}_id`] === version.id) {
-          v2Add = false;
-        }
-      });
-      if (v1Add) {
-        sqlValues.push(`(${version.id},${result.id})`);
-      }
-      if (v2Add) {
-        sqlValues.push(`(${result.id},${version.id})`);
-      }
-      if (!sqlValues.length) {
-        continue;
-      }
+    await strapi.db.connection.raw(
+      `DELETE FROM ${collectionName}_versions_links WHERE ${attrName}_id=${result.id} OR inv_${attrName}_id=${result.id}`
+    );
 
+    for (const version of olderVersions) {
       await strapi.db.connection.raw(
-          `INSERT IGNORE INTO ${collectionName}_versions_links (${attrName}_id, inv_${attrName}_id) VALUES ` + sqlValues.join(',')
+        `INSERT INTO ${collectionName}_versions_links (${attrName}_id, inv_${attrName}_id) VALUES (${version.id},${result.id}), (${result.id},${version.id})`
       );
     }
     return result;
@@ -443,8 +458,8 @@ const decorator = (service) => ({
     if (isLocalized) {
       const latestInLocales = await strapi.db.connection.raw(
         `SELECT a.id, a.locale, a.version_number, a.published_at
-        FROM \`${collectionName}\` a WHERE NOT EXISTS (
-          SELECT 1 FROM \`${model.collectionName}\`
+        FROM ${collectionName} a WHERE NOT EXISTS (
+          SELECT 1 FROM ${model.collectionName}
           WHERE locale=a.locale AND vuid=a.vuid AND id!='${item.id}'  AND (
           CASE WHEN a.published_at is null THEN (
             published_at is not null OR version_number > a.version_number
@@ -483,28 +498,27 @@ const decorator = (service) => ({
 
       for (const entity of allVersionsOtherLocales) {
         await strapi.db.connection.raw(
-            `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${entity.id} OR inv_${attrName}_id=${entity.id}`
+          `DELETE FROM ${collectionName}_localizations_links WHERE ${attrName}_id=${entity.id}`
         );
 
-        const latestIds = Object.values(_.omit(latestByLocale, entity.locale))?.filter(x => x);
-        const sqlValues = [];
-        latestIds.map(
-            (latest) => {
-              sqlValues.push(`(${entity.id}, ${latest})`);
-              sqlValues.push(`(${latest}, ${entity.id})`);
-            });
+        const latestIds = Object.values(_.omit(latestByLocale, entity.locale));
+        const sqlValues = latestIds.map(
+          (latest) => `(${entity.id}, ${latest})`
+        );
         if (!sqlValues?.length) continue;
 
-        await strapi.db.connection.raw(
-          `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id) VALUES ` +
+        try {
+          await strapi.db.connection.raw(
+            `INSERT INTO ${collectionName}_localizations_links (${attrName}_id, inv_${attrName}_id) VALUES ` +
             sqlValues.join(",")
-        );
+          );
+        } catch (e) {}
       }
     } else {
       const latestVersion = await strapi.db.connection.raw(
         `SELECT a.id, a.version_number, a.published_at
-        FROM \`${collectionName}\` a WHERE NOT EXISTS (
-          SELECT 1 FROM \`${model.collectionName}\`
+        FROM ${collectionName} a WHERE NOT EXISTS (
+          SELECT 1 FROM ${model.collectionName}
           WHERE vuid=a.vuid AND id!='${item.id}'  AND (
           CASE WHEN a.published_at is null THEN (
             published_at is not null OR version_number > a.version_number

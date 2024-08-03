@@ -55,15 +55,12 @@ const getLatestValueByDB = (latest) => {
       return latest.rows;
     case "mysql":
       return latest[0];
+    case "mysql2":
+      return latest[0];
     default:
       return latest;
   }
 };
-
-const sleep = (ms = 100) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 
 module.exports = {
   getLatestValueByDB,
@@ -71,5 +68,4 @@ module.exports = {
   getCoreStore,
   getLatestRawQuery,
   isLocalizedContentType,
-  sleep,
 };

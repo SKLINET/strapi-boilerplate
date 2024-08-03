@@ -5,7 +5,8 @@ This plugin lets you flip back and forth between different versions of your cont
 ## ⚠️✋ Read before installation
 
 ⚠️ Might not work with the [Strapi publisher plugin](https://market.strapi.io/plugins/strapi-plugin-publisher)  
-⚠️ Might not work if `DATABASE_CLIENT` env variable is not set. More information [here](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/113).
+⚠️ Might not work if `DATABASE_CLIENT` env variable is not set. More information [here](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/113).    
+⚠️ Does not work well with GraphQL ([more information](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/152))
 
 ## 🙉 What does the plugin do for you?
 
@@ -26,7 +27,7 @@ npm i @notum-cz/strapi-plugin-content-versioning
 ```
 yarn add @notum-cz/strapi-plugin-content-versioning
 ```
-2. Create or modify file `config/plugins.ts` and include the following code snippet:
+2. Create or modify file `config/plugins.js` and include the following code snippet:
 
 ```
 module.exports = ({ env }) => ({
@@ -63,14 +64,12 @@ If a patch for your specific Strapi version is missing, please inform us or incl
 
 Are any of these features significant to you? Please show your support by giving a thumbs up on the linked issues. This will help us assess their priority on the roadmap.
 
-- ✨ [Relations support](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/132) 
 - ✨ [Extension of functionality also for single types](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/133)
 - ✨ [Update of the current version without creating a new version](https://github.com/notum-cz/strapi-plugin-content-versioning/issues/134)
 
 ## ⛔️ Known limitations
 
 - ✋  Not working with UID and unique fields
-- ✋  Not working with relations
 
 ## 🐛 Bugs
 
@@ -81,6 +80,9 @@ If you're interested in helping us, you would be a rock  ⭐.
 
 The repository is maintained by [**Ondřej Mikulčík**]( https://github.com/omikulcik), a member of the Notum Technologies development team.
 
+## 💬 Community
+
+Join our [Discord server](https://discord.gg/hZRCcfWq) to discuss new features, implementation challenges or anything related to this plugin.  
 
 ## 🚀 Created with passion by [Notum Technologies](https://notum.cz/en)
 
