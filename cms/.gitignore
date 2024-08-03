@@ -6,7 +6,6 @@
 .cache
 .AppleDouble
 .LSOverride
-Icon
 .Spotlight-V100
 .Trashes
 ._*
@@ -113,3 +112,4 @@ exports
 dist
 build
 .strapi-updater.json
+public/tinymce
