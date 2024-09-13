@@ -171,6 +171,11 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => (
         <head>
             <link rel="preconnect" href="https://res.cloudinary.com" />
             <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+            {/* Favicon */}
+            <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
+            {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
+            {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
         </head>
         <body>
             <TopLoader />

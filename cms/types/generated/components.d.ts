@@ -98,6 +98,21 @@ export interface SharedGlobalSeo extends Schema.Component {
   };
 }
 
+export interface MenuMenuItem extends Schema.Component {
+  collectionName: 'components_menu_menu_items';
+  info: {
+    displayName: 'MenuItem';
+    icon: 'angle-right';
+    description: '';
+  };
+  attributes: {
+    label: Attribute.String & Attribute.Required;
+    page: Attribute.Relation<'menu.menu-item', 'oneToOne', 'api::page.page'>;
+    externalUrl: Attribute.String;
+    openInNewTab: Attribute.Boolean & Attribute.DefaultTo<false>;
+  };
+}
+
 export interface ComplementaryVideo extends Schema.Component {
   collectionName: 'components_complementary_videos';
   info: {
@@ -164,21 +179,6 @@ export interface ComplementaryButton extends Schema.Component {
       'api::page.page'
     >;
     linkExternal: Attribute.String;
-    openInNewTab: Attribute.Boolean & Attribute.DefaultTo<false>;
-  };
-}
-
-export interface MenuMenuItem extends Schema.Component {
-  collectionName: 'components_menu_menu_items';
-  info: {
-    displayName: 'MenuItem';
-    icon: 'angle-right';
-    description: '';
-  };
-  attributes: {
-    label: Attribute.String & Attribute.Required;
-    page: Attribute.Relation<'menu.menu-item', 'oneToOne', 'api::page.page'>;
-    externalUrl: Attribute.String;
     openInNewTab: Attribute.Boolean & Attribute.DefaultTo<false>;
   };
 }
@@ -260,12 +260,12 @@ declare module '@strapi/types' {
       'shared.meta': SharedMeta;
       'shared.meta-social': SharedMetaSocial;
       'shared.global-seo': SharedGlobalSeo;
+      'menu.menu-item': MenuMenuItem;
       'complementary.video': ComplementaryVideo;
       'complementary.send-email': ComplementarySendEmail;
       'complementary.mailchimp': ComplementaryMailchimp;
       'complementary.ecomail': ComplementaryEcomail;
       'complementary.button': ComplementaryButton;
-      'menu.menu-item': MenuMenuItem;
       'block.video-block': BlockVideoBlock;
       'block.template-block': BlockTemplateBlock;
       'block.contact-form-block': BlockContactFormBlock;

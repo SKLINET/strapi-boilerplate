@@ -44,7 +44,7 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
         <section className={styles.toolbar}>
             <section className={styles.toolbar__left}>
                 <a href={adminPath} className={styles.admin} aria-label="Go to admin">
-                    <Icon name={'symbio'} className={styles.logo} />
+                    <Icon name={'sklinet-round'} className={styles.logo} />
                 </a>
                 <span className={styles.admin__text}>náhled</span>
             </section>
