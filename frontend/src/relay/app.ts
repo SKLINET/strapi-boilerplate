@@ -126,6 +126,17 @@ graphql`
 `;
 
 graphql`
+    fragment appFileFragment on UploadFileEntity {
+        id
+        attributes {
+            name
+            url
+            size
+        }
+    }
+`;
+
+graphql`
     fragment appVideoFragment on ComponentComplementaryVideo {
         id
         uploadedVideo {
