@@ -11,6 +11,7 @@ import { fetchArticles } from '../../../actions/fetch-articles';
 import { getArticleCategoryListType } from '../../../../utils/strapi/getArticleCategoryType';
 import { getPageUrl } from '../../../../utils/getPageUrl';
 import { Button } from '../../primitives/Button/Button';
+import { FadeIn } from '../../base/FadeIn/FadeIn';
 
 const ArticleList = ({
     blocksData: { countOnPage },
@@ -56,7 +57,7 @@ const ArticleList = ({
     );
 
     return (
-        <section className={styles.wrapper}>
+        <FadeIn className={styles.wrapper}>
             <div className={styles.filters}>
                 <a
                     href={blogHref}
@@ -94,7 +95,7 @@ const ArticleList = ({
                     {'Load more'}
                 </Button>
             )}
-        </section>
+        </FadeIn>
     );
 };
 

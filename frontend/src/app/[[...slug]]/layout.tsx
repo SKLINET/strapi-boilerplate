@@ -8,38 +8,18 @@ import { getMetaFromItem } from '../../utils/base/getMetaFromItem';
 import { getImageUrl } from '../../utils/getImageUrl';
 import { getSocialNetworksType } from '../../utils/strapi/getSocialNetworksType';
 import { redirect, permanentRedirect } from 'next/navigation';
-import localFont from 'next/font/local';
+import { Poppins } from 'next/font/google';
 import { TopLoader } from '../components/base/TopLoader/TopLoader';
 
 import '../../styles/global.scss';
 
-const primary = localFont({
-    src: [
-        // 400
-        {
-            path: '../../../public/fonts/Poppins/truetype/Poppins-Regular.ttf',
-            weight: '400',
-            style: 'normal',
-        },
-        {
-            path: '../../../public/fonts/Poppins/truetype/Poppins-Italic.ttf',
-            weight: '400',
-            style: 'italic',
-        },
-        // 700
-        {
-            path: '../../../public/fonts/Poppins/truetype/Poppins-Bold.ttf',
-            weight: '700',
-            style: 'normal',
-        },
-        {
-            path: '../../../public/fonts/Poppins/truetype/Poppins-BoldItalic.ttf',
-            weight: '700',
-            style: 'italic',
-        },
-    ],
+const primary = Poppins({
+    weight: ['400', '700'],
+    style: ['normal', 'italic'],
+    subsets: ['latin'],
     variable: '--font-primary',
-    display: 'fallback',
+    display: 'swap',
+    fallback: ['Arial', 'sans-serif'],
 });
 
 export function generateViewport(context: ContextProps): Viewport {
@@ -164,8 +144,7 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
             type: 'website',
         },
         twitter: {
-            card: 'app',
-            app: { id: {} },
+            card: 'summary_large_image',
             title: share?.twitter?.title || metaTitle,
             description: share?.twitter?.description || metaData.metaDescription,
             images: [
@@ -192,6 +171,11 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => (
         <head>
             <link rel="preconnect" href="https://res.cloudinary.com" />
             <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+            {/* Favicon */}
+            <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
+            {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
+            {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
         </head>
         <body>
             <TopLoader />

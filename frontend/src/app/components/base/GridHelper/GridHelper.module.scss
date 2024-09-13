@@ -1,5 +1,7 @@
 .wrapper {
     @apply w-full h-full fixed z-50 pointer-events-none inset-0 py-0 hidden;
+
+    // Grid offset
     // @apply px-4;
     // @apply tablet:px-10;
     // @apply desktop:px-24;
@@ -11,7 +13,9 @@
 
 .inner {
     @apply w-full h-full mx-auto grid;
-    // @apply desktop:max-w-306;
+
+    // Grid max width
+    @apply desktop:max-w-360;
 
     grid-gap: 0 var(--grid-gap);
     grid-template-columns: repeat(auto-fill, var(--grid-column));

@@ -54,7 +54,7 @@ const config: Config = {
                 '16-9': '56.25vw',
             },
             maxWidth: {
-                //
+                360: '90rem',
             },
             padding: {
                 '16/9': '56.25%',
@@ -66,6 +66,7 @@ const config: Config = {
                 width: 'width',
                 height: 'height',
                 'visibility-opacity': 'visibility, opacity',
+                'transform-opacity': 'transform, opacity',
             },
             width: {
                 //

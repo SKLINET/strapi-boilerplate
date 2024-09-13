@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import styles from './Footer.module.scss';
 import { IApp } from '../../../../types/base/app';
+import { FadeIn } from '../../base/FadeIn/FadeIn';
 
 interface FooterProps {
     app: IApp;
@@ -10,9 +11,9 @@ const Footer = ({ app }: FooterProps): ReactElement => {
     const currentYear = new Date().getFullYear().toString();
 
     return (
-        <footer className={styles.wrapper}>
+        <FadeIn tag="footer" className={styles.wrapper} contentClassName={styles.content}>
             <>© Sklinet {currentYear}</>
-        </footer>
+        </FadeIn>
     );
 };
 
