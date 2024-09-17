@@ -113,6 +113,74 @@ export interface MenuMenuItem extends Schema.Component {
   };
 }
 
+export interface BlockVideoBlock extends Schema.Component {
+  collectionName: 'components_block_video_blocks';
+  info: {
+    displayName: 'Video';
+    icon: 'play';
+  };
+  attributes: {
+    video: Attribute.Component<'complementary.video'> & Attribute.Required;
+  };
+}
+
+export interface BlockTemplateBlock extends Schema.Component {
+  collectionName: 'components_block_template_blocks';
+  info: {
+    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
+    icon: 'dashboard';
+    description: '';
+  };
+  attributes: {
+    template: Attribute.Relation<
+      'block.template-block',
+      'oneToOne',
+      'api::template.template'
+    >;
+  };
+}
+
+export interface BlockContactFormBlock extends Schema.Component {
+  collectionName: 'components_block_contact_form_blocks';
+  info: {
+    displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
+    icon: 'envelop';
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+  };
+}
+
+export interface BlockArticlesListBlock extends Schema.Component {
+  collectionName: 'components_block_articles_list_blocks';
+  info: {
+    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
+    icon: 'grid';
+    description: '';
+  };
+  attributes: {
+    countOnPage: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      > &
+      Attribute.DefaultTo<5>;
+  };
+}
+
+export interface BlockArticleDetailBlock extends Schema.Component {
+  collectionName: 'components_block_article_detail_blocks';
+  info: {
+    displayName: 'Detail \u010Dl\u00E1nku';
+    icon: 'layer';
+    description: '';
+  };
+  attributes: {};
+}
+
 export interface ComplementaryVideo extends Schema.Component {
   collectionName: 'components_complementary_videos';
   info: {
@@ -183,74 +251,6 @@ export interface ComplementaryButton extends Schema.Component {
   };
 }
 
-export interface BlockVideoBlock extends Schema.Component {
-  collectionName: 'components_block_video_blocks';
-  info: {
-    displayName: 'Video';
-    icon: 'play';
-  };
-  attributes: {
-    video: Attribute.Component<'complementary.video'> & Attribute.Required;
-  };
-}
-
-export interface BlockTemplateBlock extends Schema.Component {
-  collectionName: 'components_block_template_blocks';
-  info: {
-    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
-    icon: 'dashboard';
-    description: '';
-  };
-  attributes: {
-    template: Attribute.Relation<
-      'block.template-block',
-      'oneToOne',
-      'api::template.template'
-    >;
-  };
-}
-
-export interface BlockContactFormBlock extends Schema.Component {
-  collectionName: 'components_block_contact_form_blocks';
-  info: {
-    displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
-    icon: 'envelop';
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-  };
-}
-
-export interface BlockArticlesListBlock extends Schema.Component {
-  collectionName: 'components_block_articles_list_blocks';
-  info: {
-    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
-    icon: 'grid';
-    description: '';
-  };
-  attributes: {
-    countOnPage: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      > &
-      Attribute.DefaultTo<5>;
-  };
-}
-
-export interface BlockArticleDetailBlock extends Schema.Component {
-  collectionName: 'components_block_article_detail_blocks';
-  info: {
-    displayName: 'Detail \u010Dl\u00E1nku';
-    icon: 'layer';
-    description: '';
-  };
-  attributes: {};
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -261,16 +261,16 @@ declare module '@strapi/types' {
       'shared.meta-social': SharedMetaSocial;
       'shared.global-seo': SharedGlobalSeo;
       'menu.menu-item': MenuMenuItem;
-      'complementary.video': ComplementaryVideo;
-      'complementary.send-email': ComplementarySendEmail;
-      'complementary.mailchimp': ComplementaryMailchimp;
-      'complementary.ecomail': ComplementaryEcomail;
-      'complementary.button': ComplementaryButton;
       'block.video-block': BlockVideoBlock;
       'block.template-block': BlockTemplateBlock;
       'block.contact-form-block': BlockContactFormBlock;
       'block.articles-list-block': BlockArticlesListBlock;
       'block.article-detail-block': BlockArticleDetailBlock;
+      'complementary.video': ComplementaryVideo;
+      'complementary.send-email': ComplementarySendEmail;
+      'complementary.mailchimp': ComplementaryMailchimp;
+      'complementary.ecomail': ComplementaryEcomail;
+      'complementary.button': ComplementaryButton;
     }
   }
 }

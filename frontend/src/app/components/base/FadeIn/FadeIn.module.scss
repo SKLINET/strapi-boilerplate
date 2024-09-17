@@ -2,18 +2,14 @@
     @apply w-full;
 
     &.isVisible {
-        .background {
-            @apply opacity-100;
-        }
-
         .content {
-            @apply opacity-100 translate-y-0 transition-transform-opacity ease-in-out duration-700;
+            @apply opacity-100 transform-gpu translate-y-0 transition-transform-opacity ease-in-out duration-700;
         }
     }
 }
 
 .background {
-    @apply opacity-0 transition-opacity ease-in-out duration-700;
+    @apply opacity-0 will-change-opacity transition-opacity ease-in-out duration-700;
 }
 
 .inner {
@@ -21,5 +17,5 @@
 }
 
 .content {
-    @apply w-full opacity-0 translate-y-4;
+    @apply w-full opacity-0 transform-gpu translate-y-4 will-change-fade-in;
 }
