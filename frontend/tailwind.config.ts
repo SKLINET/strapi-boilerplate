@@ -71,6 +71,10 @@ const config: Config = {
             width: {
                 //
             },
+            willChange: {
+                'fade-in': 'transform, opacity',
+                opacity: 'opacity',
+            },
             zIndex: {
                 1: '1',
                 2: '2',
