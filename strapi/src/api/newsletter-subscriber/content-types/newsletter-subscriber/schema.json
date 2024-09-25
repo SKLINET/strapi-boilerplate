@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_subscribers",
+  "info": {
+    "singularName": "newsletter-subscriber",
+    "pluralName": "newsletter-subscribers",
+    "displayName": "📩 Prihlášky k NL"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email"
+    }
+  }
+}

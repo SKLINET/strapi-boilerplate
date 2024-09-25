@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "redirects",
+  "info": {
+    "singularName": "redirect",
+    "pluralName": "redirects",
+    "displayName": "🔀 Přesměrování"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "redirectFrom": {
+      "type": "string"
+    },
+    "redirectTo": {
+      "type": "string"
+    },
+    "statusCode": {
+      "type": "string"
+    }
+  }
+}

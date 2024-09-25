@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "icons",
+  "info": {
+    "singularName": "icon",
+    "pluralName": "icons",
+    "displayName": "🧩 Ikony"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "codename": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

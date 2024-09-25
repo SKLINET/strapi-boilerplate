@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_social_networks",
+  "info": {
+    "displayName": "SocialNetworks"
+  },
+  "options": {},
+  "attributes": {
+    "facebookMeta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.meta-social"
+    },
+    "twitterMeta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.meta-social"
+    }
+  }
+}
