@@ -27,8 +27,8 @@ export const contact = async (data: ContactFormData, app: IApp): Promise<boolean
             },
         });
 
-        if (app.contactForm?.data?.attributes?.sendEmail) {
-            const { emailFrom, emailTo, subject } = app.contactForm.data.attributes.sendEmail;
+        if (app.contactForm?.sendEmail) {
+            const { emailFrom, emailTo, subject } = app.contactForm.sendEmail;
 
             try {
                 const transporter = nodemailer.createTransport(process.env.SMTP || '');

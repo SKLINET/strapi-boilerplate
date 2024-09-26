@@ -10,7 +10,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({ app }: NavbarProps): ReactElement => {
-    const menu = getMenuType(app.webSetting?.data?.attributes?.mainMenu?.data, app);
+    const menu = getMenuType(app.webSetting?.mainMenu, app);
 
     return (
         <header className={styles.wrapper}>

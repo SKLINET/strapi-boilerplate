@@ -17,7 +17,10 @@ export const Blocks = ({ blocksData, initialProps, app }: BlocksProps): ReactEle
             if (!blockName || !Object.prototype.hasOwnProperty.call(blocks, blockName)) {
                 return null;
             }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const BlockComponent = blocks[blockName];
+
             const blockInitialProps =
                 initialProps && Object.prototype.hasOwnProperty.call(initialProps, block.id)
                     ? initialProps[block.id]

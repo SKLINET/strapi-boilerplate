@@ -64,7 +64,7 @@ if (typeof window === 'undefined') {
             err.code = 'ENOENT';
             throw err;
         }
-        return { item: item?.data || {} };
+        return { item: item || {} };
     };
 }
 

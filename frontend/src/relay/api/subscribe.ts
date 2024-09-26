@@ -3,9 +3,7 @@ import { graphql } from 'relay-runtime';
 export const SubscribeFormMutation = graphql`
     mutation subscribeMutation($data: NewsletterSubscriberInput!) {
         createNewsletterSubscriber(data: $data) {
-            data {
-                id
-            }
+            documentId
         }
     }
 `;

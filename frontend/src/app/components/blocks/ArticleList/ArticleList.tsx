@@ -51,10 +51,7 @@ const ArticleList = ({
 
     const _categories = getArticleCategoryListType(categories);
 
-    const blogHref = getPageUrl(
-        app.webSetting?.data?.attributes?.articlesPage?.data?.attributes?.url || '',
-        app.locale,
-    );
+    const blogHref = getPageUrl(app.webSetting?.articlesPage?.url || '', app.locale);
 
     return (
         <FadeIn className={styles.wrapper}>

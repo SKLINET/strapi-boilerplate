@@ -3,31 +3,25 @@ import { graphql } from 'relay-runtime';
 export const pageDetailQuery = graphql`
     query pageDetailQuery($locale: I18NLocaleCode) {
         item: page(locale: $locale) {
-            id
-            attributes {
-                title
-                url
-                publishedAt
-                pages {
-                    data {
-                        ...appPageFragment @relay(mask: false)
-                    }
-                }
-                parent {
-                    data {
-                        ...appPageFragment @relay(mask: false)
-                    }
-                }
-                seo {
-                    ...appSeoFragment @relay(mask: false)
-                }
+            documentId
+            title
+            url
+            publishedAt
+            pages {
+                ...appPageFragment @relay(mask: false)
+            }
+            parent {
+                ...appPageFragment @relay(mask: false)
+            }
+            seo {
+                ...appSeoFragment @relay(mask: false)
+            }
 
-                sitemap {
-                    ...appSitemapFragment @relay(mask: false)
-                }
-                content: blocks {
-                    ...blocksContent @relay(mask: false)
-                }
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
+            }
+            content: blocks {
+                ...blocksContent @relay(mask: false)
             }
         }
     }
@@ -36,23 +30,14 @@ export const pageDetailQuery = graphql`
 export const pageStaticPathsQuery = graphql`
     query pageStaticPathsQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
         pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
-            meta {
-                pagination {
-                    total
-                }
+            documentId
+            url
+            publishedAt
+            content: blocks {
+                ...blocksContent @relay(mask: false)
             }
-            data {
-                id
-                attributes {
-                    url
-                    publishedAt
-                    content: blocks {
-                        ...blocksContent @relay(mask: false)
-                    }
-                    sitemap {
-                        ...appSitemapFragment @relay(mask: false)
-                    }
-                }
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
             }
         }
     }
@@ -60,83 +45,57 @@ export const pageStaticPathsQuery = graphql`
 
 export const pageListQuery = graphql`
     query pageListQuery($locale: I18NLocaleCode, $start: Int, $limit: Int) {
-        meta: pages(locale: $locale) {
-            meta {
-                pagination {
-                    total
-                }
-            }
-        }
         pages(locale: $locale, pagination: { start: $start, limit: $limit }) {
-            data {
-                id
-                attributes {
-                    title
-                    url
-                    publishedAt
-                    pages {
-                        data {
-                            ...appPageFragment @relay(mask: false)
-                        }
-                    }
-                    parent {
-                        data {
-                            ...appPageFragment @relay(mask: false)
-                        }
-                    }
-                    seo {
-                        ...appSeoFragment @relay(mask: false)
-                    }
-
-                    sitemap {
-                        ...appSitemapFragment @relay(mask: false)
-                    }
-                    content: blocks {
-                        ...blocksContent @relay(mask: false)
-                    }
-                }
+            documentId
+            title
+            url
+            publishedAt
+            pages {
+                ...appPageFragment @relay(mask: false)
+            }
+            parent {
+                ...appPageFragment @relay(mask: false)
+            }
+            seo {
+                ...appSeoFragment @relay(mask: false)
+            }
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
+            }
+            content: blocks {
+                ...blocksContent @relay(mask: false)
             }
         }
     }
 `;
 
 export const SitemapPagesQuery = graphql`
-    query pagesSitemapQuery($publicationState: PublicationState) {
-        pages(publicationState: $publicationState) {
-            data {
-                attributes {
-                    url
-                    publishedAt
-                    sitemap {
-                        ...appSitemapFragment @relay(mask: false)
-                    }
-                }
+    query pagesSitemapQuery($publicationStatus: PublicationStatus) {
+        pages(status: $publicationStatus) {
+            url
+            publishedAt
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
             }
         }
     }
 `;
 
 export const SitemapArticlesQuery = graphql`
-    query pageArticlesSitemapQuery($publicationState: PublicationState, $filters: ArticleFiltersInput) {
-        articles(publicationState: $publicationState, filters: $filters) {
-            data {
-                attributes {
-                    slug
-                    publishedAt
-                    sitemap {
-                        ...appSitemapFragment @relay(mask: false)
-                    }
-                }
+    query pageArticlesSitemapQuery($publicationStatus: PublicationStatus, $filters: ArticleFiltersInput) {
+        articles(status: $publicationStatus, filters: $filters) {
+            slug
+            publishedAt
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
             }
         }
     }
 `;
 export const PageIdQuery = graphql`
-    query pageIdQuery($publicationState: PublicationState, $filters: PageFiltersInput, $locale: I18NLocaleCode) {
-        pages(publicationState: $publicationState, filters: $filters, locale: $locale) {
-            data {
-                id
-            }
+    query pageIdQuery($publicationStatus: PublicationStatus, $filters: PageFiltersInput, $locale: I18NLocaleCode) {
+        pages(status: $publicationStatus, filters: $filters, locale: $locale) {
+            documentId
         }
     }
 `;

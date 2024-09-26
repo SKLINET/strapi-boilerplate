@@ -15,23 +15,23 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
     const [isPublished, setIsPublished] = useState<boolean>(false);
     const [collection, setCollection] = useState<string>('');
     const [itemId, setItemId] = useState<number>(0);
-    const title = item?.attributes?.title || page?.attributes?.title || '';
+    const title = item?.title || page?.title || '';
     const adminPath = `${process.env.NEXT_PUBLIC_API_BASE_PATH}/admin`;
 
     useEffect(() => {
         if (item) {
-            setIsPublished(!!item?.attributes?.publishedAt);
-            if (item?.id) {
-                const id = getItemId(item?.id);
-                if (item?.id?.includes('Article')) {
+            setIsPublished(!!item?.publishedAt);
+            if (item) {
+                const id = getItemId(item.documentId);
+                if (item.__typename === 'Article') {
                     setCollection('api::article.article');
                 }
                 setItemId(Number(id));
             }
         } else {
-            setIsPublished(!!page?.attributes?.publishedAt);
-            const id = getItemId(page?.id || '');
-            if (page?.attributes?.url) {
+            setIsPublished(!!page?.publishedAt);
+            const id = getItemId(page?.documentId || '');
+            if (page?.url) {
                 setCollection('api::page.page');
                 setItemId(Number(id));
             }

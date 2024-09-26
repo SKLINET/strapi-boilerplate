@@ -40,7 +40,7 @@ export const Page = async (context: ContextProps) => {
     dayjs.locale(app.locale);
     dayjs.tz.setDefault(tz);
 
-    const gtmCode = app.webSetting?.data?.attributes?.gtmCode || config.gtm.code || null;
+    const gtmCode = app.webSetting?.gtmCode || config.gtm.code || null;
 
     return (
         <>
@@ -48,11 +48,7 @@ export const Page = async (context: ContextProps) => {
 
             <Layout app={app}>
                 {app.page && (
-                    <Blocks
-                        blocksData={app.page?.attributes?.content || []}
-                        initialProps={app.blocksPropsMap}
-                        app={app}
-                    />
+                    <Blocks blocksData={app.page?.content || []} initialProps={app.blocksPropsMap} app={app} />
                 )}
             </Layout>
 

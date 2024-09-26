@@ -4,15 +4,12 @@ import { articleCategoryFragment$data } from '../../relay/__generated__/articleC
 type Fragment = Omit<articleCategoryFragment$data, ' $fragmentType'>;
 
 export const getArticleCategoryType = (e: Fragment | null | undefined): IArticleCategory | null => {
-    if (!e || !e.attributes) return null;
+    if (!e) return null;
 
-    const {
-        id,
-        attributes: { title },
-    } = e;
+    const { documentId, title } = e;
 
     return {
-        id: id || '',
+        id: documentId,
         title: title,
     };
 };

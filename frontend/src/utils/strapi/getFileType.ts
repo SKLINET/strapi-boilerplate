@@ -5,17 +5,14 @@ import { getImageUrl } from '../getImageUrl';
 type Fragment = Omit<appFileFragment$data, ' $fragmentType'>;
 
 export const getFileType = (e: Fragment | null | undefined): IFile | null => {
-    if (!e?.attributes) return null;
+    if (!e) return null;
 
-    const {
-        id,
-        attributes: { name, url, size },
-    } = e;
+    const { documentId, name, url, size } = e;
 
     const _size = Math.round((size / 1024) * 100) / 100;
 
     return {
-        id: id || '',
+        id: documentId,
         name: name,
         href: getImageUrl(url),
         size: `${_size} MB`,

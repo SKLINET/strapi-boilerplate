@@ -1,19 +1,22 @@
 import { graphql } from 'relay-runtime';
 
+/* TODO: Slugify must be reworked on Strapi 5 */
+/*
 export const ArticleDetailQuery = graphql`
-    query articleDetailQuery($slug: String, $id: String, $locale: String, $publicationState: String) {
-        item: findSlug(
-            modelName: "article"
-            slug: $slug
-            id: $id
-            locale: $locale
-            publicationState: $publicationState
-        ) {
+    query articleDetailQuery($slug: String, $id: String, $locale: String, $publicationStatus: String) {
+        item: findSlug(modelName: "article", slug: $slug, id: $id, locale: $locale, status: $publicationStatus) {
             ... on ArticleEntityResponse {
-                data {
-                    ...articleDetailFragment @relay(mask: false)
-                }
+                ...articleDetailFragment @relay(mask: false)
             }
+        }
+    }
+`;
+*/
+
+export const ArticleDetailQuery = graphql`
+    query articleDetailQuery($publicationStatus: PublicationStatus, $locale: I18NLocaleCode, $documentId: ID!) {
+        item: article(documentId: $documentId, status: $publicationStatus, locale: $locale) {
+            ...articleDetailFragment @relay(mask: false)
         }
     }
 `;
@@ -24,7 +27,7 @@ export const ArticleListQuery = graphql`
         $start: Int
         $limit: Int
         $filter: ArticleFiltersInput
-        $publicationState: PublicationState
+        $publicationStatus: PublicationStatus
         $sort: [String] = ["publishDate:desc", "publishedAt:desc"]
     ) {
         items: articles(
@@ -32,16 +35,9 @@ export const ArticleListQuery = graphql`
             pagination: { start: $start, limit: $limit }
             sort: $sort
             filters: $filter
-            publicationState: $publicationState
+            status: $publicationStatus
         ) {
-            meta {
-                pagination {
-                    total
-                }
-            }
-            data {
-                ...articleFragment @relay(mask: false)
-            }
+            ...articleFragment @relay(mask: false)
         }
     }
 `;
@@ -49,75 +45,53 @@ export const ArticleListQuery = graphql`
 export const ArticleStaticPathsQuery = graphql`
     query articleStaticPathsQuery($locale: I18NLocaleCode, $start: Int, $limit: Int, $filters: ArticleFiltersInput) {
         articles(locale: $locale, pagination: { start: $start, limit: $limit }, filters: $filters) {
-            meta {
-                pagination {
-                    total
-                }
-            }
-            data {
-                ...articleDetailFragment @relay(mask: false)
-            }
+            ...articleDetailFragment @relay(mask: false)
         }
     }
 `;
 
 graphql`
-    fragment articleFragment on ArticleEntity {
-        id
-        attributes {
-            title
-            slug
-            publishedAt
-            publishDate
-            category {
-                data {
-                    ...articleCategoryFragment @relay(mask: false)
-                }
-            }
-            image {
-                data {
-                    ...appImageFragment @relay(mask: false)
-                }
-            }
-            content
+    fragment articleFragment on Article {
+        documentId
+        title
+        slug
+        publishedAt
+        publishDate
+        category {
+            ...articleCategoryFragment @relay(mask: false)
         }
+        image {
+            ...appImageFragment @relay(mask: false)
+        }
+        content
     }
 `;
 
 graphql`
-    fragment articleDetailFragment on ArticleEntity {
-        id
-        attributes {
-            title
+    fragment articleDetailFragment on Article {
+        __typename
+        documentId
+        title
+        slug
+        publishedAt
+        publishDate
+        category {
+            ...articleCategoryFragment @relay(mask: false)
+        }
+        image {
+            ...appImageFragment @relay(mask: false)
+        }
+        content
+        seo {
+            ...appSeoFragment @relay(mask: false)
+        }
+        sitemap {
+            ...appSitemapFragment @relay(mask: false)
+        }
+        localizations {
+            documentId
+            locale
             slug
-            publishedAt
-            publishDate
-            category {
-                data {
-                    ...articleCategoryFragment @relay(mask: false)
-                }
-            }
-            image {
-                data {
-                    ...appImageFragment @relay(mask: false)
-                }
-            }
-            content
-            seo {
-                ...appSeoFragment @relay(mask: false)
-            }
-            sitemap {
-                ...appSitemapFragment @relay(mask: false)
-            }
-            localizations {
-                data {
-                    id
-                    attributes {
-                        locale
-                        slug
-                    }
-                }
-            }
         }
     }
 `;

@@ -9,10 +9,10 @@ export const getSystemResource = (
     if (!data) return '';
 
     const el = data.find((e) => {
-        if (!e?.attributes) return false;
+        if (!e) return false;
 
-        return e.attributes.codename.toString() === key.toString();
+        return e.codename.toString() === key.toString();
     });
 
-    return el?.attributes?.value || '';
+    return el?.value || '';
 };

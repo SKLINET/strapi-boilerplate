@@ -45,46 +45,36 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
 
     const { webSetting, page } = data;
 
-    const globalSeo = webSetting?.data?.attributes?.globalSeo;
+    const globalSeo = webSetting?.globalSeo;
 
     const itemMeta = getMetaFromItem(item);
 
     const locale = getLocale(context.params.slug);
 
     const itemSharingImage = itemMeta?.image?.url ? getImageUrl(itemMeta.image.url, true) : null;
-    const globalSharingImage = globalSeo?.sharingImage?.data?.attributes?.url
-        ? getImageUrl(globalSeo.sharingImage.data.attributes.url, true)
-        : null;
+    const globalSharingImage = globalSeo?.sharingImage?.url ? getImageUrl(globalSeo.sharingImage.url, true) : null;
 
     const metaData = {
         siteName: globalSeo?.siteName,
-        title: itemMeta?.seo?.title || itemMeta?.title || page?.attributes?.seo?.title || page?.attributes?.title || '',
+        title: itemMeta?.seo?.title || itemMeta?.title || page?.seo?.title || page?.title || '',
         suffix: globalSeo?.titleSuffix || '',
-        metaTitle:
-            itemMeta?.seo?.metaTitle ||
-            itemMeta?.title ||
-            page?.attributes?.seo?.metaTitle ||
-            page?.attributes?.title ||
-            '',
+        metaTitle: itemMeta?.seo?.metaTitle || itemMeta?.title || page?.seo?.metaTitle || page?.title || '',
         metaDescription:
             itemMeta?.seo?.metaDescription ||
             itemMeta?.description ||
-            page?.attributes?.seo?.metaDescription ||
+            page?.seo?.metaDescription ||
             globalSeo?.description ||
             '',
-        keyWords: itemMeta?.seo?.keywords || page?.attributes?.seo?.keywords || '',
-        robots: itemMeta?.seo?.metaRobots || page?.attributes?.seo?.metaRobots || null,
-        meta: itemMeta?.seo?.meta || page?.attributes?.seo?.meta || globalSeo?.metaTags || [],
-        social: itemMeta?.seo?.socialNetworks || page?.attributes?.seo?.socialNetworks || null,
-        canonical: itemMeta?.seo?.canonicalURL || page?.attributes?.seo?.canonicalURL || null,
-        viewPort: itemMeta?.seo?.metaViewport || page?.attributes?.seo?.metaViewport || null,
+        keyWords: itemMeta?.seo?.keywords || page?.seo?.keywords || '',
+        robots: itemMeta?.seo?.metaRobots || page?.seo?.metaRobots || null,
+        meta: itemMeta?.seo?.meta || page?.seo?.meta || globalSeo?.metaTags || [],
+        social: itemMeta?.seo?.socialNetworks || page?.seo?.socialNetworks || null,
+        canonical: itemMeta?.seo?.canonicalURL || page?.seo?.canonicalURL || null,
+        viewPort: itemMeta?.seo?.metaViewport || page?.seo?.metaViewport || null,
         preventIndexing:
-            itemMeta?.seo?.preventIndexing ||
-            globalSeo?.preventIndexing ||
-            page?.attributes?.seo?.preventIndexing ||
-            false,
+            itemMeta?.seo?.preventIndexing || globalSeo?.preventIndexing || page?.seo?.preventIndexing || false,
         sharingImage: itemSharingImage || globalSharingImage || null,
-        structuredData: itemMeta?.seo?.structuredData || page?.attributes?.seo?.structuredData || null,
+        structuredData: itemMeta?.seo?.structuredData || page?.seo?.structuredData || null,
     };
 
     const share = getSocialNetworksType(metaData.social);

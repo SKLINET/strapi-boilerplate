@@ -4,9 +4,9 @@ import { appIconFragment$data } from '../../relay/__generated__/appIconFragment.
 type Fragment = Omit<appIconFragment$data, ' $fragmentType'>;
 
 export const getIconType = (e: Fragment | null | undefined): Icons | null => {
-    if (!e?.attributes?.codename) return null;
+    if (!e?.codename) return null;
 
-    const { codename } = e.attributes;
+    const { codename } = e;
 
     return getIconName(codename);
 };

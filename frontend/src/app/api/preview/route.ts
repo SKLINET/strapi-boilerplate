@@ -4,7 +4,6 @@ import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 import { fetchQuery } from 'relay-runtime';
 import { previewSettingsQuery } from '../../../relay/api/__generated__/previewSettingsQuery.graphql';
 import { PreviewPageQuery, PreviewSettingsQuery } from '../../../relay/api/preview';
-import { formatPageObject } from '../../../utils/base/formatPageObject';
 import { getPageUrl } from '../../../utils/getPageUrl';
 import { previewPageQuery } from '../../../relay/api/__generated__/previewPageQuery.graphql';
 import { getPagePattern } from '../../../lib/routing/getPagePattern';
@@ -22,31 +21,28 @@ export async function GET(request: Request) {
 
     const environment = createRelayEnvironment({});
     const data = await fetchQuery<previewSettingsQuery>(environment, PreviewSettingsQuery, {
-        publicationState: 'PREVIEW',
+        publicationStatus: 'DRAFT',
         locale: _locale,
     }).toPromise();
-    const settings = data?.webSetting?.data?.attributes || null;
+    const settings = data?.webSetting || null;
     let url = '';
 
-    const homepage = formatPageObject(settings?.homePage?.data?.attributes?.url || '');
+    const homepageUrl = settings?.homePage?.url || '';
 
     switch (type) {
         case 'articles':
-            url += `${getPageUrl(settings?.articleDetailPage?.data?.attributes?.url || '', _locale)?.replace(
-                ':slug',
-                String(slug),
-            )}`;
+            url += `${getPageUrl(settings?.articleDetailPage?.url || '', _locale)?.replace(':slug', String(slug))}`;
             break;
     }
 
     if (type === 'pages') {
         const p = await fetchQuery<previewPageQuery>(environment, PreviewPageQuery, {
-            publicationState: 'PREVIEW',
+            publicationStatus: 'DRAFT',
             locale: _locale,
             pattern: getPagePattern(slug || ''),
         }).toPromise();
         if (p?.findPage) {
-            url += `${getPageUrl(p?.findPage?.url || homepage?.data?.attributes?.url || '', _locale)}`;
+            url += `${getPageUrl(p?.findPage?.url || homepageUrl, _locale)}`;
         }
     }
 

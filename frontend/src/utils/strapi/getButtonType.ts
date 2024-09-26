@@ -10,7 +10,7 @@ export const getButtonType = (e: Fragment | null | undefined, app: IApp): IButto
 
     const { id, label, page, linkExternal, openInNewTab } = e;
 
-    const _page = getPageType(page?.data, app);
+    const _page = getPageType(page, app);
 
     const href = _page?.href || linkExternal;
 

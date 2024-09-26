@@ -12,8 +12,8 @@ import { articleCategoryListQuery$data } from '../../../relay/__generated__/arti
 
 export interface ArticlesListBlockStaticProps {
     data: {
-        articles: NonNullable<articleListQuery$data['items']>['data'] | null;
-        categories: NonNullable<articleCategoryListQuery$data['items']>['data'] | null;
+        articles: NonNullable<articleListQuery$data['items']> | null;
+        categories: NonNullable<articleCategoryListQuery$data['items']> | null;
         canLoadMore: boolean;
     };
 }
@@ -76,8 +76,8 @@ if (typeof window === 'undefined') {
 
         return {
             data: {
-                articles: articles?.data || [],
-                categories: categories?.data || [],
+                articles: articles || [],
+                categories: categories || [],
                 canLoadMore: articles?.count > limit,
             },
         };

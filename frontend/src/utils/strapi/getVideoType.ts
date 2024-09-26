@@ -12,8 +12,8 @@ export const getVideoType = (e: Fragment | null | undefined): IVideo | null => {
 
     return {
         id: id,
-        uploadedVideo: getUploadedVideoType(uploadedVideo?.data),
+        uploadedVideo: getUploadedVideoType(uploadedVideo),
         externalVideo: externalVideo || null,
-        image: getImageType(optionalImage?.data),
+        image: getImageType(optionalImage),
     };
 };
