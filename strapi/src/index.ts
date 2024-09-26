@@ -26,7 +26,21 @@ export default {
             async resolve(parent, args) {
               const { locale, status, pattern } = args;
 
-              // This is the original code from the query
+              const variables: Record<string, any> = {
+                locale,
+                status: status || "PUBLISHED",
+              };
+
+              const data = await strapi.entityService.findMany(
+                "api::page.page",
+                variables
+              );
+
+              for (const it of data) {
+                if (it?.url?.match(pattern)) {
+                  return it;
+                }
+              }
 
               return null;
             },
@@ -47,7 +61,21 @@ export default {
             async resolve(parent, args) {
               const { status, redirectFrom } = args;
 
-              // This is the original code from the query
+              const data = await strapi.entityService.findMany(
+                "api::redirect.redirect",
+                {
+                  filters: {
+                    redirectFrom,
+                  },
+                  status: status || "PUBLISHED",
+                }
+              );
+
+              for (const it of data) {
+                if (it?.redirectFrom?.match(redirectFrom)) {
+                  return it;
+                }
+              }
 
               return null;
             },
@@ -71,7 +99,37 @@ export default {
             async resolve(parent, args) {
               const { locale, status, pattern, entityId } = args;
 
-              // This is the original code from the query
+              let data;
+              if (entityId) {
+                data = await strapi.entityService.findMany("api::page.page", {
+                  filters: {
+                    id: entityId,
+                  },
+                  locale,
+                  limit: 1,
+                  status: status || "PUBLISHED",
+                });
+                return data;
+              } else {
+                const variables: Record<string, any> = {
+                  locale,
+                  limit: 9999,
+                  status: status || "PUBLISHED",
+                };
+                if (status?.toLowerCase() === "published") {
+                  variables.versions = "all";
+                }
+                data = await strapi.entityService.findMany(
+                  "api::page.page",
+                  variables
+                );
+              }
+
+              for (const it of data) {
+                if (it?.url?.match(pattern)) {
+                  return it;
+                }
+              }
 
               return null;
             },

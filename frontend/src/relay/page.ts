@@ -72,6 +72,7 @@ export const pageListQuery = graphql`
 export const SitemapPagesQuery = graphql`
     query pagesSitemapQuery($publicationStatus: PublicationStatus) {
         pages(status: $publicationStatus) {
+            documentId
             url
             publishedAt
             sitemap {
@@ -84,6 +85,7 @@ export const SitemapPagesQuery = graphql`
 export const SitemapArticlesQuery = graphql`
     query pageArticlesSitemapQuery($publicationStatus: PublicationStatus, $filters: ArticleFiltersInput) {
         articles(status: $publicationStatus, filters: $filters) {
+            documentId
             slug
             publishedAt
             sitemap {
