@@ -86,37 +86,37 @@ class PageProvider extends AbstractStrapiProvider<
 
             if (data) {
                 if (cnt === -1) {
-                    cnt = Number(data?.pages?.meta?.pagination?.total);
+                    cnt = Number(data?.pages?.length || 0);
                 }
                 // loop over all pages
-                for (const page of data?.pages?.data || []) {
-                    if (String(page?.attributes?.url) === 'homepage' && page?.attributes?.sitemap) {
+                for (const page of data?.pages || []) {
+                    if (String(page?.url) === 'homepage' && page?.sitemap) {
                         items.push({
                             params: {
                                 slug: [],
                                 sitemap: {
-                                    enabled: page?.attributes?.sitemap?.enabled || false,
-                                    changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                    priority: page?.attributes?.sitemap?.priority || 0.3,
+                                    enabled: page?.sitemap?.enabled || false,
+                                    changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                    priority: page?.sitemap?.priority || 0.3,
                                 },
                             },
                         });
                         continue;
                     }
-                    if (String(page?.attributes?.url) === '404') {
+                    if (String(page?.url) === '404') {
                         continue;
                     }
-                    if (String(page?.attributes?.url) === '500') {
+                    if (String(page?.url) === '500') {
                         continue;
                     }
-                    const url = page?.attributes?.url;
+                    const url = page?.url;
                     if (url && blocks) {
                         const blocksParams = await getStaticParamsFromBlocks<
                             PageProps,
                             WebSettingsProps,
                             Providers,
                             Locale
-                        >(page?.attributes?.content as any, locale ?? '', providers, blocks);
+                        >(page?.content as any, locale ?? '', providers, blocks);
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;
@@ -139,9 +139,9 @@ class PageProvider extends AbstractStrapiProvider<
                                         slug: pathParts,
                                         locale,
                                         sitemap: {
-                                            enabled: page?.attributes?.sitemap?.enabled || false,
-                                            changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                            priority: page?.attributes?.sitemap?.priority || 0.3,
+                                            enabled: page?.sitemap?.enabled || false,
+                                            changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                            priority: page?.sitemap?.priority || 0.3,
                                         },
                                     },
                                 });
@@ -154,9 +154,9 @@ class PageProvider extends AbstractStrapiProvider<
                                     slug: pathParts,
                                     locale,
                                     sitemap: {
-                                        enabled: page?.attributes?.sitemap?.enabled || false,
-                                        changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                        priority: page?.attributes?.sitemap?.priority || 0.3,
+                                        enabled: page?.sitemap?.enabled || false,
+                                        changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                        priority: page?.sitemap?.priority || 0.3,
                                     },
                                 },
                             });
@@ -164,7 +164,7 @@ class PageProvider extends AbstractStrapiProvider<
                     }
                 }
 
-                done += data?.pages?.data?.length || 0;
+                done += data?.pages?.length || 0;
             }
         } while (done < cnt);
 

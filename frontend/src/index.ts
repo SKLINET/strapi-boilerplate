@@ -128,8 +128,10 @@ export type Redirect = {
     readonly permanent: boolean | null;
 } | null;
 
-export interface BasePage<T extends { __typename: string; id?: string } = { __typename: string; id?: string }> {
-    id: string | null;
+export interface BasePage<
+    T extends { __typename: string; documentId: string } = { __typename: string; documentId: string },
+> {
+    documentId: string;
     attributes: {
         url: string | null;
         title?: string | null;

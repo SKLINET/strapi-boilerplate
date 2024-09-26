@@ -390,10 +390,10 @@ export default abstract class AbstractElasticProvider<
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const { data } = await this.find({ locale, limit: Infinity }, !prod);
-                const cmsIds = data.map((item) => item?.id).filter((id) => id);
+                const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
-                const { data: data2 } = await this.findByElastic<'id'>({ size: 10000 }, locale, !prod);
-                const elasticIds = data2.map((i) => i && i.id).filter((i) => i);
+                const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, locale, !prod);
+                const elasticIds = data2.map((i) => i && i.documentId).filter((i) => i);
 
                 for (const id of elasticIds) {
                     if (id && cmsIds.indexOf(id) === -1) {
@@ -411,10 +411,10 @@ export default abstract class AbstractElasticProvider<
             // @ts-ignore
             const { data } = await this.find({ limit: Infinity }, !prod);
 
-            const cmsIds = data.map((item) => item?.id).filter((id) => id);
+            const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
-            const { data: data2 } = await this.findByElastic<'id'>({ size: 10000 }, undefined, !prod);
-            const elasticIds = data2.map((i) => i && i.id).filter((i) => i);
+            const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, undefined, !prod);
+            const elasticIds = data2.map((i) => i && i.documentId).filter((i) => i);
 
             for (const id of elasticIds) {
                 if (id && cmsIds.indexOf(id) === -1) {

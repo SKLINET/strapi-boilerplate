@@ -7,7 +7,9 @@ export interface ContextProps {
     searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export type PageProps = NonNullable<pageDetailQuery$data['item'] & { url: string; id: string }>;
+export type PageProps = NonNullable<
+    pageDetailQuery$data['item'] & { url: string | null | undefined; documentId: string }
+>;
 
 export interface ParamsProps {
     slug: string[] | undefined;

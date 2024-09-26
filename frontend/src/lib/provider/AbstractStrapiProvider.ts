@@ -8,7 +8,7 @@ import config from '../../../sklinet.config.json';
 import { STRAPI_MAX_LIMIT } from '../../constants';
 
 export type StrapiRecord = {
-    id: string | null | undefined;
+    documentId: string;
     [key: string]: unknown;
 };
 
