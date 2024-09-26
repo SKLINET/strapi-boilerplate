@@ -32,21 +32,6 @@
         }
       }
     },
-    "blocks": {
-      "type": "dynamiczone",
-      "components": [
-        "block.template-block",
-        "block.article-detail-block",
-        "block.articles-list-block",
-        "block.video-block",
-        "block.contact-form-block"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "pages": {
       "type": "relation",
       "relation": "oneToMany",
@@ -78,6 +63,21 @@
         }
       },
       "component": "shared.sitemap"
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "block.template-block",
+        "block.article-detail-block",
+        "block.articles-list-block",
+        "block.video-block",
+        "block.contact-form-block"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

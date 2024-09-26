@@ -825,20 +825,6 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    blocks: Schema.Attribute.DynamicZone<
-      [
-        'block.template-block',
-        'block.article-detail-block',
-        'block.articles-list-block',
-        'block.video-block',
-        'block.contact-form-block',
-      ]
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     pages: Schema.Attribute.Relation<'oneToMany', 'api::page.page'>;
     parent: Schema.Attribute.Relation<'manyToOne', 'api::page.page'>;
     seo: Schema.Attribute.Component<'shared.seo', false> &
@@ -848,6 +834,20 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         };
       }>;
     sitemap: Schema.Attribute.Component<'shared.sitemap', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    blocks: Schema.Attribute.DynamicZone<
+      [
+        'block.template-block',
+        'block.article-detail-block',
+        'block.articles-list-block',
+        'block.video-block',
+        'block.contact-form-block',
+      ]
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Box, Flex, Field } from '@strapi/design-system';
 import { getVideoProviderAndUid } from '../../utils/getVideoProviderAndUid';
-// import { useIntl } from 'react-intl';
-// import { getTranslation } from '../../utils/getTranslation';
+import { useIntl } from 'react-intl';
+import { getTranslation } from '../../utils/getTranslation';
 
 interface VideoInputProps {
     intlLabel: Record<any, any>;
@@ -17,17 +17,12 @@ interface VideoInputProps {
     [key: string]: any;
 }
 
-const VideoInput = ({
-    attribute,
-    name,
-    onChange,
-    value,
-}: VideoInputProps) => {
+const VideoInput = ({ attribute, name, onChange, value, intlLabel, intlDescription }: VideoInputProps) => {
     const [providerUid, setProviderUid] = useState<string | null>(null);
     const [provider, setProvider] = useState<string | null>(null);
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [invalidUrl, setInvalidUrl] = useState(false);
-    // const { formatMessage } = useIntl();
+    const { formatMessage } = useIntl();
 
     // Load data from value on page load
     useEffect(() => {
@@ -100,16 +95,32 @@ const VideoInput = ({
         }
     };
 
+    const fieldLabel = intlLabel
+        ? formatMessage(intlLabel)
+        : formatMessage({ id: getTranslation('video-field.label'), defaultMessage: 'Video' });
+    const fieldDescription = intlDescription
+        ? formatMessage(intlDescription)
+        : formatMessage({ id: getTranslation('video-field.title'), defaultMessage: 'Video url' });
+
+    const fieldPlaceholder = formatMessage({
+        id: getTranslation('video-field.placeholder'),
+        defaultMessage: 'eg. https://vimeo.com/123456789',
+    });
+    const fieldErrorMessage = formatMessage({
+        id: getTranslation('video-field.invalid.url'),
+        defaultMessage: 'Invalid video url',
+    });
+
     return (
         <Box>
-            <Field.Root id={name} hint="Video url" error={invalidUrl ? 'Invalid video url' : undefined}>
-                <Field.Label>{'External video'}</Field.Label>
+            <Field.Root id={name} hint={fieldDescription} error={invalidUrl ? fieldErrorMessage : undefined}>
+                <Field.Label>{fieldLabel}</Field.Label>
                 <Field.Input
                     type="text"
                     name={name}
                     value={videoUrl}
                     onChange={onInputChange}
-                    placeholder="eg. https://vimeo.com/123456789"
+                    placeholder={fieldPlaceholder}
                 />
                 <Field.Hint />
                 <Field.Error />
