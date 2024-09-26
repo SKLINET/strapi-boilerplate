@@ -72,7 +72,7 @@ export default abstract class AbstractStrapiProvider<
             variables =
                 typeof options === 'string'
                     ? {
-                          filter: {
+                          filters: {
                               id: { eq: options },
                               ...this.getFilterParams(),
                           },
@@ -82,8 +82,8 @@ export default abstract class AbstractStrapiProvider<
                           ...options,
                           limit: 1,
                           offset: 0,
-                          filter: options.filter
-                              ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
+                          filters: options.filters
+                              ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filters }
                               : this.getFilterParams(options?.publicationState || ''),
                           locale,
                       };
@@ -114,8 +114,8 @@ export default abstract class AbstractStrapiProvider<
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
-            filter: options.filter
-                ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
+            filters: options.filters
+                ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filters }
                 : this.getFilterParams(options?.publicationState || ''),
         };
 
@@ -128,8 +128,10 @@ export default abstract class AbstractStrapiProvider<
             .then((d) => {
                 const items = (d as Record<string, unknown>).items;
                 return {
-                    items: (items as unknown as TItems)?.data || [],
-                    meta: (items as unknown as { meta: { pagination: { total: number } } })?.meta || {},
+                    items: (items || []) as TItems['data'],
+                    // TODO: Fix meta
+                    // meta: (items as unknown as { meta: { pagination: { total: number } } })?.meta || {},
+                    meta: { pagination: { total: 0 } },
                 };
             });
 
@@ -137,6 +139,9 @@ export default abstract class AbstractStrapiProvider<
         const data: Mutable<TItems['data']> = ([...result.items] as Mutable<TItems['data']>) || [];
 
         if (options.limit > STRAPI_MAX_LIMIT) {
+            // When limit is reached, load more items
+            // TODO: Update like first load
+            /*
             while (options.limit && data.length < count && result.items.length === STRAPI_MAX_LIMIT) {
                 variables.start = data.length;
                 const result = await fetchQuery<TFind>(this.getEnvironment(preview), this.findNode, variables)
@@ -153,11 +158,14 @@ export default abstract class AbstractStrapiProvider<
                 }
                 await sleep();
             }
+            */
         }
 
         return {
             count,
-            data: (await this.transformResults(data, options.locale)) as unknown as TItems['data'],
+            // TODO: We don't need to transform results
+            // data: (await this.transformResults(data, options.locale)) as unknown as TItems['data'],
+            data,
         };
     }
 
@@ -206,8 +214,9 @@ export default abstract class AbstractStrapiProvider<
     }
 
     getFilterParams(publicationState = ''): Record<string, unknown> {
-        if (publicationState?.toLowerCase() === 'preview') {
-            return { isVisibleInListView: { eq: true } };
+        if (publicationState?.toLowerCase() === 'draft') {
+            // return { isVisibleInListView: { eq: true } };
+            return {};
         }
         return {};
     }

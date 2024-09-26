@@ -17,7 +17,8 @@ class ArticleCategoryProvider extends AbstractStrapiProvider<any, any> {
 
     getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
         if (publicationState?.toLowerCase() === 'preview') {
-            return { publishedAt: { lte: dayjs().format() }, isVisibleInListView: { eq: true } };
+            // return { publishedAt: { lte: dayjs().format() }, isVisibleInListView: { eq: true } };
+            return { publishedAt: { lte: dayjs().format() } };
         }
         return { publishedAt: { lte: dayjs().format() } };
     }

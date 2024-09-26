@@ -54,15 +54,15 @@ if (typeof window === 'undefined') {
 
         const limit = block?.countOnPage || 5;
 
-        const filter: Record<string, any> = {};
+        const filters: Record<string, any> = {};
 
         if (typeof searchParams?.filter === 'string') {
-            filter.category = { id: { eq: getItemId(searchParams.filter) } };
+            filters.category = { id: { eq: getItemId(searchParams.filter) } };
         }
 
         const articles = await providers.article.find({
             locale,
-            filter: filter,
+            filters: filters,
             limit: limit,
             preview,
             publicationState: publicationState,
@@ -76,8 +76,8 @@ if (typeof window === 'undefined') {
 
         return {
             data: {
-                articles: articles || [],
-                categories: categories || [],
+                articles: articles?.data || [],
+                categories: categories?.data || [],
                 canLoadMore: articles?.count > limit,
             },
         };

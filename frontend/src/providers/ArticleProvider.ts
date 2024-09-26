@@ -21,7 +21,8 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
 
     getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
         if (publicationState?.toLowerCase() === 'preview') {
-            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' }, isVisibleInListView: { eq: true } };
+            // return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' }, isVisibleInListView: { eq: true } };
+            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
         }
         return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
