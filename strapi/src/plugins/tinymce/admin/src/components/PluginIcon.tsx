@@ -1,5 +1,5 @@
-import { Pencil } from '@strapi/icons';
+import { Paragraph } from '@strapi/icons';
 
-const PluginIcon = () => <Pencil />;
+const PluginIcon = () => <Paragraph />;
 
 export { PluginIcon };

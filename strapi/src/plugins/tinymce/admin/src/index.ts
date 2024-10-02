@@ -4,13 +4,30 @@ import { PLUGIN_ID } from './pluginId';
 import { Initializer } from './components/Initializer';
 import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
 import pluginPermissions from './permissions';
-import Wysiwyg from './components/Wysiwyg';
+import { PluginIcon } from './components/PluginIcon';
 
 const name = pluginPkg.strapi.name;
 
 export default {
     register(app: any) {
-        app.addFields({ type: 'wysiwyg', Component: Wysiwyg });
+        app.customFields.register({
+            name: 'tinymce',
+            pluginId: 'tinymce',
+            type: 'string',
+            icon: PluginIcon,
+            intlLabel: {
+                id: getTranslation('settings.title'),
+                defaultMessage: 'TinyMCE',
+            },
+            intlDescription: {
+                id: getTranslation('settings.description'),
+                defaultMessage: 'TinyMCE rich text editor',
+            },
+            components: {
+                Input: async () =>
+                    import(/* webpackChunkName: "video-field-input-component" */ './components/Wysiwyg'),
+            },
+        });
 
         app.createSettingSection(
             {
