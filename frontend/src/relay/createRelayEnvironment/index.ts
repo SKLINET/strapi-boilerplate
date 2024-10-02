@@ -3,6 +3,28 @@ import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
 // import getPublicationState from '../../utils/getPublicationState';
 
+const getDataID = (fieldValue: any, typeName: string) => {
+    const { documentId, id, locale } = fieldValue;
+
+    // Use `documentId` if available
+    if (documentId) {
+        if (locale) {
+            return `${typeName}_${documentId}_${locale}`;
+        }
+        return `${typeName}_${documentId}`;
+    }
+
+    // Use `id` if available
+    if (id) {
+        if (locale) {
+            return `${typeName}_${id}_${locale}`;
+        }
+        return `${typeName}_${id}`;
+    }
+
+    return null;
+};
+
 export const createRelayEnvironment = (records: RecordMap, token?: string, preview = false): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
@@ -39,4 +61,5 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
         }),
         store: new Store(new RecordSource(records)),
         isServer: true,
+        getDataID,
     });

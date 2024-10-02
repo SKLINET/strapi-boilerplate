@@ -186,6 +186,7 @@ export interface BlockVideoBlock extends Struct.ComponentSchema {
   info: {
     displayName: 'Video';
     icon: 'play';
+    description: '';
   };
   attributes: {
     video: Schema.Attribute.Component<'complementary.video', false> &
