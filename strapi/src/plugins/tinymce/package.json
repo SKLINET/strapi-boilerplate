@@ -1,14 +1,14 @@
 {
-    "name": "@sklinet/strapi-plugin-video-field",
+    "name": "@sklinet/strapi-plugin-tinymce",
     "version": "1.1.0",
-    "description": "Add video field to your Strapi application.",
-    "private": false,
+    "description": "Replaces the default Strapi WYSIWYG editor with a customized build of TinyMCE editor.",
     "keywords": [
         "strapi",
-        "video",
-        "field",
-        "video-field",
-        "custom-field"
+        "tiinymce",
+        "tinymce 7",
+        "wysiwyg",
+        "rich text",
+        "editor"
     ],
     "license": "MIT",
     "author": {
@@ -51,9 +51,9 @@
     },
     "devDependencies": {
         "@strapi/sdk-plugin": "^5.2.6",
-        "@strapi/strapi": "^5.0.0",
-        "@strapi/typescript-utils": "^5.0.0",
-        "@types/react": "^18.3.9",
+        "@strapi/strapi": "^5.0.1",
+        "@strapi/typescript-utils": "^5.0.1",
+        "@types/react": "^18.3.10",
         "@types/react-dom": "^18.3.0",
         "prettier": "^3.3.3",
         "react": "^18.3.1",
@@ -64,17 +64,17 @@
     },
     "peerDependencies": {
         "@strapi/sdk-plugin": "^5.2.6",
-        "@strapi/strapi": "^5.0.0",
+        "@strapi/strapi": "^5.0.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^6.26.2",
         "styled-components": "^6.1.13"
     },
     "strapi": {
-        "name": "video-field",
-        "description": "Add video field to your Strapi application.",
-        "kind": "plugin",
-        "displayName": "Video Field"
+        "displayName": "TinyMCE",
+        "name": "tinymce",
+        "description": "Replaces the default Strapi WYSIWYG editor with a customized build of TinyMCE editor.",
+        "kind": "plugin"
     },
     "maintainers": [
         {
@@ -84,6 +84,6 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/SKLINET/strapi-plugin-video-field.git"
+        "url": "https://github.com/SKLINET/strapi-plugin-tinymce"
     }
 }

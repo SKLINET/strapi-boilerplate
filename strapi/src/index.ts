@@ -47,6 +47,7 @@ export default {
           });
         },
       });
+
       const redirectQuery = nexus.extendType({
         type: "Query",
         auth: false,
@@ -137,8 +138,42 @@ export default {
         },
       });
 
+      const findArticleBySlugQuery = nexus.extendType({
+        type: "Query",
+        auth: false,
+        definition(t) {
+          t.field("findArticleBySlug", {
+            type: "Article",
+            auth: false,
+            args: {
+              slug: "String",
+              locale: "String",
+              status: "PublicationStatus",
+            },
+            async resolve(parent, args) {
+              const { slug, locale, status } = args;
+
+              const variables: Record<string, any> = {
+                filters: {
+                  slug: slug,
+                },
+                locale,
+                status: status || "PUBLISHED",
+              };
+
+              const data = await strapi.entityService.findMany(
+                "api::article.article",
+                variables
+              );
+
+              return data[0];
+            },
+          });
+        },
+      });
+
       return {
-        types: [pageQuery, redirectQuery, onePageQuery],
+        types: [pageQuery, redirectQuery, onePageQuery, findArticleBySlugQuery],
         resolversConfig: {
           "Query.findPage": {
             auth: false,
@@ -149,7 +184,7 @@ export default {
           "Query.findRedirect": {
             auth: false,
           },
-          "Query.findSlug": {
+          "Query.findArticleBySlug": {
             auth: false,
           },
           "Query.sendEmail": {

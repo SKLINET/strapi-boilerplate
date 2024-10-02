@@ -1,21 +1,8 @@
 import { graphql } from 'relay-runtime';
 
-/* TODO: Slugify must be reworked on Strapi 5 */
-/*
 export const ArticleDetailQuery = graphql`
-    query articleDetailQuery($slug: String, $id: String, $locale: String, $publicationStatus: String) {
-        item: findSlug(modelName: "article", slug: $slug, id: $id, locale: $locale, status: $publicationStatus) {
-            ... on ArticleEntityResponse {
-                ...articleDetailFragment @relay(mask: false)
-            }
-        }
-    }
-`;
-*/
-
-export const ArticleDetailQuery = graphql`
-    query articleDetailQuery($publicationStatus: PublicationStatus, $locale: I18NLocaleCode, $documentId: ID!) {
-        item: article(documentId: $documentId, status: $publicationStatus, locale: $locale) {
+    query articleDetailQuery($slug: String, $locale: I18NLocaleCode, $publicationStatus: PublicationStatus) {
+        item: findArticleBySlug(slug: $slug, locale: $locale, status: $publicationStatus) {
             ...articleDetailFragment @relay(mask: false)
         }
     }

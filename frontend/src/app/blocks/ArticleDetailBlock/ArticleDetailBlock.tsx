@@ -59,7 +59,7 @@ if (typeof window === 'undefined') {
             variables.id = previewData?.itemId || '';
         }
         const item = await provider.findOne(variables, locale, preview);
-        if (!item || !item?.data) {
+        if (!item) {
             const err = new Error('Article not found') as Error & { code: string };
             err.code = 'ENOENT';
             throw err;

@@ -29,7 +29,9 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -38,14 +40,6 @@
     },
     "publishDate": {
       "type": "datetime",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "content": {
-      "type": "richtext",
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -86,6 +80,14 @@
       "relation": "manyToOne",
       "target": "api::article-category.article-category",
       "inversedBy": "articles"
+    },
+    "content": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "richtext"
     }
   }
 }
