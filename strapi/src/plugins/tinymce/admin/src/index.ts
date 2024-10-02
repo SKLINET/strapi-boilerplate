@@ -10,6 +10,7 @@ const name = pluginPkg.strapi.name;
 
 export default {
     register(app: any) {
+        console.log(app);
         app.customFields.register({
             name: 'tinymce',
             pluginId: 'tinymce',
@@ -23,9 +24,23 @@ export default {
                 id: getTranslation('settings.description'),
                 defaultMessage: 'TinyMCE rich text editor',
             },
+            isResizable: false,
+            default: 12,
+            options: {
+                advanced: [
+                    {
+                        type: 'checkbox',
+                        name: 'required',
+                        intlLabel: {
+                            id: getTranslation('settings.required-field'),
+                            defaultMessage: 'Required field',
+                        },
+                        description: "You won't be able to create an entry if this field is empty",
+                    },
+                ],
+            },
             components: {
-                Input: async () =>
-                    import(/* webpackChunkName: "video-field-input-component" */ './components/Wysiwyg'),
+                Input: async () => import(/* webpackChunkName: "video-field-input-component" */ './components/Wysiwyg'),
             },
         });
 

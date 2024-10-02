@@ -543,13 +543,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::article-category.article-category'
     >;
-    content: Schema.Attribute.RichText &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    richtext: Schema.Attribute.String &
+    content: Schema.Attribute.String &
       Schema.Attribute.CustomField<'plugin::tinymce.tinymce'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

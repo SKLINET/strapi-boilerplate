@@ -47,6 +47,7 @@
     "dependencies": {
         "@strapi/design-system": "^2.0.0-rc.11",
         "@strapi/icons": "^2.0.0-rc.11",
+        "@tinymce/tinymce-react": "^5.1.1",
         "react-intl": "^6.7.0"
     },
     "devDependencies": {

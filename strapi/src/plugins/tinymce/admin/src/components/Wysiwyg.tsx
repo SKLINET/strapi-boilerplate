@@ -1,26 +1,62 @@
 import React from 'react';
-import { Field } from '@strapi/design-system';
+import { Box, Flex, Typography } from '@strapi/design-system';
+import { Earth } from '@strapi/icons';
+import TinyEditor from './Editor';
+// import MediaLib from './MediaLib';
 
 interface WysiwygProps {
-    description?: Record<any, any>;
     disabled?: boolean;
     error?: string;
-    intlLabel: Record<any, any>;
     name: string;
     onChange: (e: any) => void;
     required?: boolean;
+    label?: string;
+    placeholder?: string;
+    hint?: string;
     value?: any;
+    attribute?: any;
 }
 
-const Wysiwyg = ({ name, onChange, value, intlLabel, disabled, error, description, required }: WysiwygProps) => {
-    //
+const Wysiwyg = ({ name, onChange, value, label, disabled, error, required, hint, attribute }: WysiwygProps) => {
+    const localized = Boolean(attribute?.pluginOptions?.i18n?.localized || false);
+
     return (
-        <Field.Root id={name}>
-            <Field.Label>{'Ahoj'}</Field.Label>
-            <Field.Input type="text" name={name} value={value} onChange={onChange} placeholder={'Hmmm'} />
-            <Field.Hint />
-            <Field.Error />
-        </Field.Root>
+        <>
+            <Box>
+                {label && (
+                    <Flex paddingBottom={1}>
+                        <Typography variant="pi" fontWeight="bold" textColor="neutral800">
+                            {label}
+                        </Typography>
+                        {required && (
+                            <Typography variant="omega" fontWeight="bold" textColor="danger600">
+                                *
+                            </Typography>
+                        )}
+                        {localized && (
+                            <Flex paddingLeft={1}>
+                                <Earth width={12} height={12} />
+                            </Flex>
+                        )}
+                    </Flex>
+                )}
+                <TinyEditor disabled={Boolean(disabled)} name={name} onChange={onChange} value={value} />
+                {(error || hint) && (
+                    <Box paddingTop={1}>
+                        {error ? (
+                            <Typography variant="pi" textColor="danger600">
+                                {error}
+                            </Typography>
+                        ) : (
+                            <Typography variant="pi" textColor="neutral600">
+                                {hint}
+                            </Typography>
+                        )}
+                    </Box>
+                )}
+            </Box>
+            {/* <MediaLib isOpen={true} /> */}
+        </>
     );
 };
 
