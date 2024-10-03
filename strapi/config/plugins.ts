@@ -7,6 +7,10 @@ export default () => ({
     enabled: true,
     resolve: "./src/plugins/bold-title-editor",
   },
+  "content-tags": {
+    enabled: true,
+    resolve: "./src/plugins/content-tags",
+  },
   graphql: {
     config: {
       apolloServer: {

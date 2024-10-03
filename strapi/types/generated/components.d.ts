@@ -1,5 +1,20 @@
 import type { Struct, Schema } from '@strapi/strapi';
 
+export interface MenuMenuItem extends Struct.ComponentSchema {
+  collectionName: 'components_menu_menu_items';
+  info: {
+    displayName: 'MenuItem';
+    icon: 'angle-right';
+    description: '';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
+    externalUrl: Schema.Attribute.String;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 export interface SharedSocialNetworks extends Struct.ComponentSchema {
   collectionName: 'components_shared_social_networks';
   info: {
@@ -100,19 +115,70 @@ export interface SharedGlobalSeo extends Struct.ComponentSchema {
   };
 }
 
-export interface MenuMenuItem extends Struct.ComponentSchema {
-  collectionName: 'components_menu_menu_items';
+export interface BlockVideoBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_video_blocks';
   info: {
-    displayName: 'MenuItem';
-    icon: 'angle-right';
+    displayName: 'Video';
+    icon: 'play';
     description: '';
   };
   attributes: {
-    label: Schema.Attribute.String & Schema.Attribute.Required;
-    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
-    externalUrl: Schema.Attribute.String;
-    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    video: Schema.Attribute.Component<'complementary.video', false> &
+      Schema.Attribute.Required;
   };
+}
+
+export interface BlockTemplateBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_template_blocks';
+  info: {
+    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
+    icon: 'rotate';
+    description: '';
+  };
+  attributes: {
+    template: Schema.Attribute.Relation<'oneToOne', 'api::template.template'>;
+  };
+}
+
+export interface BlockContactFormBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_contact_form_blocks';
+  info: {
+    displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
+    icon: 'envelop';
+  };
+  attributes: {
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface BlockArticlesListBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_articles_list_blocks';
+  info: {
+    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
+    icon: 'paintBrush';
+    description: '';
+  };
+  attributes: {
+    countOnPage: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+  };
+}
+
+export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_article_detail_blocks';
+  info: {
+    displayName: 'Detail \u010Dl\u00E1nku';
+    icon: 'paintBrush';
+    description: '';
+  };
+  attributes: {};
 }
 
 export interface ComplementaryVideo extends Struct.ComponentSchema {
@@ -181,92 +247,26 @@ export interface ComplementaryButton extends Struct.ComponentSchema {
   };
 }
 
-export interface BlockVideoBlock extends Struct.ComponentSchema {
-  collectionName: 'components_block_video_blocks';
-  info: {
-    displayName: 'Video';
-    icon: 'play';
-    description: '';
-  };
-  attributes: {
-    video: Schema.Attribute.Component<'complementary.video', false> &
-      Schema.Attribute.Required;
-  };
-}
-
-export interface BlockTemplateBlock extends Struct.ComponentSchema {
-  collectionName: 'components_block_template_blocks';
-  info: {
-    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
-    icon: 'rotate';
-    description: '';
-  };
-  attributes: {
-    template: Schema.Attribute.Relation<'oneToOne', 'api::template.template'>;
-  };
-}
-
-export interface BlockContactFormBlock extends Struct.ComponentSchema {
-  collectionName: 'components_block_contact_form_blocks';
-  info: {
-    displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
-    icon: 'envelop';
-  };
-  attributes: {
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface BlockArticlesListBlock extends Struct.ComponentSchema {
-  collectionName: 'components_block_articles_list_blocks';
-  info: {
-    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
-    icon: 'paintBrush';
-    description: '';
-  };
-  attributes: {
-    countOnPage: Schema.Attribute.Integer &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      > &
-      Schema.Attribute.DefaultTo<5>;
-  };
-}
-
-export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
-  collectionName: 'components_block_article_detail_blocks';
-  info: {
-    displayName: 'Detail \u010Dl\u00E1nku';
-    icon: 'paintBrush';
-    description: '';
-  };
-  attributes: {};
-}
-
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'menu.menu-item': MenuMenuItem;
       'shared.social-networks': SharedSocialNetworks;
       'shared.sitemap': SharedSitemap;
       'shared.seo': SharedSeo;
       'shared.meta': SharedMeta;
       'shared.meta-social': SharedMetaSocial;
       'shared.global-seo': SharedGlobalSeo;
-      'menu.menu-item': MenuMenuItem;
-      'complementary.video': ComplementaryVideo;
-      'complementary.send-email': ComplementarySendEmail;
-      'complementary.mailchimp': ComplementaryMailchimp;
-      'complementary.ecomail': ComplementaryEcomail;
-      'complementary.button': ComplementaryButton;
       'block.video-block': BlockVideoBlock;
       'block.template-block': BlockTemplateBlock;
       'block.contact-form-block': BlockContactFormBlock;
       'block.articles-list-block': BlockArticlesListBlock;
       'block.article-detail-block': BlockArticleDetailBlock;
+      'complementary.video': ComplementaryVideo;
+      'complementary.send-email': ComplementarySendEmail;
+      'complementary.mailchimp': ComplementaryMailchimp;
+      'complementary.ecomail': ComplementaryEcomail;
+      'complementary.button': ComplementaryButton;
     }
   }
 }

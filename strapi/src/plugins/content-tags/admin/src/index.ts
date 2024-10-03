@@ -3,13 +3,14 @@ import { PLUGIN_ID } from './pluginId';
 import { Initializer } from './components/Initializer';
 import { PluginIcon } from './components/PluginIcon';
 import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
+import addColumnToTableHook from './hooks/addColumnToTableHook';
 
 export default {
     register(app: any) {
         app.customFields.register({
-            name: 'bold-title-editor',
+            name: 'content-tags',
             pluginId: PLUGIN_ID,
-            type: 'string',
+            type: 'text',
             icon: PluginIcon,
             intlLabel: {
                 id: getTranslation('field.title'),
@@ -22,13 +23,24 @@ export default {
             options: {
                 advanced: [
                     {
-                        type: 'checkbox',
-                        name: 'required',
-                        intlLabel: {
-                            id: getTranslation('field.required-field'),
-                            defaultMessage: 'Required field',
+                        sectionTitle: {
+                            id: 'global.settings',
+                            defaultMessage: 'Settings',
                         },
-                        description: "You won't be able to create an entry if this field is empty",
+                        items: [
+                            {
+                                name: 'required',
+                                type: 'checkbox',
+                                intlLabel: {
+                                    id: 'form.attribute.item.requiredField',
+                                    defaultMessage: 'Required field',
+                                },
+                                description: {
+                                    id: 'form.attribute.item.requiredField.description',
+                                    defaultMessage: "You won't be able to create an entry if this field is empty",
+                                },
+                            },
+                        ],
                     },
                 ],
             },
@@ -45,12 +57,15 @@ export default {
         });
     },
 
+    bootstrap(app: any) {
+        app.registerHook('Admin/CM/pages/ListView/inject-column-in-table', addColumnToTableHook);
+    },
     async registerTrads(app: any) {
         const { locales } = app;
 
         const importedTranslations = await Promise.all(
             (locales as string[]).map((locale) => {
-                return import(`./translations/${locale}.json`)
+                return import(/* webpackChunkName: "translation-[request]" */ `./translations/${locale}.json`)
                     .then(({ default: data }) => {
                         return {
                             data: prefixPluginTranslations(data, PLUGIN_ID),

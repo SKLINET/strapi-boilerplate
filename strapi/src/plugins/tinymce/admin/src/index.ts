@@ -12,7 +12,7 @@ export default {
     register(app: any) {
         app.customFields.register({
             name: 'tinymce',
-            pluginId: 'tinymce',
+            pluginId: PLUGIN_ID,
             type: 'string',
             icon: PluginIcon,
             intlLabel: {
