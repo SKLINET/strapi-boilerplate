@@ -1,4 +1,22 @@
 export default () => ({
+  "video-field": {
+    enabled: true,
+    resolve: "./src/plugins/video-field",
+  },
+  "bold-title-editor": {
+    enabled: true,
+    resolve: "./src/plugins/bold-title-editor",
+  },
+  graphql: {
+    config: {
+      apolloServer: {
+        introspection: true,
+      },
+      defaultLimit: 100,
+      maxLimit: -1,
+      playgroundAlways: true,
+    },
+  },
   tinymce: {
     enabled: true,
     resolve: "./src/plugins/tinymce",
@@ -64,20 +82,6 @@ export default () => ({
           ],
         },
       },
-    },
-  },
-  "video-field": {
-    enabled: true,
-    resolve: "./src/plugins/video-field",
-  },
-  graphql: {
-    config: {
-      apolloServer: {
-        introspection: true,
-      },
-      defaultLimit: 100,
-      maxLimit: -1,
-      playgroundAlways: true,
     },
   },
 });
