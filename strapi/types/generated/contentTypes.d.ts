@@ -336,45 +336,6 @@ export interface PluginReviewWorkflowsWorkflowStage
   };
 }
 
-export interface PluginPublisherAction extends Struct.CollectionTypeSchema {
-  collectionName: 'actions';
-  info: {
-    singularName: 'action';
-    pluralName: 'actions';
-    displayName: 'actions';
-  };
-  options: {
-    draftAndPublish: false;
-    comment: '';
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    executeAt: Schema.Attribute.DateTime;
-    mode: Schema.Attribute.String;
-    entityId: Schema.Attribute.Integer;
-    entitySlug: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'plugin::publisher.action'
-    >;
-  };
-}
-
 export interface PluginUsersPermissionsPermission
   extends Struct.CollectionTypeSchema {
   collectionName: 'up_permissions';
@@ -1452,7 +1413,6 @@ declare module '@strapi/strapi' {
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::review-workflows.workflow': PluginReviewWorkflowsWorkflow;
       'plugin::review-workflows.workflow-stage': PluginReviewWorkflowsWorkflowStage;
-      'plugin::publisher.action': PluginPublisherAction;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;

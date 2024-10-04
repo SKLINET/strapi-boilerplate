@@ -1,8 +1,10 @@
 export default () => ({
+  /*
   publisher: {
     enabled: true,
     resolve: "./src/plugins/publisher",
   },
+  */
   "video-field": {
     enabled: true,
     resolve: "./src/plugins/video-field",
