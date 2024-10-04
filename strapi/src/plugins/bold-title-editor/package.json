@@ -70,6 +70,7 @@
     "strapi": {
         "name": "bold-title-editor",
         "description": "A bold title/text editor to accent certain parts",
-        "kind": "plugin"
+        "kind": "plugin",
+        "displayName": "Bold Title Editor"
     }
 }

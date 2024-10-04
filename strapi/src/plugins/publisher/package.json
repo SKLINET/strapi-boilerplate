@@ -1,7 +1,7 @@
 {
-    "name": "content-tags",
+    "name": "publisher",
     "version": "1.0.0",
-    "description": "A Strapi plugin that allows you to add custom tags to your content.",
+    "description": "A plugin for Strapi Headless CMS that provides the ability to schedule publishing for any content type.",
     "keywords": [],
     "license": "MIT",
     "author": {
@@ -65,9 +65,9 @@
         "styled-components": "^6.1.13"
     },
     "strapi": {
-        "name": "content-tags",
-        "description": "A Strapi plugin that allows you to add custom tags to your content.",
-        "kind": "plugin",
-        "displayName": "Content Tags"
+        "displayName": "Publisher",
+        "name": "publisher",
+        "description": "A plugin for Strapi Headless CMS that provides the ability to schedule publishing for any content type.",
+        "kind": "plugin"
     }
 }
