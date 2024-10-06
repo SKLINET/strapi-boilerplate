@@ -1,5 +1,20 @@
 import type { Struct, Schema } from '@strapi/strapi';
 
+export interface MenuMenuItem extends Struct.ComponentSchema {
+  collectionName: 'components_menu_menu_items';
+  info: {
+    displayName: 'MenuItem';
+    icon: 'angle-right';
+    description: '';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
+    externalUrl: Schema.Attribute.String;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 export interface SharedSocialNetworks extends Struct.ComponentSchema {
   collectionName: 'components_shared_social_networks';
   info: {
@@ -97,21 +112,6 @@ export interface SharedGlobalSeo extends Struct.ComponentSchema {
     preventIndexing: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     metaTags: Schema.Attribute.Component<'shared.meta', true>;
-  };
-}
-
-export interface MenuMenuItem extends Struct.ComponentSchema {
-  collectionName: 'components_menu_menu_items';
-  info: {
-    displayName: 'MenuItem';
-    icon: 'angle-right';
-    description: '';
-  };
-  attributes: {
-    label: Schema.Attribute.String & Schema.Attribute.Required;
-    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
-    externalUrl: Schema.Attribute.String;
-    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
   };
 }
 
@@ -250,13 +250,13 @@ export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'menu.menu-item': MenuMenuItem;
       'shared.social-networks': SharedSocialNetworks;
       'shared.sitemap': SharedSitemap;
       'shared.seo': SharedSeo;
       'shared.meta': SharedMeta;
       'shared.meta-social': SharedMetaSocial;
       'shared.global-seo': SharedGlobalSeo;
-      'menu.menu-item': MenuMenuItem;
       'complementary.video': ComplementaryVideo;
       'complementary.send-email': ComplementarySendEmail;
       'complementary.mailchimp': ComplementaryMailchimp;

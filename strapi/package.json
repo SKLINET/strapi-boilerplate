@@ -16,7 +16,6 @@
     "@strapi/plugin-color-picker": "^5.0.2",
     "@strapi/plugin-graphql": "^5.0.2",
     "@strapi/plugin-users-permissions": "5.0.2",
-    "@strapi/provider-upload-cloudinary": "^5.0.2",
     "@strapi/strapi": "5.0.2",
     "mysql2": "3.9.4",
     "react": "^18.0.0",
