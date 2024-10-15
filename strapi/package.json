@@ -12,11 +12,13 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.0.2",
-    "@strapi/plugin-color-picker": "^5.0.2",
-    "@strapi/plugin-graphql": "^5.0.2",
-    "@strapi/plugin-users-permissions": "5.0.2",
-    "@strapi/strapi": "5.0.2",
+    "@notum-cz/strapi-plugin-record-locking": "^2.0.0",
+    "@strapi/plugin-cloud": "5.0.6",
+    "@strapi/plugin-color-picker": "^5.0.6",
+    "@strapi/plugin-graphql": "^5.0.6",
+    "@strapi/plugin-seo": "^2.0.1-rc.1",
+    "@strapi/plugin-users-permissions": "5.0.6",
+    "@strapi/strapi": "5.0.6",
     "mysql2": "3.9.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

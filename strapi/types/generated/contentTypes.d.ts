@@ -336,6 +336,46 @@ export interface PluginReviewWorkflowsWorkflowStage
   };
 }
 
+export interface PluginRecordLockingOpenEntity
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'open-entity';
+  info: {
+    singularName: 'open-entity';
+    pluralName: 'open-entities';
+    displayName: 'Open Entity';
+    description: 'List of open entities for record locking plugin.';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    entityDocumentId: Schema.Attribute.String;
+    entityId: Schema.Attribute.String;
+    user: Schema.Attribute.String;
+    connectionId: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::record-locking.open-entity'
+    >;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Struct.CollectionTypeSchema {
   collectionName: 'up_permissions';
@@ -1413,6 +1453,7 @@ declare module '@strapi/strapi' {
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::review-workflows.workflow': PluginReviewWorkflowsWorkflow;
       'plugin::review-workflows.workflow-stage': PluginReviewWorkflowsWorkflowStage;
+      'plugin::record-locking.open-entity': PluginRecordLockingOpenEntity;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;

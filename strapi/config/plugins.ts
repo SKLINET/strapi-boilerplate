@@ -1,4 +1,10 @@
 export default ({ env }) => ({
+  seo: {
+    enabled: true,
+  },
+  "record-locking": {
+    enabled: true,
+  },
   /*
   publisher: {
     enabled: true,
