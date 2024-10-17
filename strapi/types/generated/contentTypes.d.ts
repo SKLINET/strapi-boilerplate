@@ -780,6 +780,7 @@ export interface ApiMenuMenu extends Struct.CollectionTypeSchema {
     singularName: 'menu';
     pluralName: 'menus';
     displayName: '\uD83E\uDDED Menu';
+    description: '';
   };
   options: {
     draftAndPublish: true;
