@@ -14,7 +14,7 @@ interface PreviewToolbarProps {
 const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): ReactElement | null => {
     const [isPublished, setIsPublished] = useState<boolean>(false);
     const [collection, setCollection] = useState<string>('');
-    const [itemId, setItemId] = useState<number>(0);
+    const [itemId, setItemId] = useState<string | null>(null);
     const title = item?.title || page?.title || '';
     const adminPath = `${process.env.NEXT_PUBLIC_API_BASE_PATH}/admin`;
 
@@ -26,14 +26,14 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
                 if (item.__typename === 'Article') {
                     setCollection('api::article.article');
                 }
-                setItemId(Number(id));
+                setItemId(id);
             }
         } else {
             setIsPublished(!!page?.publishedAt);
             const id = getItemId(page?.documentId || '');
             if (page?.url) {
                 setCollection('api::page.page');
-                setItemId(Number(id));
+                setItemId(id);
             }
         }
     }, [page, item]);
