@@ -1,122 +1,84 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { useFetchClient, useNotification } from '@strapi/admin/strapi-admin';
-
+import { useFetchClient } from '@strapi/admin/strapi-admin';
 import { PLUGIN_ID } from '../pluginId';
-// import { getTranslation } from '../utils/getTranslation';
 
-const buildQueryKey = (args: any) => {
-    return args.filter((a: any) => a);
-};
+export interface IPublisher {
+    getAction: (filters: Record<string, any>) => Promise<IPublisherEntity | null>;
+    createAction: (data: Record<string, any>) => Promise<IPublisherEntity | null>;
+    updateAction: (documentId: string, data: Record<string, any>) => Promise<IPublisherEntity | null>;
+    deleteAction: (documentId: string) => Promise<boolean>;
+}
+
+export interface IPublisherEntity {
+    id: number;
+    documentId: string;
+    // Type of action
+    mode: 'publish' | 'unpublish';
+    // Entity ID
+    entityId: string;
+    // Date of execution an action
+    executeAt: string;
+}
 
 export const usePublisher = () => {
-    const { toggleNotification } = useNotification();
-    const { del, post, put, get } = useFetchClient();
-    const queryClient = useQueryClient();
+    const { get, post, put, del } = useFetchClient();
 
-    function onSuccessHandler({ queryKey, notification }: any) {
-        queryClient.invalidateQueries(queryKey);
-        toggleNotification({
-            type: notification.type,
-            // message: { id: getTranslation(notification.tradId) },
-            message: 'Success',
-        });
-    }
-
-    function onErrorHandler(error: any) {
-        toggleNotification({
-            type: 'warning',
-            message: error.response?.error?.message || error.message || { id: 'notification.error' },
-        });
-    }
-
-    function getAction(filters: any = {}) {
-        return useQuery({
-            queryKey: buildQueryKey([PLUGIN_ID, 'entity-action', filters.entityId, filters.sentitySlug, filters.mode]),
-            queryFn: function () {
-                return get(`/${PLUGIN_ID}/actions`, {
-                    params: { filters },
-                });
-            },
-            select: function ({ data }) {
-                return data.data[0] || false;
-            },
-        });
-    }
-
-    const { mutateAsync: createAction } = useMutation({
-        mutationFn: function (body) {
-            return post(`/${PLUGIN_ID}/actions`, { data: body });
-        },
-        onSuccess: ({ data: response }) => {
-            const { data } = response;
-            const queryKey = buildQueryKey([
-                PLUGIN_ID,
-                'entity-action',
-                data.attributes.entityId,
-                data.attributes.entitySlug,
-                data.attributes.mode,
-            ]);
-
-            onSuccessHandler({
-                queryKey,
-                notification: {
-                    type: 'success',
-                    tradId: `action.notification.${data.attributes.mode}.create.success`,
-                },
+    const getAction = async (filters: Record<string, any> = {}): Promise<IPublisherEntity | null> => {
+        try {
+            const response = await get(`/${PLUGIN_ID}/actions`, {
+                params: { filters },
             });
-        },
-        onError: onErrorHandler,
-    });
 
-    const { mutateAsync: updateAction } = useMutation({
-        mutationFn: function ({ id, body }: any) {
-            return put(`/${PLUGIN_ID}/actions/${id}`, { data: body });
-        },
-        onSuccess: ({ data: response }) => {
-            const { data } = response;
-            const queryKey = buildQueryKey([
-                PLUGIN_ID,
-                'entity-action',
-                data.attributes.entityId,
-                data.attributes.entitySlug,
-                data.attributes.mode,
-            ]);
+            if (!response || !response.data || !response.data.data) throw new Error('Failed to fetch action');
 
-            onSuccessHandler({
-                queryKey,
-                notification: {
-                    type: 'success',
-                    tradId: `action.notification.${data.attributes.mode}.update.success`,
-                },
-            });
-        },
-        onError: onErrorHandler,
-    });
+            if (!Array.isArray(response.data.data) || response.data.data.length === 0)
+                throw new Error('No action found');
 
-    const { mutateAsync: deleteAction } = useMutation({
-        mutationFn: function ({ id }: any) {
-            return del(`/${PLUGIN_ID}/actions/${id}`);
-        },
-        onSuccess: ({ data: response }) => {
-            const { data } = response;
-            const queryKey = buildQueryKey([
-                PLUGIN_ID,
-                'entity-action',
-                data.attributes.entityId,
-                data.attributes.entitySlug,
-                data.attributes.mode,
-            ]);
+            return response.data.data[0];
+        } catch (error) {
+            return null;
+        }
+    };
 
-            onSuccessHandler({
-                queryKey,
-                notification: {
-                    type: 'success',
-                    tradId: `action.notification.${data.attributes.mode}.delete.success`,
-                },
-            });
-        },
-        onError: onErrorHandler,
-    });
+    const createAction = async (data: Record<string, any>): Promise<IPublisherEntity | null> => {
+        try {
+            const response = await post(`/${PLUGIN_ID}/actions`, { data: data });
 
-    return { getAction, createAction, updateAction, deleteAction };
+            if (!response || !response.data || !response.data.data) throw new Error('Failed to create action');
+
+            return response.data.data;
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const updateAction = async (documentId: string, data: Record<string, any>): Promise<IPublisherEntity | null> => {
+        try {
+            const response = await put(`/${PLUGIN_ID}/actions/${documentId}`, { data: data });
+
+            if (!response || !response.data || !response.data.data) throw new Error('Failed to update action');
+
+            return response.data.data;
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const deleteAction = async (documentId: string): Promise<boolean> => {
+        try {
+            const response = await del(`/${PLUGIN_ID}/actions/${documentId}`);
+
+            if (response.status !== 204) throw new Error('Failed to delete action');
+
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+
+    return {
+        getAction,
+        createAction,
+        updateAction,
+        deleteAction,
+    };
 };

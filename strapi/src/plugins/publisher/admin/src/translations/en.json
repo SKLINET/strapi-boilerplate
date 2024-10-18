@@ -16,5 +16,6 @@
 	"action.notification.unpublish.create.success": "Unpublish action created successfully",
 	"action.notification.unpublish.delete.success": "Unpublish action deleted successfully",
 	"action.notification.unpublish.update.success": "Unpublish action updated successfully",
+	"action.notification.error": "An error occurred",
 	"plugin.name": "Publisher"
 }

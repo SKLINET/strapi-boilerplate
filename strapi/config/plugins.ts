@@ -5,12 +5,10 @@ export default ({ env }) => ({
   "record-locking": {
     enabled: true,
   },
-  /*
   publisher: {
     enabled: true,
     resolve: "./src/plugins/publisher",
   },
-  */
   "video-field": {
     enabled: true,
     resolve: "./src/plugins/video-field",

@@ -3,15 +3,34 @@
 import { getPluginService } from '../utils/getPluginService';
 import { getPluginEntityUid } from '../utils/getEntityUId';
 import { getDeepPopulate } from '../utils/populate';
+import { Core } from '@strapi/strapi';
 
 const actionUId = getPluginEntityUid('action');
 
-export default ({ strapi }) => ({
+interface IRecord {
+    id: number;
+    documentId: string;
+    executeAt: string;
+    mode: 'publish' | 'unpublish';
+    entityId: string;
+    entitySlug: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    locale: string | null;
+}
+
+export default ({ strapi }: { strapi: Core.Strapi }) => ({
     /**
      * Publish a single record
      *
      */
     async publish(uid, entityId, data = {}) {
+        console.log('uid', uid);
+        console.log('entityId', entityId);
+        console.log('data', data);
+
+        /*
         const populateRelations = strapi.config.get('server.webhooks.populateRelations', true);
         const publishedEntity = await strapi.entityService.update(uid, entityId, {
             data,
@@ -24,6 +43,7 @@ export default ({ strapi }) => ({
         await hooks.beforePublish({ strapi, uid, entity: publishedEntity });
         await getPluginService('emitService').publish(uid, publishedEntity);
         await hooks.afterPublish({ strapi, uid, entity: publishedEntity });
+        */
     },
 
     /**
@@ -31,6 +51,10 @@ export default ({ strapi }) => ({
      *
      */
     async unpublish(uid, entityId) {
+        console.log('uid', uid);
+        console.log('entityId', entityId);
+
+        /*
         const populateRelations = strapi.config.get('server.webhooks.populateRelations', true);
         const unpublishedEntity = await strapi.entityService.update(uid, entityId, {
             data: {
@@ -45,15 +69,20 @@ export default ({ strapi }) => ({
         await hooks.beforeUnpublish({ strapi, uid, entity: unpublishedEntity });
         await getPluginService('emitService').unpublish(uid, unpublishedEntity);
         await hooks.afterUnpublish({ strapi, uid, entity: unpublishedEntity });
+        */
     },
 
     /**
      * Toggle a records publication state
      *
      */
-    async toggle(record, mode) {
+    async toggle(record: IRecord, mode: 'publish' | 'unpublish') {
+        // TOOD: need to implement this
+        // Run every 1 minute for all records in content type "Plugin - Publisher"
+        //
+        /*
         // handle single content type, id is always 1
-        const entityId = record.entityId || 1;
+        const entityId = record.entityId || '1';
 
         const entity = await strapi.entityService.findOne(record.entitySlug, entityId);
 
@@ -73,5 +102,6 @@ export default ({ strapi }) => ({
 
         // remove any used actions
         strapi.entityService.delete(actionUId, record.id);
+        */
     },
 });

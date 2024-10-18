@@ -6,14 +6,14 @@ export default {
     info: {
         singularName: 'action',
         pluralName: 'actions',
-        displayName: 'actions',
+        displayName: 'Plugin - Publisher',
     },
     pluginOptions: {
         'content-manager': {
-            visible: false,
+            visible: true,
         },
         'content-type-builder': {
-            visible: false,
+            visible: true,
         },
     },
     options: {
@@ -28,7 +28,7 @@ export default {
             type: 'string',
         },
         entityId: {
-            type: 'integer',
+            type: 'string',
         },
         entitySlug: {
             type: 'string',

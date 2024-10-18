@@ -1,24 +1,47 @@
-import { useQuery } from 'react-query';
+import { useState, useEffect } from 'react';
 import { useFetchClient } from '@strapi/admin/strapi-admin';
-
 import { PLUGIN_ID } from '../pluginId';
 
+export interface ISettings {
+    isLoading: boolean;
+    isRefetching: boolean;
+    data: {
+        actions: any;
+        components: {
+            dateTimePicker: {
+                step: number;
+            };
+        };
+        hooks: any;
+    } | null;
+}
+
 export const useSettings = () => {
+    const [data, setData] = useState<ISettings | null>(null);
+
     const { get } = useFetchClient();
 
-    function getSettings() {
-        return useQuery({
-            queryKey: [PLUGIN_ID, 'settings'],
-            queryFn: function () {
-                return get(`/${PLUGIN_ID}/settings`);
-            },
-            select: function ({ data }) {
-                return data.data || false;
-            },
-        });
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await get(`/${PLUGIN_ID}/settings`);
 
-    return {
-        getSettings,
-    };
+                if (response.data) {
+                    setData({
+                        ...response.data,
+                        isLoading: response.data?.isLoading || false,
+                        isRefetching: response.data?.isRefetching || false,
+                    });
+                } else {
+                    setData(null);
+                }
+            } catch (error) {
+                setData(null);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    return data;
 };

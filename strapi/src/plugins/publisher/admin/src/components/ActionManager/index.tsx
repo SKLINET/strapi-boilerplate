@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { unstable_useContentManagerContext as useContentManagerContext } from '@strapi/strapi/admin';
 import { getTranslation } from '../../utils/getTranslation';
-import { Box, Typography, Divider } from '@strapi/design-system';
-// import Action from '../Action';
-import { useSettings } from '../../hooks/useSettings';
+import { Box, Typography, Divider, Flex } from '@strapi/design-system';
+import ActionController from '../ActionController/ActionController';
+import UnpublishAction from '../UnpublishAction/UnpublishAction';
+import { ISettings, useSettings } from '../../hooks/useSettings';
+import { IPublisher, usePublisher } from '../../hooks/usePublisher';
 
-const actionModes = ['publish', 'unpublish'];
+export interface AppProps {
+    publisher: IPublisher;
+    settings: ISettings;
+}
 
-const ActionManagerComponent = () => {
-    const { formatMessage } = useIntl();
+const ActionManagerComponent = (props: AppProps) => {
     const context = useContentManagerContext();
-    const [showActions, setShowActions] = useState(false);
-    const { getSettings } = useSettings();
-    // const { isLoading, data, isRefetching } = getSettings();
+    const { formatMessage } = useIntl();
 
-    /*
-    useEffect(() => {
-        if (!isLoading && !isRefetching) {
-            if (!data.contentTypes?.length || data.contentTypes?.find((uid: any) => uid === context.slug)) {
-                setShowActions(true);
-            }
-        }
-    }, [isLoading, isRefetching]);
-    */
+    // Do not show when publishing is not available
+    if (!context.hasDraftAndPublish || context.isCreatingEntry) {
+        return <></>;
+    }
 
-    if (!showActions) {
-        return null;
+    // Do not show when the current content type is a single type
+    if (context.isSingleType) return <></>;
+
+    // Do not show when the entity is not created yet
+    if (!context.id) {
+        return <></>;
     }
 
     return (
-        <Box marginTop={8} width="100%">
+        <Box marginTop={4} width="100%">
             <Typography variant="sigma" textColor="neutral600">
                 {formatMessage({
                     id: getTranslation('plugin.name'),
@@ -40,31 +41,22 @@ const ActionManagerComponent = () => {
             <Box marginTop={2} marginBottom={4}>
                 <Divider />
             </Box>
-            <Box spacing={4} marginTop={2}>
-                {/* actionModes.map((mode, index) => (
-                    <Action mode={mode} key={mode + index} entityId={entity.modifiedData.id} entitySlug={entity.slug} />
-                )) */}
-            </Box>
+            <Flex spacing={4} marginTop={2} direction="column" alignItems="start" gap={2}>
+                <ActionController type="publish" {...props} />
+                <ActionController type="unpublish" {...props} />
+            </Flex>
         </Box>
     );
-
-    return <></>;
 };
 
 const ActionManager = () => {
-    const context = useContentManagerContext();
+    const settings = useSettings();
+    const publisher = usePublisher();
 
-    if (!context.hasDraftAndPublish || context.isCreatingEntry) {
-        return null;
-    }
+    // Do not show when settings are loading
+    if (!settings || settings.isLoading || settings.isRefetching) return <></>;
 
-    /*
-    if (!context?.modifiedData?.id) {
-        return null;
-    }
-    */
-
-    return <ActionManagerComponent />;
+    return <ActionManagerComponent publisher={publisher} settings={settings} />;
 };
 
 export default ActionManager;
