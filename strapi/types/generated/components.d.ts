@@ -1,71 +1,5 @@
 import type { Struct, Schema } from '@strapi/strapi';
 
-export interface ComplementaryVideo extends Struct.ComponentSchema {
-  collectionName: 'components_complementary_videos';
-  info: {
-    displayName: 'Video';
-    description: '';
-  };
-  attributes: {
-    uploadedVideo: Schema.Attribute.Media<'videos'>;
-    externalVideo: Schema.Attribute.JSON &
-      Schema.Attribute.CustomField<'plugin::video-field.video'>;
-    optionalImage: Schema.Attribute.Media<'images'>;
-  };
-}
-
-export interface ComplementarySendEmail extends Struct.ComponentSchema {
-  collectionName: 'components_complementary_send_emails';
-  info: {
-    displayName: 'SendEmail';
-  };
-  attributes: {
-    emailFrom: Schema.Attribute.Email & Schema.Attribute.Required;
-    emailTo: Schema.Attribute.Email & Schema.Attribute.Required;
-    subject: Schema.Attribute.String & Schema.Attribute.Required;
-  };
-}
-
-export interface ComplementaryMailchimp extends Struct.ComponentSchema {
-  collectionName: 'components_complementary_mailchimps';
-  info: {
-    displayName: 'Mailchimp';
-    icon: 'envelope-square';
-  };
-  attributes: {
-    serverPrefix: Schema.Attribute.String;
-    apiKey: Schema.Attribute.String;
-    listId: Schema.Attribute.String;
-  };
-}
-
-export interface ComplementaryEcomail extends Struct.ComponentSchema {
-  collectionName: 'components_complementary_ecomails';
-  info: {
-    displayName: 'Ecomail';
-    icon: 'envelope';
-  };
-  attributes: {
-    apiKey: Schema.Attribute.String;
-    listId: Schema.Attribute.String;
-  };
-}
-
-export interface ComplementaryButton extends Struct.ComponentSchema {
-  collectionName: 'components_complementary_buttons';
-  info: {
-    displayName: 'Button';
-    icon: 'bold';
-    description: '';
-  };
-  attributes: {
-    label: Schema.Attribute.String & Schema.Attribute.Required;
-    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
-    linkExternal: Schema.Attribute.String;
-    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-  };
-}
-
 export interface SharedSocialNetworks extends Struct.ComponentSchema {
   collectionName: 'components_shared_social_networks';
   info: {
@@ -247,14 +181,75 @@ export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
   attributes: {};
 }
 
+export interface ComplementaryVideo extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_videos';
+  info: {
+    displayName: 'Video';
+    description: '';
+  };
+  attributes: {
+    uploadedVideo: Schema.Attribute.Media<'videos'>;
+    externalVideo: Schema.Attribute.JSON &
+      Schema.Attribute.CustomField<'plugin::video-field.video'>;
+    optionalImage: Schema.Attribute.Media<'images'>;
+  };
+}
+
+export interface ComplementarySendEmail extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_send_emails';
+  info: {
+    displayName: 'SendEmail';
+  };
+  attributes: {
+    emailFrom: Schema.Attribute.Email & Schema.Attribute.Required;
+    emailTo: Schema.Attribute.Email & Schema.Attribute.Required;
+    subject: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ComplementaryMailchimp extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_mailchimps';
+  info: {
+    displayName: 'Mailchimp';
+    icon: 'envelope-square';
+  };
+  attributes: {
+    serverPrefix: Schema.Attribute.String;
+    apiKey: Schema.Attribute.String;
+    listId: Schema.Attribute.String;
+  };
+}
+
+export interface ComplementaryEcomail extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_ecomails';
+  info: {
+    displayName: 'Ecomail';
+    icon: 'envelope';
+  };
+  attributes: {
+    apiKey: Schema.Attribute.String;
+    listId: Schema.Attribute.String;
+  };
+}
+
+export interface ComplementaryButton extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_buttons';
+  info: {
+    displayName: 'Button';
+    icon: 'bold';
+    description: '';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
+    linkExternal: Schema.Attribute.String;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
-      'complementary.video': ComplementaryVideo;
-      'complementary.send-email': ComplementarySendEmail;
-      'complementary.mailchimp': ComplementaryMailchimp;
-      'complementary.ecomail': ComplementaryEcomail;
-      'complementary.button': ComplementaryButton;
       'shared.social-networks': SharedSocialNetworks;
       'shared.sitemap': SharedSitemap;
       'shared.seo': SharedSeo;
@@ -267,6 +262,11 @@ declare module '@strapi/strapi' {
       'block.contact-form-block': BlockContactFormBlock;
       'block.articles-list-block': BlockArticlesListBlock;
       'block.article-detail-block': BlockArticleDetailBlock;
+      'complementary.video': ComplementaryVideo;
+      'complementary.send-email': ComplementarySendEmail;
+      'complementary.mailchimp': ComplementaryMailchimp;
+      'complementary.ecomail': ComplementaryEcomail;
+      'complementary.button': ComplementaryButton;
     }
   }
 }

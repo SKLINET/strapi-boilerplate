@@ -4,7 +4,6 @@ import { unstable_useContentManagerContext as useContentManagerContext } from '@
 import { getTranslation } from '../../utils/getTranslation';
 import { Box, Typography, Divider, Flex } from '@strapi/design-system';
 import ActionController from '../ActionController/ActionController';
-import UnpublishAction from '../UnpublishAction/UnpublishAction';
 import { ISettings, useSettings } from '../../hooks/useSettings';
 import { IPublisher, usePublisher } from '../../hooks/usePublisher';
 

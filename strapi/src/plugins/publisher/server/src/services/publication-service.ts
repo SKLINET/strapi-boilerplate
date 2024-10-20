@@ -1,9 +1,8 @@
 'use strict';
 
-import { getPluginService } from '../utils/getPluginService';
 import { getPluginEntityUid } from '../utils/getEntityUId';
-import { getDeepPopulate } from '../utils/populate';
 import { Core } from '@strapi/strapi';
+import dayjs from 'dayjs';
 
 const actionUId = getPluginEntityUid('action');
 
@@ -14,6 +13,7 @@ interface IRecord {
     mode: 'publish' | 'unpublish';
     entityId: string;
     entitySlug: string;
+    entityUid: string;
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
@@ -25,25 +25,11 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
      * Publish a single record
      *
      */
-    async publish(uid, entityId, data = {}) {
-        console.log('uid', uid);
-        console.log('entityId', entityId);
-        console.log('data', data);
-
-        /*
-        const populateRelations = strapi.config.get('server.webhooks.populateRelations', true);
-        const publishedEntity = await strapi.entityService.update(uid, entityId, {
-            data,
-            populate: populateRelations
-                ? getDeepPopulate(uid, {})
-                : getDeepPopulate(uid, { countMany: true, countOne: true }),
+    async publish(uid, entityId) {
+        await strapi.documents(uid).publish({
+            documentId: entityId,
+            locale: '*',
         });
-        const { hooks } = getPluginService('settingsService').get();
-        // emit publish event
-        await hooks.beforePublish({ strapi, uid, entity: publishedEntity });
-        await getPluginService('emitService').publish(uid, publishedEntity);
-        await hooks.afterPublish({ strapi, uid, entity: publishedEntity });
-        */
     },
 
     /**
@@ -51,25 +37,10 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
      *
      */
     async unpublish(uid, entityId) {
-        console.log('uid', uid);
-        console.log('entityId', entityId);
-
-        /*
-        const populateRelations = strapi.config.get('server.webhooks.populateRelations', true);
-        const unpublishedEntity = await strapi.entityService.update(uid, entityId, {
-            data: {
-                publishedAt: null,
-            },
-            populate: populateRelations
-                ? getDeepPopulate(uid, {})
-                : getDeepPopulate(uid, { countMany: true, countOne: true }),
+        await strapi.documents(uid).unpublish({
+            documentId: entityId,
+            locale: '*',
         });
-        const { hooks } = getPluginService('settingsService').get();
-        // emit unpublish event
-        await hooks.beforeUnpublish({ strapi, uid, entity: unpublishedEntity });
-        await getPluginService('emitService').unpublish(uid, unpublishedEntity);
-        await hooks.afterUnpublish({ strapi, uid, entity: unpublishedEntity });
-        */
     },
 
     /**
@@ -77,31 +48,43 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
      *
      */
     async toggle(record: IRecord, mode: 'publish' | 'unpublish') {
-        // TOOD: need to implement this
-        // Run every 1 minute for all records in content type "Plugin - Publisher"
-        //
-        /*
-        // handle single content type, id is always 1
-        const entityId = record.entityId || '1';
+        // handle single content type, id is always null
+        const entityId = record.entityId || null;
 
-        const entity = await strapi.entityService.findOne(record.entitySlug, entityId);
+        // uid of entity
+        const entitySlug = record.entitySlug || null;
+
+        if (!entitySlug) return;
+
+        const entity = await strapi.documents(entitySlug as any).findOne({
+            documentId: entityId,
+        });
 
         // ensure entity exists before attempting mutations.
         if (!entity) {
             return;
         }
 
-        // ensure entity is in correct publication status
-        if (!entity.publishedAt && mode === 'publish') {
-            await this.publish(record.entitySlug, entityId, {
-                publishedAt: record.executeAt ? new Date(record.executeAt) : new Date(),
-            });
-        } else if (entity.publishedAt && mode === 'unpublish') {
-            await this.unpublish(record.entitySlug, entityId);
+        const executeAt = record.executeAt ? dayjs(record.executeAt) : null;
+
+        if (!executeAt || executeAt.isAfter(dayjs())) return;
+
+        switch (mode) {
+            case 'publish': {
+                await this.publish(entitySlug, entityId);
+                break;
+            }
+            case 'unpublish': {
+                await this.unpublish(entitySlug, entityId);
+                break;
+            }
+            default:
+                return;
         }
 
         // remove any used actions
-        strapi.entityService.delete(actionUId, record.id);
-        */
+        strapi.documents(actionUId as any).delete({
+            documentId: record.documentId,
+        });
     },
 });
