@@ -83,8 +83,8 @@ export default abstract class AbstractStrapiProvider<
                           limit: 1,
                           offset: 0,
                           filters: options.filters
-                              ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filters }
-                              : this.getFilterParams(options?.publicationState || ''),
+                              ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+                              : this.getFilterParams(options?.status || ''),
                           locale,
                       };
         }
@@ -115,8 +115,8 @@ export default abstract class AbstractStrapiProvider<
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
             filters: options.filters
-                ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filters }
-                : this.getFilterParams(options?.publicationState || ''),
+                ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+                : this.getFilterParams(options?.status || ''),
         };
 
         if (this.isLocalizable()) {

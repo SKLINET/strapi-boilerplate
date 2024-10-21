@@ -33,8 +33,8 @@ graphql`
 `;
 
 export const webSettingQuery = graphql`
-    query webSettingQuery($publicationStatus: PublicationStatus, $locale: I18NLocaleCode) {
-        item: webSetting(status: $publicationStatus, locale: $locale) {
+    query webSettingQuery($status: PublicationStatus, $locale: I18NLocaleCode) {
+        item: webSetting(status: $status, locale: $locale) {
             ...webSettingFragment @relay(mask: false)
         }
     }

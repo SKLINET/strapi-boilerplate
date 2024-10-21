@@ -4,14 +4,15 @@ export const AppQuery = graphql`
     query appQuery(
         $pattern: String
         $redirect: String
-        $publicationStatus: PublicationStatus
+        $status: PublicationStatus
         $locale: I18NLocaleCode
         $entityId: Int
     ) {
-        page(locale: $locale, pattern: $pattern, status: $publicationStatus, entityId: $entityId) {
+        page(locale: $locale, pattern: $pattern, status: $status, entityId: $entityId) {
             documentId
             title
             url
+            updatedAt
             publishedAt
             pages {
                 ...appPageFragment @relay(mask: false)
@@ -48,7 +49,9 @@ export const AppQuery = graphql`
             }
             localizations {
                 documentId
+                title
                 url
+                publishedAt
                 locale
             }
             content: blocks {
@@ -57,21 +60,23 @@ export const AppQuery = graphql`
             }
         }
 
-        webSetting(status: $publicationStatus, locale: $locale) {
+        webSetting(status: $status, locale: $locale) {
             ...webSettingFragment @relay(mask: false)
         }
 
-        systemResources(status: $publicationStatus, locale: $locale) {
+        systemResources(status: $status, locale: $locale) {
             ...appSystemResourceFragment @relay(mask: false)
         }
 
-        redirect: findRedirect(redirectFrom: $redirect, status: $publicationStatus) {
+        redirect: findRedirect(redirectFrom: $redirect, status: $status) {
             redirectFrom
             to: redirectTo
             statusCode
+            updatedAt
+            publishedAt
         }
 
-        contactForm(status: $publicationStatus, locale: $locale) {
+        contactForm(status: $status, locale: $locale) {
             ...contactFormFragment @relay(mask: false)
         }
     }

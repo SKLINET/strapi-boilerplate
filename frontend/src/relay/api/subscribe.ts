@@ -9,8 +9,8 @@ export const SubscribeFormMutation = graphql`
 `;
 
 // export const MailchimpSettingsQuery = graphql`
-//     query subscribeMailchimpQuery($publicationState: PublicationState) {
-//         webSetting(publicationState: $publicationState) {
+//     query subscribeMailchimpQuery($status: PublicationState) {
+//         webSetting(publicationState: $status) {
 //             mailchimp {
 //                 serverPrefix
 //                 apiKey
@@ -21,8 +21,8 @@ export const SubscribeFormMutation = graphql`
 // `;
 
 // export const EcomailSettingsQuery = graphql`
-//     query subscribeEcomailQuery($publicationState: PublicationState) {
-//         newsletterBox(publicationState: $publicationState) {
+//     query subscribeEcomailQuery($status: PublicationState) {
+//         newsletterBox(publicationState: $status) {
 //             ecomail {
 //                 apiKey
 //                 listId

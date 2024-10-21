@@ -1,8 +1,8 @@
 import { graphql } from 'relay-runtime';
 
 export const ArticleDetailQuery = graphql`
-    query articleDetailQuery($slug: String, $locale: I18NLocaleCode, $publicationStatus: PublicationStatus) {
-        item: findArticleBySlug(slug: $slug, locale: $locale, status: $publicationStatus) {
+    query articleDetailQuery($slug: String, $locale: I18NLocaleCode, $status: PublicationStatus) {
+        item: findArticleBySlug(slug: $slug, locale: $locale, status: $status) {
             ...articleDetailFragment @relay(mask: false)
         }
     }
@@ -14,7 +14,7 @@ export const ArticleListQuery = graphql`
         $start: Int
         $limit: Int
         $filter: ArticleFiltersInput
-        $publicationStatus: PublicationStatus
+        $status: PublicationStatus
         $sort: [String] = ["publishDate:desc", "publishedAt:desc"]
     ) {
         items: articles(
@@ -22,7 +22,7 @@ export const ArticleListQuery = graphql`
             pagination: { start: $start, limit: $limit }
             sort: $sort
             filters: $filter
-            status: $publicationStatus
+            status: $status
         ) {
             ...articleFragment @relay(mask: false)
         }
@@ -43,6 +43,7 @@ graphql`
         title
         slug
         publishedAt
+        updatedAt
         publishDate
         category {
             ...articleCategoryFragment @relay(mask: false)
@@ -61,6 +62,7 @@ graphql`
         title
         slug
         publishedAt
+        updatedAt
         publishDate
         category {
             ...articleCategoryFragment @relay(mask: false)
@@ -77,8 +79,10 @@ graphql`
         }
         localizations {
             documentId
-            locale
+            title
             slug
+            publishedAt
+            locale
         }
     }
 `;

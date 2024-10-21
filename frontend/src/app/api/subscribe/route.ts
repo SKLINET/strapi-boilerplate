@@ -35,7 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
             // try {
             //     const { newsletterBox } = (await fetchQuery<subscribeEcomailQuery>(environment, EcomailSettingsQuery, {
-            //         publicationState: getPublicationState(),
+            //         status: getPublicationState(),
             //         locale: data?.locale || 'cs',
             //     }).toPromise()) as subscribeEcomailQuery['response'];
             //     const ecomailData = newsletterBox?.data?.attributes?.ecomail;

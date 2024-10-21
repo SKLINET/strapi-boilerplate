@@ -12,7 +12,7 @@ interface PreviewToolbarProps {
 }
 
 const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): ReactElement | null => {
-    const [isPublished, setIsPublished] = useState<boolean>(false);
+    const [isPublished, setIsPublished] = useState<boolean>(item ? !!item?.publishedAt : !!page?.publishedAt);
     const [collection, setCollection] = useState<string>('');
     const [itemId, setItemId] = useState<string | null>(null);
     const title = item?.title || page?.title || '';

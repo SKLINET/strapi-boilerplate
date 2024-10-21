@@ -40,7 +40,7 @@ export const fetchArticles = async (
         start: (page - 1) * limit,
         limit: limit,
         preview: app.preview,
-        publicationState: getPublicationState(app.preview),
+        status: getPublicationState(app.preview),
     });
 
     const _data = data as NonNullable<articleListQuery$data['items']> | null;

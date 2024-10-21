@@ -228,7 +228,7 @@ export default abstract class AbstractElasticProvider<
                 filter: { vuid: { eq: id } },
                 limit: 1,
                 locale: String(locale),
-                publicationState: getPublicationState(preview),
+                status: getPublicationState(preview),
             } as any,
             preview,
         );
@@ -317,7 +317,7 @@ export default abstract class AbstractElasticProvider<
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const { data } = await this.find(
-                    { ...options, publicationState: getPublicationState(!prod), limit: Infinity, locale } as any,
+                    { ...options, status: getPublicationState(!prod), limit: Infinity, locale } as any,
                     !prod,
                 );
 

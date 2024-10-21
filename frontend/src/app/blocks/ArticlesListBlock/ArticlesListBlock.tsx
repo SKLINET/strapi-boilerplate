@@ -65,13 +65,13 @@ if (typeof window === 'undefined') {
             filters: filters,
             limit: limit,
             preview,
-            publicationState: publicationState,
+            status: publicationState,
         });
 
         const categories = await providers.articleCategory.find({
             locale,
             preview,
-            publicationState: publicationState,
+            status: publicationState,
         });
 
         return {

@@ -6,7 +6,7 @@ export const ArticleCategoryListQuery = graphql`
         $start: Int
         $limit: Int
         $filter: ArticleCategoryFiltersInput
-        $publicationStatus: PublicationStatus
+        $status: PublicationStatus
         $sort: [String] = ["publishedAt:asc"]
     ) {
         items: articleCategories(
@@ -14,7 +14,7 @@ export const ArticleCategoryListQuery = graphql`
             pagination: { start: $start, limit: $limit }
             sort: $sort
             filters: $filter
-            status: $publicationStatus
+            status: $status
         ) {
             ...articleCategoryFragment @relay(mask: false)
         }

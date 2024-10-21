@@ -1,8 +1,8 @@
 import { graphql } from 'relay-runtime';
 
 export const PreviewSettingsQuery = graphql`
-    query previewSettingsQuery($locale: I18NLocaleCode, $publicationStatus: PublicationStatus) {
-        webSetting(status: $publicationStatus, locale: $locale) {
+    query previewSettingsQuery($locale: I18NLocaleCode, $status: PublicationStatus) {
+        webSetting(status: $status, locale: $locale) {
             homePage {
                 ...appPageFragment @relay(mask: false)
             }
@@ -14,8 +14,8 @@ export const PreviewSettingsQuery = graphql`
 `;
 
 export const PreviewPageQuery = graphql`
-    query previewPageQuery($pattern: String, $locale: I18NLocaleCode, $publicationStatus: PublicationStatus) {
-        findPage(pattern: $pattern, locale: $locale, status: $publicationStatus) {
+    query previewPageQuery($pattern: String, $locale: I18NLocaleCode, $status: PublicationStatus) {
+        findPage(pattern: $pattern, locale: $locale, status: $status) {
             url
         }
     }

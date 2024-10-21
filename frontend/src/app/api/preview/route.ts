@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
     const environment = createRelayEnvironment({});
     const data = await fetchQuery<previewSettingsQuery>(environment, PreviewSettingsQuery, {
-        publicationStatus: 'DRAFT',
+        status: 'DRAFT',
         locale: _locale,
     }).toPromise();
     const settings = data?.webSetting || null;
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
 
     if (type === 'pages') {
         const p = await fetchQuery<previewPageQuery>(environment, PreviewPageQuery, {
-            publicationStatus: 'DRAFT',
+            status: 'DRAFT',
             locale: _locale,
             pattern: getPagePattern(slug || ''),
         }).toPromise();

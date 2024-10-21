@@ -50,7 +50,7 @@ class PageProvider extends AbstractStrapiProvider<
     ): Promise<AppData<any, WebSettingsProps> | undefined> {
         const prvData = previewData as Record<string, unknown>;
         const pattern = getPagePattern(slug);
-        const publicationState = getPublicationState(preview);
+        const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
         let entityId = null;
         if (prvData?.pageId) {
@@ -60,7 +60,7 @@ class PageProvider extends AbstractStrapiProvider<
             locale,
             redirect,
             pattern,
-            publicationState,
+            status,
             entityId,
         }).toPromise();
         return {

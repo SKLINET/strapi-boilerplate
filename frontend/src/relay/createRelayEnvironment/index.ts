@@ -42,7 +42,7 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
                     headersObj.Authorization = `Bearer ${token}`;
                 }
                 // if (!vars?.publicationState) {
-                //     vars.publicationState = getPublicationState(true);
+                //     vars.status = getPublicationState(true);
                 // }
 
                 const req = await fetch(process.env.API_ENDPOINT, {

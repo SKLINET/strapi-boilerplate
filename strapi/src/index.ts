@@ -26,23 +26,37 @@ export default {
             async resolve(parent, args) {
               const { locale, status, pattern } = args;
 
-              const variables: Record<string, any> = {
+              const data = await strapi.documents("api::page.page").findMany({
                 locale,
-                status: status || "PUBLISHED",
-              };
+                status: status || "published",
+              });
 
-              const data = await strapi.entityService.findMany(
-                "api::page.page",
-                variables
-              );
+              const page = data.find((it) => it?.url?.match(pattern));
 
-              for (const it of data) {
-                if (it?.url?.match(pattern)) {
-                  return it;
+              if (!page) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedPage = await strapi
+                  .documents("api::page.page")
+                  .findFirst({
+                    filters: {
+                      documentId: page.documentId,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
+
+                // If draft page is the same as the published page
+                if (
+                  publishedPage &&
+                  publishedPage.updatedAt === page.updatedAt
+                ) {
+                  // Return published page in preview mode
+                  return publishedPage;
                 }
               }
 
-              return null;
+              return page;
             },
           });
         },
@@ -62,23 +76,42 @@ export default {
             async resolve(parent, args) {
               const { status, redirectFrom } = args;
 
-              const data = await strapi.entityService.findMany(
-                "api::redirect.redirect",
-                {
+              const data = await strapi
+                .documents("api::redirect.redirect")
+                .findMany({
                   filters: {
                     redirectFrom,
                   },
-                  status: status || "PUBLISHED",
-                }
+                  status: status || "published",
+                });
+
+              const redirect = data.find((it) =>
+                it?.redirectFrom?.match(redirectFrom)
               );
 
-              for (const it of data) {
-                if (it?.redirectFrom?.match(redirectFrom)) {
-                  return it;
+              if (!redirect) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedRedirect = await strapi
+                  .documents("api::redirect.redirect")
+                  .findFirst({
+                    filters: {
+                      documentId: redirect.documentId,
+                    },
+                    status: "published",
+                  });
+
+                // If draft redirect is the same as the published redirect
+                if (
+                  publishedRedirect &&
+                  publishedRedirect.updatedAt === redirect.updatedAt
+                ) {
+                  // Return published redirect in preview mode
+                  return publishedRedirect;
                 }
               }
 
-              return null;
+              return redirect;
             },
           });
         },
@@ -100,39 +133,55 @@ export default {
             async resolve(parent, args) {
               const { locale, status, pattern, entityId } = args;
 
-              let data;
+              const variable: Record<string, any> = entityId
+                ? {
+                    filters: {
+                      documentId: entityId,
+                    },
+                    locale,
+                    limit: 1,
+                    status: status || "published",
+                  }
+                : {
+                    locale,
+                    limit: 9999,
+                    status: status || "published",
+                  };
+
+              const data = await strapi
+                .documents("api::page.page")
+                .findMany(variable);
+
               if (entityId) {
-                data = await strapi.entityService.findMany("api::page.page", {
-                  filters: {
-                    id: entityId,
-                  },
-                  locale,
-                  limit: 1,
-                  status: status || "PUBLISHED",
-                });
-                return data;
-              } else {
-                const variables: Record<string, any> = {
-                  locale,
-                  limit: 9999,
-                  status: status || "PUBLISHED",
-                };
-                if (status?.toLowerCase() === "published") {
-                  variables.versions = "all";
-                }
-                data = await strapi.entityService.findMany(
-                  "api::page.page",
-                  variables
-                );
+                return data[0];
               }
 
-              for (const it of data) {
-                if (it?.url?.match(pattern)) {
-                  return it;
+              const page = data.find((it) => it?.url?.match(pattern));
+
+              if (!page) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedPage = await strapi
+                  .documents("api::page.page")
+                  .findFirst({
+                    filters: {
+                      documentId: page.documentId,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
+
+                // If draft page is the same as the published page
+                if (
+                  publishedPage &&
+                  publishedPage.updatedAt === page.updatedAt
+                ) {
+                  // Return published page in preview mode
+                  return publishedPage;
                 }
               }
 
-              return null;
+              return page;
             },
           });
         },
@@ -153,20 +202,38 @@ export default {
             async resolve(parent, args) {
               const { slug, locale, status } = args;
 
-              const variables: Record<string, any> = {
-                filters: {
-                  slug: slug,
-                },
-                locale,
-                status: status || "PUBLISHED",
-              };
+              const article = await strapi
+                .documents("api::article.article")
+                .findFirst({
+                  filters: {
+                    slug: slug,
+                  },
+                  locale: locale,
+                  status: status || "published",
+                });
 
-              const data = await strapi.entityService.findMany(
-                "api::article.article",
-                variables
-              );
+              if (status?.toLowerCase() === "draft") {
+                const publishedArticle = await strapi
+                  .documents("api::article.article")
+                  .findFirst({
+                    filters: {
+                      slug: slug,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
 
-              return data[0];
+                // If draft article is the same as the published article
+                if (
+                  publishedArticle &&
+                  publishedArticle.updatedAt === article.updatedAt
+                ) {
+                  // Return published article in preview mode
+                  return publishedArticle;
+                }
+              }
+
+              return article;
             },
           });
         },
