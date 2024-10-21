@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 const actionUId = getPluginEntityUid('action');
 
-interface IRecord {
+export interface IRecord {
     id: number;
     documentId: string;
     executeAt: string;
