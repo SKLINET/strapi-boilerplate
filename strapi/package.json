@@ -18,6 +18,7 @@
     "@strapi/plugin-graphql": "^5.1.0",
     "@strapi/plugin-seo": "^2.0.1-rc.1",
     "@strapi/plugin-users-permissions": "5.1.0",
+    "@strapi/provider-upload-cloudinary": "^5.1.0",
     "@strapi/strapi": "5.1.0",
     "mysql2": "3.9.4",
     "pg": "^8.13.0",
