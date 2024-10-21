@@ -17,14 +17,19 @@ export const ArticleListQuery = graphql`
         $status: PublicationStatus
         $sort: [String] = ["publishDate:desc", "publishedAt:desc"]
     ) {
-        items: articles(
+        items: articles_connection(
             locale: $locale
             pagination: { start: $start, limit: $limit }
             sort: $sort
             filters: $filter
             status: $status
         ) {
-            ...articleFragment @relay(mask: false)
+            nodes {
+                ...articleFragment @relay(mask: false)
+            }
+            pageInfo {
+                total
+            }
         }
     }
 `;

@@ -5,15 +5,15 @@ import getPublicationState from '../../../utils/base/getPublicationState';
 import { OmitRefType } from '@symbio/headless';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
-import { articleListQuery$data } from '../../../relay/__generated__/articleListQuery.graphql';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
 import { getItemId } from '../../../utils/getItemId';
-import { articleCategoryListQuery$data } from '../../../relay/__generated__/articleCategoryListQuery.graphql';
+import { articleFragment$data } from '../../../relay/__generated__/articleFragment.graphql';
+import { articleCategoryFragment$data } from '../../../relay/__generated__/articleCategoryFragment.graphql';
 
 export interface ArticlesListBlockStaticProps {
     data: {
-        articles: NonNullable<articleListQuery$data['items']> | null;
-        categories: NonNullable<articleCategoryListQuery$data['items']> | null;
+        articles: Omit<articleFragment$data, ' $fragmentType'>[];
+        categories: Omit<articleCategoryFragment$data, ' $fragmentType'>[];
         canLoadMore: boolean;
     };
 }

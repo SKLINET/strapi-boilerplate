@@ -4,22 +4,22 @@ import { Logger } from '../../services';
 // import getPublicationState from '../../utils/getPublicationState';
 
 const getDataID = (fieldValue: any, typeName: string) => {
-    const { documentId, id, locale } = fieldValue;
+    const { documentId, id, locale, publishedAt } = fieldValue;
 
     // Use `documentId` if available
     if (documentId) {
         if (locale) {
-            return `${typeName}_${documentId}_${locale}`;
+            return `${typeName}_${documentId}_${locale}_${publishedAt}`;
         }
-        return `${typeName}_${documentId}`;
+        return `${typeName}_${documentId}_${publishedAt}`;
     }
 
     // Use `id` if available
     if (id) {
         if (locale) {
-            return `${typeName}_${id}_${locale}`;
+            return `${typeName}_${id}_${locale}_${publishedAt}`;
         }
-        return `${typeName}_${id}`;
+        return `${typeName}_${id}_${publishedAt}`;
     }
 
     return null;

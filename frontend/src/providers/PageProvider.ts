@@ -52,10 +52,8 @@ class PageProvider extends AbstractStrapiProvider<
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
-        let entityId = null;
-        if (prvData?.pageId) {
-            entityId = parseInt(String(prvData.pageId));
-        }
+        const entityId = prvData?.pageId ? parseInt(String(prvData.pageId)) : null;
+
         const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             redirect,
@@ -66,7 +64,7 @@ class PageProvider extends AbstractStrapiProvider<
         return {
             ...data,
             redirect: data?.redirect ? { ...data?.redirect, permanent: data?.redirect?.statusCode === '301' } : null,
-            page: data?.page ? { ...data?.page, ...data?.page?.attributes } : null,
+            page: data?.page || null,
         };
     }
 
