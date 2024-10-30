@@ -11,11 +11,9 @@ export default ({ env }) => ({
   },
   "video-field": {
     enabled: true,
-    resolve: "./src/plugins/video-field",
   },
   "bold-title-editor": {
     enabled: true,
-    resolve: "./src/plugins/bold-title-editor",
   },
   "content-tags": {
     enabled: true,
@@ -33,10 +31,10 @@ export default ({ env }) => ({
   },
   tinymce: {
     enabled: true,
-    resolve: "./src/plugins/tinymce",
     config: {
       editor: {
         outputFormat: "html",
+        tinymceSrc: "/tinymce/tinymce.min.js",
         editorConfig: {
           language: "sk",
           height: 500,
