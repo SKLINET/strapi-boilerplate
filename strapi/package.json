@@ -15,7 +15,7 @@
   "dependencies": {
     "@notum-cz/strapi-plugin-record-locking": "^2.0.0",
     "@sklinet/strapi-plugin-bold-title-editor": "1.0.2",
-    "@sklinet/strapi-plugin-tinymce": "^1.1.1",
+    "@sklinet/strapi-plugin-tinymce": "^1.1.4",
     "@sklinet/strapi-plugin-video-field": "^1.1.0",
     "@strapi/plugin-cloud": "5.2.0",
     "@strapi/plugin-color-picker": "^5.2.0",
