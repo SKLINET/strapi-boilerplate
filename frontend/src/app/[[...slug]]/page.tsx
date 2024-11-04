@@ -1,11 +1,10 @@
+import dynamic from 'next/dynamic';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
-import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
-import { GridHelper } from '../components/base/GridHelper/GridHelper';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
-import { ContextProps } from '../../types/base/page';
+import { ServerContextProps } from '../../types/base/page';
 import { IApp } from '../../types/base/app';
 import config from '../../../sklinet.config.json';
 
@@ -22,7 +21,17 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
-export const Page = async (context: ContextProps) => {
+const PreviewToolbar = dynamic(() =>
+    import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
+);
+const GridHelper = dynamic(() => import('../components/base/GridHelper/GridHelper').then((mod) => mod.GridHelper));
+
+export const Page = async ({ params, searchParams }: ServerContextProps) => {
+    const context = {
+        params: await params,
+        searchParams: await searchParams,
+    };
+
     const data = await getStaticProps(context);
 
     const app: IApp = {

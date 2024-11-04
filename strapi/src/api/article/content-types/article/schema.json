@@ -89,15 +89,6 @@
       },
       "type": "customField",
       "customField": "plugin::tinymce.tinymce"
-    },
-    "testTitle": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "customField",
-      "customField": "plugin::bold-title-editor.bold-title-editor"
     }
   }
 }

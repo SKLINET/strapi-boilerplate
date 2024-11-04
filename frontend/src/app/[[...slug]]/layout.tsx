@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { ContextProps, ParamsProps } from '../../types/base/page';
+import { ServerContextProps, ParamsProps } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
@@ -22,7 +22,7 @@ const primary = Poppins({
     fallback: ['Arial', 'sans-serif'],
 });
 
-export function generateViewport(context: ContextProps): Viewport {
+export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -30,7 +30,11 @@ export function generateViewport(context: ContextProps): Viewport {
     };
 }
 
-export async function generateMetadata(context: ContextProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
+    const context = {
+        params: await params,
+        searchParams: await searchParams,
+    };
     const data = await getStaticProps(context);
 
     if (data?.redirect?.to) {
@@ -153,25 +157,29 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
 
 interface RootLayoutProps {
     children: ReactNode;
-    params: ParamsProps;
+    params: Promise<ParamsProps>;
 }
 
-const RootLayout = async ({ children, params }: RootLayoutProps) => (
-    <html lang={getLocale(params.slug)} className={`${primary.variable}`}>
-        <head>
-            <link rel="preconnect" href="https://res.cloudinary.com" />
-            <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
+    const { slug } = await params;
 
-            {/* Favicon */}
-            <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
-            {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
-            {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
-        </head>
-        <body>
-            <TopLoader />
-            {children}
-        </body>
-    </html>
-);
+    return (
+        <html lang={getLocale(slug)} className={`${primary.variable}`}>
+            <head>
+                <link rel="preconnect" href="https://res.cloudinary.com" />
+                <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+                {/* Favicon */}
+                <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
+                {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
+                {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
+            </head>
+            <body>
+                <TopLoader />
+                {children}
+            </body>
+        </html>
+    );
+};
 
 export default RootLayout;

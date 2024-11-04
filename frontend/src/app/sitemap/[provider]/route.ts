@@ -15,7 +15,7 @@ interface SitemapItem {
 
 export async function GET(req: Request, context: Record<string, any>) {
     const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
-    const { provider } = context.params;
+    const { provider } = await context.params;
     const { i18n } = config;
     if (typeof provider !== 'string') {
         return new Response('Sitemap not found', { status: 404 });

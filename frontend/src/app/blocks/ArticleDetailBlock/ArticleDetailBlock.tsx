@@ -35,7 +35,7 @@ if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({
         locale,
         providers,
-        context: { params, preview: previewValue, previewData },
+        context: { params, preview: previewValue },
         block,
     }: StaticBlockContext): Promise<BaseBlockProps> => {
         const preview = previewValue || false;
@@ -57,9 +57,7 @@ if (typeof window === 'undefined') {
             slug: slug,
             status: getPublicationState(preview),
         };
-        if (previewData?.itemId && slug === previewData?.itemSlug) {
-            variables.id = previewData?.itemId || '';
-        }
+
         const item = await provider.findOne(variables, locale, preview);
         if (!item?.documentId) {
             const err = new Error('Article not found') as Error & { code: string };

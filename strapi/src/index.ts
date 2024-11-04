@@ -128,33 +128,19 @@ export default {
               pattern: "String",
               status: "PublicationStatus",
               locale: "String",
-              entityId: "Int",
             },
             async resolve(parent, args) {
-              const { locale, status, pattern, entityId } = args;
+              const { locale, status, pattern } = args;
 
-              const variable: Record<string, any> = entityId
-                ? {
-                    filters: {
-                      documentId: entityId,
-                    },
-                    locale,
-                    limit: 1,
-                    status: status || "published",
-                  }
-                : {
-                    locale,
-                    limit: 9999,
-                    status: status || "published",
-                  };
+              const variable: Record<string, any> = {
+                locale,
+                limit: 9999,
+                status: status || "published",
+              };
 
               const data = await strapi
                 .documents("api::page.page")
                 .findMany(variable);
-
-              if (entityId) {
-                return data[0];
-              }
 
               const page = data.find((it) => it?.url?.match(pattern));
 

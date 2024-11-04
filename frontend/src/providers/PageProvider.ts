@@ -1,4 +1,4 @@
-import { GetStaticPathsResult, PreviewData } from 'next';
+import { GetStaticPathsResult } from 'next';
 import { fetchQuery } from 'relay-runtime';
 import { pageDetailQuery, pageListQuery, pageStaticPathsQuery } from '../relay/page';
 import * as d from '../relay/__generated__/pageDetailQuery.graphql';
@@ -40,26 +40,21 @@ class PageProvider extends AbstractStrapiProvider<
      * @param locale
      * @param slug
      * @param preview
-     * @param previewData
      */
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
         preview: boolean | undefined,
-        previewData?: PreviewData,
     ): Promise<AppData<any, WebSettingsProps> | undefined> {
-        const prvData = previewData as Record<string, unknown>;
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
-        const entityId = prvData?.pageId ? parseInt(String(prvData.pageId)) : null;
 
         const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             redirect,
             pattern,
             status,
-            entityId,
         }).toPromise();
         return {
             ...data,

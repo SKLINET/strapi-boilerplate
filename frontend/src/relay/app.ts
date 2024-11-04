@@ -1,14 +1,8 @@
 import { graphql } from 'relay-runtime';
 
 export const AppQuery = graphql`
-    query appQuery(
-        $pattern: String
-        $redirect: String
-        $status: PublicationStatus
-        $locale: I18NLocaleCode
-        $entityId: Int
-    ) {
-        page(locale: $locale, pattern: $pattern, status: $status, entityId: $entityId) {
+    query appQuery($pattern: String, $redirect: String, $status: PublicationStatus, $locale: I18NLocaleCode) {
+        page(locale: $locale, pattern: $pattern, status: $status) {
             documentId
             title
             url

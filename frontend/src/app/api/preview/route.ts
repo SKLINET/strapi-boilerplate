@@ -1,4 +1,3 @@
-// route handler with secret and slug
 import { draftMode } from 'next/headers';
 import { createRelayEnvironment } from '../../../relay/createRelayEnvironment';
 import { fetchQuery } from 'relay-runtime';
@@ -10,13 +9,13 @@ import { getPagePattern } from '../../../lib/routing/getPagePattern';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
+    const draft = await draftMode();
+
     // Parse query string parameters
     const { searchParams } = new URL(request.url);
     const locale = searchParams.get('locale');
     const slug = searchParams.get('slug');
     const type = searchParams.get('type');
-    const pageId = searchParams.get('pageId');
-    const itemId = searchParams.get('itemId');
     const _locale = (locale || '').toString() || 'cs';
 
     const environment = createRelayEnvironment({});
@@ -46,13 +45,7 @@ export async function GET(request: Request) {
         }
     }
 
-    // Enable Draft Mode by setting the cookie
-    draftMode().enable();
+    draft.enable();
 
-    const headers = new Headers(request.headers);
-    headers.set(
-        'Set-Cookie',
-        `previewData=${JSON.stringify({ pageId, itemId, itemSlug: slug, pageSlug: slug, url: url })}`,
-    );
-    return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_BASE_PATH + url), { headers });
+    return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_BASE_PATH + url));
 }

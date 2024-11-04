@@ -1,8 +1,7 @@
+import dynamic from 'next/dynamic';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
-import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
-import { GridHelper } from '../components/base/GridHelper/GridHelper';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { IApp } from '../../types/base/app';
@@ -20,6 +19,11 @@ import 'dayjs/locale/en';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+const PreviewToolbar = dynamic(() =>
+    import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
+);
+const GridHelper = dynamic(() => import('../components/base/GridHelper/GridHelper').then((mod) => mod.GridHelper));
 
 export const Page = async () => {
     const context = { params: { slug: ['404'] }, searchParams: {} };

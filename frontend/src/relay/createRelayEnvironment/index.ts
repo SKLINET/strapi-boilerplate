@@ -6,23 +6,13 @@ import { Logger } from '../../services';
 const getDataID = (fieldValue: any, typeName: string) => {
     const { documentId, id, locale, publishedAt } = fieldValue;
 
-    // Use `documentId` if available
-    if (documentId) {
-        if (locale) {
-            return `${typeName}_${documentId}_${locale}_${publishedAt}`;
-        }
-        return `${typeName}_${documentId}_${publishedAt}`;
+    const parts = [typeName, documentId, id, locale, publishedAt].filter((part) => part);
+
+    if (parts.length === 0) {
+        return null;
     }
 
-    // Use `id` if available
-    if (id) {
-        if (locale) {
-            return `${typeName}_${id}_${locale}_${publishedAt}`;
-        }
-        return `${typeName}_${id}_${publishedAt}`;
-    }
-
-    return null;
+    return parts.join('_');
 };
 
 export const createRelayEnvironment = (records: RecordMap, token?: string, preview = false): Environment =>

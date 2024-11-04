@@ -431,7 +431,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::article-category.article-category'
     >;
-    content: Schema.Attribute.String &
+    content: Schema.Attribute.RichText &
       Schema.Attribute.CustomField<'plugin::tinymce.tinymce'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -473,13 +473,6 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
         };
       }>;
     slug: Schema.Attribute.UID<'title'> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    testTitle: Schema.Attribute.String &
-      Schema.Attribute.CustomField<'plugin::bold-title-editor.bold-title-editor'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
