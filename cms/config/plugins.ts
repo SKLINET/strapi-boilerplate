@@ -1,4 +1,7 @@
 export default ({ env }) => ({
+  publisher: {
+    enabled: true,
+  },
   "preview-button": {
     enabled: true,
     config: {
@@ -64,9 +67,6 @@ export default ({ env }) => ({
     enabled: true,
   },
   "record-locking": {
-    enabled: true,
-  },
-  publisher: {
     enabled: true,
   },
   "video-field": {

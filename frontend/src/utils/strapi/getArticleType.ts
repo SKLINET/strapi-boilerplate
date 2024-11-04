@@ -18,9 +18,7 @@ export const getArticleType = (e: Fragment | null | undefined, app: IApp): IArti
 
     const _totalTime = getReadingTime(content || '');
 
-    const _href = app?.webSetting?.articleDetailPage
-        ? getItemUrl(app?.webSetting?.articleDetailPage?.url || '', e, app)
-        : null;
+    const _href = getItemUrl(app?.webSetting?.articleDetailPage?.url, e, app);
 
     if (!_image || !_href || !publishDate) return null;
 
