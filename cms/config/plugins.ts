@@ -95,7 +95,9 @@ export default ({ env }) => ({
         outputFormat: "html",
         tinymceSrc: "/tinymce/tinymce.min.js",
         editorConfig: {
+          license_key: "gpl",
           language: "sk",
+          inline_styles: true,
           height: 500,
           menubar: false,
           extended_valid_elements: "span, img, small",
