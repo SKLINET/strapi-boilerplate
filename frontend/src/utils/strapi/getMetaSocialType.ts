@@ -9,7 +9,7 @@ export const getMetaSocialType = (e: Fragment | null | undefined): IMetaSocial |
 
     const { id, title, description, image } = e;
 
-    const _image = getImageType(image?.data, true);
+    const _image = getImageType(image, true);
 
     if (!_image) return null;
 

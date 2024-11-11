@@ -27,12 +27,7 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
 ): Promise<GetStaticPropsResult<{ [key: string]: unknown }>> => {
     const provider = (providers as ProvidersType).page;
     const locale = context.locale || context.defaultLocale;
-    const props = await provider.getPageBySlug(
-        locale,
-        getNormalizedSlug(context?.params?.slug),
-        context.preview,
-        context?.previewData,
-    );
+    const props = await provider.getPageBySlug(locale, getNormalizedSlug(context?.params?.slug), context.preview);
     const slug = context.params?.slug;
 
     if (!props) {

@@ -1,33 +1,10 @@
-module.exports = ({ env }) => ({
-  slugify: {
+export default ({ env }) => ({
+  publisher: {
     enabled: true,
-    resolve: "./src/plugins/slugify",
-    config: {
-      shouldUpdateSlug: true,
-      slugifyWithCount: true,
-      contentTypes: {
-        article: {
-          field: "slug",
-          references: "title",
-        },
-      },
-    },
-  },
-  graphql: {
-    config: {
-      apolloServer: {
-        introspection: true,
-      },
-      defaultLimit: 100,
-      maxLimit: -1,
-      playgroundAlways: true,
-    },
   },
   "preview-button": {
     enabled: true,
-    openTarget: "_blank",
     config: {
-      injectListViewColumn: false,
       contentTypes: [
         {
           uid: "api::page.page",
@@ -39,7 +16,7 @@ module.exports = ({ env }) => ({
             query: {
               type: "pages",
               slug: "{url}",
-              pageId: "{id}",
+              pageId: "{documentId}",
               locale: "{locale}",
             },
           },
@@ -50,8 +27,8 @@ module.exports = ({ env }) => ({
             ),
             query: {
               type: "pages",
-              slug: "{slug}",
-              pageId: "{id}",
+              slug: "{url}",
+              pageId: "{documentId}",
               locale: "{locale}",
             },
           },
@@ -66,7 +43,7 @@ module.exports = ({ env }) => ({
             query: {
               type: "articles",
               slug: "{slug}",
-              itemId: "{id}",
+              itemId: "{documentId}",
               locale: "{locale}",
             },
           },
@@ -78,7 +55,7 @@ module.exports = ({ env }) => ({
             query: {
               type: "articles",
               slug: "{slug}",
-              itemId: "{id}",
+              itemId: "{documentId}",
               locale: "{locale}",
             },
           },
@@ -86,22 +63,29 @@ module.exports = ({ env }) => ({
       ],
     },
   },
-  "content-versioning": {
+  seo: {
     enabled: true,
-    resolve: "./src/plugins/content-versioning",
   },
-  "email-designer": {
-    enabled: false,
+  "record-locking": {
+    enabled: true,
   },
   "video-field": {
     enabled: true,
   },
-  seo: {
+  "bold-title-editor": {
     enabled: true,
   },
-  "strapi-plugin-populate-deep": {
+  "content-tags": {
+    enabled: true,
+  },
+  graphql: {
     config: {
-      defaultDepth: 4,
+      apolloServer: {
+        introspection: true,
+      },
+      defaultLimit: 100,
+      maxLimit: -1,
+      playgroundAlways: true,
     },
   },
   tinymce: {
@@ -109,27 +93,42 @@ module.exports = ({ env }) => ({
     config: {
       editor: {
         outputFormat: "html",
-        tinymceSrc: '/tinymce/tinymce.min.js',
+        tinymceSrc: "/tinymce/tinymce.min.js",
         editorConfig: {
-          license_key: 'gpl',
-          language: "cs",
+          license_key: "gpl",
+          language: "sk",
           inline_styles: true,
           height: 500,
           menubar: false,
-          valid_elements: "*[*]",
-          // extended_valid_elements: "span, img, small",
-          forced_root_block: false,
+          extended_valid_elements: "span, img, small",
+          forced_root_block: "",
           convert_urls: false,
           entity_encoding: "raw",
-          plugins:
-            "advlist autolink lists link image charmap preview anchor \
-            searchreplace visualblocks code fullscreen table emoticons nonbreaking \
-            insertdatetime media table code help wordcount",
+          plugins: [
+            "advlist",
+            "autolink",
+            "lists",
+            "link",
+            "image",
+            "charmap",
+            "preview",
+            "anchor",
+            "searchreplace",
+            "visualblocks",
+            "code",
+            "fullscreen",
+            "insertdatetime",
+            "media",
+            "table",
+            "code",
+            "help",
+            "wordcount",
+          ],
           toolbar:
             "undo redo | styles | bold italic forecolor backcolor | \
-            alignleft aligncenter alignright alignjustify | \
-            table emoticons visualblocks code|\
-            nonbreaking bullist numlist outdent indent | removeformat | help",
+                  alignleft aligncenter alignright alignjustify | \
+                  media table emoticons visualblocks code|\
+                  nonbreaking bullist numlist outdent indent | removeformat | help",
           style_formats: [
             {
               title: "Headings",
@@ -158,24 +157,14 @@ module.exports = ({ env }) => ({
       },
     },
   },
-  publisher: {
-    enabled: false,
-  },
-  i18n: {
-    enabled: true,
-  },
   upload: {
     config: {
       provider: "cloudinary",
-    },
-  },
-  cloudinary: {
-    enabled: true,
-    resolve: "./src/plugins/cloudinary",
-    config: {
-      cloud_name: env("CLOUDINARY_NAME"),
-      api_key: env("CLOUDINARY_KEY"),
-      api_secret: env("CLOUDINARY_SECRET"),
+      providerOptions: {
+        cloud_name: env("CLOUDINARY_NAME"),
+        api_key: env("CLOUDINARY_KEY"),
+        api_secret: env("CLOUDINARY_SECRET"),
+      },
     },
   },
 });

@@ -5,15 +5,12 @@ import { getImageUrl } from '../getImageUrl';
 type Fragment = Omit<appImageFragment$data, ' $fragmentType'>;
 
 export const getImageType = (e: Fragment | null | undefined, smallResolution = false): IImage | null => {
-    if (!e?.attributes) return null;
+    if (!e) return null;
 
-    const {
-        id,
-        attributes: { url, alternativeText, width, height },
-    } = e;
+    const { documentId, url, alternativeText, width, height } = e;
 
     return {
-        id: id || '',
+        id: documentId,
         url: getImageUrl(url, smallResolution),
         width: width || 0,
         height: height || 0,

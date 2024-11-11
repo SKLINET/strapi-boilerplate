@@ -7,7 +7,7 @@ import { FadeIn } from '../../base/FadeIn/FadeIn';
 const ArticleDetail = ({ blocksData, app, item }: ArticleDetailBlockProps): ReactElement => {
     return (
         <FadeIn className={styles.wrapper}>
-            <DataPreview title={item?.attributes?.title || ''} data={item} />;
+            <DataPreview title={item?.title || ''} data={item} />
         </FadeIn>
     );
 };

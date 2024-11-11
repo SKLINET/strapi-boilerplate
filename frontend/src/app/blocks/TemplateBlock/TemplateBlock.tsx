@@ -22,14 +22,10 @@ graphql`
     fragment TemplateBlock_content on ComponentBlockTemplateBlock {
         id
         template {
-            data {
-                attributes {
-                    content {
-                        __typename
-                        ...ContactFormBlock_content @relay(mask: false)
-                        ...VideoBlock_content @relay(mask: false)
-                    }
-                }
+            content {
+                __typename
+                ...ContactFormBlock_content @relay(mask: false)
+                ...VideoBlock_content @relay(mask: false)
             }
         }
     }

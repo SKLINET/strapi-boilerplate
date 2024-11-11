@@ -4,8 +4,7 @@
   "info": {
     "singularName": "icon",
     "pluralName": "icons",
-    "displayName": "🧩 Ikony",
-    "description": ""
+    "displayName": "🧩 Ikony"
   },
   "options": {
     "draftAndPublish": false

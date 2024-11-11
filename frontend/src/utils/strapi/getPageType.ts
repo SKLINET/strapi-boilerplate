@@ -6,15 +6,12 @@ import { IApp } from '../../types/base/app';
 type Fragment = Omit<appPageFragment$data, ' $fragmentType'>;
 
 export const getPageType = (e: Fragment | null | undefined, app: IApp): IPage | null => {
-    if (!e?.attributes?.url) return null;
+    if (!e?.url) return null;
 
-    const {
-        id,
-        attributes: { title, url },
-    } = e;
+    const { documentId, title, url } = e;
 
     return {
-        id: id || '',
+        id: documentId,
         title: title,
         href: getPageUrl(url, app.locale),
     };

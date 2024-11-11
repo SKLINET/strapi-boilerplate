@@ -11,9 +11,9 @@ import { Meta } from './meta';
 export type AppData = appQuery$data;
 
 export interface PageDefault {
-    id: string;
+    documentId: string;
     _id: string;
-    url: string;
+    url: string | null | undefined;
     title: string;
     content?: string;
     routeName: string;

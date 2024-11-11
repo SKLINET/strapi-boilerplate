@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { ContextProps, ParamsProps } from '../../types/base/page';
+import { ServerContextProps, ParamsProps } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
@@ -22,7 +22,7 @@ const primary = Poppins({
     fallback: ['Arial', 'sans-serif'],
 });
 
-export function generateViewport(context: ContextProps): Viewport {
+export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -30,7 +30,11 @@ export function generateViewport(context: ContextProps): Viewport {
     };
 }
 
-export async function generateMetadata(context: ContextProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
+    const context = {
+        params: await params,
+        searchParams: await searchParams,
+    };
     const data = await getStaticProps(context);
 
     if (data?.redirect?.to) {
@@ -45,46 +49,36 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
 
     const { webSetting, page } = data;
 
-    const globalSeo = webSetting?.data?.attributes?.globalSeo;
+    const globalSeo = webSetting?.globalSeo;
 
     const itemMeta = getMetaFromItem(item);
 
     const locale = getLocale(context.params.slug);
 
     const itemSharingImage = itemMeta?.image?.url ? getImageUrl(itemMeta.image.url, true) : null;
-    const globalSharingImage = globalSeo?.sharingImage?.data?.attributes?.url
-        ? getImageUrl(globalSeo.sharingImage.data.attributes.url, true)
-        : null;
+    const globalSharingImage = globalSeo?.sharingImage?.url ? getImageUrl(globalSeo.sharingImage.url, true) : null;
 
     const metaData = {
         siteName: globalSeo?.siteName,
-        title: itemMeta?.seo?.title || itemMeta?.title || page?.attributes?.seo?.title || page?.attributes?.title || '',
+        title: itemMeta?.seo?.title || itemMeta?.title || page?.seo?.title || page?.title || '',
         suffix: globalSeo?.titleSuffix || '',
-        metaTitle:
-            itemMeta?.seo?.metaTitle ||
-            itemMeta?.title ||
-            page?.attributes?.seo?.metaTitle ||
-            page?.attributes?.title ||
-            '',
+        metaTitle: itemMeta?.seo?.metaTitle || itemMeta?.title || page?.seo?.metaTitle || page?.title || '',
         metaDescription:
             itemMeta?.seo?.metaDescription ||
             itemMeta?.description ||
-            page?.attributes?.seo?.metaDescription ||
+            page?.seo?.metaDescription ||
             globalSeo?.description ||
             '',
-        keyWords: itemMeta?.seo?.keywords || page?.attributes?.seo?.keywords || '',
-        robots: itemMeta?.seo?.metaRobots || page?.attributes?.seo?.metaRobots || null,
-        meta: itemMeta?.seo?.meta || page?.attributes?.seo?.meta || globalSeo?.metaTags || [],
-        social: itemMeta?.seo?.socialNetworks || page?.attributes?.seo?.socialNetworks || null,
-        canonical: itemMeta?.seo?.canonicalURL || page?.attributes?.seo?.canonicalURL || null,
-        viewPort: itemMeta?.seo?.metaViewport || page?.attributes?.seo?.metaViewport || null,
+        keyWords: itemMeta?.seo?.keywords || page?.seo?.keywords || '',
+        robots: itemMeta?.seo?.metaRobots || page?.seo?.metaRobots || null,
+        meta: itemMeta?.seo?.meta || page?.seo?.meta || globalSeo?.metaTags || [],
+        social: itemMeta?.seo?.socialNetworks || page?.seo?.socialNetworks || null,
+        canonical: itemMeta?.seo?.canonicalURL || page?.seo?.canonicalURL || null,
+        viewPort: itemMeta?.seo?.metaViewport || page?.seo?.metaViewport || null,
         preventIndexing:
-            itemMeta?.seo?.preventIndexing ||
-            globalSeo?.preventIndexing ||
-            page?.attributes?.seo?.preventIndexing ||
-            false,
+            itemMeta?.seo?.preventIndexing || globalSeo?.preventIndexing || page?.seo?.preventIndexing || false,
         sharingImage: itemSharingImage || globalSharingImage || null,
-        structuredData: itemMeta?.seo?.structuredData || page?.attributes?.seo?.structuredData || null,
+        structuredData: itemMeta?.seo?.structuredData || page?.seo?.structuredData || null,
     };
 
     const share = getSocialNetworksType(metaData.social);
@@ -163,25 +157,29 @@ export async function generateMetadata(context: ContextProps): Promise<Metadata>
 
 interface RootLayoutProps {
     children: ReactNode;
-    params: ParamsProps;
+    params: Promise<ParamsProps>;
 }
 
-const RootLayout = async ({ children, params }: RootLayoutProps) => (
-    <html lang={getLocale(params.slug)} className={`${primary.variable}`}>
-        <head>
-            <link rel="preconnect" href="https://res.cloudinary.com" />
-            <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
+    const { slug } = await params;
 
-            {/* Favicon */}
-            <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
-            {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
-            {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
-        </head>
-        <body>
-            <TopLoader />
-            {children}
-        </body>
-    </html>
-);
+    return (
+        <html lang={getLocale(slug)} className={`${primary.variable}`}>
+            <head>
+                <link rel="preconnect" href="https://res.cloudinary.com" />
+                <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
+                {/* Favicon */}
+                <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
+                {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
+                {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
+            </head>
+            <body>
+                <TopLoader />
+                {children}
+            </body>
+        </html>
+    );
+};
 
 export default RootLayout;

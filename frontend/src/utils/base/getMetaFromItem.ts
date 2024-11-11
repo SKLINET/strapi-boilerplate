@@ -14,13 +14,13 @@ interface IItemMeta {
 export const getMetaFromItem = (item: IApp['item']): IItemMeta | null => {
     if (!item) return null;
 
-    if (item.id?.includes('Article')) {
+    if (item.__typename === 'Article') {
         const _item = item as unknown as Omit<articleDetailFragment$data, ' $fragmentType'>;
-        if (!_item?.attributes) return null;
+        if (!_item) return null;
 
-        const { title, image, seo } = _item.attributes;
+        const { title, image, seo } = _item;
 
-        const _image = getImageType(image?.data);
+        const _image = getImageType(image);
 
         return { title, description: null, image: _image, seo: seo };
     }

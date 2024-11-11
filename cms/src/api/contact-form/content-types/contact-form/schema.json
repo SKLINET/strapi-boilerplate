@@ -4,8 +4,7 @@
   "info": {
     "singularName": "contact-form",
     "pluralName": "contact-forms",
-    "displayName": "📩 Kontaktní formulář",
-    "description": ""
+    "displayName": "📩 Kontaktní formulář"
   },
   "options": {
     "draftAndPublish": true

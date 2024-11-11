@@ -26,7 +26,6 @@
       "required": true
     },
     "items": {
-      "displayName": "MenuItem",
       "type": "component",
       "repeatable": true,
       "pluginOptions": {
@@ -35,8 +34,8 @@
         }
       },
       "component": "menu.menu-item",
-      "min": 1,
-      "required": true
+      "required": true,
+      "min": 1
     }
   }
 }

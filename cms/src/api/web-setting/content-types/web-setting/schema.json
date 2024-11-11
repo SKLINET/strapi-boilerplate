@@ -4,8 +4,7 @@
   "info": {
     "singularName": "web-setting",
     "pluralName": "web-settings",
-    "displayName": "⚙️ Nastavení webu",
-    "description": ""
+    "displayName": "⚙️ Nastavení webu"
   },
   "options": {
     "draftAndPublish": true

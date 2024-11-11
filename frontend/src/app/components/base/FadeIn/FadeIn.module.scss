@@ -8,10 +8,6 @@
     }
 }
 
-.background {
-    @apply opacity-0 will-change-opacity transition-opacity ease-in-out duration-700;
-}
-
 .inner {
     @apply w-full;
 }

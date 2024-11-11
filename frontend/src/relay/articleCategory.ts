@@ -6,7 +6,7 @@ export const ArticleCategoryListQuery = graphql`
         $start: Int
         $limit: Int
         $filter: ArticleCategoryFiltersInput
-        $publicationState: PublicationState
+        $status: PublicationStatus
         $sort: [String] = ["publishedAt:asc"]
     ) {
         items: articleCategories(
@@ -14,25 +14,16 @@ export const ArticleCategoryListQuery = graphql`
             pagination: { start: $start, limit: $limit }
             sort: $sort
             filters: $filter
-            publicationState: $publicationState
+            status: $status
         ) {
-            meta {
-                pagination {
-                    total
-                }
-            }
-            data {
-                ...articleCategoryFragment @relay(mask: false)
-            }
+            ...articleCategoryFragment @relay(mask: false)
         }
     }
 `;
 
 graphql`
-    fragment articleCategoryFragment on ArticleCategoryEntity {
-        id
-        attributes {
-            title
-        }
+    fragment articleCategoryFragment on ArticleCategory {
+        documentId
+        title
     }
 `;

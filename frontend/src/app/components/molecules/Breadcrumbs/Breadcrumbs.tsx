@@ -13,13 +13,13 @@ interface BreadcrumbsProps {
     className?: string;
 }
 
-type ParentProps = NonNullable<NonNullable<appQuery$data['page']>['attributes']>['parent'] | null | undefined;
+type ParentProps = NonNullable<NonNullable<appQuery$data['page']>>['parent'] | null | undefined;
 
 const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: BreadcrumbsProps): ReactElement => {
     const renderParent = (page: ParentProps): any => {
-        if (!page?.data?.attributes) return <></>;
+        if (!page) return <></>;
 
-        const { title, url, parent, seo } = page.data.attributes;
+        const { title, url, parent, seo } = page;
 
         const label = seo?.title || title || '';
         const href = getPageUrl(url || '', locale);
@@ -42,25 +42,25 @@ const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: Bre
 
         const classNames = clsx(styles.label);
 
-        if (item && page.id === webSetting?.data?.attributes?.articleDetailPage?.data?.id) {
+        if (item && page.documentId === webSetting?.articleDetailPage?.documentId) {
             const _item = item as unknown as Omit<articleDetailFragment$data, ' $fragmentType'>;
-            if (!_item?.attributes) return <></>;
+            if (!_item) return <></>;
 
-            const { title, seo } = _item.attributes;
+            const { title, seo } = _item;
 
             const label = seo?.title || title;
 
             return <Paragraph className={classNames}>{label}</Paragraph>;
         }
 
-        const label = page.attributes?.title || '';
+        const label = page.title || '';
 
         return <Paragraph className={classNames}>{label}</Paragraph>;
     };
 
     return (
         <div className={clsx(styles.wrapper, className)}>
-            {renderParent(page?.attributes?.parent as ParentProps)}
+            {renderParent(page?.parent as ParentProps)}
             {renderCurrent()}
         </div>
     );

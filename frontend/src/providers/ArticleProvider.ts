@@ -21,7 +21,7 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
 
     getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
         if (publicationState?.toLowerCase() === 'preview') {
-            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' }, isVisibleInListView: { eq: true } };
+            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
         }
         return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
@@ -33,15 +33,15 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
         }).toPromise();
 
         if (data) {
-            for (const article of data.articles?.data || []) {
+            for (const article of data?.articles || []) {
                 items.push({
                     params: {
-                        slug: [article.attributes?.slug || ''],
+                        slug: [article?.slug || ''],
                         locale,
                         sitemap: {
-                            enabled: article?.attributes?.sitemap?.enabled || false,
-                            changeFrequency: article?.attributes?.sitemap?.changeFrequency || 'monthly',
-                            priority: article?.attributes?.sitemap?.priority || 0.3,
+                            enabled: article?.sitemap?.enabled || false,
+                            changeFrequency: article?.sitemap?.changeFrequency || 'monthly',
+                            priority: article?.sitemap?.priority || 0.3,
                         },
                     },
                 });

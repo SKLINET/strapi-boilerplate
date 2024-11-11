@@ -9,26 +9,21 @@ import { getReadingTime } from '../getReadingTime';
 type Fragment = Omit<articleFragment$data, ' $fragmentType'>;
 
 export const getArticleType = (e: Fragment | null | undefined, app: IApp): IArticle | null => {
-    if (!e || !e.attributes) return null;
+    if (!e) return null;
 
-    const {
-        id,
-        attributes: { title, category, image, content, publishDate },
-    } = e;
+    const { documentId, title, category, image, content, publishDate } = e;
 
-    const _category = getArticleCategoryType(category?.data);
-    const _image = getImageType(image?.data);
+    const _category = getArticleCategoryType(category);
+    const _image = getImageType(image);
 
     const _totalTime = getReadingTime(content || '');
 
-    const _href = app?.webSetting?.data?.attributes?.articleDetailPage
-        ? getItemUrl(app?.webSetting?.data?.attributes?.articleDetailPage?.data?.attributes?.url || '', e, app)
-        : null;
+    const _href = getItemUrl(app?.webSetting?.articleDetailPage?.url, e, app);
 
     if (!_image || !_href || !publishDate) return null;
 
     return {
-        id: id || '',
+        id: documentId,
         title: title,
         href: _href,
         category: _category,

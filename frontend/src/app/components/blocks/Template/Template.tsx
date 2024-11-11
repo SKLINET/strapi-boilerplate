@@ -6,7 +6,7 @@ import VideoBlock from '../../../blocks/VideoBlock/VideoBlock';
 
 const Template = ({ blocksData, app }: TemplateBlockProps): ReactElement => (
     <>
-        {blocksData.template?.data?.attributes?.content?.map((e) => {
+        {blocksData.template?.content?.map((e) => {
             if (!e) return null;
             switch (e.__typename) {
                 case 'ComponentBlockContactFormBlock':

@@ -6,6 +6,8 @@ import { IArticle } from '../../types/article';
 import providers from '../../providers';
 import { getArticleListType } from '../../utils/strapi/getArticleType';
 import { articleListQuery$data } from '../../relay/__generated__/articleListQuery.graphql';
+import { FindResponse } from '../../lib/provider/AbstractStrapiProvider';
+import { articleFragment$data } from '../../relay/__generated__/articleFragment.graphql';
 
 export const fetchArticles = async (
     options: {
@@ -34,19 +36,17 @@ export const fetchArticles = async (
         filter.category = { id: { eq: categoryId } };
     }
 
-    const { data, count } = await providers.article.find({
+    const { data, count } = (await providers.article.find({
         locale: app.locale,
         filter: filter,
         start: (page - 1) * limit,
         limit: limit,
         preview: app.preview,
-        publicationState: getPublicationState(app.preview),
-    });
-
-    const _data = data as NonNullable<articleListQuery$data['items']>['data'] | null;
+        status: getPublicationState(app.preview),
+    })) as unknown as FindResponse<Omit<articleFragment$data, ' $fragmentType'>[]>;
 
     return {
-        articles: getArticleListType(_data, app),
+        articles: getArticleListType(data, app),
         canLoadMore: count > (page - 1) * limit + limit,
     };
 };

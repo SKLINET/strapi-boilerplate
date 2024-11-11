@@ -228,7 +228,7 @@ export default abstract class AbstractElasticProvider<
                 filter: { vuid: { eq: id } },
                 limit: 1,
                 locale: String(locale),
-                publicationState: getPublicationState(preview),
+                status: getPublicationState(preview),
             } as any,
             preview,
         );
@@ -317,7 +317,7 @@ export default abstract class AbstractElasticProvider<
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const { data } = await this.find(
-                    { ...options, publicationState: getPublicationState(!prod), limit: Infinity, locale } as any,
+                    { ...options, status: getPublicationState(!prod), limit: Infinity, locale } as any,
                     !prod,
                 );
 
@@ -390,10 +390,10 @@ export default abstract class AbstractElasticProvider<
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const { data } = await this.find({ locale, limit: Infinity }, !prod);
-                const cmsIds = data.map((item) => item?.id).filter((id) => id);
+                const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
-                const { data: data2 } = await this.findByElastic<'id'>({ size: 10000 }, locale, !prod);
-                const elasticIds = data2.map((i) => i && i.id).filter((i) => i);
+                const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, locale, !prod);
+                const elasticIds = data2.map((i) => i && i.documentId).filter((i) => i);
 
                 for (const id of elasticIds) {
                     if (id && cmsIds.indexOf(id) === -1) {
@@ -411,10 +411,10 @@ export default abstract class AbstractElasticProvider<
             // @ts-ignore
             const { data } = await this.find({ limit: Infinity }, !prod);
 
-            const cmsIds = data.map((item) => item?.id).filter((id) => id);
+            const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
-            const { data: data2 } = await this.findByElastic<'id'>({ size: 10000 }, undefined, !prod);
-            const elasticIds = data2.map((i) => i && i.id).filter((i) => i);
+            const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, undefined, !prod);
+            const elasticIds = data2.map((i) => i && i.documentId).filter((i) => i);
 
             for (const id of elasticIds) {
                 if (id && cmsIds.indexOf(id) === -1) {

@@ -1,4 +1,4 @@
-import { GetStaticPathsResult, PreviewData } from 'next';
+import { GetStaticPathsResult } from 'next';
 import { fetchQuery } from 'relay-runtime';
 import { pageDetailQuery, pageListQuery, pageStaticPathsQuery } from '../relay/page';
 import * as d from '../relay/__generated__/pageDetailQuery.graphql';
@@ -40,33 +40,26 @@ class PageProvider extends AbstractStrapiProvider<
      * @param locale
      * @param slug
      * @param preview
-     * @param previewData
      */
     async getPageBySlug(
         locale: string | undefined,
         slug: string[],
         preview: boolean | undefined,
-        previewData?: PreviewData,
     ): Promise<AppData<any, WebSettingsProps> | undefined> {
-        const prvData = previewData as Record<string, unknown>;
         const pattern = getPagePattern(slug);
-        const publicationState = getPublicationState(preview);
+        const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
-        let entityId = null;
-        if (prvData?.pageId) {
-            entityId = parseInt(String(prvData.pageId));
-        }
+
         const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
             locale,
             redirect,
             pattern,
-            publicationState,
-            entityId,
+            status,
         }).toPromise();
         return {
             ...data,
             redirect: data?.redirect ? { ...data?.redirect, permanent: data?.redirect?.statusCode === '301' } : null,
-            page: data?.page ? { ...data?.page, ...data?.page?.attributes } : null,
+            page: data?.page || null,
         };
     }
 
@@ -86,37 +79,37 @@ class PageProvider extends AbstractStrapiProvider<
 
             if (data) {
                 if (cnt === -1) {
-                    cnt = Number(data?.pages?.meta?.pagination?.total);
+                    cnt = Number(data?.pages?.length || 0);
                 }
                 // loop over all pages
-                for (const page of data?.pages?.data || []) {
-                    if (String(page?.attributes?.url) === 'homepage' && page?.attributes?.sitemap) {
+                for (const page of data?.pages || []) {
+                    if (String(page?.url) === 'homepage' && page?.sitemap) {
                         items.push({
                             params: {
                                 slug: [],
                                 sitemap: {
-                                    enabled: page?.attributes?.sitemap?.enabled || false,
-                                    changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                    priority: page?.attributes?.sitemap?.priority || 0.3,
+                                    enabled: page?.sitemap?.enabled || false,
+                                    changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                    priority: page?.sitemap?.priority || 0.3,
                                 },
                             },
                         });
                         continue;
                     }
-                    if (String(page?.attributes?.url) === '404') {
+                    if (String(page?.url) === '404') {
                         continue;
                     }
-                    if (String(page?.attributes?.url) === '500') {
+                    if (String(page?.url) === '500') {
                         continue;
                     }
-                    const url = page?.attributes?.url;
+                    const url = page?.url;
                     if (url && blocks) {
                         const blocksParams = await getStaticParamsFromBlocks<
                             PageProps,
                             WebSettingsProps,
                             Providers,
                             Locale
-                        >(page?.attributes?.content as any, locale ?? '', providers, blocks);
+                        >(page?.content as any, locale ?? '', providers, blocks);
                         if (blocksParams.length > 0) {
                             for (const blockParams of blocksParams) {
                                 let newUrl = url;
@@ -139,9 +132,9 @@ class PageProvider extends AbstractStrapiProvider<
                                         slug: pathParts,
                                         locale,
                                         sitemap: {
-                                            enabled: page?.attributes?.sitemap?.enabled || false,
-                                            changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                            priority: page?.attributes?.sitemap?.priority || 0.3,
+                                            enabled: page?.sitemap?.enabled || false,
+                                            changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                            priority: page?.sitemap?.priority || 0.3,
                                         },
                                     },
                                 });
@@ -154,9 +147,9 @@ class PageProvider extends AbstractStrapiProvider<
                                     slug: pathParts,
                                     locale,
                                     sitemap: {
-                                        enabled: page?.attributes?.sitemap?.enabled || false,
-                                        changeFrequency: page?.attributes?.sitemap?.changeFrequency || 'monthly',
-                                        priority: page?.attributes?.sitemap?.priority || 0.3,
+                                        enabled: page?.sitemap?.enabled || false,
+                                        changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
+                                        priority: page?.sitemap?.priority || 0.3,
                                     },
                                 },
                             });
@@ -164,7 +157,7 @@ class PageProvider extends AbstractStrapiProvider<
                     }
                 }
 
-                done += data?.pages?.data?.length || 0;
+                done += data?.pages?.length || 0;
             }
         } while (done < cnt);
 

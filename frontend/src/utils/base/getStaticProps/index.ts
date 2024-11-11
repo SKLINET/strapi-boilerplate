@@ -10,23 +10,19 @@ import { CALENDAR_FORMATS } from '../../../constants';
 import blocks from '../../../app/blocks';
 import { getBlocksProps } from '../../../lib/blocks/getBlocksProps';
 import providers from '../../../providers';
-import { GetStaticPropsContext, PreviewData } from 'next';
+import { GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { IPageResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
-import { cookies, draftMode } from 'next/headers';
+import { draftMode } from 'next/headers';
 
-type IContext = GetStaticPropsContext<ParsedUrlQuery, PreviewData> & {
+type IContext = GetStaticPropsContext<ParsedUrlQuery> & {
     searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export const getStaticProps = cache(
     async ({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> => {
-        const { isEnabled } = draftMode();
-        const cookieStore = cookies();
-        const previewData = cookieStore.has('previewData')
-            ? JSON.parse(cookieStore.get('previewData')?.value || '')
-            : {};
+        const { isEnabled } = await draftMode();
         const {
             tz,
             i18n: { defaultLocale, locales },
@@ -40,7 +36,6 @@ export const getStaticProps = cache(
             defaultLocale,
             params: { slug: getNormalizedSlug(slug) },
             searchParams: searchParams,
-            previewData,
             preview: isEnabled,
             draftMode: isEnabled,
         };
@@ -56,6 +51,8 @@ export const getStaticProps = cache(
         const renamedBlocks: Record<string, any> = {};
 
         for (const key in blocks) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             renamedBlocks[`ComponentBlock${key}`] = blocks[key];
         }
 

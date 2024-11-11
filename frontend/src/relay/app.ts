@@ -1,138 +1,105 @@
 import { graphql } from 'relay-runtime';
 
 export const AppQuery = graphql`
-    query appQuery(
-        $pattern: String
-        $redirect: String
-        $publicationState: PublicationState
-        $locale: I18NLocaleCode
-        $entityId: Int
-    ) {
-        page(locale: $locale, pattern: $pattern, publicationState: $publicationState, entityId: $entityId) {
-            id
-            attributes {
+    query appQuery($pattern: String, $redirect: String, $status: PublicationStatus, $locale: I18NLocaleCode) {
+        page(locale: $locale, pattern: $pattern, status: $status) {
+            documentId
+            title
+            url
+            updatedAt
+            publishedAt
+            pages {
+                ...appPageFragment @relay(mask: false)
+            }
+            parent {
+                documentId
                 title
                 url
-                publishedAt
-                pages {
-                    data {
-                        ...appPageFragment @relay(mask: false)
-                    }
-                }
-                parent {
-                    data {
-                        id
-                        attributes {
-                            title
-                            url
-                            seo {
-                                ...appSeoFragment @relay(mask: false)
-                            }
-                            parent {
-                                data {
-                                    id
-                                    attributes {
-                                        title
-                                        url
-                                        seo {
-                                            ...appSeoFragment @relay(mask: false)
-                                        }
-                                        parent {
-                                            data {
-                                                id
-                                                attributes {
-                                                    title
-                                                    url
-                                                    seo {
-                                                        ...appSeoFragment @relay(mask: false)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
                 seo {
                     ...appSeoFragment @relay(mask: false)
                 }
-                sitemap {
-                    ...appSitemapFragment @relay(mask: false)
-                }
-                localizations {
-                    data {
-                        id
-                        attributes {
-                            url
-                            locale
+                parent {
+                    documentId
+                    title
+                    url
+                    seo {
+                        ...appSeoFragment @relay(mask: false)
+                    }
+                    parent {
+                        documentId
+                        title
+                        url
+                        seo {
+                            ...appSeoFragment @relay(mask: false)
                         }
                     }
                 }
-                content: blocks {
-                    __typename
-                    ...blocksContent @relay(mask: false)
-                }
+            }
+            seo {
+                ...appSeoFragment @relay(mask: false)
+            }
+            sitemap {
+                ...appSitemapFragment @relay(mask: false)
+            }
+            localizations {
+                documentId
+                title
+                url
+                publishedAt
+                locale
+            }
+            content: blocks {
+                __typename
+                ...blocksContent @relay(mask: false)
             }
         }
 
-        webSetting(publicationState: $publicationState, locale: $locale) {
-            data {
-                ...webSettingFragment @relay(mask: false)
-            }
+        webSetting(status: $status, locale: $locale) {
+            ...webSettingFragment @relay(mask: false)
         }
 
-        systemResources(publicationState: $publicationState, locale: $locale) {
-            data {
-                ...appSystemResourceFragment @relay(mask: false)
-            }
+        systemResources(status: $status, locale: $locale) {
+            ...appSystemResourceFragment @relay(mask: false)
         }
 
-        redirect: findRedirect(redirectFrom: $redirect, publicationState: $publicationState) {
+        redirect: findRedirect(redirectFrom: $redirect, status: $status) {
             redirectFrom
             to: redirectTo
             statusCode
+            updatedAt
+            publishedAt
         }
 
-        contactForm(publicationState: $publicationState, locale: $locale) {
-            data {
-                ...contactFormFragment @relay(mask: false)
-            }
+        contactForm(status: $status, locale: $locale) {
+            ...contactFormFragment @relay(mask: false)
         }
     }
 `;
 
 graphql`
-    fragment appPageFragment on PageEntity {
-        id
-        attributes {
-            title
-            url
-        }
+    fragment appPageFragment on Page {
+        documentId
+        title
+        url
     }
 `;
 
 graphql`
-    fragment appImageFragment on UploadFileEntity {
-        id
-        attributes {
-            url
-            alternativeText
-            width
-            height
-        }
+    fragment appImageFragment on UploadFile {
+        documentId
+        url
+        alternativeText
+        width
+        height
     }
 `;
 
 graphql`
-    fragment appFileFragment on UploadFileEntity {
-        id
-        attributes {
-            name
-            url
-            size
-        }
+    fragment appFileFragment on UploadFile {
+        documentId
+        name
+        url
+        size
     }
 `;
 
@@ -140,35 +107,27 @@ graphql`
     fragment appVideoFragment on ComponentComplementaryVideo {
         id
         uploadedVideo {
-            data {
-                ...appUploadedVideoFragment @relay(mask: false)
-            }
+            ...appUploadedVideoFragment @relay(mask: false)
         }
         externalVideo
         optionalImage {
-            data {
-                ...appImageFragment @relay(mask: false)
-            }
+            ...appImageFragment @relay(mask: false)
         }
     }
 `;
 
 graphql`
-    fragment appUploadedVideoFragment on UploadFileEntity {
-        id
-        attributes {
-            url
-        }
+    fragment appUploadedVideoFragment on UploadFile {
+        documentId
+        url
     }
 `;
 
 graphql`
-    fragment appIconFragment on IconEntity {
-        id
-        attributes {
-            title
-            codename
-        }
+    fragment appIconFragment on Icon {
+        documentId
+        title
+        codename
     }
 `;
 
@@ -177,9 +136,7 @@ graphql`
         id
         label
         page {
-            data {
-                ...appPageFragment @relay(mask: false)
-            }
+            ...appPageFragment @relay(mask: false)
         }
         linkExternal
         openInNewTab
@@ -187,13 +144,11 @@ graphql`
 `;
 
 graphql`
-    fragment appMenuEntityFragment on MenuEntity {
-        id
-        attributes {
-            title
-            items {
-                ...appMenuItemFragment @relay(mask: false)
-            }
+    fragment appMenuFragment on Menu {
+        documentId
+        title
+        items {
+            ...appMenuItemFragment @relay(mask: false)
         }
     }
 `;
@@ -203,9 +158,7 @@ graphql`
         id
         label
         page {
-            data {
-                ...appPageFragment @relay(mask: false)
-            }
+            ...appPageFragment @relay(mask: false)
         }
         externalUrl
         openInNewTab
@@ -251,9 +204,7 @@ graphql`
         title
         description
         image {
-            data {
-                ...appImageFragment @relay(mask: false)
-            }
+            ...appImageFragment @relay(mask: false)
         }
     }
 `;
@@ -267,12 +218,10 @@ graphql`
 `;
 
 graphql`
-    fragment appSystemResourceFragment on SystemResourceEntity {
-        id
-        attributes {
-            codename
-            value
-        }
+    fragment appSystemResourceFragment on SystemResource {
+        documentId
+        codename
+        value
     }
 `;
 

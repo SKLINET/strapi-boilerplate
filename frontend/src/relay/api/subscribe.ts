@@ -3,16 +3,14 @@ import { graphql } from 'relay-runtime';
 export const SubscribeFormMutation = graphql`
     mutation subscribeMutation($data: NewsletterSubscriberInput!) {
         createNewsletterSubscriber(data: $data) {
-            data {
-                id
-            }
+            documentId
         }
     }
 `;
 
 // export const MailchimpSettingsQuery = graphql`
-//     query subscribeMailchimpQuery($publicationState: PublicationState) {
-//         webSetting(publicationState: $publicationState) {
+//     query subscribeMailchimpQuery($status: PublicationState) {
+//         webSetting(publicationState: $status) {
 //             mailchimp {
 //                 serverPrefix
 //                 apiKey
@@ -23,8 +21,8 @@ export const SubscribeFormMutation = graphql`
 // `;
 
 // export const EcomailSettingsQuery = graphql`
-//     query subscribeEcomailQuery($publicationState: PublicationState) {
-//         newsletterBox(publicationState: $publicationState) {
+//     query subscribeEcomailQuery($status: PublicationState) {
+//         newsletterBox(publicationState: $status) {
 //             ecomail {
 //                 apiKey
 //                 listId

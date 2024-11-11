@@ -4,8 +4,7 @@
   "info": {
     "singularName": "page",
     "pluralName": "pages",
-    "displayName": "📝 Stránky",
-    "description": ""
+    "displayName": "📝 Stránky"
   },
   "options": {
     "draftAndPublish": true
@@ -27,21 +26,6 @@
     },
     "url": {
       "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "blocks": {
-      "type": "dynamiczone",
-      "components": [
-        "block.article-detail-block",
-        "block.articles-list-block",
-        "block.template-block",
-        "block.video-block",
-        "block.contact-form-block"
-      ],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -79,6 +63,21 @@
         }
       },
       "component": "shared.sitemap"
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "block.template-block",
+        "block.article-detail-block",
+        "block.articles-list-block",
+        "block.video-block",
+        "block.contact-form-block"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

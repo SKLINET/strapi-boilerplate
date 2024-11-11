@@ -7,6 +7,7 @@ import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBl
 import { IApp } from '../../../types/base/app';
 import { articleDetailFragment$data } from '../../../relay/__generated__/articleDetailFragment.graphql';
 import { ArticleDetail } from '../../components/blocks/ArticleDetail/ArticleDetail';
+import getPublicationState from '../../../utils/base/getPublicationState';
 
 export interface ArticleDetailBlockStaticProps {
     item: Omit<articleDetailFragment$data, ' $fragmentType'>;
@@ -34,7 +35,7 @@ if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({
         locale,
         providers,
-        context: { params, preview: previewValue, previewData },
+        context: { params, preview: previewValue },
         block,
     }: StaticBlockContext): Promise<BaseBlockProps> => {
         const preview = previewValue || false;
@@ -54,17 +55,16 @@ if (typeof window === 'undefined') {
             locale,
             preview,
             slug: slug,
+            status: getPublicationState(preview),
         };
-        if (previewData?.itemId && slug === previewData?.itemSlug) {
-            variables.id = previewData?.itemId || '';
-        }
+
         const item = await provider.findOne(variables, locale, preview);
-        if (!item || !item?.data) {
+        if (!item?.documentId) {
             const err = new Error('Article not found') as Error & { code: string };
             err.code = 'ENOENT';
             throw err;
         }
-        return { item: item?.data || {} };
+        return { item: item || {} };
     };
 }
 

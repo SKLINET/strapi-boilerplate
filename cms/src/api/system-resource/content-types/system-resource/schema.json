@@ -4,8 +4,7 @@
   "info": {
     "singularName": "system-resource",
     "pluralName": "system-resources",
-    "displayName": "🧩 Všeobecné texty",
-    "description": ""
+    "displayName": "🧩 Všeobecné texty"
   },
   "options": {
     "draftAndPublish": true

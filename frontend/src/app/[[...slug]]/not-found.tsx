@@ -1,8 +1,7 @@
+import dynamic from 'next/dynamic';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
-import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
-import { GridHelper } from '../components/base/GridHelper/GridHelper';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { IApp } from '../../types/base/app';
@@ -20,6 +19,11 @@ import 'dayjs/locale/en';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+const PreviewToolbar = dynamic(() =>
+    import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
+);
+const GridHelper = dynamic(() => import('../components/base/GridHelper/GridHelper').then((mod) => mod.GridHelper));
 
 export const Page = async () => {
     const context = { params: { slug: ['404'] }, searchParams: {} };
@@ -40,7 +44,7 @@ export const Page = async () => {
     dayjs.locale(app.locale);
     dayjs.tz.setDefault(tz);
 
-    const gtmCode = app.webSetting?.data?.attributes?.gtmCode || config.gtm.code || null;
+    const gtmCode = app.webSetting?.gtmCode || config.gtm.code || null;
 
     return (
         <>
@@ -48,11 +52,7 @@ export const Page = async () => {
 
             <Layout app={app}>
                 {app.page && (
-                    <Blocks
-                        blocksData={app.page?.attributes?.content || []}
-                        initialProps={app.blocksPropsMap}
-                        app={app}
-                    />
+                    <Blocks blocksData={app.page?.content || []} initialProps={app.blocksPropsMap} app={app} />
                 )}
             </Layout>
 

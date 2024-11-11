@@ -1,6 +1,6 @@
 export default [
-  'strapi::logger',
-  'strapi::errors',
+  "strapi::logger",
+  "strapi::errors",
   {
     name: "strapi::security",
     config: {
@@ -32,7 +32,7 @@ export default [
             "ws:",
             "wss:",
             "http:",
-            "https:"
+            "https:",
           ],
           "img-src": [
             "'self'",
@@ -44,15 +44,15 @@ export default [
             "strapi.io",
             "dl.airtable.com",
             "s3.amazonaws.com",
-            'market-assets.strapi.io',
-            'res.cloudinary.com'
+            "market-assets.strapi.io",
+            "res.cloudinary.com",
           ],
-          'media-src': [
+          "media-src": [
             "'self'",
-            'data:',
-            'blob:',
-            'market-assets.strapi.io',
-            'res.cloudinary.com',
+            "data:",
+            "blob:",
+            "market-assets.strapi.io",
+            "res.cloudinary.com",
           ],
           "style-src": [
             "'self'",
@@ -71,11 +71,11 @@ export default [
       },
     },
   },
-  'strapi::cors',
-  'strapi::poweredBy',
-  'strapi::query',
+  "strapi::cors",
+  "strapi::poweredBy",
+  "strapi::query",
   { name: "strapi::body", config: { includeUnparsed: true } },
-  'strapi::session',
-  'strapi::favicon',
-  'strapi::public',
+  "strapi::session",
+  "strapi::favicon",
+  "strapi::public",
 ];

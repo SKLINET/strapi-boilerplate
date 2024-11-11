@@ -15,7 +15,7 @@ interface SitemapItem {
 
 export async function GET(req: Request, context: Record<string, any>) {
     const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
-    const { provider } = context.params;
+    const { provider } = await context.params;
     const { i18n } = config;
     if (typeof provider !== 'string') {
         return new Response('Sitemap not found', { status: 404 });
@@ -63,13 +63,13 @@ export async function GET(req: Request, context: Record<string, any>) {
         } else {
             const ws = await providers.webSetting.get(locale, false);
             const pageKey = toCamel(p.getApiKey()) + 'DetailPage';
-            const webSetting: any = ws?.data?.attributes;
+            const webSetting: any = ws;
             if (webSetting && Object.prototype.hasOwnProperty.call(webSetting, pageKey)) {
                 const page = webSetting[pageKey];
                 const staticPaths = await p.getStaticPaths(locale);
                 for (const path of staticPaths as unknown as StaticPathsParams[]) {
                     if (page && typeof path === 'object' && path?.params?.sitemap?.enabled) {
-                        const pageObj = page?.data?.attributes;
+                        const pageObj = page;
                         const pageUrl = pageObj?.url?.includes(':slug')
                             ? pageObj?.url?.replace(':slug', path?.params?.slug || '')
                             : pageObj?.url;

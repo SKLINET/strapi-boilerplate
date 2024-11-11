@@ -46,22 +46,14 @@
         }
       }
     },
-    "content": {
-      "type": "richtext",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "slug": {
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "type": "string",
-      "required": false
+      "type": "uid",
+      "targetField": "title"
     },
     "seo": {
       "type": "component",
@@ -88,6 +80,15 @@
       "relation": "manyToOne",
       "target": "api::article-category.article-category",
       "inversedBy": "articles"
+    },
+    "content": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "customField",
+      "customField": "plugin::tinymce.tinymce"
     }
   }
 }

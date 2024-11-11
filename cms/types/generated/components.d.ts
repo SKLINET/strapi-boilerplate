@@ -1,276 +1,272 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Schema, Struct } from '@strapi/strapi';
 
-export interface SharedSocialNetworks extends Schema.Component {
-  collectionName: 'components_shared_social_networks';
+export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_article_detail_blocks';
   info: {
-    displayName: 'SocialNetworks';
-  };
-  attributes: {
-    facebookMeta: Attribute.Component<'shared.meta-social'>;
-    twitterMeta: Attribute.Component<'shared.meta-social'>;
-  };
-}
-
-export interface SharedSitemap extends Schema.Component {
-  collectionName: 'components_shared_sitemaps';
-  info: {
-    displayName: 'Sitemap';
-    icon: 'boxes';
     description: '';
+    displayName: 'Detail \u010Dl\u00E1nku';
+    icon: 'paintBrush';
   };
-  attributes: {
-    enabled: Attribute.Boolean & Attribute.DefaultTo<true>;
-    changeFrequency: Attribute.Enumeration<
-      ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']
-    >;
-    priority: Attribute.Decimal;
-  };
+  attributes: {};
 }
 
-export interface SharedSeo extends Schema.Component {
-  collectionName: 'components_shared_seos';
+export interface BlockArticlesListBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_articles_list_blocks';
   info: {
-    displayName: 'seo';
-    icon: 'search';
     description: '';
+    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
+    icon: 'paintBrush';
   };
   attributes: {
-    metaTitle: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 60;
-      }>;
-    metaDescription: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 160;
-      }>;
-    socialNetworks: Attribute.Component<'shared.social-networks'>;
-    keywords: Attribute.Text;
-    metaRobots: Attribute.String;
-    structuredData: Attribute.JSON;
-    metaViewport: Attribute.String;
-    canonicalURL: Attribute.String;
-    preventIndexing: Attribute.Boolean & Attribute.DefaultTo<false>;
-    meta: Attribute.Component<'shared.meta', true>;
-    title: Attribute.String;
+    countOnPage: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
   };
 }
 
-export interface SharedMeta extends Schema.Component {
-  collectionName: 'components_shared_metas';
-  info: {
-    displayName: 'Meta';
-    icon: 'laptop-medical';
-  };
-  attributes: {
-    name: Attribute.String;
-    content: Attribute.Text;
-  };
-}
-
-export interface SharedMetaSocial extends Schema.Component {
-  collectionName: 'components_shared_meta_socials';
-  info: {
-    displayName: 'MetaSocial';
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-    description: Attribute.Text;
-    image: Attribute.Media<'images'> & Attribute.Required;
-  };
-}
-
-export interface SharedGlobalSeo extends Schema.Component {
-  collectionName: 'components_shared_global_seos';
-  info: {
-    displayName: 'GlobalSeo';
-    icon: 'address-card';
-    description: '';
-  };
-  attributes: {
-    siteName: Attribute.String;
-    titleSuffix: Attribute.String;
-    description: Attribute.Text;
-    sharingImage: Attribute.Media<'images'>;
-    preventIndexing: Attribute.Boolean & Attribute.DefaultTo<false>;
-    metaTags: Attribute.Component<'shared.meta', true>;
-  };
-}
-
-export interface MenuMenuItem extends Schema.Component {
-  collectionName: 'components_menu_menu_items';
-  info: {
-    displayName: 'MenuItem';
-    icon: 'angle-right';
-    description: '';
-  };
-  attributes: {
-    label: Attribute.String & Attribute.Required;
-    page: Attribute.Relation<'menu.menu-item', 'oneToOne', 'api::page.page'>;
-    externalUrl: Attribute.String;
-    openInNewTab: Attribute.Boolean & Attribute.DefaultTo<false>;
-  };
-}
-
-export interface BlockVideoBlock extends Schema.Component {
-  collectionName: 'components_block_video_blocks';
-  info: {
-    displayName: 'Video';
-    icon: 'play';
-  };
-  attributes: {
-    video: Attribute.Component<'complementary.video'> & Attribute.Required;
-  };
-}
-
-export interface BlockTemplateBlock extends Schema.Component {
-  collectionName: 'components_block_template_blocks';
-  info: {
-    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
-    icon: 'dashboard';
-    description: '';
-  };
-  attributes: {
-    template: Attribute.Relation<
-      'block.template-block',
-      'oneToOne',
-      'api::template.template'
-    >;
-  };
-}
-
-export interface BlockContactFormBlock extends Schema.Component {
+export interface BlockContactFormBlock extends Struct.ComponentSchema {
   collectionName: 'components_block_contact_form_blocks';
   info: {
     displayName: 'Kontaktn\u00ED formul\u00E1\u0159';
     icon: 'envelop';
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
-export interface BlockArticlesListBlock extends Schema.Component {
-  collectionName: 'components_block_articles_list_blocks';
+export interface BlockTemplateBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_template_blocks';
   info: {
-    displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
-    icon: 'grid';
     description: '';
+    displayName: 'Znovupou\u017Eiteln\u00FD obsah';
+    icon: 'rotate';
   };
   attributes: {
-    countOnPage: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-        },
-        number
-      > &
-      Attribute.DefaultTo<5>;
+    template: Schema.Attribute.Relation<'oneToOne', 'api::template.template'>;
   };
 }
 
-export interface BlockArticleDetailBlock extends Schema.Component {
-  collectionName: 'components_block_article_detail_blocks';
+export interface BlockVideoBlock extends Struct.ComponentSchema {
+  collectionName: 'components_block_video_blocks';
   info: {
-    displayName: 'Detail \u010Dl\u00E1nku';
-    icon: 'layer';
     description: '';
-  };
-  attributes: {};
-}
-
-export interface ComplementaryVideo extends Schema.Component {
-  collectionName: 'components_complementary_videos';
-  info: {
     displayName: 'Video';
+    icon: 'play';
+  };
+  attributes: {
+    video: Schema.Attribute.Component<'complementary.video', false> &
+      Schema.Attribute.Required;
+  };
+}
+
+export interface ComplementaryButton extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_buttons';
+  info: {
     description: '';
+    displayName: 'Button';
+    icon: 'bold';
   };
   attributes: {
-    uploadedVideo: Attribute.Media<'videos'>;
-    externalVideo: Attribute.JSON &
-      Attribute.CustomField<'plugin::video-field.video'>;
-    optionalImage: Attribute.Media<'images'>;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    linkExternal: Schema.Attribute.String;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
   };
 }
 
-export interface ComplementarySendEmail extends Schema.Component {
-  collectionName: 'components_complementary_send_emails';
-  info: {
-    displayName: 'SendEmail';
-  };
-  attributes: {
-    emailFrom: Attribute.Email & Attribute.Required;
-    emailTo: Attribute.Email & Attribute.Required;
-    subject: Attribute.String & Attribute.Required;
-  };
-}
-
-export interface ComplementaryMailchimp extends Schema.Component {
-  collectionName: 'components_complementary_mailchimps';
-  info: {
-    displayName: 'Mailchimp';
-    icon: 'envelope-square';
-  };
-  attributes: {
-    serverPrefix: Attribute.String;
-    apiKey: Attribute.String;
-    listId: Attribute.String;
-  };
-}
-
-export interface ComplementaryEcomail extends Schema.Component {
+export interface ComplementaryEcomail extends Struct.ComponentSchema {
   collectionName: 'components_complementary_ecomails';
   info: {
     displayName: 'Ecomail';
     icon: 'envelope';
   };
   attributes: {
-    apiKey: Attribute.String;
-    listId: Attribute.String;
+    apiKey: Schema.Attribute.String;
+    listId: Schema.Attribute.String;
   };
 }
 
-export interface ComplementaryButton extends Schema.Component {
-  collectionName: 'components_complementary_buttons';
+export interface ComplementaryMailchimp extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_mailchimps';
   info: {
-    displayName: 'Button';
-    icon: 'bold';
-    description: '';
+    displayName: 'Mailchimp';
+    icon: 'envelope-square';
   };
   attributes: {
-    label: Attribute.String & Attribute.Required;
-    page: Attribute.Relation<
-      'complementary.button',
-      'oneToOne',
-      'api::page.page'
-    >;
-    linkExternal: Attribute.String;
-    openInNewTab: Attribute.Boolean & Attribute.DefaultTo<false>;
+    apiKey: Schema.Attribute.String;
+    listId: Schema.Attribute.String;
+    serverPrefix: Schema.Attribute.String;
   };
 }
 
-declare module '@strapi/types' {
-  export module Shared {
-    export interface Components {
-      'shared.social-networks': SharedSocialNetworks;
-      'shared.sitemap': SharedSitemap;
-      'shared.seo': SharedSeo;
+export interface ComplementarySendEmail extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_send_emails';
+  info: {
+    displayName: 'SendEmail';
+  };
+  attributes: {
+    emailFrom: Schema.Attribute.Email & Schema.Attribute.Required;
+    emailTo: Schema.Attribute.Email & Schema.Attribute.Required;
+    subject: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ComplementaryVideo extends Struct.ComponentSchema {
+  collectionName: 'components_complementary_videos';
+  info: {
+    description: '';
+    displayName: 'Video';
+  };
+  attributes: {
+    externalVideo: Schema.Attribute.JSON &
+      Schema.Attribute.CustomField<'plugin::video-field.video'>;
+    optionalImage: Schema.Attribute.Media<'images'>;
+    uploadedVideo: Schema.Attribute.Media<'videos'>;
+  };
+}
+
+export interface MenuMenuItem extends Struct.ComponentSchema {
+  collectionName: 'components_menu_menu_items';
+  info: {
+    description: '';
+    displayName: 'MenuItem';
+    icon: 'angle-right';
+  };
+  attributes: {
+    externalUrl: Schema.Attribute.String;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    page: Schema.Attribute.Relation<'oneToOne', 'api::page.page'>;
+  };
+}
+
+export interface SharedGlobalSeo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_global_seos';
+  info: {
+    description: '';
+    displayName: 'GlobalSeo';
+    icon: 'address-card';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    metaTags: Schema.Attribute.Component<'shared.meta', true>;
+    preventIndexing: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    sharingImage: Schema.Attribute.Media<'images'>;
+    siteName: Schema.Attribute.String;
+    titleSuffix: Schema.Attribute.String;
+  };
+}
+
+export interface SharedMeta extends Struct.ComponentSchema {
+  collectionName: 'components_shared_metas';
+  info: {
+    displayName: 'Meta';
+    icon: 'laptop-medical';
+  };
+  attributes: {
+    content: Schema.Attribute.Text;
+    name: Schema.Attribute.String;
+  };
+}
+
+export interface SharedMetaSocial extends Struct.ComponentSchema {
+  collectionName: 'components_shared_meta_socials';
+  info: {
+    displayName: 'MetaSocial';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedSeo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_seos';
+  info: {
+    description: '';
+    displayName: 'seo';
+    icon: 'search';
+  };
+  attributes: {
+    canonicalURL: Schema.Attribute.String;
+    keywords: Schema.Attribute.Text;
+    meta: Schema.Attribute.Component<'shared.meta', true>;
+    metaDescription: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    metaRobots: Schema.Attribute.String;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    metaViewport: Schema.Attribute.String;
+    preventIndexing: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    socialNetworks: Schema.Attribute.Component<'shared.social-networks', false>;
+    structuredData: Schema.Attribute.JSON;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedSitemap extends Struct.ComponentSchema {
+  collectionName: 'components_shared_sitemaps';
+  info: {
+    description: '';
+    displayName: 'Sitemap';
+    icon: 'boxes';
+  };
+  attributes: {
+    changeFrequency: Schema.Attribute.Enumeration<
+      ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']
+    >;
+    enabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    priority: Schema.Attribute.Decimal;
+  };
+}
+
+export interface SharedSocialNetworks extends Struct.ComponentSchema {
+  collectionName: 'components_shared_social_networks';
+  info: {
+    displayName: 'SocialNetworks';
+  };
+  attributes: {
+    facebookMeta: Schema.Attribute.Component<'shared.meta-social', false>;
+    twitterMeta: Schema.Attribute.Component<'shared.meta-social', false>;
+  };
+}
+
+declare module '@strapi/strapi' {
+  export module Public {
+    export interface ComponentSchemas {
+      'block.article-detail-block': BlockArticleDetailBlock;
+      'block.articles-list-block': BlockArticlesListBlock;
+      'block.contact-form-block': BlockContactFormBlock;
+      'block.template-block': BlockTemplateBlock;
+      'block.video-block': BlockVideoBlock;
+      'complementary.button': ComplementaryButton;
+      'complementary.ecomail': ComplementaryEcomail;
+      'complementary.mailchimp': ComplementaryMailchimp;
+      'complementary.send-email': ComplementarySendEmail;
+      'complementary.video': ComplementaryVideo;
+      'menu.menu-item': MenuMenuItem;
+      'shared.global-seo': SharedGlobalSeo;
       'shared.meta': SharedMeta;
       'shared.meta-social': SharedMetaSocial;
-      'shared.global-seo': SharedGlobalSeo;
-      'menu.menu-item': MenuMenuItem;
-      'block.video-block': BlockVideoBlock;
-      'block.template-block': BlockTemplateBlock;
-      'block.contact-form-block': BlockContactFormBlock;
-      'block.articles-list-block': BlockArticlesListBlock;
-      'block.article-detail-block': BlockArticleDetailBlock;
-      'complementary.video': ComplementaryVideo;
-      'complementary.send-email': ComplementarySendEmail;
-      'complementary.mailchimp': ComplementaryMailchimp;
-      'complementary.ecomail': ComplementaryEcomail;
-      'complementary.button': ComplementaryButton;
+      'shared.seo': SharedSeo;
+      'shared.sitemap': SharedSitemap;
+      'shared.social-networks': SharedSocialNetworks;
     }
   }
 }

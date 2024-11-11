@@ -8,7 +8,7 @@ import config from '../../../sklinet.config.json';
 import { STRAPI_MAX_LIMIT } from '../../constants';
 
 export type StrapiRecord = {
-    id: string | null | undefined;
+    documentId: string;
     [key: string]: unknown;
 };
 
@@ -65,15 +65,15 @@ export default abstract class AbstractStrapiProvider<
         preview = false,
     ): Promise<TItem | null> {
         let variables: TOne['variables'] = {};
-        if (typeof options !== 'string' && options.id) {
+        if (typeof options !== 'string' && options.documentId) {
             variables = options;
         }
         if (Object.keys(variables).length === 0) {
             variables =
                 typeof options === 'string'
                     ? {
-                          filter: {
-                              id: { eq: options },
+                          filters: {
+                              documentId: { eq: options },
                               ...this.getFilterParams(),
                           },
                           locale,
@@ -82,9 +82,9 @@ export default abstract class AbstractStrapiProvider<
                           ...options,
                           limit: 1,
                           offset: 0,
-                          filter: options.filter
-                              ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
-                              : this.getFilterParams(options?.publicationState || ''),
+                          filters: options.filters
+                              ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+                              : this.getFilterParams(options?.status || ''),
                           locale,
                       };
         }
@@ -99,7 +99,7 @@ export default abstract class AbstractStrapiProvider<
      * @param locale
      */
     async transformResult(result: TOne['response'], locale?: string): Promise<TItem | null> {
-        if (result) {
+        if (result && Object.keys(result).length > 0) {
             return { ...(result as { item: TItem }).item, cmsTypeId: this.getId() };
         } else {
             return null;
@@ -114,9 +114,9 @@ export default abstract class AbstractStrapiProvider<
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
-            filter: options.filter
-                ? { ...this.getFilterParams(options?.publicationState || ''), ...options.filter }
-                : this.getFilterParams(options?.publicationState || ''),
+            filters: options.filters
+                ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+                : this.getFilterParams(options?.status || ''),
         };
 
         if (this.isLocalizable()) {
@@ -125,27 +125,49 @@ export default abstract class AbstractStrapiProvider<
 
         const result = await fetchQuery<TFind>(this.getEnvironment(preview), this.findNode, variables)
             .toPromise()
-            .then((d) => {
-                const items = (d as Record<string, unknown>).items;
+            .then((d: any) => {
+                // When response do not have meta information -> articles query
+                if (Array.isArray(d.items)) {
+                    return {
+                        items: d.items,
+                        meta: { pagination: { total: 0 } },
+                    };
+                }
+
+                // When response have meta information -> articles_connection query
+                const { nodes, pageInfo } = d.items;
+
                 return {
-                    items: (items as unknown as TItems)?.data || [],
-                    meta: (items as unknown as { meta: { pagination: { total: number } } })?.meta || {},
+                    items: nodes,
+                    meta: { pagination: { total: pageInfo.total } },
                 };
             });
 
-        const count = result?.meta?.pagination?.total || 0;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const data: Mutable<TItems['data']> = ([...result.items] as Mutable<TItems['data']>) || [];
+        const count = result?.meta?.pagination?.total || 0;
 
         if (options.limit > STRAPI_MAX_LIMIT) {
             while (options.limit && data.length < count && result.items.length === STRAPI_MAX_LIMIT) {
                 variables.start = data.length;
                 const result = await fetchQuery<TFind>(this.getEnvironment(preview), this.findNode, variables)
                     .toPromise()
-                    .then((d) => {
-                        const items = (d as Record<string, unknown>).items;
+                    .then((d: any) => {
+                        // When response do not have meta information -> articles query
+                        if (Array.isArray(d.items)) {
+                            return {
+                                items: d.items,
+                                meta: { pagination: { total: 0 } },
+                            };
+                        }
+
+                        // When response have meta information -> articles_connection query
+                        const { nodes, pageInfo } = d;
+
                         return {
-                            items: (items as unknown as TItems)?.data || [],
-                            meta: (items as unknown as { meta: { pagination: { total: number } } }).meta,
+                            items: nodes,
+                            meta: { pagination: { total: pageInfo.total } },
                         };
                     });
                 if (Array.isArray(data)) {
@@ -157,7 +179,7 @@ export default abstract class AbstractStrapiProvider<
 
         return {
             count,
-            data: (await this.transformResults(data, options.locale)) as unknown as TItems['data'],
+            data,
         };
     }
 
@@ -170,12 +192,10 @@ export default abstract class AbstractStrapiProvider<
             if (typeof field === 'string' || typeof field === 'number' || typeof field === 'boolean') {
                 result[key] = field;
             } else {
-                if (field?.data?.attributes) {
-                    result[key] = this.cleanData({ id: field.data.id, ...field.data.attributes });
-                } else if (Array.isArray(field?.data)) {
+                if (Array.isArray(field?.data)) {
                     const items = [];
                     for (let j = 0; j < field?.data?.length; j++) {
-                        const it = this.cleanData({ id: field.data[j].id, ...field.data[j].attributes });
+                        const it = this.cleanData({ id: field.data[j].id, ...field.data[j] });
                         items.push(it);
                     }
                     result[key] = items;
@@ -186,28 +206,17 @@ export default abstract class AbstractStrapiProvider<
                         items.push(it);
                     }
                     result[key] = items;
+                } else if (field?.data) {
+                    result[key] = this.cleanData({ id: field.data.id, ...field.data });
                 }
             }
         }
         return result;
     }
 
-    /**
-     * Transform find results into array of items
-     * @param items
-     * @param locale
-     */
-    async transformResults(items: TItems['data'], locale?: string): Promise<TItems> {
-        return items.map((item) => ({
-            ...item,
-            ...(this.cleanData(item?.attributes || {}) || {}),
-            cmsTypeId: this.getId(),
-        })) as unknown as TItems;
-    }
-
     getFilterParams(publicationState = ''): Record<string, unknown> {
-        if (publicationState?.toLowerCase() === 'preview') {
-            return { isVisibleInListView: { eq: true } };
+        if (publicationState?.toLowerCase() === 'draft') {
+            return {};
         }
         return {};
     }

@@ -1,3 +1,5 @@
+import type { Core } from "@strapi/strapi";
+
 export default {
   /**
    * An asynchronous register function that runs before
@@ -5,8 +7,9 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register({ strapi }) {
+  register({ strapi }: { strapi: Core.Strapi }) {
     const extensionService = strapi.plugin("graphql").service("extension");
+
     extensionService.use(({ nexus }) => {
       const pageQuery = nexus.extendType({
         type: "Query",
@@ -17,28 +20,48 @@ export default {
             auth: false,
             args: {
               pattern: "String",
-              publicationState: "PublicationState",
+              status: "PublicationStatus",
               locale: "String",
             },
             async resolve(parent, args) {
-              const { locale, publicationState, pattern } = args;
-              const data = await strapi.entityService.findMany(
-                "api::page.page",
-                {
-                  locale,
-                  publicationState: publicationState || "live",
-                }
-              );
-              for (const it of data) {
-                if (it?.url?.match(pattern)) {
-                  return it;
+              const { locale, status, pattern } = args;
+
+              const data = await strapi.documents("api::page.page").findMany({
+                locale,
+                status: status || "published",
+              });
+
+              const page = data.find((it) => it?.url?.match(pattern));
+
+              if (!page) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedPage = await strapi
+                  .documents("api::page.page")
+                  .findFirst({
+                    filters: {
+                      documentId: page.documentId,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
+
+                // If draft page is the same as the published page
+                if (
+                  publishedPage &&
+                  publishedPage.updatedAt === page.updatedAt
+                ) {
+                  // Return published page in preview mode
+                  return publishedPage;
                 }
               }
-              return null;
+
+              return page;
             },
           });
         },
       });
+
       const redirectQuery = nexus.extendType({
         type: "Query",
         auth: false,
@@ -48,25 +71,47 @@ export default {
             auth: false,
             args: {
               redirectFrom: "String",
-              publicationState: "PublicationState",
+              status: "PublicationStatus",
             },
             async resolve(parent, args) {
-              const { publicationState, redirectFrom } = args;
-              const data = await strapi.entityService.findMany(
-                "api::redirect.redirect",
-                {
+              const { status, redirectFrom } = args;
+
+              const data = await strapi
+                .documents("api::redirect.redirect")
+                .findMany({
                   filters: {
                     redirectFrom,
                   },
-                  publicationState: publicationState || "live",
-                }
+                  status: status || "published",
+                });
+
+              const redirect = data.find((it) =>
+                it?.redirectFrom?.match(redirectFrom)
               );
-              for (const it of data) {
-                if (it?.redirectFrom?.match(redirectFrom)) {
-                  return it;
+
+              if (!redirect) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedRedirect = await strapi
+                  .documents("api::redirect.redirect")
+                  .findFirst({
+                    filters: {
+                      documentId: redirect.documentId,
+                    },
+                    status: "published",
+                  });
+
+                // If draft redirect is the same as the published redirect
+                if (
+                  publishedRedirect &&
+                  publishedRedirect.updatedAt === redirect.updatedAt
+                ) {
+                  // Return published redirect in preview mode
+                  return publishedRedirect;
                 }
               }
-              return null;
+
+              return redirect;
             },
           });
         },
@@ -77,56 +122,111 @@ export default {
         auth: false,
         definition(t) {
           t.field("page", {
-            type: "PageEntity",
+            type: "Page",
             auth: false,
             args: {
               pattern: "String",
-              publicationState: "PublicationState",
+              status: "PublicationStatus",
               locale: "String",
-              entityId: "Int",
             },
             async resolve(parent, args) {
-              const { locale, publicationState, pattern, entityId } = args;
+              const { locale, status, pattern } = args;
 
-              let data;
-              if (entityId) {
-                data = await strapi.entityService.findOne(
-                  "api::page.page",
-                  entityId,
-                  {
-                    locale,
-                    publicationState: publicationState || "LIVE",
-                  }
-                );
-                return data;
-              } else {
-                const variables: Record<string, any> = {
-                  locale,
-                  limit: 9999,
-                  publicationState: publicationState || "LIVE",
-                };
-                if (publicationState?.toLowerCase() === "live") {
-                  variables.versions = "all";
+              const variable: Record<string, any> = {
+                locale,
+                limit: 9999,
+                status: status || "published",
+              };
+
+              const data = await strapi
+                .documents("api::page.page")
+                .findMany(variable);
+
+              const page = data.find((it) => it?.url?.match(pattern));
+
+              if (!page) return null;
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedPage = await strapi
+                  .documents("api::page.page")
+                  .findFirst({
+                    filters: {
+                      documentId: page.documentId,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
+
+                // If draft page is the same as the published page
+                if (
+                  publishedPage &&
+                  publishedPage.updatedAt === page.updatedAt
+                ) {
+                  // Return published page in preview mode
+                  return publishedPage;
                 }
-                data = await strapi.entityService.findMany(
-                  "api::page.page",
-                  variables
-                );
               }
 
-              for (const it of data) {
-                if (it?.url?.match(pattern)) {
-                  return it;
+              return page;
+            },
+          });
+        },
+      });
+
+      const findArticleBySlugQuery = nexus.extendType({
+        type: "Query",
+        auth: false,
+        definition(t) {
+          t.field("findArticleBySlug", {
+            type: "Article",
+            auth: false,
+            args: {
+              slug: "String",
+              locale: "String",
+              status: "PublicationStatus",
+            },
+            async resolve(parent, args) {
+              const { slug, locale, status } = args;
+
+              const article = await strapi
+                .documents("api::article.article")
+                .findFirst({
+                  filters: {
+                    slug: slug,
+                  },
+                  locale: locale,
+                  status: status || "published",
+                });
+
+              if (status?.toLowerCase() === "draft") {
+                const publishedArticle = await strapi
+                  .documents("api::article.article")
+                  .findFirst({
+                    filters: {
+                      slug: slug,
+                    },
+                    locale: locale,
+                    status: "published",
+                  });
+
+                // If draft article is the same as the published article
+                if (
+                  publishedArticle &&
+                  publishedArticle.updatedAt === article.updatedAt
+                ) {
+                  // Return published article in preview mode
+                  return publishedArticle;
                 }
               }
-              return null;
+
+              return article;
             },
           });
         },
       });
 
       return {
-        types: [pageQuery, redirectQuery, onePageQuery],
+        types: [pageQuery, redirectQuery, onePageQuery, findArticleBySlugQuery],
         resolversConfig: {
           "Query.findPage": {
             auth: false,
@@ -137,7 +237,7 @@ export default {
           "Query.findRedirect": {
             auth: false,
           },
-          "Query.findSlug": {
+          "Query.findArticleBySlug": {
             auth: false,
           },
           "Query.sendEmail": {
@@ -155,5 +255,5 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap({ strapi }) {},
+  bootstrap({ strapi }: { strapi: Core.Strapi }) {},
 };

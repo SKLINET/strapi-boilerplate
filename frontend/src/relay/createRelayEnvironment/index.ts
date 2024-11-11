@@ -2,6 +2,21 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
 // import getPublicationState from '../../utils/getPublicationState';
+import { v4 as uuidv4 } from 'uuid';
+
+const getDataID = (fieldValue: any, typeName: string) => {
+    const { documentId, locale, publishedAt } = fieldValue;
+
+    const id = documentId ? documentId : uuidv4();
+
+    const parts = [typeName, id, locale, publishedAt].filter((part) => part);
+
+    if (parts.length === 0) {
+        return null;
+    }
+
+    return parts.join('_');
+};
 
 export const createRelayEnvironment = (records: RecordMap, token?: string, preview = false): Environment =>
     new Environment({
@@ -20,7 +35,7 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
                     headersObj.Authorization = `Bearer ${token}`;
                 }
                 // if (!vars?.publicationState) {
-                //     vars.publicationState = getPublicationState(true);
+                //     vars.status = getPublicationState(true);
                 // }
 
                 const req = await fetch(process.env.API_ENDPOINT, {
@@ -39,4 +54,5 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
         }),
         store: new Store(new RecordSource(records)),
         isServer: true,
+        getDataID,
     });

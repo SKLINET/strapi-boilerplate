@@ -1,57 +1,52 @@
 {
-  "name": "rohlik-ads-admin",
+  "name": "cms",
+  "version": "0.1.0",
   "private": true,
-  "version": "1.0.0",
-  "description": "Strapi boilerplate",
+  "description": "A Strapi application",
   "scripts": {
+    "build": "strapi build",
+    "deploy": "strapi deploy",
     "develop": "strapi develop",
+    "start": "strapi start",
     "watch": "strapi develop --watch-admin",
-    "start": "NODE_ENV=production strapi start",
-    "build": "NODE_ENV=production strapi build",
-    "strapi": "strapi",
     "postinstall": "patch-package && node postinstall.js",
-    "cs": "config-sync"
+    "strapi": "strapi"
   },
   "dependencies": {
-    "@ef2/strapi-plugin-bold-title-editor": "^1.0.9",
-    "@notum-cz/strapi-plugin-content-versioning": "^1.2.9",
-    "@sklinet/strapi-plugin-tinymce": "^1.0.9",
-    "@sklinet/strapi-plugin-video-field": "^1.0.6",
-    "@strapi/plugin-color-picker": "^4.25.5",
-    "@strapi/plugin-graphql": "^4.25.5",
-    "@strapi/plugin-i18n": "^4.25.5",
-    "@strapi/plugin-seo": "^1.9.8",
-    "@strapi/plugin-users-permissions": "^4.25.5",
-    "@strapi/provider-upload-cloudinary": "file:src/providers/upload-cloudinary",
-    "@strapi/strapi": "4.25.5",
-    "axios": "^1.6.7",
-    "cloudinary": "^2.0.0",
-    "form-data": "^4.0.0",
-    "into-stream": "^5.1.0",
-    "knex": "3.1.0",
-    "mysql": "2.18.1",
+    "@notum-cz/strapi-plugin-record-locking": "^2.0.0",
+    "@sklinet/strapi-plugin-bold-title-editor": "1.0.2",
+    "@sklinet/strapi-plugin-content-tags": "^1.0.0",
+    "@sklinet/strapi-plugin-preview-button": "^1.0.1",
+    "@sklinet/strapi-plugin-publisher": "^1.0.0",
+    "@sklinet/strapi-plugin-seo": "^1.0.2",
+    "@sklinet/strapi-plugin-tinymce": "^1.1.4",
+    "@sklinet/strapi-plugin-video-field": "^1.1.0",
+    "@strapi/plugin-cloud": "5.2.0",
+    "@strapi/plugin-color-picker": "^5.2.0",
+    "@strapi/plugin-graphql": "^5.2.0",
+    "@strapi/plugin-users-permissions": "5.2.0",
+    "@strapi/provider-upload-cloudinary": "^5.2.0",
+    "@strapi/strapi": "5.2.0",
+    "mysql2": "3.9.4",
     "patch-package": "^8.0.0",
-    "pg": "^8.11.3",
+    "pg": "^8.13.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "5.3.4",
-    "strapi-plugin-config-sync": "^1.2.3",
-    "strapi-plugin-do-not-delete": "^1.2.0",
-    "strapi-plugin-import-export-entries": "^1.23.1",
-    "strapi-plugin-populate-deep": "^3.0.1",
-    "strapi-plugin-preview-button": "^2.2.1",
-    "styled-components": "5.3.3"
+    "react-router-dom": "^6.0.0",
+    "strapi-plugin-config-sync": "^2.1.0",
+    "styled-components": "^6.0.0"
   },
-  "author": {
-    "name": "A Strapi developer"
-  },
-  "strapi": {
-    "uuid": "71e40369-634b-4da2-bc11-f5e409058102",
-    "telemetryDisabled": true
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   },
   "engines": {
-    "node": ">=14.19.1 <=20.x.x",
+    "node": ">=18.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "strapi": {
+    "uuid": "2a67d68c-176a-4c3c-b675-6eab3031dab5"
+  }
 }
