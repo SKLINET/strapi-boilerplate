@@ -22,6 +22,8 @@ graphql`
     }
 `;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
     ArticleDetailBlock,
     ArticlesListBlock,

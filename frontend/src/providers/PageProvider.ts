@@ -65,6 +65,8 @@ class PageProvider extends AbstractStrapiProvider<
 
     async getStaticPaths(
         locale: string | undefined,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         blocks?: Record<string, BlockType<PageProps, WebSettingsProps, Providers, Locale>>,
     ): Promise<GetStaticPathsResult['paths']> {
         const items: StaticPathsParams[] = [];
@@ -105,6 +107,8 @@ class PageProvider extends AbstractStrapiProvider<
                     const url = page?.url;
                     if (url && blocks) {
                         const blocksParams = await getStaticParamsFromBlocks<
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
                             PageProps,
                             WebSettingsProps,
                             Providers,
