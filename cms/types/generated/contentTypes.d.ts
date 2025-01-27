@@ -841,6 +841,7 @@ export interface ApiSystemResourceSystemResource
 export interface ApiTemplateTemplate extends Struct.CollectionTypeSchema {
   collectionName: 'templates';
   info: {
+    description: '';
     displayName: '\uD83D\uDCDD Znovupou\u017Eiteln\u00FD obsah';
     pluralName: 'templates';
     singularName: 'template';
@@ -855,7 +856,11 @@ export interface ApiTemplateTemplate extends Struct.CollectionTypeSchema {
   };
   attributes: {
     content: Schema.Attribute.DynamicZone<
-      ['block.video-block', 'block.contact-form-block']
+      [
+        'block.articles-list-block',
+        'block.video-block',
+        'block.contact-form-block',
+      ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

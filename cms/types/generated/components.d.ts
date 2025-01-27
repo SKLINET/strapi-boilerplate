@@ -5,7 +5,7 @@ export interface BlockArticleDetailBlock extends Struct.ComponentSchema {
   info: {
     description: '';
     displayName: 'Detail \u010Dl\u00E1nku';
-    icon: 'paintBrush';
+    icon: 'book';
   };
   attributes: {};
 }
@@ -15,7 +15,7 @@ export interface BlockArticlesListBlock extends Struct.ComponentSchema {
   info: {
     description: '';
     displayName: 'V\u00FDpis \u010Dl\u00E1nk\u016F';
-    icon: 'paintBrush';
+    icon: 'book';
   };
   attributes: {
     countOnPage: Schema.Attribute.Integer &

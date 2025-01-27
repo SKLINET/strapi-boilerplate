@@ -4,7 +4,8 @@
   "info": {
     "singularName": "template",
     "pluralName": "templates",
-    "displayName": "📝 Znovupoužitelný obsah"
+    "displayName": "📝 Znovupoužitelný obsah",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -31,7 +32,11 @@
         }
       },
       "type": "dynamiczone",
-      "components": ["block.video-block", "block.contact-form-block"],
+      "components": [
+        "block.articles-list-block",
+        "block.video-block",
+        "block.contact-form-block"
+      ],
       "required": false
     }
   }
