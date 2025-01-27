@@ -2,67 +2,6 @@ export default ({ env }) => ({
   publisher: {
     enabled: true,
   },
-  "preview-button": {
-    enabled: true,
-    config: {
-      contentTypes: [
-        {
-          uid: "api::page.page",
-          draft: {
-            url: env(
-              "STRAPI_PREVIEW_DRAFT_URL",
-              "http://localhost:3000/api/preview"
-            ),
-            query: {
-              type: "pages",
-              slug: "{url}",
-              pageId: "{documentId}",
-              locale: "{locale}",
-            },
-          },
-          published: {
-            url: env(
-              "STRAPI_PREVIEW_PUBLISHED_URL",
-              "http://localhost:3000/api/preview"
-            ),
-            query: {
-              type: "pages",
-              slug: "{url}",
-              pageId: "{documentId}",
-              locale: "{locale}",
-            },
-          },
-        },
-        {
-          uid: "api::article.article",
-          draft: {
-            url: env(
-              "STRAPI_PREVIEW_DRAFT_URL",
-              "http://localhost:3000/api/preview"
-            ),
-            query: {
-              type: "articles",
-              slug: "{slug}",
-              itemId: "{documentId}",
-              locale: "{locale}",
-            },
-          },
-          published: {
-            url: env(
-              "STRAPI_PREVIEW_PUBLISHED_URL",
-              "http://localhost:3000/api/preview"
-            ),
-            query: {
-              type: "articles",
-              slug: "{slug}",
-              itemId: "{documentId}",
-              locale: "{locale}",
-            },
-          },
-        },
-      ],
-    },
-  },
   seo: {
     enabled: true,
   },
