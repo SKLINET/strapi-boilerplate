@@ -11,7 +11,7 @@ export const useVideoResize = (url: string) => {
 
     const myCld = new Cloudinary({
         cloud: {
-            cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+            cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || '',
         },
     });
 
