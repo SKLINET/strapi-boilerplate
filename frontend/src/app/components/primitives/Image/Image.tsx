@@ -6,7 +6,7 @@ import { ImgixProps } from '@symbio/headless';
 import { kebabCase } from '@symbio/headless/utils';
 import { IImage } from '../../../../types/image';
 import { getImageUrl } from '../../../../utils/getImageUrl';
-import { useBlurDataUrl } from '../../../../utils/hooks/useBlurDataUrl';
+import { useBlurDataUrl } from '../../../../utils/cloudinary/useBlurDataUrl';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;

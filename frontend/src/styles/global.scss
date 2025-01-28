@@ -62,10 +62,79 @@ img {
     }
 }
 
-.withoutTopOffset {
-    padding-top: 0 !important;
+// Cookiebot banner styles
+
+/*
+a#CybotCookiebotDialogPoweredbyCybot,
+div#CybotCookiebotDialogPoweredByText {
+    display: none;
 }
 
-.withoutBottomOffset {
-    padding-bottom: 0 !important;
+#CybotCookiebotDialog,
+#CybotCookiebotDialogBodyContentTitle,
+#CybotCookiebotDialogDetailBodyContentCookieContainerHeader,
+.CybotCookiebotDialogDetailBodyContentCookieContainerButton,
+.CybotCookiebotDialogDetailBodyContentIABv2Tab {
+    @apply font-secondary #{!important};
 }
+
+#CybotCookiebotDialogBodyContentText,
+#CybotCookiebotDialogDetailBodyContentTextAbout,
+.CybotCookiebotDialogDetailBodyContentCookieTypeIntro,
+#CybotCookiebotDialogDetailFooter,
+.CookieCard,
+#CybotCookiebotDialogDetailBodyContentIABv2Tabs {
+    @apply font-secondary #{!important};
+    
+    h2 {
+        @apply font-secondary #{!important};
+    }
+}
+
+#CybotCookiebotDialogBodyButtonsWrapper,
+#CybotCookiebotDialogBodyFieldsetInnerContainer,
+#CybotCookiebotDialogNav {
+    @apply font-secondary #{!important};
+}
+
+#CookiebotWidget {
+    .CookiebotWidget-body {
+        .CookiebotWidget-body-inner {
+            .CookiebotWidget-main-logo {
+                display: none;
+            }
+        }
+    }
+}
+#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSliderWrapper {
+    width: 52px !important;
+    height: 25px !important;
+}
+
+#CybotCookiebotDialog .CybotCookiebotDialogBodyLevelButtonSlider:before {
+    height: 18px !important;
+    width: 18px !important;
+}
+
+#CybotCookiebotDialog {
+    max-height: calc(50% + 100px) !important;
+    max-width: calc(100% - 50px) !important;
+    @apply tablet:max-w-[900px] #{!important};
+}
+
+#CookiebotWidget-buttons {
+    @apply font-secondary #{!important};
+}
+
+#CybotCookiebotDialogPoweredbyLink {
+    width: 75% !important;
+}
+
+.CybotCookiebotDialogBodyLevelButtonDescription {
+    @apply font-secondary #{!important};
+}
+
+#CybotCookiebotDialogBodyEdgeMoreDetailsLink {
+    @apply font-secondary #{!important};
+}
+*/

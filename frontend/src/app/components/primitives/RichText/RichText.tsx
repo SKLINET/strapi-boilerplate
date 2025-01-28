@@ -11,6 +11,7 @@ import { Image } from '../Image/Image';
 import { List } from '../List/List';
 import { Table } from '../Table/Table';
 import { nbsp } from '../../../../utils/nbsp';
+import InnerHTML from 'dangerously-set-html-content';
 
 export interface RichTextProps {
     content: string;
@@ -111,11 +112,17 @@ const parserOptions = new (class implements HTMLReactParserOptions {
 
                 case 'p':
                     if (domNode.children && domNode.children.length > 0) {
-                        return (
-                            <Paragraph key={v4()} className={clsx(align && styles[align])}>
-                                {domToReact(domNode.children as DOMNode[], parserOptions)}
-                            </Paragraph>
-                        );
+                        const children = domToReact(domNode.children as DOMNode[], parserOptions);
+
+                        // Cookiebot declaration
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        if (typeof children === 'object' && children?.props?.children === '[COOKIE_DECLARATION]') {
+                            const scriptCmp = `<script id="CookieDeclaration" data-culture="cs" src="https://consent.cookiebot.com/f26a3d67-9a35-4fc2-be47-967232074783/cd.js" type="text/javascript" async />`;
+                            return <InnerHTML html={scriptCmp} />;
+                        }
+
+                        return <Paragraph key={v4()}>{children}</Paragraph>;
                     } else {
                         return <Fragment key={v4()} />;
                     }

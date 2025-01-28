@@ -173,6 +173,19 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
                 <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
                 {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
                 {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
+
+                {/* Cookiebot */}
+                {/*
+                <script
+                    id="Cookiebot"
+                    src={`https://consent.cookiebot.com/uc.js`}
+                    data-culture={getLocale(slug)}
+                    data-cbid="YOUR_COOKIEBOT_ID"
+                    type="text/javascript"
+                    data-blockingmode="auto"
+                    defer
+                />
+                */}
             </head>
             <body>
                 <TopLoader />
