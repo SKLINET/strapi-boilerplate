@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextComponentType } from 'next';
 import { ParsedUrlQuery } from 'querystring';
+import { IApp } from './app';
 
 export interface BaseBlockProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,9 +19,11 @@ export interface StaticBlockContext {
     slug?: string;
     page?: any;
     block?: any;
-    app?: any;
+    blocks?: any;
+    item?: any;
     providers?: any;
     context: any;
+    settings?: IApp['webSetting'];
 }
 
 export interface ServerSideBlockContext extends StaticBlockContext {

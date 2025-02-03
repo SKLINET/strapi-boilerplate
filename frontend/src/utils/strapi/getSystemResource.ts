@@ -14,5 +14,10 @@ export const getSystemResource = (
         return e.codename.toString() === key.toString();
     });
 
+    if (!el) {
+        console.error('Chybějící všeobecný text: ', key);
+        return `{${key}}`;
+    }
+
     return el?.value || '';
 };

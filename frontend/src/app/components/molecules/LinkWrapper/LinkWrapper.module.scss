@@ -1,0 +1,21 @@
+.wrapper {
+    @apply flex relative;
+}
+
+.link {
+    @apply absolute inset-0 z-3;
+}
+
+.content {
+    @apply w-full relative z-2;
+}
+
+@mixin hover {
+    @media (pointer: fine) {
+        & > a:hover {
+            & + * {
+                @content;
+            }
+        }
+    }
+}

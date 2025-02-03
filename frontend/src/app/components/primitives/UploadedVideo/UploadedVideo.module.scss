@@ -1,3 +1,11 @@
 .wrapper {
     @apply w-full block object-cover object-center;
+
+    &.withTransition {
+        @apply opacity-0 transition-opacity ease-in-out duration-700;
+
+        &.showVideo {
+            @apply opacity-100;
+        }
+    }
 }

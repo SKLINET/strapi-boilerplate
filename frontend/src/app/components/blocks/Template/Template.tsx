@@ -1,23 +1,10 @@
 import React, { ReactElement } from 'react';
 import { TemplateBlockProps } from '../../../blocks/TemplateBlock/TemplateBlock';
+import { Blocks } from '../../base/Blocks/Blocks';
 
-import ContactFormBlock from '../../../blocks/ContactFormBlock/ContactFormBlock';
-import VideoBlock from '../../../blocks/VideoBlock/VideoBlock';
-
-const Template = ({ blocksData, app }: TemplateBlockProps): ReactElement => (
-    <>
-        {blocksData.template?.content?.map((e) => {
-            if (!e) return null;
-            switch (e.__typename) {
-                case 'ComponentBlockContactFormBlock':
-                    return <ContactFormBlock key={e.id} blocksData={e} app={app} />;
-                case 'ComponentBlockVideoBlock':
-                    return <VideoBlock key={e.id} blocksData={e} app={app} />;
-                default:
-                    return null;
-            }
-        })}
-    </>
-);
+const Template = ({ blocksData, app, data }: TemplateBlockProps): ReactElement => {
+    if (!blocksData?.template?.content) return <></>;
+    return <Blocks blocksData={blocksData.template.content} app={app} initialProps={data} />;
+};
 
 export { Template };

@@ -27,7 +27,13 @@ module.exports = {
                           './public/**/*.html',
                       ],
                       defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-                      safelist: [/^li:/],
+                      safelist: {
+                          standard: [
+                              /^li:/, // Retain classes starting with "li:"
+                              /^Cookie/, // Retain classes starting with "Cookie"
+                              /^Cybot/, // Retain classes starting with "Cybot"
+                          ],
+                      },
                   },
               }
             : {}),

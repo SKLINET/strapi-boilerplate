@@ -1,16 +1,14 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
-// import getPublicationState from '../../utils/getPublicationState';
 import { v4 as uuidv4 } from 'uuid';
 
 const getDataID = (fieldValue: any, typeName: string) => {
-    const { documentId, locale, publishedAt } = fieldValue;
+    const { documentId, locale, publishedAt, updatedAt } = fieldValue;
 
     const id = documentId ? documentId : uuidv4();
 
-    const parts = [typeName, id, locale, publishedAt].filter((part) => part);
-
+    const parts = [typeName, id, locale, publishedAt, updatedAt].filter((part) => part);
     if (parts.length === 0) {
         return null;
     }
@@ -18,7 +16,31 @@ const getDataID = (fieldValue: any, typeName: string) => {
     return parts.join('_');
 };
 
-export const createRelayEnvironment = (records: RecordMap, token?: string, preview = false): Environment =>
+class CustomRecordSource extends RecordSource {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    get(recordID: string) {
+        const record = super.get(recordID);
+        if (record && record.__typename && record.id) {
+            return {
+                ...record,
+                id: getDataID(record, String(record.__typename)),
+            };
+        }
+        return record;
+    }
+
+    getDataID(record: Record<string, any>, typeName: string): string | null {
+        return getDataID(record, typeName);
+    }
+}
+
+export const createRelayEnvironment = (
+    records: RecordMap,
+    token?: string,
+    preview = false,
+    withoutCache = false,
+): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
             if (!process.env.API_ENDPOINT) {
@@ -31,18 +53,19 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
                     'Content-Type': 'application/json',
                 };
 
-                if (token) {
-                    headersObj.Authorization = `Bearer ${token}`;
+                const appToken = token || process.env.API_TOKEN;
+                if (appToken) {
+                    headersObj.Authorization = `Bearer ${appToken}`;
                 }
                 // if (!vars?.publicationState) {
-                //     vars.status = getPublicationState(true);
+                //     vars.publicationState = getPublicationState(true);
                 // }
 
                 const req = await fetch(process.env.API_ENDPOINT, {
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    cache: 'force-cache',
+                    cache: withoutCache ? 'no-store' : 'force-cache',
                 });
                 const data = await req.json();
                 return data;
@@ -52,7 +75,7 @@ export const createRelayEnvironment = (records: RecordMap, token?: string, previ
                 Logger.error(e);
             }
         }),
-        store: new Store(new RecordSource(records)),
+        store: new Store(new CustomRecordSource(records) as any),
         isServer: true,
         getDataID,
     });

@@ -6,7 +6,7 @@ import { IApp } from '../../../../types/base/app';
 
 interface BlocksProps {
     blocksData: readonly any[] | null;
-    initialProps?: BlocksPropsMap;
+    initialProps?: BlocksPropsMap | null;
     app: IApp;
 }
 

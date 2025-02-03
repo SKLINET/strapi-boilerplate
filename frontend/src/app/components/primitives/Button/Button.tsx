@@ -7,7 +7,7 @@ import { nbsp } from '../../../../utils/nbsp';
 
 interface ButtonProps {
     children: ReactNode;
-    alt: string;
+    alt?: string | null;
     onClick?: () => void;
     href?: string | null;
     openInNewTab?: boolean;
@@ -36,6 +36,11 @@ const Button = ({
             </span>
         </>
     );
+    const _alt = alt || (typeof children === 'string' ? children : '');
+
+    if (_alt.length === 0) {
+        console.error('Chybějící alt u tlačítka');
+    }
 
     if (onClick) {
         return (
@@ -44,7 +49,7 @@ const Button = ({
                 onClick={() => onClick()}
                 className={allClassNames}
                 disabled={loading}
-                aria-label={alt}
+                aria-label={_alt}
             >
                 {_children}
             </button>
@@ -53,7 +58,7 @@ const Button = ({
 
     if (href) {
         return (
-            <Link href={href} openInNewTab={openInNewTab || false} className={allClassNames} alt={alt}>
+            <Link href={href} openInNewTab={openInNewTab || false} className={allClassNames} alt={_alt}>
                 {_children}
             </Link>
         );
@@ -61,7 +66,7 @@ const Button = ({
 
     if (submit) {
         return (
-            <button type="submit" className={allClassNames} disabled={loading} aria-label={alt}>
+            <button type="submit" className={allClassNames} disabled={loading} aria-label={_alt}>
                 {_children}
             </button>
         );
