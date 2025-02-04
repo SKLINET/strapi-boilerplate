@@ -3,6 +3,7 @@ import { appQuery$data } from '../../relay/__generated__/appQuery.graphql';
 import { articleDetailFragment$data } from '../../relay/__generated__/articleDetailFragment.graphql';
 import { ContextProps } from './page';
 import { appPageFragment$data } from '../../relay/__generated__/appPageFragment.graphql';
+import Mapper from '../../lib/mapper/Mapper';
 
 export type IApp = appQuery$data & {
     item: Omit<articleDetailFragment$data, ' $fragmentType'> | null;
@@ -11,4 +12,5 @@ export type IApp = appQuery$data & {
     blocksPropsMap: BlocksPropsMap;
     preview: boolean;
     context: ContextProps;
+    mapper: Mapper;
 };

@@ -20,6 +20,7 @@ import 'dayjs/locale/en';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import Mapper from '../../lib/mapper/Mapper';
 
 const PreviewToolbar = dynamic(() =>
     import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
@@ -38,6 +39,12 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
         ...data,
         item: getItemFromPageResponse(data),
         context,
+        mapper: new Mapper({
+            locale: data.locale,
+            pages: {
+                articleDetailPage: data.webSetting?.articleDetailPage || null,
+            },
+        }),
     };
 
     const { tz } = config;

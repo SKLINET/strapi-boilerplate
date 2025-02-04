@@ -6,6 +6,7 @@ import { getItemFromPageResponse } from '../../utils/base/getItemFromPageRespons
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { IApp } from '../../types/base/app';
 import config from '../../../sklinet.config.json';
+import Mapper from '../../lib/mapper/Mapper';
 
 // Day JS
 import { CALENDAR_FORMATS } from '../../constants';
@@ -33,6 +34,12 @@ export const Page = async () => {
         ...data,
         item: getItemFromPageResponse(data),
         context,
+        mapper: new Mapper({
+            locale: data.locale,
+            pages: {
+                articleDetailPage: data.webSetting?.articleDetailPage || null,
+            },
+        }),
     };
 
     const { tz } = config;
