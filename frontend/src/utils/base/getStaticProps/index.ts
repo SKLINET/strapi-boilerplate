@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import config from '../../../../sklinet.config.json';
-import { ContextProps } from '../../../types/base/page';
+import { ContextProps, IContext } from '../../../types/base/page';
 import { getLocale } from '../getLocal';
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
@@ -10,15 +10,9 @@ import { CALENDAR_FORMATS } from '../../../constants';
 import blocks from '../../../app/blocks';
 import { getBlocksProps } from '../../../lib/blocks/getBlocksProps';
 import providers from '../../../providers';
-import { GetStaticPropsContext } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 import { IPageResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
-
-type IContext = GetStaticPropsContext<ParsedUrlQuery> & {
-    searchParams: { [key: string]: string | string[] | undefined };
-};
 
 export const getStaticProps = cache(
     async ({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> => {
@@ -57,7 +51,7 @@ export const getStaticProps = cache(
         }
 
         try {
-            const res = (await getBlocksProps(context, providers, renamedBlocks, config.ssg)) as any;
+            const res = await getBlocksProps(context, providers, renamedBlocks, config.ssg);
 
             if (!res?.redirect && (!res.props.page || res.notFound)) {
                 throw new Error('Page not found!');
@@ -80,6 +74,7 @@ export const getStaticProps = cache(
                     params: { slug: ['404'] },
                     preview: isEnabled,
                     draftMode: isEnabled,
+                    searchParams,
                 },
                 providers,
                 renamedBlocks,

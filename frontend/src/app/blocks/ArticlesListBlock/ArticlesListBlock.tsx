@@ -1,8 +1,7 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
+import { graphql } from 'relay-runtime';
 import { StaticBlockContext } from '../../../types/base/block';
 import getPublicationState from '../../../utils/base/getPublicationState';
-import { OmitRefType } from '@symbio/headless';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
@@ -18,7 +17,7 @@ export interface ArticlesListBlockStaticProps {
     };
 }
 
-export interface ArticlesListBlockContent extends OmitRefType<ArticlesListBlock_content$data> {
+export interface ArticlesListBlockContent extends Omit<ArticlesListBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockArticlesListBlock';
 }
 

@@ -2,11 +2,11 @@
 
 import React, { ReactElement, CSSProperties } from 'react';
 import NextImage, { StaticImageData, ImageLoaderProps, ImageProps as NextImageProps } from 'next/image';
-import { ImgixProps } from '@symbio/headless';
-import { kebabCase } from '@symbio/headless/utils';
 import { IImage } from '../../../../types/image';
 import { getImageUrl } from '../../../../utils/getImageUrl';
 import { useBlurDataUrl } from '../../../../utils/cloudinary/useBlurDataUrl';
+import { ImgixProps } from '../../../../types/base/imgix';
+import { kebabCase } from '../../../../utils/base/kebabCase';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;

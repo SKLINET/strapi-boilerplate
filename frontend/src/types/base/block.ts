@@ -1,7 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { NextComponentType } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { IApp } from './app';
 
 export interface BaseBlockProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,16 +13,17 @@ export interface BaseBlockProps {
 }
 
 export interface StaticBlockContext {
-    params?: ParsedUrlQuery;
-    locale?: string;
-    slug?: string;
+    context: any;
+    locale?: string | null;
     page?: any;
     block?: any;
-    blocks?: any;
-    item?: any;
     providers?: any;
-    context: any;
-    settings?: IApp['webSetting'];
+    blocks?: any;
+    settings?: any;
+    params?: ParsedUrlQuery;
+    slug?: string;
+    app?: any;
+    item?: any;
 }
 
 export interface ServerSideBlockContext extends StaticBlockContext {
@@ -48,3 +48,6 @@ export declare type BlockType = NextComponentType<ServerSideBlockContext, any, a
     getStaticProps?: BlockGetStaticProps;
     getStaticPaths?: BlockGetStaticPaths;
 };
+
+export declare type BlocksPropsMap = Record<string, unknown>;
+export declare type BlocksPropsPromisesMap = Record<string, Promise<unknown>>;

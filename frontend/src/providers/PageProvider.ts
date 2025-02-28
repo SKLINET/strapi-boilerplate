@@ -5,17 +5,18 @@ import * as d from '../relay/__generated__/pageDetailQuery.graphql';
 import * as l from '../relay/__generated__/pageListQuery.graphql';
 import * as s from '../relay/__generated__/pageStaticPathsQuery.graphql';
 import { AppQuery } from '../relay/app';
-import { BlockType, getStaticParamsFromBlocks } from '@symbio/headless';
 import providers from './index';
 import { PageProps } from '../types/base/page';
 import { WebSettingsProps } from '../types/base/webSettings';
 import { Locale } from '../types/base/locale';
 import { Providers } from '../types/base/providers';
 import getPublicationState from '../utils/base/getPublicationState';
-import { AppData } from '../index';
 import { StaticPathsParams } from '../types/base/staticPathsParams';
 import AbstractStrapiProvider from '../lib/provider/AbstractStrapiProvider';
 import { getPagePattern } from '../lib/routing/getPagePattern';
+import { BlockType } from '../types/base/block';
+import { getStaticParamsFromBlocks } from '../utils/base/getStaticParamsFromBlocks';
+import { appQuery } from '../relay/__generated__/appQuery.graphql';
 
 class PageProvider extends AbstractStrapiProvider<
     d.pageDetailQuery,
@@ -41,21 +42,18 @@ class PageProvider extends AbstractStrapiProvider<
      * @param slug
      * @param preview
      */
-    async getPageBySlug(
-        locale: string | undefined,
-        slug: string[],
-        preview: boolean | undefined,
-    ): Promise<AppData<any, WebSettingsProps> | undefined> {
+    async getPageBySlug(locale: string | undefined, slug: string[], preview: boolean | undefined) {
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
 
-        const data = await fetchQuery<any>(this.getEnvironment(preview), AppQuery, {
+        const data = await fetchQuery<appQuery>(this.getEnvironment(preview), AppQuery, {
             locale,
             redirect,
             pattern,
             status,
         }).toPromise();
+
         return {
             ...data,
             redirect: data?.redirect ? { ...data?.redirect, permanent: data?.redirect?.statusCode === '301' } : null,
@@ -65,9 +63,7 @@ class PageProvider extends AbstractStrapiProvider<
 
     async getStaticPaths(
         locale: string | undefined,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        blocks?: Record<string, BlockType<PageProps, WebSettingsProps, Providers, Locale>>,
+        blocks?: Record<string, BlockType>,
     ): Promise<GetStaticPathsResult['paths']> {
         const items: StaticPathsParams[] = [];
         let cnt = -1;

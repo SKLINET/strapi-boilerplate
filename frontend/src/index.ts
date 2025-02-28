@@ -1,6 +1,7 @@
 import { GetStaticPathsResult } from 'next';
-import { AbstractProvider, AbstractSingletonProvider, findProvider } from '@symbio/cms';
 import { Variables } from 'relay-runtime';
+import { webSettingFragment$data } from './relay/__generated__/webSettingFragment.graphql';
+import { appPageFragment$data } from './relay/__generated__/appPageFragment.graphql';
 
 export type ItemId = string;
 
@@ -82,18 +83,14 @@ export interface Provider {
 }
 
 export interface PageProvider<P extends BasePage, W> extends Provider {
-    getPageBySlug: (
-        locale: string | undefined,
-        slug: string[],
-        preview?: boolean,
-    ) => Promise<AppData<P, W> | undefined>;
+    getPageBySlug: (locale: string | undefined, slug: string[], preview?: boolean) => Promise<AppData | undefined>;
 }
 
-export type AppData<P extends BasePage, W> = {
+export type AppData = {
     site: Site;
-    page: P | null;
+    page: Omit<appPageFragment$data, ' $fragmentType'>;
     redirect: Redirect;
-    webSetting: W;
+    webSetting: Omit<webSettingFragment$data, ' $fragmentType'>;
 };
 
 export interface Site {
@@ -129,14 +126,16 @@ export type Redirect = {
 } | null;
 
 export interface BasePage<
-    T extends { __typename: string; documentId: string } = { __typename: string; documentId: string },
+    T extends { __typename: string; documentId: string; id: string } = {
+        __typename: string;
+        documentId: string;
+        id: string;
+    },
 > {
     documentId: string;
-    attributes: {
-        url: string | null;
-        title?: string | null;
-        content?: ReadonlyArray<T | null> | null;
-    } | null;
+    url: string | null;
+    title?: string | null;
+    content?: ReadonlyArray<T | null> | null;
 }
 
 export type Route<ObjectType> = {
@@ -151,5 +150,3 @@ export type Route<ObjectType> = {
     readonly isTargetBlank?: boolean | null;
     readonly parameters?: string | null;
 };
-
-export { AbstractProvider, AbstractSingletonProvider, findProvider };

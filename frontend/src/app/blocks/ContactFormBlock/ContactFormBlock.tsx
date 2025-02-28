@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
-import { OmitRefType } from '@symbio/headless';
+import { graphql } from 'relay-runtime';
 import { ContactFormBlock_content$data } from './__generated__/ContactFormBlock_content.graphql';
 import { ContactForm } from '../../components/blocks/ContactForm/ContactForm';
 import { IApp } from '../../../types/base/app';
@@ -8,7 +7,7 @@ import { IApp } from '../../../types/base/app';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ContactFormBlockStaticProps {}
 
-export interface ContactFormBlockContent extends OmitRefType<ContactFormBlock_content$data> {
+export interface ContactFormBlockContent extends Omit<ContactFormBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockContactFormBlock';
 }
 
