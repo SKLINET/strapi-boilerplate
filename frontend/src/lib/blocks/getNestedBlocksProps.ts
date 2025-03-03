@@ -1,6 +1,6 @@
 import { GetStaticPropsContext } from 'next';
-import { BlocksPropsMap, BlocksPropsPromisesMap } from '@symbio/headless';
 import { IApp } from '../../types/base/app';
+import { BlocksPropsMap, BlocksPropsPromisesMap } from '../../types/base/block';
 
 function getBlockName(block: { __typename?: string } | null): string | undefined {
     return block?.__typename?.replace(/Record$/, 'Block').replace('BlockBlock', 'Block');
@@ -11,7 +11,7 @@ export const getNestedBlocksProps = async (
     blocks: Record<string, any>,
     page: Record<string, any>,
     items: ReadonlyArray<any>,
-    locale?: string,
+    locale?: string | null,
     slug?: string,
     providers?: any,
     item?: any,

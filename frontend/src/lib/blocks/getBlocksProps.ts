@@ -1,32 +1,32 @@
-import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
-import { AppData, BasePage } from '@symbio/cms';
-import { BlocksPropsMap, BlocksPropsPromisesMap, BlockType } from '@symbio/headless';
-import { Providers as ProvidersType } from '../../types/base/providers';
+import { Providers } from '../../types/base/providers';
 import { getNormalizedSlug } from '../../utils/base/getSlug';
+import { BlocksPropsMap, BlocksPropsPromisesMap, BlockType } from '../../types/base/block';
+import { IContext, IPageResponse } from '../../types/base/page';
+import { appQuery$data } from '../../relay/__generated__/appQuery.graphql';
 
-function getBlockName(block: { __typename?: string } | null): string | undefined {
+export function getBlockName(block: { __typename?: string } | null): string | undefined {
     return block?.__typename?.replace(/Record$/, 'Block').replace('BlockBlock', 'Block');
 }
 
-/**
- * Get static props for current page and it's blocks
- * @param {GetStaticPropsContext} context
- * @param providers
- * @param {Record<string, BlockType>} blocks
- * @param ssg
- * @returns {Promise<GetStaticPropsResult<{[p: string]: unknown}>>}
- */
-export const getBlocksProps = async <Page extends BasePage, WebSettings, Providers, Locale>(
-    context: GetStaticPropsContext,
+export const getBlocksProps = async (
+    context: IContext,
     providers: Providers,
-    blocks: Record<string, BlockType<Page, WebSettings, Providers, Locale>>,
+    blocks: Record<string, BlockType>,
     ssg: {
         staticGeneration: boolean;
         revalidate: boolean | number;
     },
-): Promise<GetStaticPropsResult<{ [key: string]: unknown }>> => {
-    const provider = (providers as ProvidersType).page;
-    const locale = context.locale || context.defaultLocale;
+): Promise<{
+    props: IPageResponse;
+    revalidate?: boolean | number;
+    notFound?: boolean;
+    redirect?: {
+        destination: string;
+        permanent: boolean;
+    };
+}> => {
+    const provider = providers.page;
+    const locale = context.locale || context.defaultLocale || '';
     const props = await provider.getPageBySlug(locale, getNormalizedSlug(context?.params?.slug), context.preview);
     const slug = context.params?.slug;
 
@@ -35,7 +35,7 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
             props: {
                 locale,
                 preview: !!context.preview,
-            },
+            } as IPageResponse,
             revalidate: ssg.staticGeneration ? false : ssg.revalidate,
             notFound: true,
         };
@@ -49,7 +49,7 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
                 ...props,
                 locale,
                 preview: !!context.preview,
-            },
+            } as IPageResponse,
             revalidate: ssg.staticGeneration ? false : ssg.revalidate,
             redirect: {
                 destination: props.redirect.to,
@@ -58,13 +58,13 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
         };
     }
 
-    const blocksPropsPromises = getBlocksPropsPromises<Page, WebSettings, Providers, Locale>(
-        props.page as Page | null,
-        locale as unknown as Locale,
+    const blocksPropsPromises = getBlocksPropsPromises(
+        props.page,
+        locale,
         context,
         providers,
         blocks,
-        props.webSetting as WebSettings,
+        props.webSetting,
     );
 
     try {
@@ -80,7 +80,7 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
                 locale,
                 blocksPropsMap,
                 preview: !!context.preview,
-            },
+            } as IPageResponse,
             revalidate: ssg.staticGeneration ? false : ssg.revalidate,
             ...((slug && slug.length === 1 && slug[0] === '404') || !!props.page ? {} : { notFound }),
         };
@@ -90,9 +90,9 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
                 props: {
                     ...props,
                     locale,
-                    blocksPropsMap: new Map(),
+                    blocksPropsMap: {},
                     preview: !!context.preview,
-                },
+                } as IPageResponse,
                 revalidate: ssg.staticGeneration ? false : ssg.revalidate,
                 ...(slug && slug.length === 1 && slug[0] === '404' ? {} : { notFound: true }),
             };
@@ -102,18 +102,18 @@ export const getBlocksProps = async <Page extends BasePage, WebSettings, Provide
     }
 };
 
-export function getBlocksPropsPromises<P extends BasePage, W, PR, L>(
-    page: AppData<P, W>['page'],
-    locale: L,
-    context: GetStaticPropsContext,
-    providers: PR,
-    blocks: Record<string, BlockType<P, W, PR, L>>,
-    webSetting: W,
+export function getBlocksPropsPromises(
+    page: appQuery$data['page'],
+    locale: string,
+    context: IContext,
+    providers: Providers,
+    blocks: Record<string, BlockType>,
+    webSetting: appQuery$data['webSetting'],
 ): BlocksPropsPromisesMap {
     const blocksPropsPromises: BlocksPropsPromisesMap = {};
     if (page?.content && page.content.length > 0) {
         for (const block of page.content) {
-            const blockName = getBlockName(block);
+            const blockName = getBlockName(block as any);
             if (blockName && Object.prototype.hasOwnProperty.call(blocks, blockName)) {
                 const blk = blocks[blockName];
                 if (blk.getStaticProps && block && block.__typename !== '%other' && block.id) {

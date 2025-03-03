@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
-import { OmitRefType } from '@symbio/headless';
+import { graphql } from 'relay-runtime';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
 import { Video } from '../../components/blocks/Video/Video';
 import { IApp } from '../../../types/base/app';
@@ -8,7 +7,7 @@ import { IApp } from '../../../types/base/app';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VideoBlockStaticProps {}
 
-export interface VideoBlockContent extends OmitRefType<VideoBlock_content$data> {
+export interface VideoBlockContent extends Omit<VideoBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockVideoBlock';
 }
 

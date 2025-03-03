@@ -1,19 +1,18 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
-import { getSlug } from '@symbio/headless/utils';
+import { graphql } from 'relay-runtime';
 import { BaseBlockProps, StaticBlockContext } from '../../../types/base/block';
-import { OmitRefType } from '@symbio/headless';
 import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
 import { articleDetailFragment$data } from '../../../relay/__generated__/articleDetailFragment.graphql';
 import { ArticleDetail } from '../../components/blocks/ArticleDetail/ArticleDetail';
 import getPublicationState from '../../../utils/base/getPublicationState';
+import { getSlug } from '../../../utils/base/getSlug';
 
 export interface ArticleDetailBlockStaticProps {
     item: Omit<articleDetailFragment$data, ' $fragmentType'>;
 }
 
-export interface ArticleDetailBlockContent extends OmitRefType<ArticleDetailBlock_content$data> {
+export interface ArticleDetailBlockContent extends Omit<ArticleDetailBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockArticleDetailBlock';
 }
 

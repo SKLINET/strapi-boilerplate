@@ -1,9 +1,4 @@
 import { graphql } from 'relay-runtime';
-import { BlockType } from '@symbio/headless';
-import { PageProps } from '../../types/base/page';
-import { WebSettingsProps } from '../../types/base/webSettings';
-import { Providers } from '../../types/base/providers';
-import { Locale } from '../../types/base/locale';
 
 import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';
@@ -22,9 +17,7 @@ graphql`
     }
 `;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const blocks: { [name: string]: BlockType<PageProps, WebSettingsProps, Providers, Locale> } = {
+const blocks = {
     ArticleDetailBlock,
     ArticlesListBlock,
     ContactFormBlock,

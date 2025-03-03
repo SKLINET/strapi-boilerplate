@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
-import graphql from 'graphql-tag';
-import { StaticBlockContext } from '../../../types/base/block';
-import { BlocksPropsMap, OmitRefType } from '@symbio/headless';
+import { graphql } from 'relay-runtime';
+import { BlocksPropsMap, StaticBlockContext } from '../../../types/base/block';
 import { TemplateBlock_content$data } from './__generated__/TemplateBlock_content.graphql';
 import { Template } from '../../components/blocks/Template/Template';
 import { IApp } from '../../../types/base/app';
@@ -11,7 +10,7 @@ export interface TemplateBlockStaticProps {
     data: BlocksPropsMap;
 }
 
-export interface TemplateBlockContent extends OmitRefType<TemplateBlock_content$data> {
+export interface TemplateBlockContent extends Omit<TemplateBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockTemplateBlock';
 }
 
