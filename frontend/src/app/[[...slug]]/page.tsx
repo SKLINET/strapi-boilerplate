@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
-import { GoogleTagManager } from '@next/third-parties/google';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
+import { GtmProvider } from '../components/base/GtmProvider/GtmProvider';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
 import { ServerContextProps } from '../../types/base/page';
@@ -59,9 +59,7 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
     }
 
     return (
-        <>
-            {gtmCode && <GoogleTagManager gtmId={String(gtmCode)} />}
-
+        <GtmProvider gtmCode={gtmCode}>
             <Layout app={app}>
                 {app.page && (
                     <Blocks blocksData={app.page?.content || []} initialProps={app.blocksPropsMap} app={app} />
@@ -70,17 +68,7 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
 
             {app.preview && app.page && <PreviewToolbar app={app} />}
             {process.env.NODE_ENV === 'development' && <GridHelper />}
-
-            {gtmCode && (
-                <noscript
-                    dangerouslySetInnerHTML={{
-                        __html: `<!-- Google Tag Manager (noscript) -->
-                            <iframe src="https://www.googletagmanager.com/ns.html?id=${gtmCode}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-                            <!-- End Google Tag Manager (noscript) -->`,
-                    }}
-                />
-            )}
-        </>
+        </GtmProvider>
     );
 };
 
