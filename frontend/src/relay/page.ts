@@ -22,7 +22,7 @@ export const pageDetailQuery = graphql`
                 ...appSitemapFragment @relay(mask: false)
             }
             content: blocks {
-                ...blocksContent @relay(mask: false)
+                ...serverBlocksContent @relay(mask: false)
             }
         }
     }
@@ -36,7 +36,7 @@ export const pageStaticPathsQuery = graphql`
             updatedAt
             publishedAt
             content: blocks {
-                ...blocksContent @relay(mask: false)
+                ...serverBlocksContent @relay(mask: false)
             }
             sitemap {
                 ...appSitemapFragment @relay(mask: false)
@@ -66,7 +66,7 @@ export const pageListQuery = graphql`
                 ...appSitemapFragment @relay(mask: false)
             }
             content: blocks {
-                ...blocksContent @relay(mask: false)
+                ...serverBlocksContent @relay(mask: false)
             }
         }
     }

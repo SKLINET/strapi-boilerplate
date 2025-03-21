@@ -50,7 +50,7 @@ export const AppQuery = graphql`
             }
             content: blocks {
                 __typename
-                ...blocksContent @relay(mask: false)
+                ...serverBlocksContent @relay(mask: false)
             }
         }
 

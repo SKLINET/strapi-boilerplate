@@ -51,6 +51,13 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
 
     const gtmCode = app.webSetting?.gtmCode || config.gtm.code || null;
 
+    if (process.env.NODE_ENV === 'development') {
+        console.log('');
+        console.log('- - - - - - - - - - - - - - - -');
+        console.log('💡 Page:', app?.page?.title || '');
+        console.log('- - - - - - - - - - - - - - - -');
+    }
+
     return (
         <>
             {gtmCode && <GoogleTagManager gtmId={String(gtmCode)} />}

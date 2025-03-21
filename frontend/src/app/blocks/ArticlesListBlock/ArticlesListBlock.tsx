@@ -5,7 +5,6 @@ import getPublicationState from '../../../utils/base/getPublicationState';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
-import { getItemId } from '../../../utils/getItemId';
 import { articleFragment$data } from '../../../relay/__generated__/articleFragment.graphql';
 import { articleCategoryFragment$data } from '../../../relay/__generated__/articleCategoryFragment.graphql';
 
@@ -56,7 +55,7 @@ if (typeof window === 'undefined') {
         const filters: Record<string, any> = {};
 
         if (typeof searchParams?.filter === 'string') {
-            filters.category = { id: { eq: getItemId(searchParams.filter) } };
+            filters.category = { documentId: { eq: searchParams.filter } };
         }
 
         const articles = await providers.article.find({

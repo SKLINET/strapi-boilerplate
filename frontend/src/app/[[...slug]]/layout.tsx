@@ -19,7 +19,6 @@ const primary = Poppins({
     subsets: ['latin'],
     variable: '--font-primary',
     display: 'swap',
-    fallback: ['Arial', 'sans-serif'],
 });
 
 export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {

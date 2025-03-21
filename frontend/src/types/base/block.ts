@@ -49,5 +49,5 @@ export declare type BlockType = NextComponentType<ServerSideBlockContext, any, a
     getStaticPaths?: BlockGetStaticPaths;
 };
 
-export declare type BlocksPropsMap = Record<string, unknown>;
-export declare type BlocksPropsPromisesMap = Record<string, Promise<unknown>>;
+export declare type BlocksPropsMap = Record<string, any>;
+export declare type BlocksPropsPromisesMap = Record<string, Promise<any>>;

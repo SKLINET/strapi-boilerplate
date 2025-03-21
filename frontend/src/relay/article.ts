@@ -13,7 +13,7 @@ export const ArticleListQuery = graphql`
         $locale: I18NLocaleCode
         $start: Int
         $limit: Int
-        $filter: ArticleFiltersInput
+        $filters: ArticleFiltersInput
         $status: PublicationStatus
         $sort: [String] = ["publishDate:desc", "publishedAt:desc"]
     ) {
@@ -21,7 +21,7 @@ export const ArticleListQuery = graphql`
             locale: $locale
             pagination: { start: $start, limit: $limit }
             sort: $sort
-            filters: $filter
+            filters: $filters
             status: $status
         ) {
             nodes {
