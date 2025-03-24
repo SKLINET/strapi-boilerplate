@@ -5,7 +5,7 @@ export const ArticleCategoryListQuery = graphql`
         $locale: I18NLocaleCode
         $start: Int
         $limit: Int
-        $filter: ArticleCategoryFiltersInput
+        $filters: ArticleCategoryFiltersInput
         $status: PublicationStatus
         $sort: [String] = ["publishedAt:asc"]
     ) {
@@ -13,7 +13,7 @@ export const ArticleCategoryListQuery = graphql`
             locale: $locale
             pagination: { start: $start, limit: $limit }
             sort: $sort
-            filters: $filter
+            filters: $filters
             status: $status
         ) {
             ...articleCategoryFragment @relay(mask: false)

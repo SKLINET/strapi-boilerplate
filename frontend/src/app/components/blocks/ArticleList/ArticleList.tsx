@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import { ArticlesListBlockProps } from '../../../blocks/ArticlesListBlock/ArticlesListBlock';
 import { getArticleListType } from '../../../../utils/strapi/getArticleType';
 import { IArticle } from '../../../../types/article';
-import { getItemId } from '../../../../utils/getItemId';
 import { fetchArticles } from '../../../actions/fetch-articles';
 import { getArticleCategoryListType } from '../../../../utils/strapi/getArticleCategoryType';
 import { getPageUrl } from '../../../../utils/getPageUrl';
@@ -31,8 +30,7 @@ const ArticleList = ({
         setCanLoadMore(canLoadMore);
     }, [articles, canLoadMore, app]);
 
-    const categoryId =
-        typeof app.context?.searchParams?.filter === 'string' ? getItemId(app.context.searchParams.filter) : null;
+    const categoryId = typeof app.context?.searchParams?.filter === 'string' ? app.context.searchParams.filter : null;
 
     const loadMore = async (page: number) => {
         if (!isPending) {
@@ -66,8 +64,8 @@ const ArticleList = ({
                 {_categories.map((e) => (
                     <a
                         key={e.id}
-                        href={blogHref + `?filter=${getItemId(e.id)}`}
-                        className={clsx(styles.button, categoryId === getItemId(e.id) && styles.active)}
+                        href={blogHref + `?filter=${e.id}`}
+                        className={clsx(styles.button, categoryId === e.id && styles.active)}
                         aria-label={`Filter by ${e.title}`}
                     >
                         {e.title}

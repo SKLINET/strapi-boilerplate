@@ -17,6 +17,14 @@ const { parsed: myEnv } = require('dotenv').config({
  */
 const nextConfig = {
     images,
+    experimental: {
+        staleTimes: {
+            dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
+            static: 180,
+        },
+        webpackMemoryOptimizations: true,
+        inlineCss: true,
+    },
     compiler: {
         relay: {
             src: './',

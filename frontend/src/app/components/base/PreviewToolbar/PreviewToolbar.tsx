@@ -4,7 +4,6 @@ import React, { ReactElement, useState, useEffect } from 'react';
 import styles from './PreviewToolbar.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../primitives/Icon/Icon';
-import { getItemId } from '../../../../utils/getItemId';
 import { IApp } from '../../../../types/base/app';
 
 interface PreviewToolbarProps {
@@ -22,7 +21,7 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
         if (item) {
             setIsPublished(!!item?.publishedAt);
             if (item) {
-                const id = getItemId(item.documentId);
+                const id = item.documentId;
                 if (item.__typename === 'Article') {
                     setCollection('api::article.article');
                 }
@@ -30,7 +29,7 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
             }
         } else {
             setIsPublished(!!page?.publishedAt);
-            const id = getItemId(page?.documentId || '');
+            const id = page?.documentId || '';
             if (page?.url) {
                 setCollection('api::page.page');
                 setItemId(id);

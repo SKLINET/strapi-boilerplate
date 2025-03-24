@@ -172,7 +172,7 @@ ${names
     }, [])
     .join('\n')}
 graphql\`
-    fragment blocksContent on PageBlocksDynamicZone {
+    fragment serverBlocksContent on PageBlocksDynamicZone {
         __typename
 ${names
     .map(([name, fields]) => (fields.length > 0 ? `        ...${name}_content @relay(mask: false)` : ''))

@@ -7,7 +7,7 @@ import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 
 graphql`
-    fragment blocksContent on PageBlocksDynamicZone {
+    fragment serverBlocksContent on PageBlocksDynamicZone {
         __typename
         ...ArticleDetailBlock_content @relay(mask: false)
         ...ArticlesListBlock_content @relay(mask: false)

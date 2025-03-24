@@ -15,11 +15,10 @@ import '../../styles/global.scss';
 
 const primary = Poppins({
     weight: ['400', '700'],
-    style: ['normal', 'italic'],
+    style: ['normal'],
     subsets: ['latin'],
     variable: '--font-primary',
     display: 'swap',
-    fallback: ['Arial', 'sans-serif'],
 });
 
 export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {
@@ -166,9 +165,6 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
     return (
         <html lang={getLocale(slug)} className={`${primary.variable}`}>
             <head>
-                <link rel="preconnect" href="https://res.cloudinary.com" />
-                <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-
                 {/* Favicon */}
                 <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
                 {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}

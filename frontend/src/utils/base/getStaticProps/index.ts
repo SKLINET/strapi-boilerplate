@@ -7,7 +7,7 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import timeZone from 'dayjs/plugin/timezone';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { CALENDAR_FORMATS } from '../../../constants';
-import blocks from '../../../app/blocks';
+import blocks from '../../../app/blocks/server';
 import { getBlocksProps } from '../../../lib/blocks/getBlocksProps';
 import providers from '../../../providers';
 import { IPageResponse } from '../../../types/base/page';

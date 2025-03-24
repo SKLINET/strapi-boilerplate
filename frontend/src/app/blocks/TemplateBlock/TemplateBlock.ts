@@ -1,24 +1,6 @@
-import React, { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
-import { BlocksPropsMap, StaticBlockContext } from '../../../types/base/block';
-import { TemplateBlock_content$data } from './__generated__/TemplateBlock_content.graphql';
-import { Template } from '../../components/blocks/Template/Template';
-import { IApp } from '../../../types/base/app';
+import { BlockType, StaticBlockContext } from '../../../types/base/block';
 import { getNestedBlocksProps } from '../../../lib/blocks/getNestedBlocksProps';
-
-export interface TemplateBlockStaticProps {
-    data: BlocksPropsMap;
-}
-
-export interface TemplateBlockContent extends Omit<TemplateBlock_content$data, ' $fragmentType'> {
-    __typename: 'ComponentBlockTemplateBlock';
-}
-
-export interface TemplateBlockProps extends TemplateBlockStaticProps {
-    blocksData: Omit<TemplateBlockContent, ' $fragmentType'>;
-    app: IApp;
-    className?: string;
-}
 
 graphql`
     fragment TemplateBlock_content on ComponentBlockTemplateBlock {
@@ -34,10 +16,8 @@ graphql`
     }
 `;
 
-const TemplateBlock = (props: TemplateBlockProps): ReactElement => <Template {...props} />;
-
-if (typeof window === 'undefined') {
-    TemplateBlock.getStaticProps = async ({
+const TemplateBlock = {
+    getStaticProps: async ({
         locale,
         providers,
         context,
@@ -68,7 +48,7 @@ if (typeof window === 'undefined') {
         );
 
         return { data: blocksProps?.blocksPropsMap };
-    };
-}
+    },
+} as BlockType;
 
 export default TemplateBlock;

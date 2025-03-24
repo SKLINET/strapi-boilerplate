@@ -5,7 +5,6 @@ import { IApp } from '../../types/base/app';
 import { IArticle } from '../../types/article';
 import providers from '../../providers';
 import { getArticleListType } from '../../utils/strapi/getArticleType';
-import { articleListQuery$data } from '../../relay/__generated__/articleListQuery.graphql';
 import { FindResponse } from '../../lib/provider/AbstractStrapiProvider';
 import { articleFragment$data } from '../../relay/__generated__/articleFragment.graphql';
 
@@ -33,7 +32,7 @@ export const fetchArticles = async (
     }
 
     if (categoryId) {
-        filter.category = { id: { eq: categoryId } };
+        filter.category = { documentId: { eq: categoryId } };
     }
 
     const { data, count } = (await providers.article.find({

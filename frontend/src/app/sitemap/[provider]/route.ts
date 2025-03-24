@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import dayjs from 'dayjs';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';
-import blocks from '../../blocks';
+import blocks from '../../blocks/server';
 import { StaticPathsParams } from '../../../types/base/staticPathsParams';
 import { findProvider } from '../../../utils/base/findProvider';
 import { toCamel } from '../../../utils/base/toCamel';
