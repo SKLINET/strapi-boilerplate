@@ -1,7 +1,7 @@
 import { IApp } from '../../types/base/app';
-import { IPageResponse } from '../../types/base/page';
+import { IMetadataResponse, IPageResponse } from '../../types/base/page';
 
-export const getItemFromPageResponse = ({ blocksPropsMap }: IPageResponse): IApp['item'] => {
+export const getItemFromPageResponse = ({ blocksPropsMap }: IPageResponse | IMetadataResponse): IApp['item'] => {
     let item =
         Array.isArray(blocksPropsMap) && blocksPropsMap.length > 0
             ? blocksPropsMap[0].item || blocksPropsMap[0].data?.item

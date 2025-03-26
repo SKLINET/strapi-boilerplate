@@ -5,10 +5,11 @@ import { GeneralText } from './generalText';
 import { IMenu } from '../menu';
 import { Setting } from './setting';
 import { Locale } from './locale';
-import { appQuery$data } from '../../relay/__generated__/appQuery.graphql';
 import { Meta } from './meta';
+import { appDataQuery$data } from '../../relay/__generated__/appDataQuery.graphql';
+import { appPageQuery$data } from '../../relay/__generated__/appPageQuery.graphql';
 
-export type AppData = appQuery$data;
+export type AppData = appDataQuery$data & appPageQuery$data;
 
 export interface PageDefault {
     documentId: string;

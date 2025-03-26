@@ -1,22 +1,16 @@
 import config from '../../../../sklinet.config.json';
 import { ContextProps, IContext } from '../../../types/base/page';
 import { getLocale } from '../getLocal';
-import dayjs from 'dayjs';
-import updateLocale from 'dayjs/plugin/updateLocale';
-import timeZone from 'dayjs/plugin/timezone';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { CALENDAR_FORMATS } from '../../../constants';
 import blocks from '../../../app/blocks/server';
-import { getBlocksProps } from '../../../lib/blocks/getBlocksProps';
+import { getMetadataProps } from '../../../lib/blocks/getMetadataProps';
 import providers from '../../../providers';
-import { IPageResponse } from '../../../types/base/page';
+import { IMetadataResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
-export const getStaticProps = async ({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> => {
+export const getMetadata = async ({ params: { slug }, searchParams }: ContextProps): Promise<IMetadataResponse> => {
     const { isEnabled } = await draftMode();
     const {
-        tz,
         i18n: { defaultLocale, locales },
     } = config;
 
@@ -32,14 +26,6 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
         draftMode: isEnabled,
     };
 
-    dayjs.extend(updateLocale);
-    dayjs.extend(timeZone);
-    dayjs.extend(localizedFormat);
-    if (locale) {
-        dayjs.updateLocale(locale, { calendar: CALENDAR_FORMATS[locale] });
-        dayjs.locale(locale);
-    }
-    dayjs.tz.setDefault(tz);
     const renamedBlocks: Record<string, any> = {};
 
     for (const key in blocks) {
@@ -49,7 +35,7 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
     }
 
     try {
-        const res = await getBlocksProps(context, providers, renamedBlocks, config.ssg);
+        const res = await getMetadataProps(context, providers, renamedBlocks, config.ssg);
 
         if (!res?.redirect && (!res.props.page || res.notFound)) {
             throw new Error('Page not found!');
@@ -64,7 +50,7 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
 
         return res.props;
     } catch (err) {
-        const notFoundPage = (await getBlocksProps(
+        const notFoundPage = (await getMetadataProps(
             {
                 locale,
                 locales,

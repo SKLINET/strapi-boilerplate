@@ -4,7 +4,10 @@ import { pageDetailQuery, pageListQuery, pageStaticPathsQuery } from '../relay/p
 import * as d from '../relay/__generated__/pageDetailQuery.graphql';
 import * as l from '../relay/__generated__/pageListQuery.graphql';
 import * as s from '../relay/__generated__/pageStaticPathsQuery.graphql';
-import { AppQuery } from '../relay/app';
+import { AppDataQuery, AppPageQuery, AppRedirectQuery } from '../relay/app';
+import { appPageQuery } from '../relay/__generated__/appPageQuery.graphql';
+import { appDataQuery } from '../relay/__generated__/appDataQuery.graphql';
+import { appRedirectQuery } from '../relay/__generated__/appRedirectQuery.graphql';
 import providers from './index';
 import { PageProps } from '../types/base/page';
 import { WebSettingsProps } from '../types/base/webSettings';
@@ -16,7 +19,9 @@ import AbstractStrapiProvider from '../lib/provider/AbstractStrapiProvider';
 import { getPagePattern } from '../lib/routing/getPagePattern';
 import { BlockType } from '../types/base/block';
 import { getStaticParamsFromBlocks } from '../utils/base/getStaticParamsFromBlocks';
-import { appQuery } from '../relay/__generated__/appQuery.graphql';
+import { MetadataGlobalQuery, MetadataPageQuery } from '../relay/metadata';
+import { metadataGlobalQuery } from '../relay/__generated__/metadataGlobalQuery.graphql';
+import { metadataPageQuery } from '../relay/__generated__/metadataPageQuery.graphql';
 
 class PageProvider extends AbstractStrapiProvider<
     d.pageDetailQuery,
@@ -45,19 +50,61 @@ class PageProvider extends AbstractStrapiProvider<
     async getPageBySlug(locale: string | undefined, slug: string[], preview: boolean | undefined) {
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
-        const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
 
-        const data = await fetchQuery<appQuery>(this.getEnvironment(preview), AppQuery, {
+        const appData = await fetchQuery<appDataQuery>(this.getEnvironment(preview), AppDataQuery, {
             locale,
-            redirect,
+            status,
+        }).toPromise();
+
+        const appPage = await fetchQuery<appPageQuery>(this.getEnvironment(preview), AppPageQuery, {
+            locale,
             pattern,
             status,
         }).toPromise();
 
         return {
-            ...data,
-            redirect: data?.redirect ? { ...data?.redirect, permanent: data?.redirect?.statusCode === '301' } : null,
-            page: data?.page || null,
+            ...appData,
+            page: appPage?.page || null,
+        };
+    }
+
+    /**
+     * Special function returning Page metadata
+     * @param locale
+     * @param slug
+     * @param preview
+     */
+    async getPageMetadata(locale: string | undefined, slug: string[], preview: boolean | undefined) {
+        const pattern = getPagePattern(slug);
+        const status = getPublicationState(preview);
+        const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
+
+        const metadataGlobal = await fetchQuery<metadataGlobalQuery>(
+            this.getEnvironment(preview),
+            MetadataGlobalQuery,
+            {
+                locale,
+                status,
+            },
+        ).toPromise();
+
+        const appRedirect = await fetchQuery<appRedirectQuery>(this.getEnvironment(preview), AppRedirectQuery, {
+            redirect,
+            status,
+        }).toPromise();
+
+        const metadataPage = await fetchQuery<metadataPageQuery>(this.getEnvironment(preview), MetadataPageQuery, {
+            locale,
+            pattern,
+            status,
+        }).toPromise();
+
+        return {
+            ...metadataGlobal,
+            redirect: appRedirect?.redirect
+                ? { ...appRedirect?.redirect, permanent: appRedirect?.redirect?.statusCode === '301' }
+                : null,
+            page: metadataPage?.page || null,
         };
     }
 

@@ -16,19 +16,6 @@ graphql`
         mainMenu {
             ...appMenuFragment @relay(mask: false)
         }
-        globalSeo {
-            siteName
-            titleSuffix
-            description
-            sharingImage {
-                ...appImageFragment @relay(mask: false)
-            }
-            preventIndexing
-            metaTags {
-                name
-                content
-            }
-        }
     }
 `;
 

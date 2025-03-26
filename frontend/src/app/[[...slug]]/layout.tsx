@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
 import { ServerContextProps, ParamsProps } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
-import { getStaticProps } from '../../utils/base/getStaticProps';
+import { getMetadata } from '../../utils/base/getMetadata';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getMetaFromItem } from '../../utils/base/getMetaFromItem';
 import { getImageUrl } from '../../utils/getImageUrl';
@@ -34,7 +34,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         params: await params,
         searchParams: await searchParams,
     };
-    const data = await getStaticProps(context);
+    const data = await getMetadata(context);
 
     if (data?.redirect?.to) {
         if ((data?.redirect as any)?.permanent) {

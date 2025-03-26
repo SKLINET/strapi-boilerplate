@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';
 import { articleDetailFragment$data } from '../../../../relay/__generated__/articleDetailFragment.graphql';
 import { Paragraph } from '../../primitives/Paragraph/Paragraph';
-import { appQuery$data } from '../../../../relay/__generated__/appQuery.graphql';
+import { appPageQuery$data } from '../../../../relay/__generated__/appPageQuery.graphql';
 import { getPageUrl } from '../../../../utils/getPageUrl';
 import { Link } from '../../primitives/Link/Link';
 
@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
     className?: string;
 }
 
-type ParentProps = NonNullable<NonNullable<appQuery$data['page']>>['parent'] | null | undefined;
+type ParentProps = NonNullable<NonNullable<appPageQuery$data['page']>>['parent'] | null | undefined;
 
 const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: BreadcrumbsProps): ReactElement => {
     const renderParent = (page: ParentProps): any => {

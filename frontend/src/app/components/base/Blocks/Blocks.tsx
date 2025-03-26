@@ -1,6 +1,6 @@
+import { getBlockName } from '../../../../lib/blocks/getBlocksPropsPromises';
 import { IApp } from '../../../../types/base/app';
 import { BlocksPropsMap } from '../../../../types/base/block';
-import { getBlockName } from '../../../../lib/blocks/getBlocksProps';
 import { loadBlock } from '../../../blocks/client';
 
 interface BlocksProps {
