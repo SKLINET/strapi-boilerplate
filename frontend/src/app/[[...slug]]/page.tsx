@@ -25,6 +25,7 @@ const PreviewToolbar = dynamic(() =>
     import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
 );
 const GridHelper = dynamic(() => import('../components/base/GridHelper/GridHelper').then((mod) => mod.GridHelper));
+const DataModal = dynamic(() => import('../components/base/DataModal/DataModal').then((mod) => mod.DataModal));
 
 export const Page = async ({ params, searchParams }: ServerContextProps) => {
     const context = {
@@ -67,7 +68,13 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
             </Layout>
 
             {app.preview && app.page && <PreviewToolbar app={app} />}
-            {process.env.NODE_ENV === 'development' && <GridHelper />}
+
+            {process.env.NODE_ENV === 'development' && (
+                <>
+                    <GridHelper />
+                    <DataModal app={app} />
+                </>
+            )}
         </GtmProvider>
     );
 };

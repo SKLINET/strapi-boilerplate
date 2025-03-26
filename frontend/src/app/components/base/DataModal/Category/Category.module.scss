@@ -1,0 +1,57 @@
+@import '../../../../../styles/mixins/hover.scss';
+
+.wrapper {
+    @apply border-b border-black border-opacity-30;
+
+    &.isOpen {
+        .topbar {
+            .icon {
+                @apply rotate-90;
+
+                svg path:nth-child(2) {
+                    @apply opacity-0;
+                }
+            }
+        }
+
+        .content {
+            //
+
+            .inner {
+                @apply opacity-100;
+            }
+        }
+    }
+}
+
+.topbar {
+    @apply w-full flex items-center gap-4 py-5 transition-colors ease-in-out duration-300;
+
+    @include hover {
+        &:hover {
+            @apply border-black border-opacity-100;
+        }
+    }
+
+    .label {
+        @apply block grow text-left;
+    }
+
+    .icon {
+        @apply w-5 h-5 shrink-0 text-black transition-transform-colors ease-in-out duration-500;
+
+        svg path:nth-child(2) {
+            @apply transition-opacity ease-in-out duration-500;
+        }
+    }
+}
+
+.content {
+    @apply w-full h-0 overflow-hidden transition-height ease-in-out duration-500;
+
+    .inner {
+        @apply w-full pt-2 pb-5 opacity-0 transition-opacity ease-in-out duration-500;
+
+        font-size: 0.875rem;
+    }
+}

@@ -67,6 +67,7 @@ const config: Config = {
                 height: 'height',
                 'visibility-opacity': 'visibility, opacity',
                 'transform-opacity': 'transform, opacity',
+                'transform-colors': 'transform, background, background-color, color',
             },
             width: {
                 //
@@ -81,6 +82,7 @@ const config: Config = {
                 3: '3',
                 4: '4',
                 5: '5',
+                99: '99',
                 100: '100',
                 9999: '9999',
             },
