@@ -7,6 +7,7 @@ import Edit from '../../../../../public/icons/edit.svg';
 import Exit from '../../../../../public/icons/exit.svg';
 import Loader from '../../../../../public/icons/loader.svg';
 import Play from '../../../../../public/icons/play.svg';
+import Plus from '../../../../../public/icons/plus.svg';
 import SklinetRound from '../../../../../public/icons/sklinet-logo.svg';
 import Sklinet from '../../../../../public/icons/sklinet.svg';
 import Symbio from '../../../../../public/icons/symbio.svg';
@@ -18,6 +19,7 @@ export type Icons =
     | 'exit'
     | 'loader'
     | 'play'
+    | 'plus'
     | 'sklinet-round'
     | 'sklinet'
     | 'symbio'
@@ -55,6 +57,8 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
                 return <Loader />;
             case 'play':
                 return <Play />;
+            case 'plus':
+                return <Plus />;
             case 'sklinet-round':
                 return <SklinetRound />;
             case 'sklinet':

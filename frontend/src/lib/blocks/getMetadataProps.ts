@@ -1,10 +1,12 @@
 import { Providers } from '../../types/base/providers';
 import { getNormalizedSlug } from '../../utils/base/getSlug';
 import { BlocksPropsMap, BlockType } from '../../types/base/block';
-import { IContext, IPageResponse } from '../../types/base/page';
+import { IContext, IMetadataResponse } from '../../types/base/page';
+import { appDataQuery$data } from '../../relay/__generated__/appDataQuery.graphql';
+import { appPageQuery$data } from '../../relay/__generated__/appPageQuery.graphql';
 import { getBlocksPropsPromises } from './getBlocksPropsPromises';
 
-export const getBlocksProps = async (
+export const getMetadataProps = async (
     context: IContext,
     providers: Providers,
     blocks: Record<string, BlockType>,
@@ -13,7 +15,7 @@ export const getBlocksProps = async (
         revalidate: boolean | number;
     },
 ): Promise<{
-    props: IPageResponse;
+    props: IMetadataResponse;
     revalidate?: boolean | number;
     notFound?: boolean;
     redirect?: {
@@ -23,7 +25,7 @@ export const getBlocksProps = async (
 }> => {
     const provider = providers.page;
     const locale = context.locale || context.defaultLocale || '';
-    const props = await provider.getPageBySlug(locale, getNormalizedSlug(context?.params?.slug), context.preview);
+    const props = await provider.getPageMetadata(locale, getNormalizedSlug(context?.params?.slug), context.preview);
     const slug = context.params?.slug;
 
     if (!props) {
@@ -31,19 +33,37 @@ export const getBlocksProps = async (
             props: {
                 locale,
                 preview: !!context.preview,
-            } as IPageResponse,
+            } as IMetadataResponse,
             revalidate: ssg.staticGeneration ? false : ssg.revalidate,
             notFound: true,
         };
     }
 
+    const notFound = (!props?.page && !props?.redirect) || undefined;
+
+    if (props.redirect && props.redirect.to && typeof props.redirect.permanent === 'boolean') {
+        return {
+            props: {
+                ...props,
+                locale,
+                preview: !!context.preview,
+                blocksPropsMap: {},
+            } as IMetadataResponse,
+            revalidate: ssg.staticGeneration ? false : ssg.revalidate,
+            redirect: {
+                destination: props.redirect.to,
+                permanent: props.redirect.permanent,
+            },
+        };
+    }
+
     const blocksPropsPromises = getBlocksPropsPromises(
-        props.page,
+        props.page as appPageQuery$data['page'],
         locale,
         context,
         providers,
         blocks,
-        props.webSetting,
+        props.webSetting as appDataQuery$data['webSetting'],
     );
 
     try {
@@ -59,9 +79,9 @@ export const getBlocksProps = async (
                 locale,
                 blocksPropsMap,
                 preview: !!context.preview,
-            } as IPageResponse,
+            } as IMetadataResponse,
             revalidate: ssg.staticGeneration ? false : ssg.revalidate,
-            ...((slug && slug.length === 1 && slug[0] === '404') || !!props.page ? {} : { notFound: false }),
+            ...((slug && slug.length === 1 && slug[0] === '404') || !!props.page ? {} : { notFound }),
         };
     } catch (e) {
         if ((e as { code: string }).code === 'ENOENT') {
@@ -71,7 +91,7 @@ export const getBlocksProps = async (
                     locale,
                     blocksPropsMap: {},
                     preview: !!context.preview,
-                } as IPageResponse,
+                } as IMetadataResponse,
                 revalidate: ssg.staticGeneration ? false : ssg.revalidate,
                 ...(slug && slug.length === 1 && slug[0] === '404' ? {} : { notFound: true }),
             };

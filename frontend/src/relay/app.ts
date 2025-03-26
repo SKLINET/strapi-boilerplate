@@ -1,7 +1,8 @@
 import { graphql } from 'relay-runtime';
 
-export const AppQuery = graphql`
-    query appQuery($pattern: String, $redirect: String, $status: PublicationStatus, $locale: I18NLocaleCode) {
+// For page data
+export const AppPageQuery = graphql`
+    query appPageQuery($pattern: String, $status: PublicationStatus, $locale: I18NLocaleCode) {
         page(locale: $locale, pattern: $pattern, status: $status) {
             documentId
             title
@@ -16,27 +17,27 @@ export const AppQuery = graphql`
                 title
                 url
                 seo {
-                    ...appSeoFragment @relay(mask: false)
+                    title
                 }
                 parent {
                     documentId
                     title
                     url
                     seo {
-                        ...appSeoFragment @relay(mask: false)
+                        title
                     }
                     parent {
                         documentId
                         title
                         url
                         seo {
-                            ...appSeoFragment @relay(mask: false)
+                            title
                         }
                     }
                 }
             }
             seo {
-                ...appSeoFragment @relay(mask: false)
+                title
             }
             sitemap {
                 ...appSitemapFragment @relay(mask: false)
@@ -53,7 +54,12 @@ export const AppQuery = graphql`
                 ...serverBlocksContent @relay(mask: false)
             }
         }
+    }
+`;
 
+// For additional CMS data
+export const AppDataQuery = graphql`
+    query appDataQuery($status: PublicationStatus, $locale: I18NLocaleCode) {
         webSetting(status: $status, locale: $locale) {
             ...webSettingFragment @relay(mask: false)
         }
@@ -62,16 +68,21 @@ export const AppQuery = graphql`
             ...appSystemResourceFragment @relay(mask: false)
         }
 
+        contactForm(status: $status, locale: $locale) {
+            ...contactFormFragment @relay(mask: false)
+        }
+    }
+`;
+
+// For redirecting
+export const AppRedirectQuery = graphql`
+    query appRedirectQuery($redirect: String, $status: PublicationStatus) {
         redirect: findRedirect(redirectFrom: $redirect, status: $status) {
             redirectFrom
             to: redirectTo
             statusCode
             updatedAt
             publishedAt
-        }
-
-        contactForm(status: $status, locale: $locale) {
-            ...contactFormFragment @relay(mask: false)
         }
     }
 `;

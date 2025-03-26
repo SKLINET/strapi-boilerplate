@@ -1,0 +1,28 @@
+.mainButton {
+    @apply w-10 h-10 fixed z-100 right-5 bottom-5 hover:scale-110 transition-transform ease-in-out duration-300;
+}
+
+.modal {
+    @apply fixed z-99 inset-0 flex items-stretch justify-center pt-4 px-4 pb-20 opacity-0 invisible transition-visibility-opacity ease-in-out duration-500;
+    @apply tablet:px-10 tablet:pt-10;
+    @apply tablet-landscape:px-16 tablet-landscape:pt-16;
+    @apply desktop:px-20 desktop:pt-20;
+
+    &.isOpen {
+        @apply opacity-100 visible;
+    }
+
+    .inner {
+        @apply w-full rounded-2xl relative z-2 shadow-lg overflow-y-auto px-8 py-4;
+        @apply tablet:px-10 tablet:py-6;
+        @apply desktop:px-12 desktop:py-8;
+
+        background-color: #edeef2;
+
+    }
+
+    .overlay {
+        @apply absolute inset-0;
+        background-color: #fafafa50;
+    }
+}

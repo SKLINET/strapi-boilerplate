@@ -1,3 +1,3 @@
-import { appQuery$data } from '../../relay/__generated__/appQuery.graphql';
+import { appDataQuery$data } from '../../relay/__generated__/appDataQuery.graphql';
 
-export type WebSettingsProps = appQuery$data['webSetting'];
+export type WebSettingsProps = appDataQuery$data['webSetting'];
