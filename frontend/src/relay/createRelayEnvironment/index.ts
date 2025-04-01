@@ -1,14 +1,13 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
-import { v4 as uuidv4 } from 'uuid';
 
 const getDataID = (fieldValue: any, typeName: string) => {
-    const { documentId, locale, publishedAt, updatedAt } = fieldValue;
+    const { documentId, id, locale, publishedAt, updatedAt } = fieldValue;
 
-    const id = documentId ? documentId : uuidv4();
+    const _id = documentId ? documentId : id ? id : undefined;
 
-    const parts = [typeName, id, locale, publishedAt, updatedAt].filter((part) => part);
+    const parts = [typeName, _id, locale, publishedAt, updatedAt].filter((part) => part);
     if (parts.length === 0) {
         return null;
     }
