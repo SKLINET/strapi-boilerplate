@@ -10,6 +10,7 @@ import { getSocialNetworksType } from '../../utils/strapi/getSocialNetworksType'
 import { redirect, permanentRedirect } from 'next/navigation';
 import { Poppins } from 'next/font/google';
 import { TopLoader } from '../components/base/TopLoader/TopLoader';
+import config from '../../../sklinet.config.json';
 
 import '../../styles/global.scss';
 
@@ -34,6 +35,15 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         params: await params,
         searchParams: await searchParams,
     };
+    const pathname =
+        '/' +
+        (context.params.slug || [])
+            .filter((e, i) => {
+                if (i === 0 && e === config.i18n.defaultLocale) return false;
+                return true;
+            })
+            .join('/');
+
     const data = await getMetadata(context);
 
     if (data?.redirect?.to) {
@@ -72,7 +82,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         robots: itemMeta?.seo?.metaRobots || page?.seo?.metaRobots || null,
         meta: itemMeta?.seo?.meta || page?.seo?.meta || globalSeo?.metaTags || [],
         social: itemMeta?.seo?.socialNetworks || page?.seo?.socialNetworks || null,
-        canonical: itemMeta?.seo?.canonicalURL || page?.seo?.canonicalURL || null,
+        canonical: itemMeta?.seo?.canonicalURL || page?.seo?.canonicalURL || pathname,
         viewPort: itemMeta?.seo?.metaViewport || page?.seo?.metaViewport || null,
         preventIndexing:
             itemMeta?.seo?.preventIndexing || globalSeo?.preventIndexing || page?.seo?.preventIndexing || false,
@@ -149,6 +159,9 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         appleWebApp: {
             title: metaData.siteName || '',
             statusBarStyle: 'default',
+        },
+        alternates: {
+            canonical: metaData.canonical,
         },
         other: customMetaData,
     };
