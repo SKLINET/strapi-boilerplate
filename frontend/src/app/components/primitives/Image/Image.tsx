@@ -67,6 +67,8 @@ export const serializeImageParams = (
     return str.join('&');
 };
 
+const MAX_IMAGE_WIDTH = 2560;
+
 const Image = ({
     staticImage,
     image,
@@ -87,7 +89,7 @@ const Image = ({
     style,
     ...props
 }: ImageProps): ReactElement => {
-    const maxWidth = image?.width ? image.width : width ? Number(width) : null;
+    const maxWidth = image?.width ? image.width : width ? Number(width) : MAX_IMAGE_WIDTH;
 
     // Next/image loader
     const myLoader = ({ src, width }: ImageLoaderProps) => {
@@ -98,11 +100,14 @@ const Image = ({
 
         // Cloudinary optimization
         if (src.includes('upload')) {
-            const srcParts = src.split('upload');
-            if (srcParts.length !== 2) return src;
-            const _w = maxWidth ? Math.min(width, maxWidth, 2560).toString() : 'auto';
+            const [prefix, suffix] = src.split('upload');
+            if (!suffix) return src;
 
-            return `${srcParts[0]}upload/f_auto/fl_lossy/w_${_w}/dpr_auto/q_${quality}${srcParts[1]}`;
+            const _w = Math.min(width, maxWidth, MAX_IMAGE_WIDTH).toString();
+
+            const transformations = ['f_auto', 'fl_lossy', 'c_limit', `w_${_w}`, 'dpr_auto', `q_${quality}`].join(',');
+
+            return `${prefix}upload/${transformations}${suffix}`;
         }
 
         return src;
