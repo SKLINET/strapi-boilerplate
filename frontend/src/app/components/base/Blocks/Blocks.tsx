@@ -1,6 +1,6 @@
-import { getBlockName } from '../../../../lib/blocks/getBlocksPropsPromises';
 import { IApp } from '../../../../types/base/app';
 import { BlocksPropsMap } from '../../../../types/base/block';
+import { getBlockType } from '../../../../utils/base/getBlockType/getBlockType';
 import { loadBlock } from '../../../blocks/client';
 
 interface BlocksProps {
@@ -13,7 +13,7 @@ interface BlocksProps {
 export const Blocks = async ({ blocksData, initialProps = {}, app, isTemplateBlock = false }: BlocksProps) => (
     <>
         {blocksData?.map(async (block, i) => {
-            const blockName = getBlockName(block)?.replace('ComponentBlock', '');
+            const blockName = getBlockType(block?.__typename)?.replace('ComponentBlock', '');
             if (!blockName) {
                 return null;
             }
