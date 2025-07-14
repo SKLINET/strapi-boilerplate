@@ -13,6 +13,7 @@ interface ButtonProps {
     openInNewTab?: boolean;
     submit?: boolean;
     loading?: boolean;
+    disabled?: boolean;
     className?: string;
 }
 
@@ -24,6 +25,7 @@ const Button = ({
     openInNewTab,
     submit,
     loading = false,
+    disabled = false,
     className,
 }: ButtonProps): ReactElement => {
     const allClassNames = clsx(styles.wrapper, loading && styles.loading, className);
@@ -38,6 +40,8 @@ const Button = ({
     );
     const _alt = alt || (typeof children === 'string' ? children : '');
 
+    const _disabled = disabled || loading;
+
     if (_alt.length === 0) {
         console.error('Chybějící alt u tlačítka');
     }
@@ -48,7 +52,7 @@ const Button = ({
                 type="button"
                 onClick={() => onClick()}
                 className={allClassNames}
-                disabled={loading}
+                disabled={_disabled}
                 aria-label={_alt}
             >
                 {_children}
@@ -66,7 +70,7 @@ const Button = ({
 
     if (submit) {
         return (
-            <button type="submit" className={allClassNames} disabled={loading} aria-label={_alt}>
+            <button type="submit" className={allClassNames} disabled={_disabled} aria-label={_alt}>
                 {_children}
             </button>
         );

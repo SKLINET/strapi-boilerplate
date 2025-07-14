@@ -9,6 +9,7 @@ import { WidthLimiter } from '../WidthLimiter/WidthLimiter';
 interface FadeInProps {
     tag?: 'section' | 'footer' | 'div';
     children: ReactNode;
+    backgroundEl?: ReactNode;
     className?: string;
     innerClassName?: string;
     contentClassName?: string;
@@ -19,6 +20,7 @@ interface FadeInProps {
 const FadeIn = ({
     tag = 'section',
     children,
+    backgroundEl,
     className,
     innerClassName,
     contentClassName,
@@ -54,6 +56,7 @@ const FadeIn = ({
             ref={ref}
             id={anchor || undefined}
         >
+            {backgroundEl}
             {renderInner(renderContent(children))}
         </Tag>
     );

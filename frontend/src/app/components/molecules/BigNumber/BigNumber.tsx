@@ -3,7 +3,7 @@
 import React, { ReactElement, useRef, useEffect } from 'react';
 import styles from './BigNumber.module.scss';
 import clsx from 'clsx';
-import { Paragraph } from '../../primitives/Paragraph/Paragraph';
+import { Text } from '../../primitives/Text/Text';
 import { useCountUp } from 'react-countup';
 import { countDecimals } from '../../../../utils/countDecimals';
 import { getFormattedPrice } from '../../../../utils/getFormattedPrice';
@@ -47,10 +47,10 @@ const BigNumber = ({
     return (
         <div className={clsx(styles.wrapper, className)}>
             <div className={styles.valueWrapper}>
-                <Paragraph className={clsx(styles.value, styles.fake)}>
+                <Text className={clsx(styles.value, styles.fake)}>
                     {getFormattedPrice(value)}
                     {additionLabel ? additionLabel : ''}
-                </Paragraph>
+                </Text>
                 <p className={clsx(styles.value, styles.real)}>
                     <span ref={realValueRef}>{getFormattedPrice(value * 0.8)}</span>
                     {additionLabel ? additionLabel : ''}

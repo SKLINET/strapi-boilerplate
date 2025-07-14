@@ -23,7 +23,8 @@ export function middleware(req: NextRequest) {
         (req.nextUrl.host.includes('localhost') && process.env.NODE_ENV !== 'production') ||
         (process.env.NODE_ENV === 'production' &&
             !process?.env?.BASE_PATH?.includes('symbio.agency') &&
-            !process?.env?.BASE_PATH?.includes('beneficiotest.cz'))
+            !process?.env?.BASE_PATH?.includes('beneficiotest.cz') &&
+            !process?.env?.BASE_PATH?.includes('sklinet.com'))
     ) {
         return NextResponse.next();
     }

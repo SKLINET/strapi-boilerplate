@@ -4,8 +4,8 @@ export function getBlockType(type: string | undefined): string {
             return 'ArticleDetailBlock';
         case 'ComponentBlockArticlesListBlock':
             return 'ArticlesListBlock';
-        case 'ComponentBlockContactFormBlock':
-            return 'ContactFormBlock';
+        case 'ComponentBlockFormBlock':
+            return 'FormBlock';
         case 'ComponentBlockTemplateBlock':
             return 'TemplateBlock';
         case 'ComponentBlockVideoBlock':

@@ -39,6 +39,10 @@
 
     .label {
         @apply grow pl-4 text-16 leading-1.5 text-black;
+
+        span {
+            @apply text-red;
+        }
     }
 
     .input {

@@ -3,7 +3,7 @@ import styles from './Breadcrumbs.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';
 import { articleDetailFragment$data } from '../../../../relay/__generated__/articleDetailFragment.graphql';
-import { Paragraph } from '../../primitives/Paragraph/Paragraph';
+import { Text } from '../../primitives/Text/Text';
 import { appPageQuery$data } from '../../../../relay/__generated__/appPageQuery.graphql';
 import { getPageUrl } from '../../../../utils/getPageUrl';
 import { Link } from '../../primitives/Link/Link';
@@ -50,12 +50,12 @@ const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: Bre
 
             const label = seo?.title || title;
 
-            return <Paragraph className={classNames}>{label}</Paragraph>;
+            return <Text className={classNames}>{label}</Text>;
         }
 
         const label = page.title || '';
 
-        return <Paragraph className={classNames}>{label}</Paragraph>;
+        return <Text className={classNames}>{label}</Text>;
     };
 
     return (

@@ -1,8 +1,17 @@
 .wrapper {
+    //
+}
+
+.label {
+    @apply text-14 text-black mb-1;
+
+    span {
+        @apply text-red;
+    }
 }
 
 .input {
-    @apply w-full bg-transparent border border-black border-opacity-40 rounded-none px-6 py-3 outline-none rounded-xl text-16 leading-1.5 text-black;
+    @apply w-full bg-transparent border border-black border-opacity-40 px-6 py-3 outline-none rounded-xl text-16 leading-1.5 text-black;
 
     &::placeholder {
         @apply text-black text-opacity-60;

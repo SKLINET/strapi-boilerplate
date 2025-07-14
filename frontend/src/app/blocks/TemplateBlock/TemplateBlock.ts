@@ -6,10 +6,11 @@ graphql`
     fragment TemplateBlock_content on ComponentBlockTemplateBlock {
         id
         template {
+            documentId
             content {
                 __typename
                 ...ArticlesListBlock_content @relay(mask: false)
-                ...ContactFormBlock_content @relay(mask: false)
+                ...FormBlock_content @relay(mask: false)
                 ...VideoBlock_content @relay(mask: false)
             }
         }

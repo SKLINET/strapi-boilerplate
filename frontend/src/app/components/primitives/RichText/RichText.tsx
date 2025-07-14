@@ -5,7 +5,7 @@ import parse from 'html-react-parser';
 import { DOMNode, domToReact, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import { v4 } from 'uuid';
 import { Heading } from '../Heading/Heading';
-import { Paragraph } from '../Paragraph/Paragraph';
+import { Text as _Text } from '../Text/Text';
 import { Link } from '../Link/Link';
 import { Image } from '../Image/Image';
 import { List } from '../List/List';
@@ -122,7 +122,7 @@ const parserOptions = new (class implements HTMLReactParserOptions {
                             return <InnerHTML html={scriptCmp} />;
                         }
 
-                        return <Paragraph key={v4()}>{children}</Paragraph>;
+                        return <_Text key={v4()}>{children}</_Text>;
                     } else {
                         return <Fragment key={v4()} />;
                     }

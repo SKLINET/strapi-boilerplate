@@ -15,7 +15,7 @@
     @apply w-full h-full mx-auto grid;
 
     // Grid max width
-    @apply desktop:max-w-360;
+    // @apply desktop:max-w-360;
 
     grid-gap: 0 var(--grid-gap);
     grid-template-columns: repeat(auto-fill, var(--grid-column));
@@ -23,6 +23,5 @@
 }
 
 .column {
-    @apply w-full border-x border-red border-opacity-30;
-    @apply tablet:border-0 tablet:bg-red tablet:bg-opacity-10;
+    @apply w-full bg-red bg-opacity-30;
 }

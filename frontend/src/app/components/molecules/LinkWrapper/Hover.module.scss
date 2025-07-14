@@ -1,0 +1,19 @@
+@mixin hover {
+    @media (pointer: fine) {
+        & > a:hover {
+            & + * {
+                @content;
+            }
+        }
+    }
+}
+
+@mixin activeHover {
+    @media (pointer: fine) {
+        & > a:hover:active {
+            & + * {
+                @content;
+            }
+        }
+    }
+}

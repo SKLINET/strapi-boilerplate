@@ -1,4 +1,5 @@
 import type { Core } from "@strapi/strapi";
+import slugify from "slugify";
 
 export default {
   /**
@@ -8,6 +9,79 @@ export default {
    * This gives you an opportunity to extend code.
    */
   register({ strapi }: { strapi: Core.Strapi }) {
+
+
+    {/* Auto change publish date */}
+
+    strapi.documents.use(async (context, next) => {
+      if (context.uid !== "api::article.article") {
+        return next();
+      }
+
+      if (['create', 'update'].includes(context.action)) {
+        (context.params as any).data.publishDate = new Date().toISOString();
+      }
+
+      return next();
+    });
+
+    {/* Auto generate slug */}
+
+    const modelsWithSlug = {
+      'api::article.article': 'title',
+    };
+    const slugifyOptions = {
+      lower: true,
+      remove: /[*+~,.()'"!:@#?]/g,
+    }
+    strapi.documents.use(async (context, next) => {
+      const slugAlreadyPresent = async (slug: string, context: any) => {
+        const elements = await strapi.documents(context.uid).findMany({
+          locale: context.params.locale,
+          filters: {
+            slug: {
+              $eq: slug
+            }
+          }
+        });
+
+        const filteredElements = elements.filter((element: any) => {
+          return element.documentId != context.params.documentId
+        })
+        return filteredElements.length > 0;
+      };
+
+      if (!Object.keys(modelsWithSlug).includes(context.uid)) {
+        return next();
+      }
+
+      if (['create', 'update'].includes(context.action)) {
+        const data = (context?.params as any)?.data;
+        // if (data?.slug) {
+        //   return next();
+        // }
+        const field = modelsWithSlug[context.uid];
+        const initialSlug = slugify(data?.[field], slugifyOptions);
+
+        let i = 1;
+        let generatedSlug = initialSlug;
+        let present = await slugAlreadyPresent(generatedSlug, context)
+
+        while (present) {
+          generatedSlug = slugify(`${initialSlug} ${i}`, slugifyOptions);
+          present = await slugAlreadyPresent(generatedSlug, context);
+          i++;
+        }
+
+        (context.params as any).data.slug = generatedSlug;
+      }
+
+      return next();
+    });
+
+
+    {/* Custom queries */}
+
     const extensionService = strapi.plugin("graphql").service("extension");
 
     extensionService.use(({ nexus }) => {

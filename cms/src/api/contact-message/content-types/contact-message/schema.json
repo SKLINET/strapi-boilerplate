@@ -11,20 +11,28 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
+    "optionalTitle": {
       "type": "string"
     },
-    "company": {
+    "date": {
+      "type": "datetime"
+    },
+    "formData": {
+      "type": "customField",
+      "customField": "plugin::form-builder.form-message-view"
+    },
+    "urlFrom": {
       "type": "string"
     },
-    "phone": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
-    },
-    "message": {
-      "type": "text"
+    "files": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }
