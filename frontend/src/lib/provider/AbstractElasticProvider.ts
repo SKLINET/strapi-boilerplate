@@ -831,7 +831,7 @@ export default abstract class AbstractElasticProvider<
      */
     getIndex(locale?: string, prod?: boolean | undefined, version?: number): string {
         const ver = version || this.getIndexVersion();
-        const prefix = process.env.NEXT_PUBLIC_BASE_PATH === 'https://www.mariuspedersen.cz' ? 'p' : 's';
+        const prefix = process.env.NEXT_PUBLIC_BASE_PATH === 'https://www.<project_name>.cz' ? 'p' : 's';
         const suffix = typeof prod !== 'undefined' && prod ? '_prod' : '';
         if (this.isLocalizable()) {
             return `mp_${prefix}_` + this.getApiKey() + '_' + locale + '_v' + ver + suffix;
