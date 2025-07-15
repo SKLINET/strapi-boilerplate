@@ -3,7 +3,7 @@ import styles from './Checkbox.module.scss';
 import clsx from 'clsx';
 import { UseFormRegister } from 'react-hook-form';
 import { Icon } from '../Icon/Icon';
-import { Paragraph } from '../Paragraph/Paragraph';
+import { Text } from '../Text/Text';
 import { RichText } from '../RichText/RichText';
 
 export interface CheckboxProps {
@@ -13,6 +13,7 @@ export interface CheckboxProps {
     error?: string | undefined;
     label?: string;
     disabled?: boolean;
+    required?: boolean;
     className?: string;
 }
 
@@ -23,17 +24,18 @@ const Checkbox = ({
     error,
     label,
     disabled = false,
+    required,
     className,
 }: CheckboxProps): ReactElement => {
     return (
         <div className={clsx(styles.wrapper, className)}>
             <label className={clsx(styles.content, checked && styles.checked, disabled && styles.disabled)}>
-                <div className={styles.column}>
+                <span className={styles.column}>
                     <Icon name="tick" className={styles.icon} />
-                </div>
-                <Paragraph className={styles.label}>
-                    <RichText content={label || ''} />
-                </Paragraph>
+                </span>
+                <Text tag="span" className={styles.label}>
+                    <RichText content={(label || '') + (required ? ` <span>*</span>` : '')} />
+                </Text>
                 <input
                     type="checkbox"
                     {...register(name)}
@@ -42,7 +44,7 @@ const Checkbox = ({
                     className={styles.input}
                 />
             </label>
-            {error && <Paragraph className={styles.error}>{error}</Paragraph>}
+            {error && <Text className={styles.error}>{error}</Text>}
         </div>
     );
 };

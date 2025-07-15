@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_block_form_blocks",
+  "info": {
+    "displayName": "Formulář",
+    "icon": "envelop"
+  },
+  "options": {},
+  "attributes": {
+    "form": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::form-builder.built-form"
+    },
+    "sendEmail": {
+      "type": "component",
+      "component": "complementary.send-email",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

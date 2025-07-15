@@ -13,7 +13,7 @@ interface DataModalProps {
 }
 
 const DataModal = ({
-    app: { webSetting, page, systemResources, contactForm, item, blocksPropsMap, ...rest },
+    app: { webSetting, page, systemResources, item, blocksPropsMap, ...rest },
 }: DataModalProps): ReactElement => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +25,6 @@ const DataModal = ({
                     <Category title="⚙️ Nastavení webu" data={webSetting || {}} />
                     <Category title="📝 Stránka" data={page || {}} />
                     <Category title="🧩 Všeobecné texty" data={systemResources || {}} />
-                    <Category title="📩 Kontaktní formulář" data={contactForm || {}} />
                     <Category title="📝 Detail obsahu" data={item || {}} />
                     <Category title="📦 Data bloků" data={blocksPropsMap || {}} />
                     <Category title="🧹 Ostatní" data={rest || {}} />

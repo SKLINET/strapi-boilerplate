@@ -22,24 +22,29 @@ export default ({ env }) => {
     preview: {
       enabled: true,
       config: {
-        allowedOrigins: [clientUrl],
-        async handler(uid, { documentId, locale, status }) {
-          const document = await strapi
-            .documents(uid)
-            .findOne({ documentId, locale, status });
+         allowedOrigins: [clientUrl],
+         async handler(uid, { documentId, locale, status }) {
+            switch (uid) {
+               case 'api::article.article':
+               case 'api::page.page': {
+                  const document = await strapi.documents(uid).findOne({ documentId, locale, status });
 
-          // Use Next.js draft mode
-          const urlSearchParams = new URLSearchParams({
-            type: uid,
-            slug: document?.slug || document?.url,
-            locale: locale,
-            secret: previewSecret,
-            status,
-          });
+                  // Use Next.js draft mode
+                  const urlSearchParams = new URLSearchParams({
+                     type: uid,
+                     slug: document?.slug || document?.url,
+                     locale: locale,
+                     secret: previewSecret,
+                     status,
+                  });
 
-          return `${clientUrl}/api/preview?${urlSearchParams}`;
-        },
+                  return `${clientUrl}/api/preview?${urlSearchParams}`;
+               }
+               default:
+                  return null;
+            }
+         },
       },
-    },
+   },
   };
 };

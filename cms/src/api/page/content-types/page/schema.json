@@ -46,38 +46,38 @@
     },
     "seo": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.seo"
+      "component": "shared.seo",
+      "repeatable": false
     },
     "sitemap": {
       "type": "component",
-      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
       },
-      "component": "shared.sitemap"
+      "component": "shared.sitemap",
+      "repeatable": false
     },
     "blocks": {
       "type": "dynamiczone",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
       "components": [
         "block.template-block",
         "block.article-detail-block",
         "block.articles-list-block",
         "block.video-block",
-        "block.contact-form-block"
-      ],
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
+        "block.form-block"
+      ]
     }
   }
 }

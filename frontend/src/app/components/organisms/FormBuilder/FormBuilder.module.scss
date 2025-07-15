@@ -1,0 +1,46 @@
+@import '../../../../styles/mixins/responsive.scss';
+@import '../../../../styles/functions/layout.scss';
+
+.wrapper {
+    @apply flex flex-col;
+
+    & > * {
+        @apply mt-5;
+
+        /*
+        &:not(.smallWidth):not(.productsSelection) {
+            @apply mt-8;
+        }
+        */
+
+        &:first-child {
+            margin-top: 0 !important;
+        }
+    }
+
+    &.allowSmallWidth {
+        & > * {
+            &.smallWidth:not(.submit) {
+                @apply w-full;
+            }
+        }
+    }
+}
+
+/*
+.title {
+    //
+}
+
+.message {
+    //
+}
+
+.divider {
+    @apply border border-brand-10;
+}
+
+.submit {
+    //
+}
+*/

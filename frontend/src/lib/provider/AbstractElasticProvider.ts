@@ -57,6 +57,7 @@ export default abstract class AbstractElasticProvider<
                 : {
                       index: this.getIndex(locale, !preview),
                       body: Object.assign({}, options.body, { size: 1 }),
+                      _source: options._source || this.getSource(),
                   };
 
         const result = await getElastic().search(variables);
@@ -225,14 +226,21 @@ export default abstract class AbstractElasticProvider<
     async findOneForIndex(id: string, locale?: string, preview = false): Promise<TItem | null> {
         const it = await this.find(
             {
-                filter: { vuid: { eq: id } },
+                filter: { documentId: { eq: id } },
                 limit: 1,
                 locale: String(locale),
                 status: getPublicationState(preview),
             } as any,
             preview,
+            true,
         );
-        return Array.isArray(it?.data) && it?.data?.length > 0 ? it?.data[0] : null;
+        const item =
+            Array.isArray(it?.data) && it?.data?.length > 0
+                ? it?.data?.[0]
+                : Array.isArray(it) && it?.length > 0
+                  ? it?.[0]
+                  : null;
+        return item;
     }
 
     /**
@@ -316,10 +324,7 @@ export default abstract class AbstractElasticProvider<
 
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                const { data } = await this.find(
-                    { ...options, status: getPublicationState(!prod), limit: Infinity, locale } as any,
-                    !prod,
-                );
+                const { data } = await this.find({ ...options, limit: Infinity, locale } as any, !prod, true);
 
                 Logger.info('Found', data.length, 'items');
 
@@ -329,15 +334,15 @@ export default abstract class AbstractElasticProvider<
 
                 for (const item of data) {
                     if (item) {
-                        Logger.info('Indexing item:', item.vuid);
+                        Logger.info('Indexing item:', item.documentId);
                         await getElastic().index({
                             index: this.getIndex(locale, prod),
                             document: item,
                             refresh: true,
-                            id: item.vuid as Id,
+                            id: item.documentId as Id,
                         });
                         result.push({
-                            id: item.vuid as Id,
+                            id: item.documentId as Id,
                             type: this.getApiKey(),
                             locale,
                             index: this.getIndex(locale, prod),
@@ -351,7 +356,7 @@ export default abstract class AbstractElasticProvider<
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const { data } = await this.find({ ...options, limit: Infinity }, !prod);
+            const { data } = await this.find({ ...options, limit: Infinity }, !prod, true);
 
             Logger.info('Found', data.length, 'items');
 
@@ -365,10 +370,10 @@ export default abstract class AbstractElasticProvider<
                         index: this.getIndex(undefined, prod),
                         document: { ...item },
                         refresh: true,
-                        id: item.vuid as Id,
+                        id: item.documentId as Id,
                     });
                     result.push({
-                        id: item.vuid as Id,
+                        id: item.documentId as Id,
                         type: this.getApiKey(),
                         index: this.getIndex(undefined, prod),
                     });
@@ -389,7 +394,7 @@ export default abstract class AbstractElasticProvider<
                 Logger.log(`Getting data for ${this.getIndex(locale, prod)}`);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                const { data } = await this.find({ locale, limit: Infinity }, !prod);
+                const { data } = await this.find({ locale, limit: Infinity }, !prod, true);
                 const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
                 const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, locale, !prod);
@@ -409,7 +414,7 @@ export default abstract class AbstractElasticProvider<
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const { data } = await this.find({ limit: Infinity }, !prod);
+            const { data } = await this.find({ limit: Infinity }, !prod, true);
 
             const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
@@ -479,7 +484,7 @@ export default abstract class AbstractElasticProvider<
             await this.indexAll(false, prod);
             Logger.log('Done');
         } catch (e) {
-            console.log('E', e);
+            console.log('E', (e as any).meta.body.error);
             Logger.error((e as { meta: { body: { error: string } } }).meta.body.error);
         }
     }
@@ -546,6 +551,13 @@ export default abstract class AbstractElasticProvider<
                             tokenizer: 'standard',
                             char_filter: ['html_strip'],
                             filter: ['asciifolding', 'czechStop', 'czechStemmer', 'lowercase', 'shingle'],
+                        },
+                    },
+                    normalizer: {
+                        default_sort: {
+                            type: 'custom',
+                            char_filter: [],
+                            filter: ['lowercase', 'asciifolding'],
                         },
                     },
                 },
@@ -686,7 +698,7 @@ export default abstract class AbstractElasticProvider<
                     },
                     {
                         meta_tags: {
-                            path_match: '_seoMetaTags.attributes.content',
+                            path_match: '_seoMetaTags.content',
                             mapping: {
                                 type: 'text',
                             },
@@ -694,17 +706,30 @@ export default abstract class AbstractElasticProvider<
                     },
                     {
                         child_meta_tags: {
-                            path_match: '*._seoMetaTags.attributes.content',
+                            path_match: '*._seoMetaTags.content',
                             mapping: {
                                 type: 'text',
                             },
                         },
                     },
+                    // {
+                    //     amount: {
+                    //         path_match: '*.amount',
+                    //         mapping: {
+                    //             type: 'float',
+                    //         },
+                    //     },
+                    // },
                     {
-                        amount: {
-                            path_match: '*.amount',
+                        bnValue: {
+                            path_match: '*.bnValue',
                             mapping: {
                                 type: 'float',
+                                fields: {
+                                    asKeyword: {
+                                        type: 'keyword',
+                                    },
+                                },
                             },
                         },
                     },
@@ -806,11 +831,12 @@ export default abstract class AbstractElasticProvider<
      */
     getIndex(locale?: string, prod?: boolean | undefined, version?: number): string {
         const ver = version || this.getIndexVersion();
+        const prefix = process.env.NEXT_PUBLIC_BASE_PATH === 'https://www.<project_name>.cz' ? 'p' : 's';
         const suffix = typeof prod !== 'undefined' && prod ? '_prod' : '';
         if (this.isLocalizable()) {
-            return this.getApiKey() + '_' + locale + '_v' + ver + suffix;
+            return `mp_${prefix}_` + this.getApiKey() + '_' + locale + '_v' + ver + suffix;
         } else {
-            return this.getApiKey() + '_v' + ver + suffix;
+            return `mp_${prefix}_` + this.getApiKey() + '_v' + ver + suffix;
         }
     }
 
@@ -841,13 +867,10 @@ export default abstract class AbstractElasticProvider<
                     max_chars: 10,
                 },
                 fields: {
-                    // sort: {
-                    //     type: 'icu_collation_keyword',
-                    //     index: false,
-                    //     language: (this.isLocalizable() && locale) || 'cs',
-                    //     variant: '@collation=standard',
-                    //     strength: 'primary',
-                    // },
+                    sort: {
+                        type: 'keyword',
+                        normalizer: 'default_sort',
+                    },
                     suggest: {
                         type: 'completion',
                         analyzer: locale === 'en' ? 'english' : 'czech',
@@ -857,6 +880,12 @@ export default abstract class AbstractElasticProvider<
                         analyzer: locale === 'en' ? 'english' : 'czech',
                     },
                 },
+            },
+            publishedAt: {
+                type: 'date',
+            },
+            priority: {
+                type: 'integer',
             },
         };
     }

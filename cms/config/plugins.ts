@@ -17,14 +17,31 @@ export default ({ env }) => ({
   "content-tags": {
     enabled: true,
   },
+  'form-builder': {
+    enabled: true,
+    config: {
+      language: "cs",
+      fields: [
+        "textinput",
+        "textarea",
+        "email",
+        "phone",
+        "checkbox",
+        "submit"
+      ],
+      allowConditions: false,
+      allowFullWidth: false,
+      allowUseOnly: false,
+    },
+  },
   graphql: {
     config: {
       apolloServer: {
         introspection: true,
       },
-      defaultLimit: 100,
+      defaultLimit: 200,
       maxLimit: -1,
-      playgroundAlways: true,
+      landingPage: true,
     },
   },
   tinymce: {
@@ -35,7 +52,7 @@ export default ({ env }) => ({
         tinymceSrc: "/tinymce/tinymce.min.js",
         editorConfig: {
           license_key: "gpl",
-          language: "sk",
+          language: "cs",
           inline_styles: true,
           height: 500,
           menubar: false,

@@ -34,6 +34,10 @@ export interface AdminApiToken extends Struct.CollectionTypeSchema {
         minLength: 1;
       }> &
       Schema.Attribute.DefaultTo<''>;
+    encryptedKey: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        minLength: 1;
+      }>;
     expiresAt: Schema.Attribute.DateTime;
     lastUsedAt: Schema.Attribute.DateTime;
     lifespan: Schema.Attribute.BigInteger;
@@ -491,64 +495,6 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiContactFormContactForm extends Struct.SingleTypeSchema {
-  collectionName: 'contact_forms';
-  info: {
-    displayName: '\uD83D\uDCE9 Kontaktn\u00ED formul\u00E1\u0159';
-    pluralName: 'contact-forms';
-    singularName: 'contact-form';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    checkboxLabel: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    errorMessage: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::contact-form.contact-form'
-    >;
-    publishedAt: Schema.Attribute.DateTime;
-    sendEmail: Schema.Attribute.Component<'complementary.send-email', false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    successMessage: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiContactMessageContactMessage
   extends Struct.CollectionTypeSchema {
   collectionName: 'contact_messages';
@@ -561,24 +507,28 @@ export interface ApiContactMessageContactMessage
     draftAndPublish: false;
   };
   attributes: {
-    company: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    email: Schema.Attribute.String;
+    date: Schema.Attribute.DateTime;
+    files: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    formData: Schema.Attribute.JSON &
+      Schema.Attribute.CustomField<'plugin::form-builder.form-message-view'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::contact-message.contact-message'
     > &
       Schema.Attribute.Private;
-    message: Schema.Attribute.Text;
-    name: Schema.Attribute.String;
-    phone: Schema.Attribute.String;
+    optionalTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    urlFrom: Schema.Attribute.String;
   };
 }
 
@@ -708,7 +658,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'block.article-detail-block',
         'block.articles-list-block',
         'block.video-block',
-        'block.contact-form-block',
+        'block.form-block',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -856,11 +806,7 @@ export interface ApiTemplateTemplate extends Struct.CollectionTypeSchema {
   };
   attributes: {
     content: Schema.Attribute.DynamicZone<
-      [
-        'block.articles-list-block',
-        'block.video-block',
-        'block.contact-form-block',
-      ]
+      ['block.articles-list-block', 'block.video-block', 'block.form-block']
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1023,6 +969,69 @@ export interface PluginContentReleasesReleaseAction
     >;
     type: Schema.Attribute.Enumeration<['publish', 'unpublish']> &
       Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface PluginFormBuilderBuiltForm
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'built-forms';
+  info: {
+    displayName: '\uD83D\uDCCB Formul\u00E1\u0159e';
+    pluralName: 'built-forms';
+    singularName: 'built-form';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: true;
+    };
+    'content-type-builder': {
+      visible: true;
+    };
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    errorMessage: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::form-builder.built-form'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    successMessage: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1527,7 +1536,6 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::article-category.article-category': ApiArticleCategoryArticleCategory;
       'api::article.article': ApiArticleArticle;
-      'api::contact-form.contact-form': ApiContactFormContactForm;
       'api::contact-message.contact-message': ApiContactMessageContactMessage;
       'api::icon.icon': ApiIconIcon;
       'api::menu.menu': ApiMenuMenu;
@@ -1539,6 +1547,7 @@ declare module '@strapi/strapi' {
       'api::web-setting.web-setting': ApiWebSettingWebSetting;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::form-builder.built-form': PluginFormBuilderBuiltForm;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::publisher.action': PluginPublisherAction;
       'plugin::record-locking.open-entity': PluginRecordLockingOpenEntity;

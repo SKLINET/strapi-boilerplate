@@ -2,10 +2,11 @@ import Provider from './Provider';
 import { Environment, GraphQLTaggedNode } from 'relay-runtime';
 import { createRelayEnvironment } from '../../relay/createRelayEnvironment';
 import { OperationType } from 'relay-runtime/lib/util/RelayRuntimeTypes';
-import { fetchQuery } from 'relay-runtime';
+import { fetchQuery, commitMutation } from 'relay-runtime';
 import { sleep } from '../../utils/sleep';
 import config from '../../../sklinet.config.json';
 import { STRAPI_MAX_LIMIT } from '../../constants';
+import getPublicationState from '../../utils/base/getPublicationState';
 
 export type StrapiRecord = {
     documentId: string;
@@ -29,17 +30,36 @@ export default abstract class AbstractStrapiProvider<
         production: createRelayEnvironment({}, '', false),
     };
 
-    protected node: GraphQLTaggedNode;
+    protected node: GraphQLTaggedNode | undefined;
 
     protected findNode: GraphQLTaggedNode;
 
-    public constructor(node: GraphQLTaggedNode, findNode: GraphQLTaggedNode) {
+    protected createNode: GraphQLTaggedNode | undefined;
+
+    protected updateNode: GraphQLTaggedNode | undefined;
+
+    protected indexNode: GraphQLTaggedNode | undefined;
+
+    public constructor(
+        node: GraphQLTaggedNode | undefined,
+        findNode: GraphQLTaggedNode,
+        createNode?: GraphQLTaggedNode,
+        updateNode?: GraphQLTaggedNode,
+        indexNode?: GraphQLTaggedNode,
+    ) {
         this.node = node;
         this.findNode = findNode;
+        this.createNode = createNode;
+        this.updateNode = updateNode;
+        this.indexNode = indexNode;
     }
 
     protected getEnvironment(preview = false): Environment {
-        return this.environment[preview ? 'preview' : 'production'];
+        if (preview) {
+            return createRelayEnvironment({}, '', true, true);
+        } else {
+            return createRelayEnvironment({}, '', false);
+        }
     }
 
     public isLocalizable(): boolean {
@@ -64,6 +84,8 @@ export default abstract class AbstractStrapiProvider<
         locale?: string,
         preview = false,
     ): Promise<TItem | null> {
+        if (!this.node) return null;
+
         let variables: TOne['variables'] = {};
         if (typeof options !== 'string' && options.documentId) {
             variables = options;
@@ -72,7 +94,7 @@ export default abstract class AbstractStrapiProvider<
             variables =
                 typeof options === 'string'
                     ? {
-                          filters: {
+                          filter: {
                               documentId: { eq: options },
                               ...this.getFilterParams(),
                           },
@@ -82,8 +104,8 @@ export default abstract class AbstractStrapiProvider<
                           ...options,
                           limit: 1,
                           offset: 0,
-                          filters: options.filters
-                              ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+                          filter: options.filter
+                              ? { ...this.getFilterParams(options?.status || ''), ...options.filter }
                               : this.getFilterParams(options?.status || ''),
                           locale,
                       };
@@ -109,21 +131,26 @@ export default abstract class AbstractStrapiProvider<
     async find(
         options: Omit<TFind['variables'], 'locale'> & { locale?: string },
         preview = false,
+        index = false,
     ): Promise<FindResponse<TItems['data']>> {
         const variables = {
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
-            filters: options.filters
-                ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
+            filter: options.filter
+                ? { ...this.getFilterParams(options?.status || ''), ...options.filter }
                 : this.getFilterParams(options?.status || ''),
+            status: getPublicationState(preview),
         };
+
+        const node: GraphQLTaggedNode = index && this.indexNode ? this.indexNode : this.findNode;
 
         if (this.isLocalizable()) {
             variables.locale = options.locale;
         }
+        const environment = index ? this.getEnvironment(true) : this.getEnvironment(preview);
 
-        const result = await fetchQuery<TFind>(this.getEnvironment(preview), this.findNode, variables)
+        const result = await fetchQuery<TFind>(environment, node, variables)
             .toPromise()
             .then((d: any) => {
                 // When response do not have meta information -> articles query
@@ -135,23 +162,23 @@ export default abstract class AbstractStrapiProvider<
                 }
 
                 // When response have meta information -> articles_connection query
-                const { nodes, pageInfo } = d.items;
+                const { nodes, pageInfo } = d.items || {};
 
                 return {
                     items: nodes,
-                    meta: { pagination: { total: pageInfo.total } },
+                    meta: { pagination: { total: pageInfo?.total || 0 } },
                 };
             });
 
+        const count = result?.meta?.pagination?.total || 0;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const data: Mutable<TItems['data']> = ([...result.items] as Mutable<TItems['data']>) || [];
-        const count = result?.meta?.pagination?.total || 0;
+        const data: Mutable<TItems['data']> = ([...(result?.items || [])] as Mutable<TItems['data']>) || [];
 
         if (options.limit > STRAPI_MAX_LIMIT) {
             while (options.limit && data.length < count && result.items.length === STRAPI_MAX_LIMIT) {
                 variables.start = data.length;
-                const result = await fetchQuery<TFind>(this.getEnvironment(preview), this.findNode, variables)
+                const result = await fetchQuery<TFind>(environment, this.findNode, variables)
                     .toPromise()
                     .then((d: any) => {
                         // When response do not have meta information -> articles query
@@ -163,11 +190,11 @@ export default abstract class AbstractStrapiProvider<
                         }
 
                         // When response have meta information -> articles_connection query
-                        const { nodes, pageInfo } = d;
+                        const { nodes, pageInfo } = d.items;
 
                         return {
                             items: nodes,
-                            meta: { pagination: { total: pageInfo.total } },
+                            meta: { pagination: { total: pageInfo?.total || 0 } },
                         };
                     });
                 if (Array.isArray(data)) {
@@ -179,35 +206,69 @@ export default abstract class AbstractStrapiProvider<
 
         return {
             count,
-            data,
+            data: (await this.transformResults(data, options.locale)) as unknown as TItems['data'],
         };
+    }
+
+    async transformResults(items: TItems['data'], locale?: string): Promise<TItems> {
+        const _items: any[] = [];
+
+        // Conver built-forms into string (stringify)
+        items.forEach((e: any) => {
+            if (e?.__typename === 'Establishment') {
+                const newItem: Record<string, any> = { ...e };
+
+                if (Array.isArray(e?.requestForms)) {
+                    newItem.requestForms = [];
+
+                    e.requestForms.forEach((k: any) => {
+                        newItem.requestForms.push({
+                            ...k,
+                            form: JSON.stringify(k.form),
+                        });
+                    });
+                }
+
+                if (e?.orderForm?.form) {
+                    newItem.orderForm = {
+                        ...e.orderForm,
+                        form: JSON.stringify(e.orderForm.form),
+                    };
+                }
+
+                _items.push(newItem);
+            } else {
+                _items.push(e);
+            }
+        });
+
+        return _items.map((item) => ({
+            ...item,
+            ...(this.cleanData(item?.attributes || {}) || {}),
+            cmsTypeId: this.getId(),
+        })) as unknown as TItems;
     }
 
     cleanData(data: Record<string, any>) {
         const result: Record<string, any> = {};
         const keys = data ? Object.keys(data) : [];
+
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             const field = data[key];
+
             if (typeof field === 'string' || typeof field === 'number' || typeof field === 'boolean') {
                 result[key] = field;
             } else {
-                if (Array.isArray(field?.data)) {
-                    const items = [];
-                    for (let j = 0; j < field?.data?.length; j++) {
-                        const it = this.cleanData({ id: field.data[j].id, ...field.data[j] });
-                        items.push(it);
-                    }
-                    result[key] = items;
+                if (field) {
+                    result[key] = this.cleanData({ id: field.documentId, ...field });
                 } else if (Array.isArray(field)) {
                     const items = [];
                     for (let j = 0; j < field?.length; j++) {
-                        const it = this.cleanData(field[j]);
+                        const it = this.cleanData({ id: field[j].documentId, ...field[j] });
                         items.push(it);
                     }
                     result[key] = items;
-                } else if (field?.data) {
-                    result[key] = this.cleanData({ id: field.data.id, ...field.data });
                 }
             }
         }
@@ -251,5 +312,51 @@ export default abstract class AbstractStrapiProvider<
             }
             return null;
         }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    async create<TItem extends BaseRecord = TFind['response']['items'][number]>(
+        variables: any,
+    ): Promise<Record<string, any>> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve, reject) => {
+            await commitMutation<any>(this.getEnvironment(false), {
+                mutation: this.createNode as GraphQLTaggedNode,
+                variables,
+                onCompleted(response) {
+                    if (!response?.item) {
+                        return reject({ success: false });
+                    }
+                    return resolve({ success: true, data: response?.item });
+                },
+                onError(error) {
+                    return reject({ success: false, error });
+                },
+            });
+        });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    async update<TItem extends BaseRecord = TFind['response']['items'][number]>(
+        variables: any,
+    ): Promise<Record<string, any>> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve, reject) => {
+            await commitMutation<any>(this.getEnvironment(false), {
+                mutation: this.updateNode as GraphQLTaggedNode,
+                variables,
+                onCompleted(response) {
+                    if (!response) {
+                        return reject({ success: false });
+                    }
+                    return resolve({ success: true, data: response });
+                },
+                onError(error) {
+                    return reject({ success: false, error });
+                },
+            });
+        });
     }
 }

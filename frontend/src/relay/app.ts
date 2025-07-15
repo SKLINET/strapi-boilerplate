@@ -67,10 +67,6 @@ export const AppDataQuery = graphql`
         systemResources(status: $status, locale: $locale) {
             ...appSystemResourceFragment @relay(mask: false)
         }
-
-        contactForm(status: $status, locale: $locale) {
-            ...contactFormFragment @relay(mask: false)
-        }
     }
 `;
 
@@ -242,5 +238,15 @@ graphql`
         emailFrom
         emailTo
         subject
+    }
+`;
+
+graphql`
+    fragment appBuiltFormFragment on FormBuilderBuiltForm {
+        documentId
+        title
+        data
+        successMessage
+        errorMessage
     }
 `;

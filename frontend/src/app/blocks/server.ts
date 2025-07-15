@@ -2,7 +2,7 @@ import { graphql } from 'relay-runtime';
 
 import ArticleDetailBlock from './ArticleDetailBlock/ArticleDetailBlock';
 import ArticlesListBlock from './ArticlesListBlock/ArticlesListBlock';
-import ContactFormBlock from './ContactFormBlock/ContactFormBlock';
+import FormBlock from './FormBlock/FormBlock';
 import TemplateBlock from './TemplateBlock/TemplateBlock';
 import VideoBlock from './VideoBlock/VideoBlock';
 
@@ -11,7 +11,7 @@ graphql`
         __typename
         ...ArticleDetailBlock_content @relay(mask: false)
         ...ArticlesListBlock_content @relay(mask: false)
-        ...ContactFormBlock_content @relay(mask: false)
+        ...FormBlock_content @relay(mask: false)
         ...TemplateBlock_content @relay(mask: false)
         ...VideoBlock_content @relay(mask: false)
     }
@@ -20,7 +20,7 @@ graphql`
 const blocks = {
     ArticleDetailBlock,
     ArticlesListBlock,
-    ContactFormBlock,
+    FormBlock,
     TemplateBlock,
     VideoBlock,
 };

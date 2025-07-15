@@ -17,6 +17,68 @@ export const CALENDAR_FORMATS: Record<string, unknown> = {
     },
 };
 
+export const MONTHS: Record<string, unknown> = {
+    cs: [
+        'ledna',
+        'února',
+        'března',
+        'dubna',
+        'května',
+        'června',
+        'července',
+        'srpna',
+        'září',
+        'října',
+        'listopadu',
+        'prosince',
+    ],
+    en: [
+        'january',
+        'february',
+        'march',
+        'april',
+        'may',
+        'june',
+        'july',
+        'august',
+        'september',
+        'october',
+        'november',
+        'december',
+    ],
+};
+
+export const MONTHS_CALENDAR: Record<string, unknown> = {
+    cs: [
+        'Ledna',
+        'Února',
+        'Března',
+        'Dubna',
+        'Května',
+        'Června',
+        'Července',
+        'Srpna',
+        'Září',
+        'Října',
+        'Listopadu',
+        'Prosince',
+    ],
+    en: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ],
+};
+
 export enum ASYNC_STATES {
     IDLE = 'idle',
     PENDING = 'pending',

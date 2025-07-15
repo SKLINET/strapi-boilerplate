@@ -37,7 +37,7 @@ const ArticleList = ({
             startTransition(async () => {
                 const { articles, canLoadMore } = await fetchArticles(
                     { limit: page * countOnPage, categoryId: categoryId },
-                    app,
+                    { locale: app.locale, preview: app.preview, webSetting: app.webSetting },
                 );
 
                 setPage(page);

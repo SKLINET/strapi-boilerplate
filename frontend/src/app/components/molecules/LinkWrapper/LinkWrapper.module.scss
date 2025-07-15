@@ -9,13 +9,3 @@
 .content {
     @apply w-full relative z-2;
 }
-
-@mixin hover {
-    @media (pointer: fine) {
-        & > a:hover {
-            & + * {
-                @content;
-            }
-        }
-    }
-}

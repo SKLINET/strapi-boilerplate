@@ -15,7 +15,7 @@ export const fetchArticles = async (
         skipArticleId?: string | null;
         categoryId?: string | null;
     },
-    app: IApp,
+    app: { locale: IApp['locale']; preview: IApp['preview']; webSetting: IApp['webSetting'] },
 ): Promise<{
     articles: IArticle[];
     canLoadMore: boolean;
@@ -45,7 +45,7 @@ export const fetchArticles = async (
     })) as unknown as FindResponse<Omit<articleFragment$data, ' $fragmentType'>[]>;
 
     return {
-        articles: getArticleListType(data, app),
+        articles: getArticleListType(data, app as IApp),
         canLoadMore: count > (page - 1) * limit + limit,
     };
 };
