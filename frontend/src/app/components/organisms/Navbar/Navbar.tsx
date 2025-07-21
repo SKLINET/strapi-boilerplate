@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import styles from './Navbar.module.scss';
 import { IApp } from '../../../../types/base/app';
-import { Link } from '../../primitives/Link/Link';
 import { getMenuType } from '../../../../utils/strapi/getMenuType';
 import { LanguageSelector } from '../../molecules/LanguageSelector/LanguageSelector';
+import { MenuLink } from './MenuLink/MenuLink';
+import { Logo } from '../../molecules/Logo/Logo';
+import { SocialButton } from '../../molecules/SocialButton/SocialButton';
 
 interface NavbarProps {
     app: IApp;
@@ -14,12 +16,13 @@ const Navbar = ({ app }: NavbarProps): ReactElement => {
 
     return (
         <header className={styles.wrapper}>
-            {menu?.items.map((e) => (
-                <Link key={e.id} href={e.href} openInNewTab={e.openInNewTab} className={styles.link} alt={e.label}>
-                    {e.label}
-                </Link>
-            ))}
+            <Logo app={app} className={styles.logo} />
+            {menu?.items.map((e) => <MenuLink key={e.id} data={e} />)}
             <LanguageSelector app={app} />
+            <div className={styles.socials}>
+                <SocialButton type="facebook" href="https://www.facebook.com" app={app} />
+                <SocialButton type="instagram" href="https://www.instagram.com" app={app} />
+            </div>
         </header>
     );
 };

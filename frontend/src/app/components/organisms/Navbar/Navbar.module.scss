@@ -2,7 +2,10 @@
     @apply w-full flex items-center justify-center gap-6 p-6 bg-black;
 }
 
-.link {
-    @apply block text-white;
-    font-size: 1.25rem;
+.logo {
+    @apply w-8 h-8;
+}
+
+.socials {
+    @apply flex items-center gap-3;
 }

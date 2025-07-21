@@ -13,7 +13,7 @@ const Form = ({ blocksData: { form, sendEmail }, app }: FormBlockProps): ReactEl
     if (!_form) return <></>;
 
     return (
-        <FadeIn className={styles.wrapper}>
+        <FadeIn className={styles.wrapper} spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}>
             <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
         </FadeIn>
     );

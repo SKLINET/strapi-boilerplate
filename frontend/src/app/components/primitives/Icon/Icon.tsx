@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import Alert from '../../../../../public/icons/alert.svg';
 import Edit from '../../../../../public/icons/edit.svg';
 import Exit from '../../../../../public/icons/exit.svg';
+import Facebook from '../../../../../public/icons/facebook.svg';
+import Instagram from '../../../../../public/icons/instagram.svg';
 import Loader from '../../../../../public/icons/loader.svg';
 import Play from '../../../../../public/icons/play.svg';
 import Plus from '../../../../../public/icons/plus.svg';
@@ -17,6 +19,8 @@ export type Icons =
     | 'alert'
     | 'edit'
     | 'exit'
+    | 'facebook'
+    | 'instagram'
     | 'loader'
     | 'play'
     | 'plus'
@@ -53,6 +57,10 @@ const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
                 return <Edit />;
             case 'exit':
                 return <Exit />;
+            case 'facebook':
+                return <Facebook />;
+            case 'instagram':
+                return <Instagram />;
             case 'loader':
                 return <Loader />;
             case 'play':

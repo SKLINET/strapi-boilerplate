@@ -11,7 +11,7 @@ const Footer = ({ app }: FooterProps): ReactElement => {
     const currentYear = new Date().getFullYear().toString();
 
     return (
-        <FadeIn tag="footer" className={styles.wrapper} contentClassName={styles.content}>
+        <FadeIn tag="footer" triggerPosition="bottom" className={styles.wrapper} contentClassName={styles.content}>
             <>© Sklinet {currentYear}</>
         </FadeIn>
     );
