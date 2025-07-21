@@ -52,7 +52,7 @@ const ArticleList = ({
     const blogHref = getPageUrl(app.webSetting?.articlesPage?.url || '', app.locale);
 
     return (
-        <FadeIn className={styles.wrapper}>
+        <FadeIn className={styles.wrapper} spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}>
             <div className={styles.filters}>
                 <a
                     href={blogHref}

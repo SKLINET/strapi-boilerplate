@@ -11,6 +11,7 @@ import { redirect, permanentRedirect } from 'next/navigation';
 import { Poppins } from 'next/font/google';
 import { TopLoader } from '../components/base/TopLoader/TopLoader';
 import config from '../../../sklinet.config.json';
+import { Providers } from './providers';
 
 import '../../styles/global.scss';
 
@@ -198,7 +199,7 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
             </head>
             <body>
                 <TopLoader />
-                {children}
+                <Providers>{children}</Providers>
             </body>
         </html>
     );

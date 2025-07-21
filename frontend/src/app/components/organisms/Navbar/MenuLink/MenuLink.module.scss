@@ -1,0 +1,11 @@
+@import '../../../../../styles/mixins/hover.scss';
+
+.wrapper {
+    @apply w-fit block relative text-16 leading-1 text-white;
+
+    @include hover {
+        &:hover {
+            //
+        }
+    }
+}

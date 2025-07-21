@@ -51,6 +51,7 @@
         "react-relay": "^16.0.0",
         "react-remove-scroll": "^2.6.0",
         "react-responsive-carousel": "^3.2.23",
+        "react-scroll-parallax": "^3.4.5",
         "react-share": "^5.0.3",
         "relay-runtime": "^16.0.0",
         "swr": "^2.2.4",
