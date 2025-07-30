@@ -28,7 +28,7 @@ export const fetchArticles = async (
     const filter: Record<string, any> = {};
 
     if (skipArticleId) {
-        filter.id = { ne: skipArticleId };
+        filter.documentId = { ne: skipArticleId };
     }
 
     if (categoryId) {
