@@ -25,19 +25,19 @@ export const fetchArticles = async (
     const page = options.page ? Math.max(options.page, 1) : 1;
     const limit = options.limit;
 
-    const filter: Record<string, any> = {};
+    const filters: Record<string, any> = {};
 
     if (skipArticleId) {
-        filter.documentId = { ne: skipArticleId };
+        filters.documentId = { ne: skipArticleId };
     }
 
     if (categoryId) {
-        filter.category = { documentId: { eq: categoryId } };
+        filters.category = { documentId: { eq: categoryId } };
     }
 
     const { data, count } = (await providers.article.find({
         locale: app.locale,
-        filter: filter,
+        filter: filters,
         start: (page - 1) * limit,
         limit: limit,
         preview: app.preview,
