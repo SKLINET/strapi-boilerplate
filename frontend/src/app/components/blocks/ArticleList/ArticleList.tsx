@@ -4,20 +4,19 @@ import React, { ReactElement, useState, useEffect, useTransition } from 'react';
 import styles from './ArticleList.module.scss';
 import clsx from 'clsx';
 import { ArticlesListBlockProps } from '../../../blocks/ArticlesListBlock/ArticlesListBlock';
-import { getArticleListType } from '../../../../utils/strapi/getArticleType';
 import { IArticle } from '../../../../types/article';
 import { fetchArticles } from '../../../actions/fetch-articles';
-import { getArticleCategoryListType } from '../../../../utils/strapi/getArticleCategoryType';
 import { getPageUrl } from '../../../../utils/getPageUrl';
 import { Button } from '../../primitives/Button/Button';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
+import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 
 const ArticleList = ({
     blocksData: { countOnPage },
     app,
     data: { articles, categories, canLoadMore },
 }: ArticlesListBlockProps): ReactElement => {
-    const [_articles, setArticles] = useState<IArticle[]>(getArticleListType(articles, app));
+    const [_articles, setArticles] = useState<IArticle[]>(articles);
 
     const [page, setPage] = useState(1);
     const [_canLoadMore, setCanLoadMore] = useState(canLoadMore);
@@ -25,7 +24,7 @@ const ArticleList = ({
     const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
-        setArticles(getArticleListType(articles, app));
+        setArticles(articles);
         setPage(1);
         setCanLoadMore(canLoadMore);
     }, [articles, canLoadMore, app]);
@@ -47,8 +46,6 @@ const ArticleList = ({
         }
     };
 
-    const _categories = getArticleCategoryListType(categories);
-
     const blogHref = getPageUrl(app.webSetting?.articlesPage?.url || '', app.locale);
 
     return (
@@ -57,16 +54,19 @@ const ArticleList = ({
                 <a
                     href={blogHref}
                     className={clsx(styles.button, categoryId === null && styles.active)}
-                    aria-label={'All articles'}
+                    aria-label={getSystemResource('all', app?.systemResources)}
                 >
-                    {app.locale === 'cs' ? 'Vše' : 'All'}
+                    {getSystemResource('all', app?.systemResources)}
                 </a>
-                {_categories.map((e) => (
+                {categories.map((e) => (
                     <a
                         key={e.id}
                         href={blogHref + `?filter=${e.id}`}
                         className={clsx(styles.button, categoryId === e.id && styles.active)}
-                        aria-label={`Filter by ${e.title}`}
+                        aria-label={getSystemResource('filter_by_value', app?.systemResources).replace(
+                            '{value}',
+                            e.title,
+                        )}
                     >
                         {e.title}
                     </a>
@@ -74,7 +74,12 @@ const ArticleList = ({
             </div>
             <div className={styles.list}>
                 {_articles.map((e) => (
-                    <a key={e.id} href={e.href} className={styles.article} aria-label={`Go to article ${e.title}`}>
+                    <a
+                        key={e.id}
+                        href={e.href}
+                        className={styles.article}
+                        aria-label={getSystemResource('go_to_value', app?.systemResources).replace('{value}', e.title)}
+                    >
                         <p className={styles.title}>{e.title}</p>
                         {e.category && <p className={styles.category}>{e.category?.title}</p>}
                     </a>
@@ -85,9 +90,8 @@ const ArticleList = ({
                     loading={isPending}
                     onClick={() => !isPending && loadMore(page + 1)}
                     className={styles.loadMoreButton}
-                    alt="Load more"
                 >
-                    {'Load more'}
+                    {getSystemResource('load_more', app?.systemResources)}
                 </Button>
             )}
         </FadeIn>
