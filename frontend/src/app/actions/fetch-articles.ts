@@ -7,15 +7,16 @@ import providers from '../../providers';
 import { getArticleListType } from '../../utils/strapi/getArticleType';
 import { FindResponse } from '../../lib/provider/AbstractStrapiProvider';
 import { articleFragment$data } from '../../relay/__generated__/articleFragment.graphql';
+import { STRAPI_MAX_LIMIT } from '../../constants';
 
 export const fetchArticles = async (
     options: {
         page?: number;
-        limit: number;
+        limit?: number;
         skipArticleId?: string | null;
         categoryId?: string | null;
     },
-    app: { locale: IApp['locale']; preview: IApp['preview']; webSetting: IApp['webSetting'] },
+    app: { locale?: IApp['locale']; preview: IApp['preview']; webSetting: IApp['webSetting'] },
 ): Promise<{
     articles: IArticle[];
     canLoadMore: boolean;
@@ -23,7 +24,7 @@ export const fetchArticles = async (
     const { skipArticleId, categoryId } = options;
 
     const page = options.page ? Math.max(options.page, 1) : 1;
-    const limit = options.limit;
+    const limit = options.limit || STRAPI_MAX_LIMIT;
 
     const filters: Record<string, any> = {};
 
@@ -37,7 +38,7 @@ export const fetchArticles = async (
 
     const { data, count } = (await providers.article.find({
         locale: app.locale,
-        filter: filters,
+        filters: filters,
         start: (page - 1) * limit,
         limit: limit,
         preview: app.preview,

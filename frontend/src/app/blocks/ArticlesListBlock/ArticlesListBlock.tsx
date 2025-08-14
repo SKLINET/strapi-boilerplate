@@ -1,17 +1,18 @@
 import React, { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { StaticBlockContext } from '../../../types/base/block';
-import getPublicationState from '../../../utils/base/getPublicationState';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
-import { articleFragment$data } from '../../../relay/__generated__/articleFragment.graphql';
-import { articleCategoryFragment$data } from '../../../relay/__generated__/articleCategoryFragment.graphql';
+import { fetchArticles } from '../../actions/fetch-articles';
+import config from '../../../../sklinet.config.json';
+import { fetchArticleCategories } from '../../actions/fetch-article-categories';
+import { IArticle, IArticleCategory } from '../../../types/article';
 
 export interface ArticlesListBlockStaticProps {
     data: {
-        articles: Omit<articleFragment$data, ' $fragmentType'>[];
-        categories: Omit<articleCategoryFragment$data, ' $fragmentType'>[];
+        articles: IArticle[];
+        categories: IArticleCategory[];
         canLoadMore: boolean;
     };
 }
@@ -38,9 +39,9 @@ const ArticlesListBlock = (props: ArticlesListBlockProps): ReactElement => <Arti
 if (typeof window === 'undefined') {
     ArticlesListBlock.getStaticProps = async ({
         locale,
-        providers,
         context: { preview, searchParams },
         block,
+        settings,
     }: StaticBlockContext): Promise<any> => {
         if (block?.__typename !== 'ComponentBlockArticlesListBlock') {
             const err = new Error('Page not found') as Error & { code: string };
@@ -48,35 +49,32 @@ if (typeof window === 'undefined') {
             throw err;
         }
 
-        const publicationState = getPublicationState(preview);
-
         const limit = block?.countOnPage || 5;
 
-        const filters: Record<string, any> = {};
+        const categoryId = typeof searchParams?.filter === 'string' ? searchParams.filter : undefined;
 
-        if (typeof searchParams?.filter === 'string') {
-            filters.category = { documentId: { eq: searchParams.filter } };
-        }
+        const { articles, canLoadMore } = await fetchArticles(
+            { limit: limit, categoryId: categoryId },
+            {
+                webSetting: settings,
+                locale: locale || config.i18n.defaultLocale,
+                preview,
+            },
+        );
 
-        const articles = await providers.article.find({
-            locale,
-            filters: filters,
-            limit: limit,
-            preview,
-            status: publicationState,
-        });
-
-        const categories = await providers.articleCategory.find({
-            locale,
-            preview,
-            status: publicationState,
-        });
+        const { categories } = await fetchArticleCategories(
+            {},
+            {
+                locale: locale || config.i18n.defaultLocale,
+                preview,
+            },
+        );
 
         return {
             data: {
-                articles: articles?.data || [],
-                categories: categories?.data || [],
-                canLoadMore: articles?.count > limit,
+                articles: articles,
+                categories: categories,
+                canLoadMore: canLoadMore,
             },
         };
     };
