@@ -8,10 +8,12 @@ export const getBuiltFormType = (e: Fragment | null | undefined): IBuiltForm | n
 
     const { documentId, title, data, successMessage, errorMessage } = e;
 
+    const _data = typeof data === 'string' ? JSON.parse(data) : data;
+
     return {
         id: documentId,
         title: title,
-        data: Array.isArray(data) ? data : [],
+        data: Array.isArray(_data) ? _data : [],
         successMessage: successMessage,
         errorMessage: errorMessage,
     };

@@ -211,36 +211,26 @@ export default abstract class AbstractStrapiProvider<
     }
 
     async transformResults(items: TItems['data'], locale?: string): Promise<TItems> {
-        const _items: any[] = [];
-
-        // Conver built-forms into string (stringify)
-        items.forEach((e: any) => {
-            if (e?.__typename === 'Establishment') {
-                const newItem: Record<string, any> = { ...e };
-
-                if (Array.isArray(e?.requestForms)) {
-                    newItem.requestForms = [];
-
-                    e.requestForms.forEach((k: any) => {
-                        newItem.requestForms.push({
-                            ...k,
-                            form: JSON.stringify(k.form),
-                        });
-                    });
+        // Stringify form builder data (becouse Elastic indexing)
+        function stringifyFormBuilderData(input: unknown): unknown {
+            if (Array.isArray(input)) {
+                return input.map(stringifyFormBuilderData);
+            } else if (input && typeof input === 'object') {
+                const obj = input as Record<string, unknown>;
+                if (obj['__typename'] === 'FormBuilderBuiltForm' && obj.data) {
+                    return { ...obj, data: JSON.stringify(obj.data) };
                 }
-
-                if (e?.orderForm?.form) {
-                    newItem.orderForm = {
-                        ...e.orderForm,
-                        form: JSON.stringify(e.orderForm.form),
-                    };
+                const result: Record<string, unknown> = {};
+                for (const key of Object.keys(obj)) {
+                    result[key] = stringifyFormBuilderData(obj[key]);
                 }
-
-                _items.push(newItem);
+                return result;
             } else {
-                _items.push(e);
+                return input;
             }
-        });
+        }
+
+        const _items: any[] = items.map((e) => stringifyFormBuilderData(e));
 
         return _items.map((item) => ({
             ...item,

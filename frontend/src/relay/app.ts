@@ -243,6 +243,7 @@ graphql`
 
 graphql`
     fragment appBuiltFormFragment on FormBuilderBuiltForm {
+        __typename
         documentId
         title
         data
