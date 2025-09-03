@@ -17,6 +17,28 @@ function mergeUnique(arr1: string[], arr2: string[]): string[] {
     return Array.from(new Set([...arr1, ...arr2]));
 }
 
+// Function for deduplicating IndexingResultItem objects
+function deduplicateIndexingResults(items: IndexingResultItem[]): IndexingResultItem[] {
+    const seen = new Set<string>();
+    const duplicatesFound = new Set<string>();
+
+    const result = items.filter((item) => {
+        const key = `${item.type}:${item.id}:${item.index}:${item.locale || 'default'}`;
+        if (seen.has(key)) {
+            duplicatesFound.add(key);
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+
+    if (duplicatesFound.size > 0) {
+        console.log(`Removed ${items.length - result.length} duplicate indexing items:`, Array.from(duplicatesFound));
+    }
+
+    return result;
+}
+
 // Fetch one entry from Elastic
 // const fetchOne = async (typeId: string, id: string, locale: string) => {
 //    const provider = findProvider(typeId);
@@ -74,7 +96,8 @@ const reindexItem = async ({ typeId, id, action, simple }: IHandle) => {
         }
     }
 
-    return indexedItems;
+    // Deduplicate at item level to prevent accumulation
+    return deduplicateIndexingResults(indexedItems);
 };
 
 // Reindex one related item
@@ -95,9 +118,9 @@ const reindexRelatedEntry = async (typeId: string, id: string, simple: boolean) 
 const reindexRelatedEntries = async (typeId: string, idArray: string[], simple: boolean) => {
     const indexedItems: Array<IndexingResultItem> = [];
 
-    for (let i = 0; i < idArray.length || 0; i++) {
+    for (let i = 0; i < (idArray?.length || 0); i++) {
         try {
-            indexedItems.concat(await reindexRelatedEntry(typeId, idArray[i], simple));
+            indexedItems.push(...(await reindexRelatedEntry(typeId, idArray[i], simple)));
         } catch (err) {
             console.log(err);
         }
@@ -106,6 +129,9 @@ const reindexRelatedEntries = async (typeId: string, idArray: string[], simple: 
     return indexedItems;
 };
 
+// Global set to track currently processing items to prevent circular references
+const currentlyProcessing = new Set<string>();
+
 const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
     console.log('INDEX ITEM', action, typeId, id, simple);
     try {
@@ -113,9 +139,31 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
 
         const indexedItems: Array<IndexingResultItem> = [];
 
+        // Protection against circular references
+        const currentProcessingKey = `${typeId}:${id}`;
+
+        if (currentlyProcessing.has(currentProcessingKey)) {
+            console.log(`Skipping circular reference: ${currentProcessingKey}`);
+            return new Response(
+                JSON.stringify({
+                    status: 'OK',
+                    indexedItems: [],
+                    message: 'Circular reference detected and skipped',
+                }),
+                {
+                    status: 200,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+        }
+
+        currentlyProcessing.add(currentProcessingKey);
+
         try {
             // 1) Reindexing edited item
-            indexedItems.concat(await reindexItem({ typeId, id, action, simple, entry }));
+            indexedItems.push(...(await reindexItem({ typeId, id, action, simple, entry })));
 
             // 2) Reindexing of related items
             for (const locale of locales) {
@@ -147,8 +195,8 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
                             )?.map((e: any) => e.documentId) || [],
                         );
 
-                        indexedItems.concat(
-                            await reindexRelatedEntries('article-category', articleCategoryIDs, simple),
+                        indexedItems.push(
+                            ...(await reindexRelatedEntries('article-category', articleCategoryIDs, simple)),
                         );
                         */
                         break;
