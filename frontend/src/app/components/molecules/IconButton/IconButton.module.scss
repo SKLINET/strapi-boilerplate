@@ -1,0 +1,43 @@
+@import '../../../../styles/mixins/hover.scss';
+
+.wrapper {
+    @apply flex items-center justify-center shrink-0 border transition-colors-opacity ease-out duration-300;
+
+    &:disabled {
+        @apply opacity-30 cursor-not-allowed;
+    }
+
+    // Color
+    &.fill {
+        &.black {
+            @apply bg-black border-black text-black;
+
+            @include hover {
+                &:hover {
+                    @apply bg-opacity-90 border-opacity-90;
+                }
+            }
+        }
+    }
+
+    &.outline {
+        &.gray {
+            @apply text-black border-black bg-transparent;
+
+            @include hover {
+                &:hover {
+                    @apply bg-black text-white;
+                }
+            }
+        }
+    }
+
+    // Size
+    &.large {
+        @apply w-10 h-10 rounded-full;
+
+        .icon {
+            @apply w-5 h-5;
+        }
+    }
+}

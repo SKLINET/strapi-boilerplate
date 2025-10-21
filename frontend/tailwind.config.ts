@@ -60,7 +60,8 @@ const config: Config = {
                 '16/9': '56.25%',
             },
             spacing: {
-                //
+                18: '4.5rem',
+                27: '6.75rem',
             },
             transitionProperty: {
                 width: 'width',
@@ -68,6 +69,7 @@ const config: Config = {
                 'visibility-opacity': 'visibility, opacity',
                 'transform-opacity': 'transform, opacity',
                 'transform-colors': 'transform, background, background-color, color',
+                'colors-opacity': 'background, background-color, color, border-color, opacity',
             },
             width: {
                 //

@@ -1,22 +1,19 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { images } = require('./sklinet.config');
-const path = require('path');
-const webpack = require('webpack');
+import { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import { config } from 'dotenv';
+import path from 'path';
+import { images } from './sklinet.config.json';
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const bundleAnalyzer = withBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
 });
 
-const { parsed: myEnv } = require('dotenv').config({
+const { parsed: myEnv } = config({
     path: path.join(__dirname, '.env'),
 });
 
-/**
- * @type {import('next').NextConfig}
- */
-const nextConfig = {
-    images,
+const nextConfig: NextConfig = {
+    images: images as NextConfig['images'],
     experimental: {
         staleTimes: {
             dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
@@ -71,16 +68,12 @@ const nextConfig = {
                 source: '/:path*',
                 headers: [
                     {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
                         key: 'X-XSS-Protection',
                         value: '1; mode=block',
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337 https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com; frame-ancestors 'self' https://www.<project_name>.cz https://<project_name>.symbio.agency https://admin-<project_name>.symbio.agency;",
+                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337 https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com; frame-ancestors 'self' http://localhost:3000 http://localhost:1337 https://www.<project_name>.cz https://<project_name>.symbio.agency https://admin-<project_name>.symbio.agency;",
                     },
                     {
                         key: 'Referrer-Policy',
@@ -109,4 +102,4 @@ const nextConfig = {
     },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+export default bundleAnalyzer(nextConfig);

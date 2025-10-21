@@ -7,6 +7,8 @@ import dynamic from 'next/dynamic';
 import { IVideo } from '../../../../types/video';
 import { Image } from '../../primitives/Image/Image';
 import { Icon } from '../../primitives/Icon/Icon';
+import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
+import { IApp } from '../../../../types/base/app';
 
 const UploadedVideo = dynamic(() =>
     import('../../primitives/UploadedVideo/UploadedVideo').then((mod) => mod.UploadedVideo),
@@ -21,10 +23,12 @@ const FacebookVideo = dynamic(() =>
 
 interface VideoProps {
     data: IVideo;
+    sizes?: string;
+    app: IApp;
     className?: string;
 }
 
-const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: VideoProps): ReactElement => {
+const Video = ({ data: { uploadedVideo, externalVideo, image }, sizes, app, className }: VideoProps): ReactElement => {
     const [play, setPlay] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
@@ -87,7 +91,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
                     alt={image.alternativeText}
                     fill
                     placeholder="blur"
-                    sizes="(max-width: 48rem) 100vw, 80vw"
+                    sizes={sizes}
                     className={imageClassNames}
                 />
             );
@@ -98,7 +102,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
                 case 'youtube': {
                     if (!externalVideo.providerUid) return <></>;
                     const url = `https://i3.ytimg.com/vi/${externalVideo.providerUid}/maxresdefault.jpg`;
-                    return <Image src={url} alt="YouTube video image" fill className={imageClassNames} />;
+                    return <Image src={url} alt="YouTube video image" unoptimized fill className={imageClassNames} />;
                 }
                 case 'vimeo': {
                     return <></>;
@@ -123,7 +127,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
                     onClick={() => setPlay(true)}
                     disabled={loaded}
                     className={styles.controlButton}
-                    aria-label="Play video"
+                    aria-label={getSystemResource('play_video', app?.systemResources)}
                 >
                     <Icon name={icon} className={clsx(styles.icon, styles[icon])} />
                 </button>

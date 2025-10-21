@@ -15,7 +15,7 @@ export const getSystemResource = (
     });
 
     if (!el) {
-        console.error('Chybějící všeobecný text: ', key);
+        console.error('⚠️  Missing system resource:', key);
         return `{${key}}`;
     }
 

@@ -1,0 +1,76 @@
+.wrapper {
+    //
+}
+
+.label {
+    @apply inline-flex text-14 leading-1.5 text-black mb-1;
+
+    .required {
+        //
+    }
+}
+
+.inner {
+    @apply w-full flex flex-col gap-3;
+
+    .inputWrapper {
+        @apply w-full relative flex items-center gap-1 px-4 py-3.5 bg-white rounded-md border border-black border-dashed overflow-hidden;
+        @apply tablet:py-5;
+        @apply desktop:py-6;
+
+        &.disabled {
+            .input {
+                @apply cursor-not-allowed;
+            }
+        }
+
+        &.withError {
+            //
+
+            .icon {
+                //
+            }
+        }
+
+        &.dragOver {
+            //
+
+            .icon {
+                //
+            }
+
+            .placeholder {
+                //
+            }
+        }
+
+        .icon {
+            @apply w-5 h-5 shrink-0 text-black;
+        }
+
+        .placeholder {
+            @apply grow;
+        }
+
+        .input {
+            @apply absolute inset-0 cursor-pointer opacity-0 z-3;
+        }
+    }
+
+    .fileList {
+        @apply w-full flex flex-col gap-2;
+
+        .fileItem {
+            @apply flex items-center gap-3;
+
+            .fileName {
+                @apply grow truncate text-14;
+            }
+        }
+    }
+}
+
+.errorMessage {
+    @apply text-14 text-left mt-3;
+    @apply desktop:mt-4;
+}

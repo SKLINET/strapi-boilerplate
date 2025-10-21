@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { fetchQuery } from 'relay-runtime';
 import { GetStaticPathsResult } from 'next';
 import * as s from '../relay/__generated__/articleStaticPathsQuery.graphql';
@@ -20,10 +19,11 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
     }
 
     getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
-        if (publicationState?.toLowerCase() === 'preview') {
-            return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
-        }
-        return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
+        // For Elastic
+        return {};
+
+        // For Strapi
+        // return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
     }
 
     async getStaticPaths(locale: string): Promise<GetStaticPathsResult['paths']> {
