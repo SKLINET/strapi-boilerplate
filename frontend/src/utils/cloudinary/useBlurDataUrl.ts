@@ -19,16 +19,11 @@ export const useBlurDataUrl = ({ image, allow }: UseBlurDataUrlProps) => {
 
         const getBlurDataURL = (src: string): string | null => {
             // Cloudinary optimization
-            if (src.includes('res.cloudinary')) {
+            if (src.includes('res.cloudinary') || src.includes('web-assets')) {
                 const srcParts = src.split('upload');
                 if (srcParts.length !== 2) return src;
 
                 return transformCloudinaryUrl(`${srcParts[0]}upload/f_auto/fl_lossy/w_50/dpr_auto/q_10${srcParts[1]}`);
-            }
-
-            // Web assets (cloudinary proxy)
-            if (src.includes('web-assets')) {
-                return src;
             }
 
             // Image from Strapi

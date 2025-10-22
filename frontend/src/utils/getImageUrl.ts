@@ -6,7 +6,7 @@ export function getImageUrl(url: string | null | undefined, smallResolution = fa
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_PATH || process.env.API_BASE_PATH;
 
     // Image from Cloudinary
-    if (url.includes('res.cloudinary')) {
+    if (url.includes('res.cloudinary') || url.includes('web-assets')) {
         if (smallResolution) {
             const urlParts = url.split('upload');
             if (urlParts.length !== 2) return url;
@@ -19,7 +19,7 @@ export function getImageUrl(url: string | null | undefined, smallResolution = fa
         return transformCloudinaryUrl(url);
     }
 
-    // Web assets (cloudinary proxy) or external images
+    // External images
     if (url.includes('http')) {
         return url;
     }

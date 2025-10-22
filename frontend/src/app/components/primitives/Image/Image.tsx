@@ -95,7 +95,7 @@ const Image = ({
     // Next/image loader
     const myLoader = ({ src, width }: ImageLoaderProps) => {
         // Cloudinary optimization
-        if (src.includes('res.cloudinary')) {
+        if (src.includes('res.cloudinary') || src.includes('web-assets')) {
             const [prefix, suffix] = src.split('upload');
             if (!suffix) return src;
 
@@ -108,11 +108,6 @@ const Image = ({
 
         // Image from Strapi
         if (src.includes('uploads')) {
-            return src;
-        }
-
-        // Web assets (cloudinary proxy) or external images
-        if (src.includes('http')) {
             return src;
         }
 
