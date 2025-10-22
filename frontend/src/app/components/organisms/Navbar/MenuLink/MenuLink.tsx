@@ -41,9 +41,7 @@ const MenuLink = ({
                 type="button"
                 onClick={() => {
                     handleClick && handleClick();
-                    setTimeout(() => {
-                        scrollToAnchor(anchor);
-                    }, 100);
+                    scrollToAnchor(anchor);
                 }}
                 className={allClassNames}
                 aria-label={alt}
