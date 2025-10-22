@@ -3,23 +3,15 @@
 import React, { ReactElement, useState } from 'react';
 import styles from './Video.module.scss';
 import clsx from 'clsx';
-import dynamic from 'next/dynamic';
 import { IVideo } from '../../../../types/video';
 import { Image } from '../../primitives/Image/Image';
 import { Icon } from '../../primitives/Icon/Icon';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 import { IApp } from '../../../../types/base/app';
-
-const UploadedVideo = dynamic(() =>
-    import('../../primitives/UploadedVideo/UploadedVideo').then((mod) => mod.UploadedVideo),
-);
-const YoutubeVideo = dynamic(() =>
-    import('../../primitives/YoutubeVideo/YoutubeVideo').then((mod) => mod.YoutubeVideo),
-);
-const VimeoVideo = dynamic(() => import('../../primitives/VimeoVideo/VimeoVideo').then((mod) => mod.VimeoVideo));
-const FacebookVideo = dynamic(() =>
-    import('../../primitives/FacebookVideo/FacebookVideo').then((mod) => mod.FacebookVideo),
-);
+import { UploadedVideo } from '../../primitives/UploadedVideo/UploadedVideo';
+import { YoutubeVideo } from '../../primitives/YoutubeVideo/YoutubeVideo';
+import { VimeoVideo } from '../../primitives/VimeoVideo/VimeoVideo';
+import { FacebookVideo } from '../../primitives/FacebookVideo/FacebookVideo';
 
 interface VideoProps {
     data: IVideo;

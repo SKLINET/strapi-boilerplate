@@ -7,6 +7,7 @@ import { getImageUrl } from '../../../../utils/getImageUrl';
 import { useBlurDataUrl } from '../../../../utils/cloudinary/useBlurDataUrl';
 import { ImgixProps } from '../../../../types/base/imgix';
 import { kebabCase } from '../../../../utils/base/kebabCase';
+import { transformCloudinaryUrl } from '../../../../utils/cloudinary/cloudinaryUrl';
 
 export declare type ImageProps = Omit<NextImageProps, 'src'> & {
     imgixParams?: ImgixProps;
@@ -93,13 +94,8 @@ const Image = ({
 
     // Next/image loader
     const myLoader = ({ src, width }: ImageLoaderProps) => {
-        // Image from Strapi
-        if (src.includes('uploads')) {
-            return src;
-        }
-
         // Cloudinary optimization
-        if (src.includes('upload')) {
+        if (src.includes('res.cloudinary')) {
             const [prefix, suffix] = src.split('upload');
             if (!suffix) return src;
 
@@ -107,7 +103,17 @@ const Image = ({
 
             const transformations = ['f_auto', 'fl_lossy', 'c_limit', `w_${_w}`, 'dpr_auto', `q_${quality}`].join(',');
 
-            return `${prefix}upload/${transformations}${suffix}`;
+            return transformCloudinaryUrl(`${prefix}upload/${transformations}${suffix}`);
+        }
+
+        // Image from Strapi
+        if (src.includes('uploads')) {
+            return src;
+        }
+
+        // Web assets (cloudinary proxy) or external images
+        if (src.includes('http')) {
+            return src;
         }
 
         return src;
