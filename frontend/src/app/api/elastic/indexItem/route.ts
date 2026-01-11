@@ -39,14 +39,20 @@ function deduplicateIndexingResults(items: IndexingResultItem[]): IndexingResult
     return result;
 }
 
-// Fetch one entry from Elastic
-// const fetchOne = async (typeId: string, id: string, locale: string) => {
-//    const provider = findProvider(typeId);
-//
-//    const entry = await provider.findOneByElastic(id, locale, false);
-//
-//    return entry;
-//};
+// Function for collecting unique items to be indexed
+function collectUniqueItemsToIndex(typeId: string, ids: string[], collectedItems: Set<string>): string[] {
+    const uniqueIds: string[] = [];
+
+    for (const id of ids) {
+        const key = `${typeId}:${id}`;
+        if (!collectedItems.has(key)) {
+            collectedItems.add(key);
+            uniqueIds.push(id);
+        }
+    }
+
+    return uniqueIds;
+}
 
 // Fetch many entries from Elastic
 const fetchMany = async (typeId: string, query: Record<string, any>, locale: string) => {
@@ -96,31 +102,16 @@ const reindexItem = async ({ typeId, id, action, simple }: IHandle) => {
         }
     }
 
-    // Deduplicate at item level to prevent accumulation
-    return deduplicateIndexingResults(indexedItems);
-};
-
-// Reindex one related item
-const reindexRelatedEntry = async (typeId: string, id: string, simple: boolean) => {
-    const indexedItems: Array<IndexingResultItem> = [];
-
-    const provider = findProvider(typeId);
-
-    if (provider) {
-        indexedItems.push(...(await provider.indexOne(id, simple, true)));
-        indexedItems.push(...(await provider.indexOne(id, simple)));
-    }
-
     return indexedItems;
 };
 
 // Reindex many related items
-const reindexRelatedEntries = async (typeId: string, idArray: string[], simple: boolean) => {
+const reindexRelatedEntries = async (typeId: string, idArray: string[], simple: boolean, action: string) => {
     const indexedItems: Array<IndexingResultItem> = [];
 
     for (let i = 0; i < (idArray?.length || 0); i++) {
         try {
-            indexedItems.push(...(await reindexRelatedEntry(typeId, idArray[i], simple)));
+            indexedItems.push(...(await reindexItem({ typeId, id: idArray[i], action, simple })));
         } catch (err) {
             console.log(err);
         }
@@ -142,72 +133,69 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
         // Protection against circular references
         const currentProcessingKey = `${typeId}:${id}`;
 
-        if (currentlyProcessing.has(currentProcessingKey)) {
-            console.log(`Skipping circular reference: ${currentProcessingKey}`);
-            return new Response(
-                JSON.stringify({
-                    status: 'OK',
-                    indexedItems: [],
-                    message: 'Circular reference detected and skipped',
-                }),
-                {
-                    status: 200,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                },
-            );
-        }
-
         currentlyProcessing.add(currentProcessingKey);
 
         try {
+            // Collection of items to be reindexed - using Map to avoid duplicates
+            const itemsToReindex = new Map<string, Set<string>>(); // typeId -> Set of IDs
+            const collectedItems = new Set<string>(); // Track collected items to avoid duplicates
+
             // 1) Reindexing edited item
             indexedItems.push(...(await reindexItem({ typeId, id, action, simple, entry })));
 
-            // 2) Reindexing of related items
-            for (const locale of locales) {
-                switch (typeId) {
-                    case 'article': {
-                        /*
-                        const articleCategoryIDs = mergeUnique(
-                            // New article categories
-                            Array.isArray(entry?.categories)
-                                ? entry?.categories?.map((e: any) => e.documentId) || []
-                                : [],
-                            // Old article categories
-                            (
-                                await fetchMany(
-                                    'article-category',
-                                    {
-                                        bool: {
-                                            must: [
-                                                {
-                                                    terms: {
-                                                        'articles.documentId': [id],
-                                                    },
-                                                },
-                                            ],
-                                        },
-                                    },
-                                    locale,
-                                )
-                            )?.map((e: any) => e.documentId) || [],
-                        );
+            // 2) Collect related items to be reindexed (process only once, not per locale)
+            const firstLocale = locales[0];
 
-                        indexedItems.push(
-                            ...(await reindexRelatedEntries('article-category', articleCategoryIDs, simple)),
-                        );
-                        */
-                        break;
+            // Helper function to add items to collection
+            const addToCollection = (type: string, ids: string[]) => {
+                if (!itemsToReindex.has(type)) {
+                    itemsToReindex.set(type, new Set());
+                }
+                const typeSet = itemsToReindex.get(type)!;
+                ids.forEach((id) => typeSet.add(id));
+            };
+
+            // Process related items collection
+            switch (typeId) {
+                default:
+                    break;
+            }
+
+            // 3) Batch reindex all collected items
+            console.log('Starting batch reindexing of collected items...');
+            for (const [relatedTypeId, idsSet] of itemsToReindex.entries()) {
+                const uniqueIds = Array.from(idsSet);
+                if (uniqueIds.length > 0) {
+                    console.log(`Reindexing ${uniqueIds.length} items of type ${relatedTypeId}`);
+                    try {
+                        if (action === 'unpublish' || action === 'delete') {
+                            indexedItems.push(
+                                ...(await reindexRelatedEntries(relatedTypeId, uniqueIds, simple, 'update')),
+                            );
+                            indexedItems.push(
+                                ...(await reindexRelatedEntries(relatedTypeId, uniqueIds, simple, 'publish')),
+                            );
+                        } else {
+                            indexedItems.push(
+                                ...(await reindexRelatedEntries(relatedTypeId, uniqueIds, simple, action)),
+                            );
+                        }
+                    } catch (err) {
+                        console.error(`Error reindexing ${relatedTypeId}:`, err);
                     }
                 }
             }
 
+            // 4) Final deduplication of all indexed items
+            const finalIndexedItems = deduplicateIndexingResults(indexedItems);
+            console.log(
+                `Final indexing results: ${finalIndexedItems.length} items (deduplicated from ${indexedItems.length})`,
+            );
+
             return new Response(
                 JSON.stringify({
                     status: 'OK',
-                    indexedItems,
+                    indexedItems: finalIndexedItems,
                 }),
                 {
                     status: 200,
@@ -229,6 +217,9 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
                     },
                 },
             );
+        } finally {
+            // Clean up circular reference protection
+            currentlyProcessing.delete(currentProcessingKey);
         }
     } catch (e) {
         return new Response(
@@ -253,7 +244,12 @@ export async function GET(request: NextRequest) {
 
     const simple = !request.nextUrl.searchParams.get('create');
 
-    return await handle({ typeId, id, action, simple });
+    if (typeId === 'built-form' && action === 'update') {
+        await handle({ typeId, id, action, simple });
+        return await handle({ typeId, id, action: 'publish', simple });
+    } else {
+        return await handle({ typeId, id, action, simple });
+    }
 }
 
 export async function POST(request: NextRequest) {
@@ -265,5 +261,10 @@ export async function POST(request: NextRequest) {
 
     const simple = !request.nextUrl.searchParams.get('create');
 
-    return await handle({ typeId, id, action, simple, entry });
+    if (typeId === 'built-form' && action === 'update') {
+        await handle({ typeId, id, action, simple, entry });
+        return await handle({ typeId, id, action: 'publish', simple, entry });
+    } else {
+        return await handle({ typeId, id, action, simple, entry });
+    }
 }

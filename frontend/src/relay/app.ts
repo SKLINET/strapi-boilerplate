@@ -38,6 +38,7 @@ export const AppPageQuery = graphql`
             }
             seo {
                 title
+                structuredData
             }
             sitemap {
                 ...appSitemapFragment @relay(mask: false)
@@ -147,6 +148,7 @@ graphql`
         }
         linkExternal
         openInNewTab
+        anchor
     }
 `;
 
@@ -169,6 +171,7 @@ graphql`
         }
         externalUrl
         openInNewTab
+        anchor
     }
 `;
 

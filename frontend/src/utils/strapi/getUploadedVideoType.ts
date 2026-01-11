@@ -16,8 +16,10 @@ export const getUploadedVideoType = (video: Fragment | null | undefined): IUploa
     const _url = getImageUrl(url);
     const _type = type[type.length - 1];
 
+    const _realType = _type === 'mov' ? 'mp4' : _type;
+
     return {
         url: _url,
-        type: `video/${_type}`,
+        type: `video/${_realType}`,
     };
 };

@@ -4,3 +4,10 @@ export interface IFile {
     href: string;
     size: string;
 }
+
+export interface IFileInput {
+    typename: 'file';
+    id: string;
+    title: string;
+    data: File;
+}

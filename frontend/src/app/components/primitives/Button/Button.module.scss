@@ -2,10 +2,71 @@
 @import '../../../../styles/keyframes/spin.scss';
 
 .wrapper {
-    @apply w-fit block px-6 py-3 text-16 text-center bg-black text-white rounded-xl relative overflow-hidden transition-colors ease-in-out duration-500;
+    @apply w-fit flex justify-center border text-center rounded-xl shrink-0 relative overflow-hidden transition-colors ease-in-out duration-500;
+
+    &.stretchOnMobile {
+        @apply w-full;
+        @apply tablet:w-fit;
+    }
+
+    &.md {
+        @apply text-16 leading-1.5 px-4 py-2;
+
+        .children {
+            .label {
+                @apply px-3;
+                @apply desktop:px-4;
+            }
+
+            .icon {
+                @apply w-4 h-4;
+                @apply desktop:w-5 desktop:h-5;
+            }
+        }
+    }
+
+    &.fill {
+        //
+
+        &.black {
+            @apply border-black bg-black text-white;
+
+            @include hover {
+                &:hover {
+                    @apply bg-opacity-90 border-opacity-90;
+
+                    &:active {
+                        //
+                    }
+                }
+            }
+        }
+    }
+
+    &.outline {
+        //
+
+        &.black {
+            @apply border-black text-black;
+
+            @include hover {
+                &:hover {
+                    @apply bg-black text-white;
+
+                    &:active {
+                        //
+                    }
+                }
+            }
+        }
+    }
 
     &.loading {
         @apply cursor-not-allowed;
+
+        .children {
+            @apply opacity-0;
+        }
     }
 
     &:disabled {
@@ -13,8 +74,20 @@
     }
 }
 
+.children {
+    @apply w-fit flex items-center transition-opacity ease-in-out duration-300;
+
+    .label {
+        @apply block;
+    }
+
+    .icon {
+        @apply shrink-0;
+    }
+}
+
 .loader {
-    @apply bg-black absolute inset-0 flex items-center justify-center opacity-0 invisible transition-visibility-opacity ease-in-out duration-300;
+    @apply absolute inset-0 flex items-center justify-center opacity-0 invisible transition-visibility-opacity ease-in-out duration-300;
 
     &.show {
         @apply opacity-100 visible;

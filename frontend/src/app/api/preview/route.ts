@@ -58,5 +58,3 @@ export async function GET(request: Request) {
 
     return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_BASE_PATH + url));
 }
-
-export const dynamic = 'force-static';

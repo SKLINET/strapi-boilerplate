@@ -27,7 +27,7 @@ const Link = ({
     const _alt = alt || (typeof children === 'string' ? children : '');
 
     if (_alt.length === 0) {
-        console.error('Chybějící alt u odkazu');
+        console.error('⚠️  Missing alt for link');
     }
 
     if (href.startsWith('mailto') || href.startsWith('tel') || href.startsWith('http') || href.startsWith('https')) {

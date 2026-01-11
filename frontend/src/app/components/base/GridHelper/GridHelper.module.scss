@@ -25,3 +25,11 @@
 .column {
     @apply w-full bg-red bg-opacity-30;
 }
+
+.mainButton {
+    @apply w-9 h-9 fixed flex items-center justify-center text-white bg-black z-[300] rounded-full overflow-hidden left-27 bottom-5 hover:scale-110 transition-transform ease-in-out duration-300;
+
+    .icon {
+        @apply w-5 h-5;
+    }
+}

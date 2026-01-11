@@ -9,9 +9,12 @@
   "attributes": {
     "video": {
       "type": "component",
-      "repeatable": false,
       "component": "complementary.video",
+      "repeatable": false,
       "required": true
+    },
+    "anchor": {
+      "type": "string"
     }
   }
 }

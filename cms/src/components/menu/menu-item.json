@@ -21,8 +21,11 @@
     },
     "openInNewTab": {
       "type": "boolean",
-      "default": false,
-      "required": false
+      "required": false,
+      "default": false
+    },
+    "anchor": {
+      "type": "string"
     }
   }
 }

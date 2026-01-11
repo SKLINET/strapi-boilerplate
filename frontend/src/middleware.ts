@@ -13,14 +13,27 @@ function isValidAuth(login: string, password: string): boolean {
     return false;
 }
 
-export function middleware(req: NextRequest) {
+// Redirects middleware
+async function handleRedirects(req: NextRequest): Promise<NextResponse<unknown> | null> {
+    const url = req.nextUrl;
+    const redirectPath = url.pathname;
+    const host = req.headers.get('host') || req.headers.get('x-forwarded-host') || url.hostname || '';
+
+    return null;
+}
+
+export async function middleware(req: NextRequest) {
+    const url = req.nextUrl;
+
+    const redirects = await handleRedirects(req);
+    if (redirects) return redirects;
+
+    // --------- SKIP BASIC AUTH ---------
     if (
-        req.nextUrl.searchParams.get('disable-auth') ||
-        req.nextUrl.pathname.includes('/fonts/') ||
-        req.nextUrl.pathname.includes('/pdf') ||
-        req.nextUrl.pathname.includes('/_next/') ||
-        req.nextUrl.pathname.includes('/api/') ||
-        (req.nextUrl.host.includes('localhost') && process.env.NODE_ENV !== 'production') ||
+        url.searchParams.get('disable-auth') ||
+        url.pathname.includes('/fonts/') ||
+        url.pathname.includes('/pdf') ||
+        (url.host.includes('localhost') && process.env.NODE_ENV !== 'production') ||
         (process.env.NODE_ENV === 'production' &&
             !process?.env?.BASE_PATH?.includes('symbio.agency') &&
             !process?.env?.BASE_PATH?.includes('beneficiotest.cz') &&
@@ -29,8 +42,8 @@ export function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
+    // --------- BASIC AUTH ---------
     const basicAuth = req.headers.get('authorization');
-    const url = req.nextUrl;
     if (basicAuth) {
         const auth = basicAuth.split(' ')[1];
         const buffer = Uint8Array.from(atob(auth), (character) => character.charCodeAt(0));
@@ -48,5 +61,14 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: '/:path*',
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
 };

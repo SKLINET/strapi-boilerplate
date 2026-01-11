@@ -42,7 +42,7 @@ const Breadcrumbs = ({ app: { item, page, webSetting, locale }, className }: Bre
 
         const classNames = clsx(styles.label);
 
-        if (item && page.documentId === webSetting?.articleDetailPage?.documentId) {
+        if (item?.__typename === 'Article') {
             const _item = item as unknown as Omit<articleDetailFragment$data, ' $fragmentType'>;
             if (!_item) return <></>;
 
