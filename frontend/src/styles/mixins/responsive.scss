@@ -1,35 +1,35 @@
 @mixin from-mobile-landscape {
-    @media (min-width: theme('screens.mobile-landscape')) {
+    @media (min-width: 36rem) {
         @content;
     }
 }
 
 @mixin from-tablet {
-    @media (min-width: theme('screens.tablet')) {
+    @media (min-width: 48rem) {
         @content;
     }
 }
 
 @mixin from-tablet-landscape {
-    @media (min-width: theme('screens.tablet-landscape')) {
+    @media (min-width: 64rem) {
         @content;
     }
 }
 
 @mixin from-desktop {
-    @media (min-width: theme('screens.desktop')) {
+    @media (min-width: 80rem) {
         @content;
     }
 }
 
 @mixin large-desktop {
-    @media (min-width: theme('screens.large-desktop')) {
+    @media (min-width: 90rem) {
         @content;
     }
 }
 
 @mixin fullhd {
-    @media (min-width: theme('screens.fullhd')) {
+    @media (min-width: 120rem) {
         @content;
     }
 }

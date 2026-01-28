@@ -11,8 +11,7 @@ export type SingletonStrapiRecord = {
 export default abstract class AbstractSingletonStrapiProvider<
     TOperation extends OperationType,
     TItem extends SingletonStrapiRecord = SingletonStrapiRecord,
-> implements Provider
-{
+> implements Provider {
     protected environment: Record<string, Environment> = {
         preview: createRelayEnvironment({}),
         production: createRelayEnvironment({}),

@@ -47,7 +47,6 @@ const UploadedVideo = ({
 
         videoRef.current?.addEventListener('loadedmetadata', onLoadedMetadata, { passive: true });
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         return () => videoRef.current?.removeEventListener('loadedmetadata', onLoadedMetadata);
     }, [videoRef, loaded, resizedUrl]);
 

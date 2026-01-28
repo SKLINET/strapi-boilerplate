@@ -1,11 +1,11 @@
-@import '../../../../styles/mixins/hover.scss';
 @import '../../../../styles/mixins/responsive.scss';
+@import '../../../../styles/mixins/hover.scss';
 
 .wrapper {
 }
 
 .label {
-    @apply inline-flex text-14 leading-1.5 text-black mb-1;
+    @apply inline-flex text-14 leading-1_5 text-black mb-1;
 
     .required {
         //
@@ -127,7 +127,7 @@
     }
 
     .item {
-        @apply block w-full text-14 leading-1.5 text-black p-3 text-left transition-colors ease-in-out duration-200;
+        @apply block w-full text-14 leading-1_5 text-black p-3 text-left transition-colors ease-in-out duration-200;
 
         &.active {
             @apply font-bold;
@@ -142,7 +142,7 @@
 
     .category {
         .categoryTitle {
-            @apply p-3 text-14 leading-1.5;
+            @apply p-3 text-14 leading-1_5;
         }
 
         .item {

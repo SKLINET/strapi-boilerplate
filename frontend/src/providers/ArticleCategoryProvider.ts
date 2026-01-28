@@ -22,5 +22,4 @@ class ArticleCategoryProvider extends AbstractStrapiProvider<any, any> {
         // return { publishedAt: { lte: dayjs().format() } };
     }
 }
-// eslint-disable-next-line import/no-anonymous-default-export
 export default new ArticleCategoryProvider(ArticleCategoryListQuery, ArticleCategoryListQuery);

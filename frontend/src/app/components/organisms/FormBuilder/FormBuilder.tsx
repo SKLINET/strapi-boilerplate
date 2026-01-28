@@ -190,7 +190,6 @@ const FormBuilder = ({
         if (isSubmitted) {
             trigger();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitted, JSON.stringify(allValues)]);
 
     const onSubmit: SubmitHandler<any> = async (_data) => {

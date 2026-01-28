@@ -24,7 +24,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, sizes, app, clas
     const [play, setPlay] = useState(false);
     const [loaded, setLoaded] = useState(false);
 
-    const renderVideo = (): JSX.Element => {
+    const renderVideo = (): ReactElement => {
         const videoClassNames = clsx(styles.video);
 
         if (uploadedVideo) {
@@ -73,7 +73,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, sizes, app, clas
         return <></>;
     };
 
-    const renderImage = (): JSX.Element => {
+    const renderImage = (): ReactElement => {
         const imageClassNames = clsx(styles.image);
 
         if (image) {

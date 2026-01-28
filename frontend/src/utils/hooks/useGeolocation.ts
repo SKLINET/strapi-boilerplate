@@ -28,7 +28,6 @@ const useGeolocation = (options: GeolocationOptions = {}) => {
             maximumAge: 0,
             ...options,
         }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [options.enableHighAccuracy, options.timeout, options.maximumAge],
     );
 

@@ -1,0 +1,158 @@
+@theme inline {
+    /* Font family */
+    --font-primary: var(--font-primary);
+
+    /* Colors */
+    --color-red: var(--red);
+    --color-black: var(--black);
+    --color-white: var(--white);
+    --color-grey: var(--grey);
+    --color-green: var(--green);
+    --color-orange: var(--orange);
+
+    /* Grid spacing */
+    --spacing-grid-gap: var(--grid-gap);
+}
+
+/* Custom transition utilities */
+@utility transition-width {
+    transition-property: width;
+}
+
+@utility transition-height {
+    transition-property: height;
+}
+
+@utility transition-visibility-opacity {
+    transition-property: visibility, opacity;
+}
+
+@utility transition-transform-opacity {
+    transition-property: transform, opacity;
+}
+
+@utility transition-transform-colors {
+    transition-property: transform, background, background-color, color;
+}
+
+@utility transition-colors-opacity {
+    transition-property: background, background-color, color, border-color, opacity;
+}
+
+/* Custom will-change utilities */
+@utility will-change-fade-in {
+    will-change: transform, opacity;
+}
+
+@utility will-change-opacity {
+    will-change: opacity;
+}
+
+/* Custom font sizes */
+@utility text-32 {
+    font-size: 2rem;
+}
+
+@utility text-24 {
+    font-size: 1.5rem;
+}
+
+@utility text-16 {
+    font-size: 1rem;
+}
+
+@utility text-14 {
+    font-size: 0.875rem;
+}
+
+/* Custom line heights */
+@utility leading-1 {
+    line-height: 1;
+}
+
+@utility leading-1_5 {
+    line-height: 1.5;
+}
+
+/* Custom z-index */
+@utility z-1 {
+    z-index: 1;
+}
+
+@utility z-2 {
+    z-index: 2;
+}
+
+@utility z-3 {
+    z-index: 3;
+}
+
+@utility z-4 {
+    z-index: 4;
+}
+
+@utility z-5 {
+    z-index: 5;
+}
+
+@utility z-99 {
+    z-index: 99;
+}
+
+@utility z-100 {
+    z-index: 100;
+}
+
+@utility z-9999 {
+    z-index: 9999;
+}
+
+/* Custom spacing */
+@utility gap-18 {
+    gap: 4.5rem;
+}
+
+@utility gap-27 {
+    gap: 6.75rem;
+}
+
+/* Custom grid column end */
+@utility col-end-13 {
+    grid-column-end: 13;
+}
+
+@utility col-end-14 {
+    grid-column-end: 14;
+}
+
+@utility col-end-15 {
+    grid-column-end: 15;
+}
+
+@utility col-end-16 {
+    grid-column-end: 16;
+}
+
+@utility col-end-17 {
+    grid-column-end: 17;
+}
+
+/* Custom max-height */
+@utility max-h-16-9 {
+    max-height: 56.25vw;
+}
+
+/* Custom height */
+@utility h-56_25vw {
+    height: 56.25vw;
+}
+
+/* Custom max-width */
+@utility max-w-360 {
+    max-width: 90rem;
+}
+
+/* Custom padding for aspect ratio */
+@utility pb-16-9 {
+    padding-bottom: 56.25%;
+}

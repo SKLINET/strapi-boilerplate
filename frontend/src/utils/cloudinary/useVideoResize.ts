@@ -39,7 +39,6 @@ export const useVideoResize = (url: string) => {
         window.addEventListener('resize', updateVideoUrl, { passive: true });
 
         return () => window.removeEventListener('resize', updateVideoUrl);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);
 
     return videoUrl;

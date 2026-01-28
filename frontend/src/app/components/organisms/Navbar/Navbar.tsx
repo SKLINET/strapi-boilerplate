@@ -16,7 +16,9 @@ const Navbar = ({ app }: NavbarProps): ReactElement => {
     return (
         <header className={styles.wrapper}>
             <Logo app={app} className={styles.logo} />
-            {menu?.items.map((e) => <MenuLink key={e.id} data={e} />)}
+            {menu?.items.map((e) => (
+                <MenuLink key={e.id} data={e} />
+            ))}
             <LanguageSelector app={app} />
         </header>
     );

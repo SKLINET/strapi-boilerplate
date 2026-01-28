@@ -65,7 +65,7 @@ export interface IconProps {
 }
 
 const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
-    const renderIcon = (name: Icons): JSX.Element => {
+    const renderIcon = (name: Icons): ReactElement => {
         switch (name) {
             case 'alert':
                 return <Alert />;

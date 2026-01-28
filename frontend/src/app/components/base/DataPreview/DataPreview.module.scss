@@ -4,6 +4,6 @@
     @apply desktop:py-12;
 
     pre {
-        @apply text-16 text-black bg-black bg-opacity-10 p-8 mt-6 overflow-x-auto rounded-lg;
+        @apply text-16 text-black bg-black/10 p-8 mt-6 overflow-x-auto rounded-lg;
     }
 }

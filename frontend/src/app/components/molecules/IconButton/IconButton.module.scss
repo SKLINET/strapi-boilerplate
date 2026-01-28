@@ -14,7 +14,7 @@
 
             @include hover {
                 &:hover {
-                    @apply bg-opacity-90 border-opacity-90;
+                    @apply bg-black/90 border-black/90;
                 }
             }
         }

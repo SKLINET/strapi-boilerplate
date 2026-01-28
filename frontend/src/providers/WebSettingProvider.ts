@@ -14,5 +14,4 @@ class WebSettingProvider extends AbstractSingletonStrapiProvider<
         return 'api::web-setting.web-setting';
     }
 }
-// eslint-disable-next-line import/no-anonymous-default-export
 export default new WebSettingProvider(webSettingQuery);

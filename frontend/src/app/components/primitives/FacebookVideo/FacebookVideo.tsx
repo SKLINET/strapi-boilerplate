@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { ReactElement } from 'react';
 import styles from './FacebookVideo.module.scss';
 import clsx from 'clsx';
 
@@ -12,7 +12,7 @@ export interface FacebookVideoProps {
     height?: number;
 }
 
-const FacebookVideo = ({ url, loaded, className, width, height }: FacebookVideoProps): JSX.Element => (
+const FacebookVideo = ({ url, loaded, className, width, height }: FacebookVideoProps): ReactElement => (
     <div className={clsx(styles.wrapper, className)}>
         <iframe
             onLoad={() => loaded()}

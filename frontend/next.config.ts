@@ -19,7 +19,6 @@ const nextConfig: NextConfig = {
             dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
             static: 180,
         },
-        webpackMemoryOptimizations: true,
         inlineCss: true,
     },
     compiler: {
@@ -28,27 +27,18 @@ const nextConfig: NextConfig = {
             language: 'typescript',
         },
     },
-    webpack: (config, { isServer }) => {
-        config.module.rules.push({
-            test: /\.svg$/,
-            use: ['@svgr/webpack'],
-        });
-        config.plugins = config.plugins || [];
-        // Fixes npm packages that depend on `fs` module
-        if (!isServer) {
-            config.resolve.fallback = {
-                fs: false,
-                net: false,
-                tls: false,
-            };
-        }
-        config.plugins = [...config.plugins];
-        // config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
-
-        return config;
+    // Turbopack configuration for SVG as React components
+    turbopack: {
+        rules: {
+            '*.svg': {
+                loaders: ['@svgr/webpack'],
+                as: '*.js',
+            },
+        },
     },
-    eslint: {
-        dirs: ['src/app', 'src/lib', 'src/providers', 'src/utils'],
+    // Add @reference directive for CSS modules to access Tailwind utilities
+    sassOptions: {
+        additionalData: `@reference "${path.resolve('./src/app/globals.css')}";`,
     },
     async rewrites() {
         return [

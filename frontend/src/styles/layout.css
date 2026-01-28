@@ -1,0 +1,44 @@
+/* Responsive breakpoints using @custom-variant */
+@custom-variant mobile-landscape (@media (width >= 36rem)); /* 576px */
+@custom-variant tablet (@media (width >= 48rem)); /* 768px */
+@custom-variant tablet-landscape (@media (width >= 64rem)); /* 1024px */
+@custom-variant desktop (@media (width >= 80rem)); /* 1280px */
+@custom-variant large-desktop (@media (width >= 90rem)); /* 1440px */
+@custom-variant fullhd (@media (width >= 120rem)); /* 1920px */
+
+/* Grid system */
+:root {
+    /* Grid configuration */
+    --grid-mobile-columns: 4;
+    --grid-tablet-columns: 12;
+
+    --grid-gap-mobile: 0.75rem;
+    --grid-gap-tablet: 1rem;
+    --grid-gap-desktop: 3rem;
+
+    --grid-columns: var(--grid-mobile-columns);
+    --grid-column: calc(
+        (100% - ((var(--grid-mobile-columns) - 1) * var(--grid-gap-mobile))) / var(--grid-mobile-columns)
+    );
+    --grid-gap: var(--grid-gap-mobile);
+
+    @media (width >= 48rem) {
+        --grid-columns: var(--grid-tablet-columns);
+        --grid-column: calc(
+            (100% - ((var(--grid-tablet-columns) - 1) * var(--grid-gap-tablet))) / var(--grid-tablet-columns)
+        );
+        --grid-gap: var(--grid-gap-tablet);
+    }
+
+    @media (width >= 80rem) {
+        --grid-column: calc(
+            (100% - ((var(--grid-tablet-columns) - 1) * var(--grid-gap-desktop))) / var(--grid-tablet-columns)
+        );
+        --grid-gap: var(--grid-gap-desktop);
+    }
+}
+
+/* Custom grid utility */
+@utility gap-grid-gap {
+    gap: var(--grid-gap);
+}

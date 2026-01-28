@@ -11,7 +11,9 @@ import { Image } from '../Image/Image';
 import { List } from '../List/List';
 import { Table } from '../Table/Table';
 import { nbsp } from '../../../../utils/nbsp';
-import InnerHTML from 'dangerously-set-html-content';
+
+// Simple component to render raw HTML (replacement for dangerously-set-html-content)
+const InnerHTML = ({ html }: { html: string }) => <div dangerouslySetInnerHTML={{ __html: html }} />;
 
 export interface RichTextProps {
     content: string;

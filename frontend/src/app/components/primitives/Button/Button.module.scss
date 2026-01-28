@@ -10,7 +10,7 @@
     }
 
     &.md {
-        @apply text-16 leading-1.5 px-4 py-2;
+        @apply text-16 leading-1_5 px-4 py-2;
 
         .children {
             .label {
@@ -33,7 +33,7 @@
 
             @include hover {
                 &:hover {
-                    @apply bg-opacity-90 border-opacity-90;
+                    @apply bg-black/90 border-black/90;
 
                     &:active {
                         //
