@@ -12,6 +12,9 @@
       "required": true,
       "default": 5,
       "min": 1
+    },
+    "anchor": {
+      "type": "string"
     }
   }
 }

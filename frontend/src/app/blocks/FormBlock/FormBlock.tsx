@@ -26,6 +26,7 @@ graphql`
         sendEmail {
             ...appSendEmailFragment @relay(mask: false)
         }
+        anchor
     }
 `;
 

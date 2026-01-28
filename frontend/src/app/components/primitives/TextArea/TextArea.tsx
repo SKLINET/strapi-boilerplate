@@ -1,12 +1,12 @@
 'use client';
 
 import React, { ReactElement } from 'react';
-import styles from './Textarea.module.scss';
+import styles from './TextArea.module.scss';
 import clsx from 'clsx';
 import { UseFormRegister } from 'react-hook-form';
 import { Text } from '../Text/Text';
 
-export interface TextareaProps {
+export interface TextAreaProps {
     name: string;
     register: UseFormRegister<any>;
     error?: string | undefined;
@@ -17,7 +17,7 @@ export interface TextareaProps {
     className?: string;
 }
 
-const Textarea = ({
+const TextArea = ({
     name,
     register,
     error,
@@ -26,7 +26,7 @@ const Textarea = ({
     placeholder,
     required,
     className,
-}: TextareaProps): ReactElement => (
+}: TextAreaProps): ReactElement => (
     <div className={clsx(styles.wrapper, className)}>
         {label && (
             <Text className={styles.label}>
@@ -48,4 +48,4 @@ const Textarea = ({
     </div>
 );
 
-export { Textarea };
+export { TextArea };

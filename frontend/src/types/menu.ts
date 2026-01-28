@@ -7,6 +7,7 @@ export interface IMenu {
 export interface IMenuItem {
     id: string;
     label: string;
-    href: string;
+    href: string | null;
     openInNewTab: boolean;
+    anchor: string | null;
 }

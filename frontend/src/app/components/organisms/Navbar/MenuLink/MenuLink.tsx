@@ -7,6 +7,8 @@ import { IMenuItem } from '../../../../../types/menu';
 import { Link } from '../../../primitives/Link/Link';
 import { Text } from '../../../primitives/Text/Text';
 import { useAsPath } from '../../../../../utils/hooks/useAsPath';
+import { usePathname } from 'next/navigation';
+import { scrollToAnchor } from '../../../../../utils/scrollToAnchor';
 
 interface MenuLinkProps {
     data: IMenuItem;
@@ -14,8 +16,13 @@ interface MenuLinkProps {
     className?: string;
 }
 
-const MenuLink = ({ data: { label, href, openInNewTab }, handleClick, className }: MenuLinkProps): ReactElement => {
+const MenuLink = ({
+    data: { label, href, openInNewTab, anchor },
+    handleClick,
+    className,
+}: MenuLinkProps): ReactElement => {
     const asPath = useAsPath();
+    const pathname = usePathname();
 
     const allClassNames = clsx(styles.wrapper, asPath === href && styles.active, className);
     const alt = label;
@@ -25,6 +32,26 @@ const MenuLink = ({ data: { label, href, openInNewTab }, handleClick, className 
             {label}
         </Text>
     );
+
+    const withAnchorOnly = anchor && (!href || href === pathname);
+
+    if (withAnchorOnly) {
+        return (
+            <button
+                type="button"
+                onClick={() => {
+                    handleClick && handleClick();
+                    scrollToAnchor(anchor);
+                }}
+                className={allClassNames}
+                aria-label={alt}
+            >
+                {children}
+            </button>
+        );
+    }
+
+    if (!href) return <></>;
 
     if (asPath === href) {
         return (
@@ -60,7 +87,12 @@ const MenuLink = ({ data: { label, href, openInNewTab }, handleClick, className 
     }
 
     return (
-        <Link href={href} openInNewTab={openInNewTab} alt={alt} className={allClassNames}>
+        <Link
+            href={href + (anchor ? `#${anchor}` : '')}
+            openInNewTab={openInNewTab}
+            alt={alt}
+            className={allClassNames}
+        >
             {children}
         </Link>
     );

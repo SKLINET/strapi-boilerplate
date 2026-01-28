@@ -12,19 +12,20 @@ export const getMenuItemType = (
 ): IMenuItem | null => {
     if (!e) return null;
 
-    const { id, label, page, externalUrl, openInNewTab } = e;
+    const { id, label, page, externalUrl, openInNewTab, anchor } = e;
 
     const _page = getPageType(page, app);
 
     const href = _page?.href || externalUrl;
 
-    if (!href) return null;
+    if (!href && !anchor) return null;
 
     return {
         id: id,
         label: label,
-        href: href,
+        href: href || null,
         openInNewTab: openInNewTab || false,
+        anchor: anchor || null,
     };
 };
 

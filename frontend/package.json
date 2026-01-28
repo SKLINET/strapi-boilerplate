@@ -18,14 +18,15 @@
         "start": "NODE_ENV=production next start"
     },
     "engines": {
-        "node": ">=16.13.0 <=20.x.x"
+        "node": "20.x.x",
+        "npm": ">=6.0.0"
     },
     "dependencies": {
         "@cloudinary/url-gen": "^1.21.0",
         "@elastic/elasticsearch": "^8.10.0",
         "@formatjs/intl-localematcher": "^0.5.2",
         "@hookform/resolvers": "^3.3.2",
-        "@next/third-parties": "^15.3.5",
+        "@next/third-parties": "^15.5.4",
         "@react-google-maps/api": "^2.19.2",
         "axios": "^1.6.2",
         "busboy": "^1.6.0",
@@ -38,7 +39,7 @@
         "http-proxy": "^1.18.1",
         "iron-session": "^8.0.1",
         "negotiator": "^0.6.3",
-        "next": "^15.3.5",
+        "next": "^15.5.4",
         "nextjs-progressbar": "0.0.16",
         "nextjs-toploader": "^1.6.12",
         "nodemailer": "^6.7.5",
@@ -63,7 +64,7 @@
         "@graphql-codegen/cli": "^5.0.0",
         "@graphql-codegen/introspection": "4.0.0",
         "@graphql-codegen/schema-ast": "^4.0.0",
-        "@next/bundle-analyzer": "^15.3.5",
+        "@next/bundle-analyzer": "^15.5.4",
         "@svgr/webpack": "^8.1.0",
         "@types/busboy": "^1.5.3",
         "@types/http-proxy": "^1.17.9",
@@ -85,7 +86,7 @@
         "dotenv": "^16.3.1",
         "env-cmd": "^10.1.0",
         "eslint": "^8.54.0",
-        "eslint-config-next": "^15.3.5",
+        "eslint-config-next": "^15.5.4",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.1",
         "eslint-plugin-react": "^7.33.2",
@@ -113,7 +114,8 @@
         "trailingComma": "all",
         "printWidth": 120,
         "tabWidth": 4,
-        "singleQuote": true
+        "singleQuote": true,
+        "endOfLine": "lf"
     },
     "eslintConfig": {
         "env": {

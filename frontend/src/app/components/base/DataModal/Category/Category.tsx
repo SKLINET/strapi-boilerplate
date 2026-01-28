@@ -32,12 +32,7 @@ const Category = ({ title, data }: CategoryProps): ReactElement => {
 
     return (
         <div className={clsx(styles.wrapper, isOpen && styles.isOpen)}>
-            <button
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                className={styles.topbar}
-                aria-label={`Show / hide info in ${title}`}
-            >
+            <button type="button" onClick={() => setIsOpen(!isOpen)} className={styles.topbar}>
                 <span className={styles.label}>{title}</span>
                 <Icon name="plus" className={styles.icon} />
             </button>

@@ -31,6 +31,7 @@ graphql`
     fragment ArticlesListBlock_content on ComponentBlockArticlesListBlock {
         id
         countOnPage
+        anchor
     }
 `;
 

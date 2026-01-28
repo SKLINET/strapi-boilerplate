@@ -94,3 +94,5 @@ export const TABLET_LANDSCAPE_BREAKPOINT = 1024;
 export const DESKTOP_BREAKPOINT = 1280;
 export const LARGE_DESKTOP_BREAKPOINT = 1440;
 export const FULL_HD_BREAKPOINT = 1920;
+
+export const GOOGLE_MAP_API_KEY = '';

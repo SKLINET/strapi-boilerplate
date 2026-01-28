@@ -30,6 +30,10 @@ const UploadedVideo = ({
 }: UploadedVideoProps): ReactElement => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    const { show, update } = useVideoFade(withTransition, loop);
+
+    const resizedUrl = useVideoResize(url);
+
     useEffect(() => {
         const onLoadedMetadata = () => {
             if (!videoRef || !videoRef.current) return;
@@ -45,11 +49,9 @@ const UploadedVideo = ({
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
         return () => videoRef.current?.removeEventListener('loadedmetadata', onLoadedMetadata);
-    }, [videoRef, loaded]);
+    }, [videoRef, loaded, resizedUrl]);
 
-    const { show, update } = useVideoFade(withTransition, loop);
-
-    const resizedUrl = useVideoResize(url);
+    if (!resizedUrl) return <></>;
 
     return (
         <video
