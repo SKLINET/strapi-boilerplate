@@ -5,6 +5,7 @@ import styles from './PreviewToolbar.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../primitives/Icon/Icon';
 import { IApp } from '../../../../types/base/app';
+import { Link } from '../../primitives/Link/Link';
 
 interface PreviewToolbarProps {
     app: IApp;
@@ -42,9 +43,9 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
     return (
         <section className={styles.toolbar}>
             <section className={styles.toolbar__left}>
-                <a href={adminPath} className={styles.admin} aria-label="Go to admin">
-                    <Icon name={'sklinet-round'} className={styles.logo} />
-                </a>
+                <Link href={adminPath} className={styles.admin}>
+                    <Icon name="sklinet-round" className={styles.logo} />
+                </Link>
                 <span className={styles.admin__text}>náhled</span>
             </section>
 
@@ -53,16 +54,16 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
                     <span className={clsx(styles.indicator, isPublished && styles.indicator__active)} />
                     <span className={styles.title}>{title}</span>
                 </div>
-                <a className={styles.edit} href={editUrl} aria-label="Go to entity detail">
-                    <Icon className={styles.edit__icon} name={'edit'} />
+                <Link className={styles.edit} href={editUrl}>
+                    <Icon className={styles.edit__icon} name="edit" />
                     <span className={styles.link__title}>Upravit</span>
-                </a>
+                </Link>
             </section>
 
-            <a href={'/api/exit-preview'} className={styles.toolbar__right} aria-label="Exit preview mode">
-                <Icon name={'exit'} className={styles.exit} />
+            <Link href="/api/exit-preview" className={styles.toolbar__right}>
+                <Icon name="exit" className={styles.exit} />
                 <span className={styles.link__title}>ukončit náhled</span>
-            </a>
+            </Link>
         </section>
     );
 };

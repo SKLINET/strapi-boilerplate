@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { ReactElement } from 'react';
 import styles from './YoutubeVideo.module.scss';
 import clsx from 'clsx';
 
@@ -12,7 +12,7 @@ export interface YoutubeVideoProps {
     height?: number;
 }
 
-const YoutubeVideo = ({ uid, loaded, className, width, height }: YoutubeVideoProps): JSX.Element => (
+const YoutubeVideo = ({ uid, loaded, className, width, height }: YoutubeVideoProps): ReactElement => (
     <div className={clsx(styles.wrapper, className)}>
         <iframe
             onLoad={() => loaded()}

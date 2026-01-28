@@ -1,7 +1,6 @@
 export function trackPage(currentUrl: string) {
     const url = currentUrl?.split('/') || [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dataLayer = (window as any).dataLayer || [];
     dataLayer.push({
         event: 'ga.page',

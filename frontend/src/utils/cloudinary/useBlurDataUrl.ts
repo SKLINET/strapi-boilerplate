@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IImage } from '../../types/image';
 import { getImageUrl } from '../getImageUrl';
+import { transformCloudinaryUrl } from './cloudinaryUrl';
 
 interface UseBlurDataUrlProps {
     image: IImage | undefined;
@@ -17,17 +18,17 @@ export const useBlurDataUrl = ({ image, allow }: UseBlurDataUrlProps) => {
         if (!image || !allow) return;
 
         const getBlurDataURL = (src: string): string | null => {
-            // Image from Strapi
-            if (src.includes('uploads')) {
-                return null;
-            }
-
             // Cloudinary optimization
-            if (src.includes('upload')) {
+            if (src.includes('res.cloudinary') || src.includes('web-assets')) {
                 const srcParts = src.split('upload');
                 if (srcParts.length !== 2) return src;
 
-                return `${srcParts[0]}upload/f_auto/fl_lossy/w_50/dpr_auto/q_10${srcParts[1]}`;
+                return transformCloudinaryUrl(`${srcParts[0]}upload/f_auto/fl_lossy/w_50/dpr_auto/q_10${srcParts[1]}`);
+            }
+
+            // Image from Strapi
+            if (src.includes('uploads')) {
+                return null;
             }
 
             return null;

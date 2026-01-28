@@ -1,13 +1,21 @@
 .wrapper {
     @apply font-bold break-words whitespace-pre-line;
 
+    &.black {
+        @apply text-black;
+    }
+
+    &.white {
+        @apply text-white;
+    }
+
     &.useSizes {
         &.xl {
-            @apply text-32 leading-1.5;
+            @apply text-32 leading-1_5;
         }
 
         &.lg {
-            @apply text-24 leading-1.5;
+            @apply text-24 leading-1_5;
         }
 
         &.md {

@@ -15,6 +15,9 @@
       "type": "component",
       "component": "complementary.send-email",
       "repeatable": false
+    },
+    "anchor": {
+      "type": "string"
     }
   },
   "config": {}

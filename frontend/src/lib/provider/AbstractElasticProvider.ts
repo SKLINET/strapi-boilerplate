@@ -484,8 +484,8 @@ export default abstract class AbstractElasticProvider<
             await this.indexAll(false, prod);
             Logger.log('Done');
         } catch (e) {
-            console.log('E', (e as any).meta.body.error);
-            Logger.error((e as { meta: { body: { error: string } } }).meta.body.error);
+            console.log('E', (e as any)?.meta?.body?.error);
+            Logger.error((e as { meta: { body: { error: string } } })?.meta?.body?.error);
         }
     }
 
@@ -882,6 +882,9 @@ export default abstract class AbstractElasticProvider<
                 },
             },
             publishedAt: {
+                type: 'date',
+            },
+            publishDate: {
                 type: 'date',
             },
             priority: {

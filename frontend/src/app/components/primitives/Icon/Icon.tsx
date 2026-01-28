@@ -3,9 +3,17 @@ import styles from './Icon.module.scss';
 import clsx from 'clsx';
 
 import Alert from '../../../../../public/icons/alert.svg';
+import ArrowDown from '../../../../../public/icons/arrow-down.svg';
+import ArrowLeft from '../../../../../public/icons/arrow-left.svg';
+import ArrowRight from '../../../../../public/icons/arrow-right.svg';
+import Attachment from '../../../../../public/icons/attachment.svg';
+import ChevronDown from '../../../../../public/icons/chevron-down.svg';
+import Cross from '../../../../../public/icons/cross.svg';
 import Edit from '../../../../../public/icons/edit.svg';
 import Exit from '../../../../../public/icons/exit.svg';
 import Facebook from '../../../../../public/icons/facebook.svg';
+import GridOff from '../../../../../public/icons/grid-off.svg';
+import GridOn from '../../../../../public/icons/grid-on.svg';
 import Instagram from '../../../../../public/icons/instagram.svg';
 import Loader from '../../../../../public/icons/loader.svg';
 import Play from '../../../../../public/icons/play.svg';
@@ -17,9 +25,17 @@ import Tick from '../../../../../public/icons/tick.svg';
 
 export type Icons =
     | 'alert'
+    | 'arrowDown'
+    | 'arrowLeft'
+    | 'arrowRight'
+    | 'attachment'
+    | 'chevronDown'
+    | 'cross'
     | 'edit'
     | 'exit'
     | 'facebook'
+    | 'gridOff'
+    | 'gridOn'
     | 'instagram'
     | 'loader'
     | 'play'
@@ -49,16 +65,32 @@ export interface IconProps {
 }
 
 const Icon = ({ name, onClick, className }: IconProps): ReactElement => {
-    const renderIcon = (name: Icons): JSX.Element => {
+    const renderIcon = (name: Icons): ReactElement => {
         switch (name) {
             case 'alert':
                 return <Alert />;
+            case 'arrowDown':
+                return <ArrowDown />;
+            case 'arrowLeft':
+                return <ArrowLeft />;
+            case 'arrowRight':
+                return <ArrowRight />;
+            case 'attachment':
+                return <Attachment />;
+            case 'chevronDown':
+                return <ChevronDown />;
+            case 'cross':
+                return <Cross />;
             case 'edit':
                 return <Edit />;
             case 'exit':
                 return <Exit />;
             case 'facebook':
                 return <Facebook />;
+            case 'gridOff':
+                return <GridOff />;
+            case 'gridOn':
+                return <GridOn />;
             case 'instagram':
                 return <Instagram />;
             case 'loader':

@@ -3,11 +3,10 @@ import { NextComponentType } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
 export interface BaseBlockProps {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     item?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     blocksData?: any;
     app?: any;
 }

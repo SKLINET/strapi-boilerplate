@@ -23,6 +23,7 @@ graphql`
         video {
             ...appVideoFragment @relay(mask: false)
         }
+        anchor
     }
 `;
 

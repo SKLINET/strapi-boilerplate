@@ -23,8 +23,7 @@ export default abstract class AbstractStrapiProvider<
     TFind extends OperationType,
     TItem extends StrapiRecord = StrapiRecord,
     TItems extends { data: ReadonlyArray<StrapiRecord | null> } = { data: ReadonlyArray<StrapiRecord | null> },
-> implements Provider
-{
+> implements Provider {
     protected environment: Record<string, Environment> = {
         preview: createRelayEnvironment({}, '', true),
         production: createRelayEnvironment({}, '', false),

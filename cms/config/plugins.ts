@@ -27,6 +27,8 @@ export default ({ env }) => ({
         "email",
         "phone",
         "checkbox",
+        "select",
+        "file",
         "submit"
       ],
       allowConditions: false,

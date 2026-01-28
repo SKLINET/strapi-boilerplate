@@ -3,27 +3,24 @@
 
     li {
         @apply mb-6 pl-8 relative;
+
         &:last-child {
             @apply mb-0;
         }
     }
 }
 
-.ul {
-    li {
-        &:before {
-            @apply w-1.5 h-1.5 rounded-full absolute left-2.5 top-2 bg-black;
-            content: '';
-        }
+.ul > li {
+    &:before {
+        @apply w-1.5 h-1.5 rounded-full absolute left-2.5 top-2 bg-black;
+        content: '';
     }
 }
 
-.ol {
-    li {
-        &:before {
-            @apply absolute left-0 top-0 w-6 h-6 bg-black rounded-full flex items-center justify-center text-center text-white;
-            counter-increment: list;
-            content: counter(list);
-        }
+.ol > li {
+    &:before {
+        @apply absolute left-0 top-0 w-6 h-6 bg-black rounded-full flex items-center justify-center text-center text-white;
+        counter-increment: list;
+        content: counter(list);
     }
 }

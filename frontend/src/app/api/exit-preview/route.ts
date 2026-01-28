@@ -11,5 +11,3 @@ export async function GET(request: Request) {
 
     return NextResponse.redirect(new URL(referer));
 }
-
-export const dynamic = 'force-static';
