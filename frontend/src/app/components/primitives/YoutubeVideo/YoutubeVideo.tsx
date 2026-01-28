@@ -23,6 +23,7 @@ const YoutubeVideo = ({ uid, loaded, className, width, height }: YoutubeVideoPro
             frameBorder="0"
             allowFullScreen={true}
             allow="autoplay; fullscreen; encrypted-media"
+            referrerPolicy="strict-origin-when-cross-origin"
         />
     </div>
 );
