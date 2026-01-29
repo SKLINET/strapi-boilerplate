@@ -1,12 +1,13 @@
 'use client';
 
-import React, { ReactElement, useState } from 'react';
+import React, { JSX, ReactElement, useState } from 'react';
 import styles from './Video.module.scss';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import { IVideo } from '../../../../types/video';
 import { Image } from '../../primitives/Image/Image';
 import { Icon } from '../../primitives/Icon/Icon';
+import { isYoutubeShortsUrl } from '../../../../utils/isYoutubeShortsUrl';
 
 const UploadedVideo = dynamic(() =>
     import('../../primitives/UploadedVideo/UploadedVideo').then((mod) => mod.UploadedVideo),
@@ -27,6 +28,7 @@ interface VideoProps {
 const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: VideoProps): ReactElement => {
     const [play, setPlay] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const isShorts = externalVideo?.provider === 'youtube' && isYoutubeShortsUrl(externalVideo?.url);
 
     const renderVideo = (): JSX.Element => {
         const videoClassNames = clsx(styles.video);
@@ -44,6 +46,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
                             uid={externalVideo.providerUid}
                             loaded={() => setLoaded(true)}
                             className={videoClassNames}
+                            url={externalVideo.url}
                         />
                     );
                 }
@@ -115,7 +118,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, className }: Vid
     const icon = play ? 'loader' : 'play';
 
     return (
-        <div className={clsx(styles.wrapper, play && loaded && styles.showVideo, className)}>
+        <div className={clsx(styles.wrapper, play && loaded && styles.showVideo, isShorts && styles.shorts, className)}>
             {play ? renderVideo() : <></>}
             <div className={styles.overlay}>
                 <button

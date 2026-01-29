@@ -26,6 +26,9 @@ const config: Config = {
             1.5: '1.5',
         },
         extend: {
+            aspectRatio: {
+                '9/16': '9 / 16',
+            },
             colors: {
                 red: '#e41f47',
                 black: '#000000',
@@ -54,6 +57,7 @@ const config: Config = {
                 '16-9': '56.25vw',
             },
             maxWidth: {
+                90: '22.5rem',
                 360: '90rem',
             },
             padding: {
