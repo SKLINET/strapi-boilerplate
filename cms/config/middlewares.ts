@@ -11,6 +11,7 @@ export default [
             "'self'",
             "youtube.com",
             "www.youtube.com",
+            "www.youtube-nocookie.com",
             "vimeo.com",
             "*.vimeo.com",
             "facebook.com",
@@ -46,6 +47,8 @@ export default [
             "s3.amazonaws.com",
             "market-assets.strapi.io",
             "res.cloudinary.com",
+            "i.ytimg.com",
+            "i3.ytimg.com",
           ],
           "media-src": [
             "'self'",
