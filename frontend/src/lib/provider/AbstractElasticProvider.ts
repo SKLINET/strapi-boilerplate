@@ -1,8 +1,7 @@
-import { RequestBody } from '@elastic/elasticsearch';
+import { RequestBody, estypes } from '@elastic/elasticsearch';
 import { OperationType } from 'relay-runtime';
 import { Logger } from '../../services';
 import getElastic from '../elastic';
-import { Id, SearchHit, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types';
 import config from '../../../sklinet.config.json';
 import AbstractStrapiProvider, { FindResponse, StrapiRecord } from './AbstractStrapiProvider';
 import { AggregatedType, ElasticType } from '../../types/base/elastic';
@@ -62,8 +61,8 @@ export default abstract class AbstractElasticProvider<
 
         const result = await getElastic().search(variables);
         const { hits: hitsStruct, total: totalValue } = result.hits;
-        const total = totalValue as SearchTotalHits;
-        const hits = hitsStruct as SearchHit[];
+        const total = totalValue as estypes.SearchTotalHits;
+        const hits = hitsStruct as estypes.SearchHit[];
 
         if (total?.value < 1) {
             return null;
@@ -88,8 +87,8 @@ export default abstract class AbstractElasticProvider<
         try {
             const result = await getElastic().search(options);
             const { hits: hitsStruct, total: totalValue } = result.hits;
-            const total = totalValue as SearchTotalHits;
-            const hits = hitsStruct as SearchHit[];
+            const total = totalValue as estypes.SearchTotalHits;
+            const hits = hitsStruct as estypes.SearchHit[];
 
             return {
                 count: total?.value || 0,
@@ -339,10 +338,10 @@ export default abstract class AbstractElasticProvider<
                             index: this.getIndex(locale, prod),
                             document: item,
                             refresh: true,
-                            id: item.documentId as Id,
+                            id: item.documentId as estypes.Id,
                         });
                         result.push({
-                            id: item.documentId as Id,
+                            id: item.documentId as estypes.Id,
                             type: this.getApiKey(),
                             locale,
                             index: this.getIndex(locale, prod),
@@ -370,10 +369,10 @@ export default abstract class AbstractElasticProvider<
                         index: this.getIndex(undefined, prod),
                         document: { ...item },
                         refresh: true,
-                        id: item.documentId as Id,
+                        id: item.documentId as estypes.Id,
                     });
                     result.push({
-                        id: item.documentId as Id,
+                        id: item.documentId as estypes.Id,
                         type: this.getApiKey(),
                         index: this.getIndex(undefined, prod),
                     });

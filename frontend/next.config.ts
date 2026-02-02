@@ -13,6 +13,7 @@ const { parsed: myEnv } = config({
 });
 
 const nextConfig: NextConfig = {
+    reactCompiler: true,
     images: images as NextConfig['images'],
     experimental: {
         staleTimes: {

@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
         const optionalTitle =
             Object.values(formData).find((value) => typeof value === 'string' && value.trim() !== '') || '';
 
-        // eslint-disable-next-line no-async-promise-executor
         const promise = new Promise(async (resolve, reject) => {
             await commitMutation(environment, {
                 mutation: mutation,

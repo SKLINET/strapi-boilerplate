@@ -4,7 +4,6 @@ import { FormBlock_content$data } from './__generated__/FormBlock_content.graphq
 import { Form } from '../../components/blocks/Form/Form';
 import { IApp } from '../../../types/base/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormBlockStaticProps {}
 
 export interface FormBlockContent extends Omit<FormBlock_content$data, ' $fragmentType'> {

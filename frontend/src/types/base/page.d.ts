@@ -38,12 +38,12 @@ interface MyPageContext extends MyPageProps {
 export type MyPageProps = AppData & {
     redirect?: Redirect;
     page?: PageDefault;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     relayData?: any;
     params?: Record<string, any>;
     query?: ParsedUrlQuery;
     variables?: Record<string, any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     blocksProps?: any;
 };
 

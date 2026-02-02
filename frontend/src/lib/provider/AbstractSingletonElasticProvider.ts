@@ -1,10 +1,9 @@
-import { RequestBody } from '@elastic/elasticsearch';
+import { RequestBody, estypes } from '@elastic/elasticsearch';
 import { OperationType } from 'relay-runtime';
 import { Logger } from '../../services';
 import getElastic from '../elastic';
 import config from '../../../sklinet.config.json';
 import { IndexingResultItem } from './AbstractElasticProvider';
-import { SearchHit, SearchTotalHits } from '@elastic/elasticsearch/lib/api/types';
 import AbstractSingletonStrapiProvider, { SingletonStrapiRecord } from './AbstractSingletonStrapiProvider';
 
 export default abstract class AbstractSingletonElasticProvider<
@@ -28,8 +27,8 @@ export default abstract class AbstractSingletonElasticProvider<
         };
         const result = await getElastic().search(options);
         const { hits: hitsStruct, total: totalValue } = result.hits;
-        const total = totalValue as SearchTotalHits;
-        const hits = hitsStruct as SearchHit[];
+        const total = totalValue as estypes.SearchTotalHits;
+        const hits = hitsStruct as estypes.SearchHit[];
 
         if (total.value < 1) {
             return null;

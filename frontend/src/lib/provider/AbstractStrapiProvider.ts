@@ -308,7 +308,6 @@ export default abstract class AbstractStrapiProvider<
     async create<TItem extends BaseRecord = TFind['response']['items'][number]>(
         variables: any,
     ): Promise<Record<string, any>> {
-        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             await commitMutation<any>(this.getEnvironment(false), {
                 mutation: this.createNode as GraphQLTaggedNode,
@@ -331,7 +330,6 @@ export default abstract class AbstractStrapiProvider<
     async update<TItem extends BaseRecord = TFind['response']['items'][number]>(
         variables: any,
     ): Promise<Record<string, any>> {
-        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             await commitMutation<any>(this.getEnvironment(false), {
                 mutation: this.updateNode as GraphQLTaggedNode,
