@@ -14,12 +14,9 @@ const { parsed: myEnv } = config({
 
 const nextConfig: NextConfig = {
     reactCompiler: true,
+    cacheComponents: true,
     images: images as NextConfig['images'],
     experimental: {
-        staleTimes: {
-            dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
-            static: 180,
-        },
         inlineCss: true,
     },
     compiler: {

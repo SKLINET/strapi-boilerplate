@@ -3,6 +3,7 @@ import { Environment, GraphQLTaggedNode } from 'relay-runtime';
 import { createRelayEnvironment } from '../../relay/createRelayEnvironment';
 import { OperationType } from 'relay-runtime/lib/util/RelayRuntimeTypes';
 import { fetchQuery } from 'relay-runtime';
+import { cacheTag, cacheLife } from 'next/cache';
 
 export type SingletonStrapiRecord = {
     [key: string]: unknown;
@@ -47,6 +48,13 @@ export default abstract class AbstractSingletonStrapiProvider<
      * @param preview
      */
     async get(locale?: string, preview = false): Promise<TItem | null> {
+        'use cache';
+
+        if (!preview) {
+            cacheLife('days');
+            cacheTag('settings');
+        }
+
         const result = await fetchQuery<TOperation>(
             this.getEnvironment(preview),
             this.node,

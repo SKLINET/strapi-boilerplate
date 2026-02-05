@@ -1,5 +1,6 @@
 'use server';
 
+import { cacheTag, cacheLife } from 'next/cache';
 import getPublicationState from '../../utils/base/getPublicationState';
 import { IApp } from '../../types/base/app';
 import { IArticleCategory } from '../../types/article';
@@ -20,6 +21,12 @@ export const fetchArticleCategories = async (
     categories: IArticleCategory[];
     canLoadMore: boolean;
 }> => {
+    'use cache';
+
+    if (!app.preview) {
+        cacheLife('days');
+        cacheTag('article-categories');
+    }
     const { skipCategoryId } = options;
 
     const page = options.page ? Math.max(options.page, 1) : 1;

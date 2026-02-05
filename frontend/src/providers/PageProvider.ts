@@ -1,5 +1,6 @@
 import { GetStaticPathsResult } from 'next';
 import { fetchQuery } from 'relay-runtime';
+import { cacheTag, cacheLife } from 'next/cache';
 import { pageDetailQuery, pageListQuery, pageStaticPathsQuery } from '../relay/page';
 import * as d from '../relay/__generated__/pageDetailQuery.graphql';
 import * as l from '../relay/__generated__/pageListQuery.graphql';
@@ -48,6 +49,13 @@ class PageProvider extends AbstractStrapiProvider<
      * @param preview
      */
     async getPageBySlug(locale: string | undefined, slug: string[], preview: boolean | undefined) {
+        'use cache';
+
+        if (!preview) {
+            cacheLife('hours');
+            cacheTag('pages', `page-${slug.join('-')}`);
+        }
+
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
 
@@ -75,6 +83,13 @@ class PageProvider extends AbstractStrapiProvider<
      * @param preview
      */
     async getPageMetadata(locale: string | undefined, slug: string[], preview: boolean | undefined) {
+        'use cache';
+
+        if (!preview) {
+            cacheLife('hours');
+            cacheTag('pages', `page-${slug.join('-')}`);
+        }
+
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
