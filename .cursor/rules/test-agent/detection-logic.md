@@ -228,24 +228,16 @@ After `autoFix()`, always check if the result is empty. If empty, should STOP wi
 
 ---
 
-### 4. checkExists(name, type)
+### 4. checkExists(name)
 
-Checks if a component with the given name already exists.
+Checks if a block with the given name already exists. Name must already include the `-block` suffix.
 
 **Implementation:**
 
 ```javascript
-function checkExists(name, type = 'block') {
-    const basePath = type === 'block'
-        ? 'cms/src/components/block/'
-        : 'cms/src/components/complementary/';
-
-    // For blocks, name already includes '-block' suffix
-    // For complementary, name is as-is
-
+function checkExists(name) {
+    const basePath = 'cms/src/components/block/';
     const filePath = `${basePath}${name}.json`;
-
-    // Check if file exists
     return fileExists(filePath);
 }
 ```
@@ -256,24 +248,14 @@ Assume existing: `hero-block.json`, `contact-form-block.json`
 
 | Input | Check For | Exists? |
 |-------|-----------|---------|
-| `hero` | `hero-block.json` | `true` |
-| `book` | `book-block.json` | `false` |
-| `hero-block` | `hero-block-block.json` | `false` (different file) |
-
-**Test Cases (Complementary):**
-
-Assume existing: `button.json`, `video.json`, `send-email.json`
-
-| Input | Check For | Exists? |
-|-------|-----------|---------|
-| `button` | `button.json` | `true` |
-| `author` | `author.json` | `false` |
-| `video` | `video.json` | `true` |
+| `hero-block` | `hero-block.json` | `true` |
+| `book-block` | `book-block.json` | `false` |
+| `hero-block-block` | `hero-block-block.json` | `false` (wrong suffix) |
 
 **Important:**
 
-- Duplicate check must run **AFTER** auto-fix
-- Example flow: `VIDEO` → auto-fix → `video` → check exists → STOP if exists
+- Duplicate check must run **AFTER** auto-fix and after adding `-block` suffix
+- Example flow: `HERO` → auto-fix → `hero` → `hero-block` → check exists → STOP if exists
 
 ---
 

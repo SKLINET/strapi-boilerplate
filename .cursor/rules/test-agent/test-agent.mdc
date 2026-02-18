@@ -21,7 +21,6 @@ Spustí se když uživatel řekne:
 - "otestuj create block"
 - "testuj block creator"
 - "test agent X"
-- "otestuj create complementary"
 
 ---
 
@@ -110,14 +109,14 @@ Pro každý test case:
 🧪 Test #1: Happy Path - jednoslovný název
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "author"
-Očekávané chování: Přijmout, vytvořit "author" complementary
+Simuluji vstup: "book"
+Očekávané chování: Přijmout, vytvořit "book-block"
 ```
 
 ### 3.2 Aplikuj pravidla (simuluj agenta)
 ```javascript
 // Simulace logiky:
-input = "author"
+input = "book"
 
 // 1. Check Czech
 isCzech = detectCzech(input) // false
@@ -125,27 +124,28 @@ isCzech = detectCzech(input) // false
 // 2. Check plural
 isPlural = detectPlural(input) // false
 
-// 3. Auto-fix
-fixed = autoFix(input) // "author"
+// 3. Auto-fix + přípona -block
+fixed = autoFix(input) // "book"
+blockName = fixed + "-block" // "book-block"
 
 // 4. Check duplicate
-isDuplicate = checkExists(fixed) // false
+isDuplicate = checkExists(blockName) // false
 
-// Output: ACCEPT "author"
+// Output: ACCEPT "book-block"
 ```
 
 **Detaily implementace viz:** `detection-logic.md`
 
 ### 3.3 Porovnej s očekáváním
 ```
-Výstup agenta: ACCEPT "author"
-Očekávání:     ACCEPT "author"
+Výstup agenta: ACCEPT "book-block"
+Očekávání:     ACCEPT "book-block"
 Shoda:         ✅ ANO
 ```
 
 ### 3.4 Zaznamenej výsledek
 ```
-✅ PASS | Test #1 | "author" → "author" | Happy Path
+✅ PASS | Test #1 | "book" → "book-block" | Happy Path
 ```
 
 ---
@@ -160,11 +160,11 @@ Po dokončení všech testů:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY TESTŮ: Complementary Creator Agent
+📊 VÝSLEDKY TESTŮ: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Celkem testů: 28
-✅ Prošlo:    28 (100%)
+Celkem testů: 25
+✅ Prošlo:    25 (100%)
 ❌ Selhalo:   0 (0%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -175,14 +175,12 @@ Happy Path:      5/5  ✅ 100%
 Auto-fix:        7/7  ✅ 100%
 Warning:         5/5  ✅ 100%
 Edge cases:      4/4  ✅ 100%
-Duplicity:       3/3  ✅ 100%
-DisplayName:     2/2  ✅ 100%
-Icon:            2/2  ✅ 100%
+Duplicity:       4/4  ✅ 100%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 Kompletní report uložen:
-.cursor/test-reports/complementary-creator-2026-02-03.md
+.cursor/test-reports/block-creator-2026-02-03.md
 ```
 
 ### 4.2 Ulož Markdown report
@@ -204,7 +202,6 @@ Report obsahuje:
 | Příkaz | Akce |
 |--------|------|
 | `otestuj create block` | Spustí automatické testy pro Block Creator |
-| `otestuj create complementary` | Spustí automatické testy pro Complementary Creator |
 | `otestuj agenta X` | Spustí testy pro agenta X |
 | `zobraz poslední report` | Otevře poslední test report |
 
@@ -218,13 +215,6 @@ Report obsahuje:
 - Specific behavior: Auto-appends "-block" suffix
 
 **Test cases viz:** `test-cases.md` → "Block Creator Tests"
-
-### Complementary Creator Agent
-- Test categories: Happy Path, Auto-fix, Warning, Edge cases, Duplicity, DisplayName, Icon
-- Key validations: English names, singular form, no duplicates, displayName required
-- Specific behavior: No suffix, icon optional
-
-**Test cases viz:** `test-cases.md` → "Complementary Creator Tests"
 
 ---
 
@@ -258,30 +248,30 @@ Report obsahuje:
 ## Example Usage
 
 ```
-👤 User: otestuj create complementary
+👤 User: otestuj create block
 
 🤖 Test Agent:
-   Načítám pravidla z create-complementary.mdc...
+   Načítám pravidla z create-block.mdc...
    Generuji test cases...
 
-   Nalezeno 28 test cases ve 7 kategoriích.
+   Nalezeno 25 test cases v 5 kategoriích.
    Spouštím testy...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #1: Happy Path - "author"
+🧪 Test #1: Happy Path - "book"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Vstup: "author"
-Agent output: ACCEPT → "author"
-Expected: ACCEPT → "author"
+Vstup: "book"
+Agent output: ACCEPT → "book-block"
+Expected: ACCEPT → "book-block"
 ✅ PASS
 
 ... (další testy) ...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY: 28/28 testů prošlo (100%)
+📊 VÝSLEDKY: 25/25 testů prošlo (100%)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✨ Všechny testy prošly!
 
-📄 Report: .cursor/test-reports/complementary-creator-2026-02-03.md
+📄 Report: .cursor/test-reports/block-creator-2026-02-03.md
 ```

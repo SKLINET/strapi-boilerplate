@@ -1,12 +1,12 @@
 # Test Cases - Generators and Examples
 
-Test case definitions and generators for different agents.
+Test case definitions and generators for the Block Creator agent.
 
 ---
 
 ## Test Case Categories
 
-All agents should be tested across these categories:
+Block Creator should be tested across these categories:
 
 ### A) Happy Path (Valid Inputs)
 Inputs that should be accepted without modification or warnings.
@@ -21,7 +21,7 @@ Inputs that should trigger warnings but may be accepted after confirmation.
 Extreme or unusual inputs (empty, very long, unicode, etc.).
 
 ### E) Duplicates
-Inputs that conflict with existing components.
+Inputs that conflict with existing blocks.
 
 ---
 
@@ -80,83 +80,6 @@ Assume existing blocks: `hero-block`, `contact-form-block`, `testimonial-block`
 | E1 | `hero` | STOP "Block 'hero-block' already exists" | Direct duplicate |
 | E2 | `Hero` | AUTO-FIX `hero` → STOP | Duplicate after fix |
 | E3 | `hero-block` | STOP "Block 'hero-block' already exists" | Exact match with suffix |
-
----
-
-## Complementary Creator Agent Tests
-
-### A) Happy Path
-
-| ID | Input | Expected Output | Description |
-|----|-------|----------------|-------------|
-| A1 | `author` | ACCEPT `author` | Single word |
-| A2 | `testimonial` | ACCEPT `testimonial` | Single word |
-| A3 | `gallery` | ACCEPT `gallery` | Single word |
-| A4 | `image-gallery` | ACCEPT `image-gallery` | Multi-word |
-| A5 | `step1` | ACCEPT `step1` | With number |
-
-### B) Auto-fix Cases
-
-| ID | Input | Expected Output | Fix Applied | Description |
-|----|-------|----------------|-------------|-------------|
-| B1 | `ImageGallery` | AUTO-FIX `image-gallery` | PascalCase → kebab-case | PascalCase conversion |
-| B2 | `socialShare` | AUTO-FIX `social-share` | camelCase → kebab-case | camelCase conversion |
-| B3 | `image_gallery` | AUTO-FIX `image-gallery` | Underscores → hyphens | Underscore replacement |
-| B4 | `image gallery` | AUTO-FIX `image-gallery` | Spaces → hyphens | Space replacement |
-| B5 | `AUTHOR` | AUTO-FIX `author` | Uppercase → lowercase | Case normalization |
-| B6 | `author!` | AUTO-FIX `author` | Remove special chars | Special character removal |
-| B7 | `galerie` | WARN (Czech) OR AUTO-FIX | Czech word detection | Czech without diacritics |
-
-**Note on B7:** `galerie` is valid after diacritic removal, but it's a Czech word. Czech detection should take precedence.
-
-### C) Warning Cases
-
-| ID | Input | Expected Output | Warning Reason |
-|----|-------|----------------|----------------|
-| C1 | `authors` | WARN `author` | Plural → suggest singular |
-| C2 | `galleries` | WARN `gallery` | Plural (-ies) → suggest singular |
-| C3 | `images` | WARN `image` | Plural → suggest singular |
-| C4 | `autor` | WARN "use English" | Czech word |
-| C5 | `tlačítko` | WARN "use English" | Czech word with diacritics |
-
-### D) Edge Cases
-
-| ID | Input | Expected Output | Description |
-|----|-------|----------------|-------------|
-| D1 | `` (empty) | STOP "Name cannot be empty" | Empty input |
-| D2 | `---` | STOP "Name cannot be empty" | Only hyphens (empty after fix) |
-| D3 | `very-long-name-for-component` | ACCEPT | Very long name |
-| D4 | `кнопка` (Cyrillic) | STOP "Invalid characters" | Unicode characters |
-
-### E) Duplicates
-
-**Pre-condition:** Scan `cms/src/components/complementary/` for existing components.
-
-Assume existing: `button`, `ecomail`, `mailchimp`, `send-email`, `video`
-
-| ID | Input | Expected Output | Description |
-|----|-------|----------------|-------------|
-| E1 | `button` | STOP "Component 'button' already exists" | Direct duplicate |
-| E2 | `Button` | AUTO-FIX `button` → STOP | Duplicate after fix |
-| E3 | `video` | STOP "Component 'video' already exists" | Exact match |
-
-### F) DisplayName Validation
-
-| ID | ComponentName | DisplayName Input | Expected Output | Description |
-|----|---------------|-------------------|----------------|-------------|
-| F1 | `author` | `` (empty) | STOP "displayName required" | Empty displayName |
-| F2 | `author` | `"Autor"` | ACCEPT | Valid Czech displayName |
-| F3 | `author` | `"Author"` | ACCEPT | Valid English displayName |
-| F4 | `image-gallery` | `"Image Gallery"` | ACCEPT | Multi-word displayName |
-
-### G) Icon Validation
-
-| ID | Icon Input | Expected Output | Description |
-|----|-----------|----------------|-------------|
-| G1 | `` (empty/skip) | ACCEPT | Icon is optional |
-| G2 | `"picture"` | ACCEPT | Valid icon |
-| G3 | `"video"` | ACCEPT | Valid icon |
-| G4 | `"unknown-xyz"` | ACCEPT | Unknown icon (Strapi validates) |
 
 ---
 
@@ -316,34 +239,34 @@ Očekávání: ACCEPT "book-block"
 ✅ PASS | Test #1 | "book" → "book-block" | Happy Path
 ```
 
-### Complementary Creator - Test #4
+### Block Creator - Test #4 (Duplicita)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #4: Duplicita - existující component
+🧪 Test #4: Duplicita - existující blok
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "button"
-Očekávané chování: STOP - component již existuje
+Simuluji vstup: "hero"
+Očekávané chování: STOP - blok hero-block již existuje
 
 Aplikuji pravidla...
-- detectCzech("button") = false
-- detectPlural("button") = false
-- autoFix("button") = "button"
-- checkExists("button") = true ❌
-  Nalezen: cms/src/components/complementary/button.json
+- detectCzech("hero") = false
+- detectPlural("hero") = false
+- autoFix("hero") = "hero" → blockName = "hero-block"
+- checkExists("hero-block") = true ❌
+  Nalezen: cms/src/components/block/hero-block.json
 
-Výstup: STOP "Component 'button' already exists"
-Očekávání: STOP s upozorněním na existující component
+Výstup: STOP "Block 'hero-block' already exists"
+Očekávání: STOP s upozorněním na existující blok
 
-✅ PASS | Test #4 | "button" → STOP (duplicate) | Duplicate detection
+✅ PASS | Test #4 | "hero" → STOP (duplicate) | Duplicate detection
 ```
 
 ---
 
 ## Adding Custom Test Cases
 
-To add new test cases for an agent:
+To add new test cases for Block Creator:
 
 1. **Identify the category** (Happy Path, Auto-fix, Warning, Edge case, Duplicate)
 2. **Define input and expected output**

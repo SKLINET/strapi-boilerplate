@@ -97,7 +97,6 @@
 | `rychlý test create block` | Smoke | Basic tests only |
 | `testuj create block s: kniha, books` | Targeted | Custom inputs |
 | `regresní test create block` | Regression | Re-run failed tests |
-| `otestuj všechny agenty` | Full | All agents |
 
 ### Process
 

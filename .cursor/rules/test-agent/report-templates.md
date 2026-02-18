@@ -32,8 +32,6 @@ Generuji test cases...
   - Warning:        {N3} testů
   - Edge cases:     {N4} testů
   - Duplicity:      {N5} testů
-  [- DisplayName:   {N6} testů]  // only for complementary
-  [- Icon:          {N7} testů]  // only for complementary
 
 Spouštím testy...
 ```
@@ -131,7 +129,7 @@ Test #{ID}: {Category} - {Description}
 
 **Filename:** `{agent-name}-{YYYY-MM-DD}.md`
 
-**Example:** `complementary-creator-2026-02-03.md`
+**Example:** `block-creator-2026-02-03.md`
 
 ### Full Template
 
@@ -154,8 +152,6 @@ Test #{ID}: {Category} - {Description}
 | Warnings | {t} | {p} | {f} | {%} |
 | Edge Cases | {t} | {p} | {f} | {%} |
 | Duplicates | {t} | {p} | {f} | {%} |
-[| DisplayName | {t} | {p} | {f} | {%} |]
-[| Icon | {t} | {p} | {f} | {%} |]
 | **TOTAL** | **{t}** | **{p}** | **{f}** | **{%}** |
 
 ---
@@ -200,10 +196,6 @@ Test #{ID}: {Category} - {Description}
 | E1 | `{input}` | {expected} | {actual} | {✅ PASS | ❌ FAIL} |
 [... etc ...]
 
-[### F) DisplayName Validation]
-
-[### G) Icon Validation]
-
 ---
 
 ## 💡 Recommendations
@@ -226,10 +218,10 @@ Test #{ID}: {Category} - {Description}
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 ANALÝZA PRAVIDEL: Complementary Creator Agent
+🔍 ANALÝZA PRAVIDEL: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Načteny pravidla: .cursor/rules/create-complementary/create-complementary.mdc
+Načteny pravidla: .cursor/rules/create-block/create-block.mdc
 Extrahováno:
   ✓ Validační pravidla (English, singular)
   ✓ Auto-fix pravidla (PascalCase, spaces, etc.)
@@ -238,14 +230,12 @@ Extrahováno:
 
 Generuji test cases...
 
-✓ Vygenerováno 28 test cases ve 7 kategoriích:
+✓ Vygenerováno 25 test cases v 5 kategoriích:
   - Happy Path:     5 testů
   - Auto-fix:       7 testů
   - Warning:        5 testů
   - Edge cases:     4 testů
-  - Duplicity:      3 testů
-  - DisplayName:    2 testy
-  - Icon:           2 testy
+  - Duplicity:      4 testů
 
 Spouštím testy...
 
@@ -253,37 +243,28 @@ Spouštím testy...
 🧪 Test #1: Happy Path - jednoslovný název
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "author"
-Očekávané chování: Přijmout, vytvořit "author" complementary
+Simuluji vstup: "book"
+Očekávané chování: Přijmout, vytvořit "book-block"
 
 Aplikuji pravidla...
-- detectCzech("author") = false
-- detectPlural("author") = false
-- autoFix("author") = "author"
-- checkExists("author") = false
+- detectCzech("book") = false
+- detectPlural("book") = false
+- autoFix("book") = "book" → "book-block"
+- checkExists("book-block") = false
 
-Výstup: ACCEPT "author"
-Očekávání: ACCEPT "author"
+Výstup: ACCEPT "book-block"
+Očekávání: ACCEPT "book-block"
 
-✅ PASS | Test #1 | "author" → "author" | Happy Path
+✅ PASS | Test #1 | "book" → "book-block" | Happy Path
 
-[... tests #2-27 ...]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #28: Icon - prázdný je OK
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Simuluji vstup: icon=""
-Očekávané chování: ACCEPT - icon je optional
-
-✅ PASS | Test #28 | icon="" → ACCEPT | Icon optional
+[... další testy ...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY TESTŮ: Complementary Creator Agent
+📊 VÝSLEDKY TESTŮ: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Celkem testů: 28
-✅ Prošlo:    28 (100%)
+Celkem testů: 25
+✅ Prošlo:    25 (100%)
 ❌ Selhalo:   0 (0%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -294,16 +275,14 @@ Happy Path:      5/5  ✅ 100%
 Auto-fix:        7/7  ✅ 100%
 Warning:         5/5  ✅ 100%
 Edge cases:      4/4  ✅ 100%
-Duplicity:       3/3  ✅ 100%
-DisplayName:     2/2  ✅ 100%
-Icon:            2/2  ✅ 100%
+Duplicity:       4/4  ✅ 100%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✨ Všechny testy prošly!
 
 📄 Kompletní report uložen:
-.cursor/test-reports/complementary-creator-2026-02-03.md
+.cursor/test-reports/block-creator-2026-02-03.md
 ```
 
 ### Failed Test Run (92%)
@@ -464,7 +443,6 @@ Reports should be stored in:
 
 Examples:
 - `.cursor/test-reports/block-creator-2026-02-03.md`
-- `.cursor/test-reports/complementary-creator-2026-02-03.md`
 - `.cursor/test-reports/block-creator-2026-02-10.md` (re-test)
 
 Keep historical reports to track:

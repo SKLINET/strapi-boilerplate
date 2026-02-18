@@ -4,7 +4,7 @@ Automated testing framework for validating other agents' behavior and rules.
 
 ## Overview
 
-Test Agent systematically validates that other agents (like Block Creator, Complementary Creator) correctly handle various inputs according to their defined rules.
+Test Agent systematically validates that other agents (like Block Creator) correctly handle various inputs according to their defined rules.
 
 ## How It Works
 
@@ -51,23 +51,6 @@ Test Agent will:
    - Auto-appending "-block" suffix
 4. Generate report in `.cursor/test-reports/`
 
-### Testing Complementary Creator
-
-```
-👤 User: otestuj create complementary
-```
-
-Test Agent will:
-1. Load rules from `create-complementary/create-complementary.mdc`
-2. Generate ~28 test cases
-3. Validate behaviors like:
-   - Component naming (no suffix)
-   - DisplayName validation (required)
-   - Icon validation (optional)
-   - Field configuration flow
-   - App context decision
-4. Generate detailed report
-
 ## Test Categories
 
 ### A) Happy Path (Valid Inputs)
@@ -110,11 +93,6 @@ Tests that existing component names are rejected.
 **Examples:**
 - `button` → STOP "Component 'button' already exists"
 - `Video` → AUTO-FIX `video` → STOP (duplicate after fix)
-
-### F) Additional Validations (Complementary Only)
-- DisplayName: required, must not be empty
-- Icon: optional, any value accepted
-- Fields: configuration flow with progress tracking
 
 ## Understanding Test Results
 
@@ -258,13 +236,11 @@ Edit `report-templates.md` to change:
 ## Related Documentation
 
 - **Block Creator**: `.cursor/rules/create-block/`
-- **Complementary Creator**: `.cursor/rules/create-complementary/`
 - **Test Reports**: `.cursor/test-reports/`
 
 ## Examples
 
 See `test-cases.md` for complete examples of:
 - Block Creator test scenarios
-- Complementary Creator test scenarios
 - Custom test case generators
 - Edge case collections
