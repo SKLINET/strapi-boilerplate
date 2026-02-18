@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+---
+
+# Code Style Rules
+
+**⚠️ IMPORTANT: These rules apply only to the frontend project (`frontend/`). The CMS project (`cms/`) has its own rules.**
+
+## Prettier Configuration
+- **Indentation**: 4 spaces (tabWidth: 4)
+- **Quotes**: Single quotes
+- **Semicolons**: Always use semicolons
+- **Line Width**: 120 characters
+- **Trailing Commas**: Always use trailing commas
+
+## TypeScript Rules
+- Use TypeScript for all new files
+- Avoid `any` type - use proper types or `unknown`
+- Use type inference where possible
+- Define interfaces/types in `src/types/` for shared types
+- Use strict TypeScript settings
+
+## Naming Conventions
+- **Components**: PascalCase (e.g., `UserProfile.tsx`)
+- **Files**: Match component name or use kebab-case for utilities
+- **Functions/Variables**: camelCase
+- **Constants**: UPPER_SNAKE_CASE
+- **Types/Interfaces**: PascalCase with descriptive names
+
+## File Organization
+- One component per file
+- Export default for main component
+- Named exports for utilities and types
+- Group related files in folders (e.g., `components/organisms/`, `components/molecules/`)

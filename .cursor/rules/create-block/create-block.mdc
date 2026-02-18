@@ -1,0 +1,239 @@
+---
+description: Guide for creating a new block in CMS and frontend
+alwaysApply: false
+---
+
+# Create New Block
+
+Creates a complete block - from CMS schema to React components on frontend.
+
+**Reference files in this folder:**
+- `file-templates.md` - TypeScript/SCSS templates for generated files
+- `graphql-reference.md` - GraphQL fragment examples for common field types
+- `cms-reference.md` - CMS field type definitions
+
+---
+
+## Step 1: Guide User Through Questions (ONE AT A TIME)
+
+**Before starting:** Silently scan CMS schemas for dynamic zones.
+
+### 1.1 Block Name
+```
+What will the block be called?
+(in English, singular, e.g., 'book', 'hero-banner')
+The '-block' suffix is added automatically.
+```
+
+**Validation:**
+| Input | Action |
+|-------|--------|
+| Czech word (`kniha`) | ⚠️ Ask for English name |
+| Plural (`books`) | ⚠️ Suggest singular, wait for confirmation |
+| PascalCase/camelCase (`HeroBanner`) | ✅ Auto-fix to kebab-case |
+| Underscores (`hero_banner`) | ✅ Auto-fix to hyphens |
+| Spaces (`hero banner`) | ✅ Auto-fix to hyphens |
+| Uppercase (`HERO`) | ✅ Auto-fix to lowercase |
+| Special chars/diacritics | ✅ Auto-remove |
+| Starts with number | ⚠️ Ask for different name |
+| Already exists | ❌ Ask for different name |
+
+**⚠️ CRITICAL: Duplicate check has HIGHEST PRIORITY!**
+- After auto-fix, ALWAYS check if the resulting name already exists
+- Example: Input `HERO` → auto-fix to `hero-block` → but `hero-block` exists → ❌ Ask for different name
+- The duplicate check runs AFTER all auto-fix transformations
+
+**⚠️ IMPORTANT: When auto-fix is applied, ALWAYS inform the user what was changed:**
+
+```
+✓ Block name: `hero-banner-block`
+  (auto-fixed: spaces → hyphens)
+```
+
+Examples:
+| Input | Output | Message |
+|-------|--------|---------|
+| `book` | `book-block` | `✓ Block name: book-block` |
+| `HeroBanner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: PascalCase → kebab-case) |
+| `hero banner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: spaces → hyphens) |
+| `hero_banner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: underscores → hyphens) |
+| `HERO` | `hero-block` | `✓ Block name: hero-block` (auto-fixed: uppercase → lowercase) |
+| `hero!` | `hero-block` | `✓ Block name: hero-block` (auto-fixed: special characters removed) |
+
+### 1.2 Display Name
+```
+What will be the Czech display name for CMS?
+(e.g., 'Knihy', 'Hlavní banner')
+```
+**Show:** `✓ displayName: Knihy`
+
+### 1.3 Icon
+```
+Which icon to use?
+```
+Options: crown, picture, book, envelope, star, heart, quote, layout, bulletList, phone, user, file, play, question, calendar, clock, gift, globe, grid, home, link, video
+
+**Show:** `✓ Icon: book`
+
+### 1.4 Location
+```
+Where to use the block?
+
+Found locations:
+- page (blocks) - regular pages
+- template (content) - reusable content
+```
+**Show:** `✓ Location: page (blocks)`
+
+### 1.5 getStaticProps
+```
+Does block need to load data from Strapi? (getStaticProps)
+```
+Options: Yes / No
+
+**Show:** `✓ getStaticProps: No`
+
+### 1.6 Summary & Confirmation
+```
+📋 New Block Summary:
+━━━━━━━━━━━━━━━━━━━━━
+
+Name:           book-block
+displayName:    Knihy  
+Icon:           book
+Location:       page (blocks)
+getStaticProps: No
+
+Files to create/update:
+- cms/src/components/block/book-block.json (new)
+- cms/src/api/page/content-types/page/schema.json (update)
+- frontend/src/app/blocks/BookBlock/BookBlock.tsx (new)
+- frontend/src/app/components/blocks/Book/Book.tsx (new)
+- frontend/src/app/components/blocks/Book/Book.module.scss (new)
+- frontend/src/app/blocks/server.ts (update)
+- frontend/src/app/blocks/client.ts (update)
+
+━━━━━━━━━━━━━━━━━━━━━
+Create block? (Yes/No)
+```
+
+**Only create files after user confirms!**
+
+---
+
+## Step 2: Calculate Names
+
+```javascript
+// Input: "hero-banner"
+blockNameKebab = "hero-banner-block"      // CMS schema name
+blockNamePascal = "HeroBannerBlock"       // Frontend block folder/file
+componentName = "HeroBanner"              // UI component (without "Block")
+typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
+```
+
+---
+
+## Step 3: Create Files
+
+### 3.1 CMS Schema
+**File:** `cms/src/components/block/{blockNameKebab}.json`
+
+```json
+{
+  "collectionName": "components_block_{blockNameKebab}s",
+  "info": {
+    "displayName": "{displayName}",
+    "icon": "{icon}"
+  },
+  "options": {},
+  "attributes": {}
+}
+```
+
+### 3.2 Update Content-Type Schema
+**File:** `cms/src/api/{contentType}/content-types/{contentType}/schema.json`
+
+Add `"block.{blockNameKebab}"` to `attributes.{fieldName}.components` array.
+
+### 3.3 Frontend Block Wrapper
+**File:** `frontend/src/app/blocks/{blockNamePascal}/{blockNamePascal}.tsx`
+
+See `file-templates.md` for template.
+
+### 3.4 Frontend UI Component
+**Files:**
+- `frontend/src/app/components/blocks/{componentName}/{componentName}.tsx`
+- `frontend/src/app/components/blocks/{componentName}/{componentName}.module.scss`
+
+See `file-templates.md` for templates.
+
+### 3.5 Update server.ts
+**File:** `frontend/src/app/blocks/server.ts`
+
+1. Add import: `import {blockNamePascal} from './{blockNamePascal}/{blockNamePascal}';`
+2. Add to fragment: `...{blockNamePascal}_content @relay(mask: false)`
+3. Add to blocks object: `{blockNamePascal},`
+
+### 3.6 Update client.ts (CRITICAL!)
+**File:** `frontend/src/app/blocks/client.ts`
+
+Add switch case (alphabetically):
+```typescript
+case '{blockNamePascal}':
+    return import('./{blockNamePascal}/{blockNamePascal}');
+```
+
+⚠️ **Without this, the block will NOT render on the page!**
+
+---
+
+## Step 4: Show TODO List
+
+```
+✅ Block "{blockNameKebab}" created successfully!
+
+📝 TODO (in this order):
+
+1. [ ] Restart Strapi CMS
+   cd cms && npm run develop
+
+2. [ ] Add fields in Strapi Content-Type Builder
+   Components → block → "{displayName}"
+
+3. [ ] Refresh GraphQL schema
+   cd frontend && npm run graphql-codegen
+
+4. [ ] Update GraphQL fragment in {blockNamePascal}.tsx
+   (see graphql-reference.md for examples)
+
+5. [ ] Run Relay compiler
+   cd frontend && npm run relay
+
+6. [ ] Implement UI in {componentName}.tsx
+
+7. [ ] Add styles to {componentName}.module.scss
+
+8. [ ] Test on page
+```
+
+---
+
+## Checklist
+
+### Questions (one at a time):
+- [ ] Block name (validate: English, singular, no duplicates)
+- [ ] displayName (Czech, not empty)
+- [ ] Icon
+- [ ] Location (from scanned dynamic zones)
+- [ ] getStaticProps (Yes/No)
+- [ ] Summary & confirmation
+
+### File creation (after confirmation):
+- [ ] CMS schema (`cms/src/components/block/{blockNameKebab}.json`)
+- [ ] Content-type schema updated
+- [ ] Block wrapper (`frontend/src/app/blocks/{blockNamePascal}/`)
+- [ ] UI component (`frontend/src/app/components/blocks/{componentName}/`)
+- [ ] SCSS file
+- [ ] `server.ts` updated (import, fragment, export)
+- [ ] `client.ts` updated (switch case) ← CRITICAL!
+- [ ] TODO list shown to user

@@ -1,0 +1,260 @@
+---
+alwaysApply: false
+---
+
+# Code Audit Checklist
+
+Tento soubor obsahuje kontrolní body pro audit kódu. Při auditu zkontroluj každý bod a ověř, zda kód odpovídá projektovým pravidlům.
+
+## ⚠️ DŮLEŽITÉ: Audit je pouze informativní
+
+**Audit je pouze informativní nástroj pro uživatele. Po dokončení auditu NESMÍŠ automaticky začít upravovat kód.**
+
+- Audit report pouze identifikuje problémy a návrhy na zlepšení
+- Uživatel rozhodne, které problémy chce opravit a kdy
+- Pokud uživatel explicitně nepožádá o opravu, pouze vytvoř audit report
+- Nezačínej automaticky upravovat soubory po vytvoření audit reportu
+
+**⚠️ DŮLEŽITÉ: Tato pravidla platí pouze pro frontend projekt (`frontend/`). CMS projekt (`cms/`) má vlastní pravidla.**
+
+## 📋 Code Style Audit
+
+### Prettier Formátování
+- [ ] Indentace: 4 mezery (ne tabs)
+- [ ] Použití single quotes místo double quotes
+- [ ] Všechny řádky končí středníkem
+- [ ] Maximální délka řádku: 120 znaků
+- [ ] Trailing commas na konci objektů/pole
+
+### TypeScript
+- [ ] Všechny nové soubory jsou TypeScript (.ts/.tsx)
+- [ ] Žádné použití `any` typu (použít konkrétní typy nebo `unknown`)
+- [ ] Správné použití type inference kde je to možné
+- [ ] Sdílené typy jsou v `src/types/`
+- [ ] Typy jsou správně definované a používané
+
+### Pojmenování
+- [ ] Komponenty: PascalCase (např. `UserProfile.tsx`)
+- [ ] Soubory: odpovídají názvu komponenty nebo kebab-case pro utility
+- [ ] Funkce/Proměnné: camelCase
+- [ ] Konstanty: UPPER_SNAKE_CASE
+- [ ] Typy/Interface: PascalCase s popisnými názvy
+
+### Organizace souborů
+- [ ] Jeden komponent na soubor
+- [ ] Default export pro hlavní komponent
+- [ ] Named exports pro utility a typy
+- [ ] Související soubory jsou ve správných složkách
+
+## ⚛️ React & Relay Audit
+
+### React Best Practices
+- [ ] Použití funkcionálních komponent s hooks
+- [ ] Komponenty jsou malé a zaměřené na jednu věc
+- [ ] Opakovaná logika je extrahována do custom hooks
+- [ ] Preferována kompozice před dědičností
+- [ ] Komponenta může vracet `<></>` (prázdný fragment) pro prázdný render - je to akceptovatelné
+- [ ] **Poznámka:** `forwardRef`, `React.memo` a podobné optimalizace jsou volitelné - zkontroluj, zda je to standard v projektu před označením jako chyba
+
+### Relay GraphQL
+- [ ] **VŠECHNY** GraphQL dotazy používají Relay fragmenty (viz `relay/app.ts`, `relay/article.ts` jako příklady)
+- [ ] Fragmenty jsou definované pomocí `graphql` template literals v `relay/` souborech
+- [ ] Queries používají fragmenty s `@relay(mask: false)` direktivou
+- [ ] Po vytvoření/změně query/fragmentu byl spuštěn `npm run relay`
+- [ ] Generated typy v `__generated__/` nejsou ručně editované
+- [ ] Fragmenty jsou správně organizované v `relay/` souborech podle domény (např. `app.ts`, `article.ts`)
+
+### Utils/Strapi Funkce
+- [ ] **VŠECHNY** utils/strapi funkce používají vygenerované typy z `relay/__generated__/` (např. `appImageFragment$data`, `articleFragment$data`)
+- [ ] Typy jsou importované z `__generated__` souborů, ne definované ručně
+- [ ] Použití `Omit<FragmentType$data, ' $fragmentType'>` pro vytvoření typu bez fragment type
+- [ ] Žádné ručně definované typy pro Strapi data v utils/strapi funkcích
+- [ ] Žádné použití `any` typu pro Strapi data (použít vygenerované typy)
+- [ ] Viz příklady: `utils/strapi/getImageType.ts`, `utils/strapi/getAddressingType.ts`
+
+## 🔌 Providers Audit
+
+### Provider Rules
+- [ ] Provider je správně implementován podle typu (ElasticProvider vs StrapiProvider)
+- [ ] **KRITICKÉ**: Provider dědící z `AbstractElasticProvider` nebo `AbstractSingletonElasticProvider` NESMÍ filtrovat podle `publishedAt` v `getFilterParams` - rozbíjí to reindexaci
+- [ ] Pro ElasticProvider použijte jiné pole pro filtrování podle data (např. `publishDate`) nebo nefiltrujte podle data vůbec
+- [ ] Provider správně implementuje povinné metody: `getApiKey()`, `getId()`, `getFilterParams()`
+- [ ] Provider používá Relay queries z `relay/` složky
+- [ ] Provider je exportován jako singleton instance
+- [ ] Viz detailní pravidla: `.cursor/rules/providers.mdc`
+
+## 🎨 Styling Audit
+
+**⚠️ DŮLEŽITÉ: Tato pravidla platí pouze pro frontend projekt (`frontend/`). CMS projekt (`cms/`) má vlastní pravidla.**
+
+### CSS Architektura
+- [ ] SCSS (`.scss`) pro komponentové styly
+- [ ] SCSS Modules pro scoped styly
+- [ ] Tailwind CSS 3 pro utility třídy
+- [ ] SCSS Modules pro komponent-specifické styly
+- [ ] Tailwind pro rychlé utility styling
+
+### File Naming
+- [ ] Komponentové styly: `ComponentName.module.scss`
+- [ ] Globální styly v `src/styles/`
+- [ ] Správný import: `import styles from './ComponentName.module.scss'`
+
+### Best Practices
+- [ ] SCSS Modules pro prevenci style konfliktů
+- [ ] Tailwind utilities pro spacing, colors, typography
+- [ ] Komponentové styly jsou co-located s komponenty
+- [ ] CSS variables pro theme hodnoty
+- [ ] **Tailwind třídy v SCSS**: Třídy jsou seskupené podle breakpointů na samostatných řádcích
+  - První řádek: všechny základní třídy bez breakpointu (mobile-first)
+  - Další řádky: všechny třídy se stejným breakpoint prefixem seskupené na jednom řádku
+  - Každý breakpoint (`mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`) má svůj vlastní řádek
+  - Všechny třídy pro stejný breakpoint musí být na stejném řádku
+  - Příklad: `@apply w-full flex flex-col gap-8 relative;` na prvním řádku, `@apply tablet-landscape:pl-6 tablet-landscape:gap-10;` na dalším řádku, `@apply desktop:pl-10 desktop:gap-12;` na dalším řádku
+- [ ] **Žádné arbitrary values v Tailwind**: Nepoužívej arbitrary values v Tailwind třídách (např. `w-[19.375rem]`, `rounded-[0.5625rem]`)
+  - **Pro spacing/sizing hodnoty** (width, height, margin, padding): Použij CSS vlastnosti přímo v SCSS modulu
+    - Příklad špatně: `@apply w-[19.375rem];`
+    - Příklad správně: `.container { width: 19.375rem; }`
+  - **Pro design tokens** (border-radius, colors, shadows, atd.): Rozšiř Tailwind konfiguraci o custom hodnoty místo arbitrary values
+    - Příklad špatně: `@apply rounded-[0.5625rem];`
+    - Příklad správně: Přidej hodnotu do Tailwind konfigurace a použij `@apply rounded-custom;` nebo použij CSS vlastnost: `.container { border-radius: 0.5625rem; }`
+  - Pokud existují vhodné standardní Tailwind utility třídy, použij je (např. `rounded-lg` místo `rounded-[0.5625rem]` pokud je to dostatečně blízko)
+
+### Tailwind 3 Specific
+- [ ] Tailwind 3 používá JavaScript/TypeScript konfigurační soubor (`tailwind.config.ts`)
+- [ ] Globální styly používají `@tailwind` direktivy (`@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`)
+- [ ] PostCSS konfigurace používá standardní Tailwind PostCSS plugin
+
+### Responsive Design
+- [ ] Tailwind responsive prefixes používají vlastní breakpointy: `mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`
+- [ ] Mobile-first přístup
+- [ ] Breakpointy jsou definované v `tailwind.config.ts`
+
+---
+
+## 🎯 Priority v Audit Reportu
+
+Při vytváření audit reportu je důležité správně kategorizovat problémy podle priority. Rozlišujeme dva typy problémů:
+
+### ⚠️ DŮLEŽITÉ: Stav projektu - Příprava na napojení na BE
+
+**Projekt se aktuálně připravuje staticky na napojení na backend, proto jsou následující věci akceptovatelné:**
+
+- **`console.log()` a debug kód** - jsou v pořádku během přípravné fáze projektu
+- **Zakomentovaný kód** - je v pořádku, pokud je to příprava na budoucí implementaci (např. API volání, startTransition)
+- **Placeholder implementace** - je v pořádku, pokud je jasné, že se jedná o dočasné řešení před napojením na BE
+
+**⚠️ Pozor:** Tyto věci by měly být označeny jako **Návrhy na zlepšení** místo **Chyby**, pokud jsou součástí přípravy na napojení na BE. Pokud je však jasné, že jde o skutečný problém (např. zapomenutý debug kód v produkci), označ to jako chybu.
+
+### ⚠️ DŮLEŽITÉ: Kontrola podobných komponent před označením chyby
+
+**Před tím, než označíš něco jako chybu, vždy zkontroluj podobné komponenty v projektu:**
+- Jak jsou řešeny podobné komponenty?
+- Je to skutečně chyba, nebo jen jiný způsob implementace?
+- Je to standard v projektu, nebo výjimka?
+
+**Příklad:** Pokud podobné komponenty nepoužívají `forwardRef`, není to chyba, ale návrhové rozhodnutí.
+
+### 🔴 Vysoká priorita - Technické problémy (Opravit okamžitě)
+
+Tyto problémy mají **vysokou prioritu** a měly by být opraveny bez diskuse:
+
+- **Formátování kódu** - nesprávné odsazení, chybějící středníky, trailing commas, atd.
+- **TypeScript chyby** - použití `any`, chybějící typy, nesprávné typy
+- **Pojmenování** - nekonzistentní naming conventions, špatné názvy proměnných/funkcí/komponent
+- **Stylování** - nesprávná SCSS struktura, chybějící SCSS Modules, nesprávné Tailwind použití
+- **React Best Practices** - nesprávné použití hooks, špatná struktura komponent
+- **Přístupnost (a11y)** - chybějící aria atributy **pouze pokud je to standard v projektu** (zkontroluj podobné komponenty)
+- **Bezpečnost** - XSS zranitelnosti, nevalidované vstupy, atd.
+- **Dokumentace** - chybějící JSDoc komentáře (pokud je to standard v projektu)
+
+**⚠️ Pozor:** 
+- Pokud podobné komponenty něco nemají (např. `forwardRef`, `aria-label`), není to chyba, ale návrhové rozhodnutí.
+- **`console.log()` a zakomentovaný kód nejsou chyby**, pokud jsou součástí přípravy na napojení na BE (viz sekce výše).
+
+**Formát v reportu:**
+```
+### ❌ Chyby (Vysoká priorita)
+- [Popis problému s návrhem konkrétní opravy]
+- [Uveď porovnání s podobnými komponentami, pokud je relevantní]
+```
+
+### 🟡 Nízká priorita - Návrhové/logické problémy (Diskuse s týmem)
+
+Tyto problémy jsou spíše **návrhové rozhodnutí** a měly by být prodiskutovány s týmem před implementací:
+
+- **Chybějící props** - pokud komponenta nemá nějaké props, které by mohla mít (ale není to chyba)
+- **Chybějící export typů/interface** - pokud komponenta nemá exportovaný props interface nebo typ, zkontroluj, zda nebude třeba tento typ někde importovat (např. pro type safety v jiných komponentách nebo pro rozšíření komponenty)
+- **Návrhové rozhodnutí** - různé způsoby implementace, které nejsou nutně špatné
+- **Logika komponent** - návrhy na změnu logiky, které ovlivňují chování komponenty
+- **API design** - návrhy na změnu API komponenty (přidání nových props, změna existujících)
+- **Architektura** - návrhy na změnu struktury nebo architektury komponenty
+- **React Best Practices (volitelné)** - `forwardRef`, `React.memo`, atd. - pouze pokud to není standard v projektu
+- **Přístupnost (volitelné)** - `aria-label`, atd. - pouze pokud to není standard v projektu
+
+**Formát v reportu:**
+```
+### 💡 Návrhy na zlepšení (Diskuse s týmem)
+- [Popis návrhu s vysvětlením, proč by to mohlo být užitečné]
+- [Porovnání s podobnými komponentami, pokud je relevantní]
+- [Naznač, že se má programátor poradit s týmem před implementací]
+```
+
+**Příklad:**
+```
+### 💡 Návrhy na zlepšení (Diskuse s týmem)
+- **Přidání `disabled` prop**: Komponenta nemá podporu pro disabled stav. 
+  Zvažte přidání této funkcionality pro konzistenci s ostatními inputy v projektu.
+  **Porovnání:** `TextInput` a `DateInput` mají `disabled` prop.
+  **Doporučení:** Prodiskutujte s týmem, zda je tato funkcionalita potřebná.
+
+- **Export props interface**: Interface `SelectInputProps<T>` není exportován.
+  Zkontrolujte, zda nebude třeba tento typ někde importovat (např. pro type safety v jiných komponentách, 
+  pro rozšíření komponenty nebo pro vytvoření wrapper komponenty).
+  **Porovnání:** `TextInput` exportuje `TextInputProps`, `DateInput` exportuje `DateInputProps`.
+  **Doporučení:** Pokud plánujete používat tento typ jinde v projektu, zvažte jeho export.
+```
+
+### 📋 Kategorizace problémů
+
+Při auditu se ptej v tomto pořadí:
+
+1. **Je to součást přípravy na napojení na BE?** (console.log, zakomentovaný kód, placeholder implementace) → Nízká priorita nebo Poznámka
+2. **Jak jsou řešeny podobné komponenty v projektu?** → Pokud to nemají, není to chyba
+3. **Je to technická chyba?** (formátování, TypeScript) → Vysoká priorita
+4. **Je to nesoulad s projektovými pravidly?** → Vysoká priorita (ale zkontroluj podobné komponenty)
+5. **Je to návrhové rozhodnutí?** → Nízká priorita (diskuse s týmem)
+6. **Může to být uděláno různými způsoby?** → Nízká priorita (diskuse s týmem)
+7. **Zachází to do logiky komponent?** (chybějící props, různé způsoby implementace) → Nízká priorita (diskuse s týmem)
+
+---
+
+## Audit Report Template
+
+Při auditu použij tento template a ulož report do `.cursor/audit-reports/[ComponentName].md`:
+
+**⚠️ POZOR:** Po vytvoření audit reportu NESMÍŠ automaticky začít upravovat kód. Audit je pouze informativní - uživatel rozhodne, které problémy chce opravit.
+
+```
+## Audit Report - [Název souboru/komponenty]
+
+**Datum**: [datum]
+**Auditor**: [jméno]
+**Komponenta**: `[cesta k souboru]`
+
+### ✅ Prošlo
+- [seznam prošlých kontrol]
+
+### ⚠️ Varování
+- [seznam varování s popisem]
+
+### ❌ Chyby
+- [seznam chyb s popisem a návrhem opravy]
+
+### 📝 Poznámky
+- [další poznámky]
+```
+
+### Audit Report Location
+- [ ] Audit reporty se ukládají do `.cursor/audit-reports/` složky
+- [ ] Název souboru: `[ComponentName].md` (např. `Error.md`, `Button.md`)
+- [ ] Pro celkový audit projektu použij název `project-overview.md`
