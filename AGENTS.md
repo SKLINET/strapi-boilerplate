@@ -65,6 +65,7 @@
    - UI component skeleton + SCSS (`frontend/src/app/components/blocks/{ComponentName}/`)
    - Update `server.ts` (import, fragment, export)
    - **Update `client.ts`** (switch case for dynamic import) ← CRITICAL!
+   - If Location includes **template (content)**: Update `TemplateBlock.ts` (add block fragment to `TemplateBlock_content` → `template.content`)
 
 5. **Show TODO list** to user (in order):
    1. Restart CMS

@@ -107,11 +107,13 @@ getStaticProps: No
 Files to create/update:
 - cms/src/components/block/book-block.json (new)
 - cms/src/api/page/content-types/page/schema.json (update)
+- cms/src/api/template/content-types/template/schema.json (update) — only if Location includes template (content)
 - frontend/src/app/blocks/BookBlock/BookBlock.tsx (new)
 - frontend/src/app/components/blocks/Book/Book.tsx (new)
 - frontend/src/app/components/blocks/Book/Book.module.scss (new)
 - frontend/src/app/blocks/server.ts (update)
 - frontend/src/app/blocks/client.ts (update)
+- frontend/src/app/blocks/TemplateBlock/TemplateBlock.ts (update) — only if Location includes template (content)
 
 ━━━━━━━━━━━━━━━━━━━━━
 Create block? (Yes/No)
@@ -151,9 +153,10 @@ typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 ```
 
 ### 3.2 Update Content-Type Schema
-**File:** `cms/src/api/{contentType}/content-types/{contentType}/schema.json`
+**Files:** `cms/src/api/page/content-types/page/schema.json`, optionally `cms/src/api/template/content-types/template/schema.json`
 
-Add `"block.{blockNameKebab}"` to `attributes.{fieldName}.components` array.
+- Add `"block.{blockNameKebab}"` to **page** `attributes.blocks.components` (always when creating a block for pages).
+- If user chose **template (content)** in Location: also add `"block.{blockNameKebab}"` to **template** `attributes.content.components`.
 
 ### 3.3 Frontend Block Wrapper
 **File:** `frontend/src/app/blocks/{blockNamePascal}/{blockNamePascal}.tsx`
@@ -184,6 +187,19 @@ case '{blockNamePascal}':
 ```
 
 ⚠️ **Without this, the block will NOT render on the page!**
+
+### 3.7 Update TemplateBlock_content (when block is in template content)
+**When:** User chose **template (content)** in Location (Step 1.4).
+
+**File:** `frontend/src/app/blocks/TemplateBlock/TemplateBlock.ts`
+
+Inside the fragment `TemplateBlock_content`, in the `template { content { ... } }` selection, add one line (alphabetically among existing block fragments):
+
+```graphql
+...{blockNamePascal}_content @relay(mask: false)
+```
+
+⚠️ **Without this, the block will NOT render inside Template block (reusable content)!**
 
 ---
 
@@ -230,10 +246,11 @@ case '{blockNamePascal}':
 
 ### File creation (after confirmation):
 - [ ] CMS schema (`cms/src/components/block/{blockNameKebab}.json`)
-- [ ] Content-type schema updated
+- [ ] Content-type schema(s) updated (page; template if Location includes template content)
 - [ ] Block wrapper (`frontend/src/app/blocks/{blockNamePascal}/`)
 - [ ] UI component (`frontend/src/app/components/blocks/{componentName}/`)
 - [ ] SCSS file
 - [ ] `server.ts` updated (import, fragment, export)
 - [ ] `client.ts` updated (switch case) ← CRITICAL!
+- [ ] If Location includes **template (content)**: `TemplateBlock.ts` updated — add `...{blockNamePascal}_content @relay(mask: false)` inside `content { }` in fragment (alphabetically)
 - [ ] TODO list shown to user
