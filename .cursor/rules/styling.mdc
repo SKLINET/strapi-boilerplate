@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+---
+
+# Styling Rules
+
+**⚠️ IMPORTANT: These rules apply only to the frontend project (`frontend/`). The CMS project (`cms/`) has its own rules.**
+
+## CSS Architecture
+- Use **SCSS** (`.scss`) for component styles
+- Use **SCSS Modules** for scoped styles
+- Use **Tailwind CSS 3** for utility classes
+- Prefer SCSS Modules for component-specific styles
+- Use Tailwind for quick utility styling
+
+## File Naming
+- Component styles: `ComponentName.module.scss`
+- Global styles: `src/styles/`
+- Import styles: `import styles from './ComponentName.module.scss'`
+
+## Best Practices
+- Use SCSS Modules to avoid style conflicts
+- Use Tailwind utilities for spacing, colors, typography
+- Keep component styles co-located with components
+- Use CSS variables for theme values
+- Follow BEM-like naming in SCSS Modules if needed
+- **Tailwind classes in SCSS**: Group classes by breakpoint on separate lines
+  - First line: all base classes without breakpoint (mobile-first)
+  - Next lines: all classes with the same breakpoint prefix grouped together on one line
+  - Each breakpoint (`mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`) gets its own line
+  - All classes for the same breakpoint must be on the same line
+  - Example:
+    ```scss
+    @apply w-full flex flex-col gap-8 relative;                    /* all base classes */
+    @apply tablet-landscape:pl-6 tablet-landscape:gap-10;           /* all tablet-landscape: classes */
+    @apply desktop:pl-10 desktop:gap-12;                            /* all desktop: classes */
+    ```
+- **No arbitrary values in Tailwind**: Avoid using arbitrary values in Tailwind classes (e.g., `w-[19.375rem]`, `rounded-[0.5625rem]`)
+  - **For spacing/sizing values** (width, height, margin, padding): Use CSS properties directly in the SCSS module
+    - Bad example: `@apply w-[19.375rem];`
+    - Good example: `.container { width: 19.375rem; }`
+  - **For design tokens** (border-radius, colors, shadows, etc.): Extend Tailwind configuration with custom values instead of using arbitrary values
+    - Bad example: `@apply rounded-[0.5625rem];`
+    - Good example: Add the value to Tailwind configuration and use `@apply rounded-custom;` or use CSS property: `.container { border-radius: 0.5625rem; }`
+  - If suitable standard Tailwind utility classes exist, use them (e.g., `rounded-lg` instead of `rounded-[0.5625rem]` if it's close enough)
+
+## Tailwind 3 Specific
+- Tailwind 3 uses JavaScript/TypeScript configuration file (`tailwind.config.ts`)
+- Global styles use `@tailwind` directives (`@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`)
+- PostCSS configuration uses standard Tailwind PostCSS plugin
+
+## Responsive Design
+- Use Tailwind responsive prefixes with custom breakpoints: `mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`
+- Mobile-first approach
+- Test on multiple screen sizes
+- Breakpoints are defined in `tailwind.config.ts`

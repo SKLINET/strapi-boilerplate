@@ -1,0 +1,101 @@
+---
+alwaysApply: true
+---
+
+# Provider Rules
+
+**⚠️ IMPORTANT: These rules apply only to the frontend project (`frontend/`). The CMS project (`cms/`) has its own rules.**
+
+This file contains rules for providers in `src/providers/`, which are used for loading data from CMS.
+
+## Provider Types
+
+Providers can extend different base classes:
+
+1. **AbstractElasticProvider** - loads data from Elasticsearch
+2. **AbstractStrapiProvider** - loads data directly from Strapi
+3. **AbstractSingletonElasticProvider** - singleton version for Elasticsearch
+4. **AbstractSingletonStrapiProvider** - singleton version for Strapi
+
+## Critical Rules
+
+### ⚠️ ElasticProvider and getFilterParams
+
+- [ ] **Provider extending `AbstractElasticProvider` or `AbstractSingletonElasticProvider` MUST NOT filter by `publishedAt` in the `getFilterParams` method**
+- [ ] Filtering by `publishedAt` in ElasticProvider breaks reindexing
+- [ ] Instead of `publishedAt`, use a different field (e.g., `publishDate`, `slug`, etc.) or don't filter by publication date at all
+- [ ] For filtering by publication date in ElasticProvider, use a different field than `publishedAt`
+
+### ✅ Correct Usage
+
+**Correct (ElasticProvider without publishedAt):**
+```typescript
+class ArticleProvider extends AbstractElasticProvider<any, any> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        return { publishDate: { lte: dayjs().format() }, slug: { ne: 'null' } };
+    }
+}
+```
+
+**Correct (ElasticProvider without date filtering):**
+```typescript
+class PersonCategoryProvider extends AbstractElasticProvider<any, any> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        return {};
+    }
+}
+```
+
+**Wrong (ElasticProvider with publishedAt):**
+```typescript
+class ArticleCategoryProvider extends AbstractElasticProvider<any, any> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        return { publishedAt: { lte: dayjs().format() } }; // ❌ BREAKS REINDEXING
+    }
+}
+```
+
+**Correct (StrapiProvider can use publishedAt):**
+```typescript
+class PageProvider extends AbstractStrapiProvider<any, any> {
+    getFilterParams(publicationState = ''): Record<string, Record<string, string | boolean>> {
+        if (publicationState?.toLowerCase() === 'preview') {
+            return { publishedAt: { lte: dayjs().format() } }; // ✅ OK for StrapiProvider
+        }
+        return { publishedAt: { lte: dayjs().format() } };
+    }
+}
+```
+
+## General Rules
+
+### Provider Structure
+- [ ] Provider is a class extending one of the Abstract provider classes
+- [ ] Provider is exported as a singleton instance (default export)
+- [ ] Provider implements required methods: `getApiKey()`, `getId()`, `getFilterParams()`
+
+### Provider Methods
+- [ ] `getApiKey()`: Returns a string identifier for API (e.g., `'article'`, `'article-category'`)
+- [ ] `getId()`: Returns a string identifier for Strapi (e.g., `'api::article.article'`)
+- [ ] `getFilterParams(publicationState)`: Returns filters for queries
+- [ ] `isSitemapEnabled()`: Returns boolean indicating if provider is enabled for sitemap
+
+### Relay Queries
+- [ ] Provider uses Relay queries/fragments from `relay/` folder
+- [ ] Queries are correctly passed to provider constructor
+- [ ] Index queries are defined for ElasticProvider
+
+### TypeScript
+- [ ] Provider uses proper types (not `any` if possible)
+- [ ] Types are imported from `relay/__generated__/` if available
+
+## Audit Checklist
+
+When auditing a provider, check:
+
+1. ✅ Which class the provider extends (Elastic vs Strapi)
+2. ✅ If it's an ElasticProvider, that `getFilterParams` doesn't filter by `publishedAt`
+3. ✅ Correct usage of Relay queries
+4. ✅ Correct implementation of required methods
+5. ✅ Correct TypeScript types
+6. ✅ Correct export as singleton
