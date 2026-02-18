@@ -81,123 +81,6 @@
 
 ---
 
-## Complementary Creator Agent
-
-**Trigger:** When user says "create complementary", "add complementary", "new complementary", "vytvoř complementary", "přidej complementary"
-
-**Rules:** @create-complementary/create-complementary.mdc
-
-**Process:**
-
-1. **Read rules** from `create-complementary.mdc`
-
-2. **Scan existing complementary components** to find duplicates (do this silently in background)
-
-3. **Guide user through questions STEP BY STEP (one at a time):**
-
-   ### Step 3.1: Component Name
-   Ask: "What will the complementary component be called? (in English, e.g., 'author', 'testimonial', 'image-gallery')"
-   - **Immediately validate & process:**
-     - Auto-fix: kebab-case, remove diacritics, special chars
-     - If plural detected → warn and suggest singular, wait for confirmation
-     - If starts with number → ask for different name
-     - If duplicate exists → ask for different name
-   - **Auto-generate displayName:** Convert kebab-case to PascalCase
-     - Examples: `donate-amount` → `DonateAmount`, `image-gallery` → `ImageGallery`
-   - **Show results:**
-     - "✓ Component name: `{componentNameKebab}`"
-     - "✓ displayName: `{displayName}` (auto-generated)"
-
-   ### Step 3.2: Icon (Optional)
-   Ask with options: "Which icon to use? (Optional - press Enter to skip)"
-   - **Show result:** "✓ Icon: `{icon}`" or "✓ Icon: (none)"
-
-   ### Step 3.3: Define Fields
-   Silently scan existing complementary components in background (for component type suggestions later).
-
-   #### 3.3.1: Ask for field list
-   Ask: "What fields should the component contain?" (free-form text)
-   - Accept any format: comma-separated, with types, with notes, natural language
-   - Examples: "name, email, phone", "title: string, description: text", "label (required), link (optional)"
-   - Parse and extract field names
-   - **Show result:** "✓ Fields detected: title, description, amount, button" + "Now let's configure each field (4 total)"
-
-   #### 3.3.2: Iteratively ask for field details
-   For each detected field (one at a time), show clear progress with field number:
-   ```
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   Field 1/4: title
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ```
-   - Ask type (string, text, richtext, media, boolean, number, date, datetime, email, enumeration, relation, component)
-   - Ask if required (Yes/No)
-   - Ask type-specific questions:
-     - enum values (for enumeration)
-     - media types (for media)
-     - relation target (for relation)
-     - **component type & repeatability (for component) - OFFER existing complementary components:**
-       - List available: complementary.button, complementary.video, complementary.ecomail, etc.
-       - Option to specify custom component
-   - **Show progress after each:** "✓ Field 1/4: title (string, required)"
-
-   After all fields are configured:
-   - **Show summary:** "✓ All fields configured (4/4):" with full list
-
-   ### Step 3.4: Usage
-   Ask: "Where will this component be used? (e.g., 'in VideoBlock', 'in multiple blocks')"
-   - Informational only - helps with context
-   - **Show result:** "✓ Usage: `{usage}`"
-
-   ### Step 3.5: App Context
-   Ask: "Will this component need access to app context (IApp)?"
-   - Options: Yes / No
-   - Explain: Yes for page relations, No for standalone data
-   - **Show result:** "✓ Needs app context: `{yes/no}`"
-
-   ### Step 3.6: Summary & Confirmation
-   Show summary of all collected info:
-   ```
-   📋 New Complementary Component Summary:
-
-   Name:          author
-   displayName:   Author (auto-generated)
-   Icon:          user
-   Fields:        4 fields defined
-     - name: string (required)
-     - bio: text (optional)
-     - avatar: media/images (optional)
-     - socialLinks: string (optional)
-   Usage:         in ArticleBlock
-   Needs app:     No
-
-   Files to create/update:
-   - cms/src/components/complementary/author.json (new, with 4 fields)
-   - frontend/src/types/author.ts (new)
-   - frontend/src/utils/strapi/getAuthorType.ts (new)
-   - frontend/src/relay/app.ts (update - add fragment)
-
-   Create complementary component? (Yes/No)
-   ```
-   - Wait for user confirmation before creating files
-
-4. **Create all files** (only after confirmation):
-   - CMS schema with fields if defined, empty if not (`cms/src/components/complementary/{componentNameKebab}.json`)
-   - TypeScript type interface (`frontend/src/types/{componentNameCamel}.ts`)
-   - Transformer utility (`frontend/src/utils/strapi/get{ComponentName}Type.ts`)
-   - Update `relay/app.ts` (add GraphQL fragment)
-
-5. **Show TODO list** to user (varies based on whether fields were defined):
-   - If fields defined: Verify fields in Strapi (already created)
-   - If empty: Add fields in Strapi Content-Type Builder
-   - Run graphql-codegen
-   - Update GraphQL fragment in relay/app.ts
-   - Run Relay compiler
-   - Use in blocks or content types
-
-**Testing:** Use `otestuj create complementary` to run automated validation tests (30+ test cases including name validation, displayName, icon, duplicates, plurals, Czech names)
-
----
-
 ## Test Agent
 
 **Trigger:** Various commands for different testing modes
@@ -211,7 +94,6 @@
 | Command | Mode | Description |
 |---------|------|-------------|
 | `otestuj create block` | Full | All test categories for Block Creator |
-| `otestuj create complementary` | Full | All test categories for Complementary Creator |
 | `rychlý test create block` | Smoke | Basic tests only |
 | `testuj create block s: kniha, books` | Targeted | Custom inputs |
 | `regresní test create block` | Regression | Re-run failed tests |
@@ -225,12 +107,11 @@
    - Discover existing blocks for duplicate testing
 
 2. **Auto-generate test cases:**
-   - ✅ Happy Path: valid inputs (`book`, `hero-banner`, `author`, `testimonial`)
+   - ✅ Happy Path: valid inputs (`book`, `hero-banner`, `contact-form`)
    - 🔧 Auto-fix: `HeroBanner`, `hero_banner`, `HERO`, `hero!`
    - ⚠️ Warning: `books` (plural), `kniha` (Czech), `3d-model`
    - 🛑 Stop: empty input, duplicates
    - 🔮 Edge cases: unicode, very long names
-   - **For Complementary:** Additional validation for displayName (required), icon (optional)
 
 3. **Run tests:**
    - Simulate input for each test case
@@ -240,15 +121,13 @@
 
 4. **Generate evaluation:**
    ```
-   📊 RESULTS: 37/40 tests passed (92.5%)
+   📊 RESULTS: 23/25 tests passed (92%)
 
    ✅ Happy Path:      5/5   100%
-   ✅ Auto-fix:       12/12  100%
-   ⚠️ Warning:        12/15   80%
+   ✅ Auto-fix:        7/7   100%
+   ⚠️ Warning:         5/8    62%
    ✅ Stop:            3/3   100%
-   ✅ Edge cases:      5/5   100%
-   ✅ DisplayName:     2/2   100%  (complementary only)
-   ✅ Icon:            2/2   100%  (complementary only)
+   ✅ Edge cases:      3/4    75%
 
    ❌ Failed tests:
    - "vyrobek" - not detected as Czech
@@ -278,24 +157,3 @@ Test Agent **does not simulate the actual agent** - it verifies **consistency an
 - Create EMPTY block (empty attributes in CMS schema, empty GraphQL fragment)
 - Always mention what needs to be done next (restart CMS, add fields, update GraphQL, relay compiler)
 - Provide clear instructions about manual steps (adding fields in Strapi Content-Type Builder)
-
-### Complementary Creator Agent
-- **Guide user STEP BY STEP** - one question at a time, validate immediately after each answer
-- **User provides component name in singular form** (e.g., 'author', not 'authors')
-- **Auto-fix formatting issues** (case, underscores, spaces, diacritics, special chars)
-- **Warn user about plural names** - suggest singular, wait for confirmation
-- **CRITICAL: Check for duplicates** - verify component doesn't already exist in complementary folder
-- **Icon is OPTIONAL** - don't require it if user doesn't want one
-- **Display name is AUTO-GENERATED** from component name (kebab-case → PascalCase)
-- **Always ask for fields in free-form text** - silently scan existing components for later use
-- **Be flexible with parsing field list** - accept comma-separated, with types, with notes, or natural language
-- **Show clear field numbering** - "Field X/Y: fieldName" when configuring each field
-- **Iteratively ask for field details** - type, required, and type-specific properties (one field at a time)
-- **When field type is "component"** - offer existing complementary components (button, video, ecomail, etc.) as options
-- **Show progress after each field** - "✓ Field X/Y: name (type, required/optional)"
-- **App context decision is important** - clarify that it's needed for page relations or global data
-- **Show summary and ask for confirmation** before creating any files
-- Create ALL files at once, not progressively (only after user confirms)
-- **Create component with defined fields OR empty** - depends on whether user defined fields
-- Always mention what needs to be done next (varies based on whether fields were created)
-- Complementary components are meant to be REUSABLE - remind users they can be used in multiple blocks/content types
