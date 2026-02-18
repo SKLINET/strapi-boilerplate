@@ -119,8 +119,6 @@ export { {componentName} };
 **File:** `frontend/src/app/components/blocks/{componentName}/{componentName}.module.scss`
 
 ```scss
-@use '../../../../styles/functions/layout';
-
 .wrapper {
     //
 }
