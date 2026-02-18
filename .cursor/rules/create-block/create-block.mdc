@@ -71,7 +71,7 @@ What will be the Czech display name for CMS?
 ```
 Which icon to use?
 ```
-Options: crown, picture, book, envelope, star, heart, quote, layout, bulletList, phone, user, file, play, question, calendar, clock, gift, globe, grid, home, link, video
+**Reference:** Kompletní seznam a mapování ikon z mřížky v modalu „Create a component“ je v **`icons-reference.md`**. Vizuální přehled: [Strapi Design System – Icons](https://design-system.strapi.io/?path=/docs/foundations-icons-icons--docs). V modalu lze vybrat jen podmnožinu – používej názvy v camelCase (např. `layout`, `bulletList`) z referenčního souboru.
 
 **Show:** `✓ Icon: book`
 
