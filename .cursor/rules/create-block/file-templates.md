@@ -132,7 +132,7 @@ export { {componentName} };
 
 ```json
 {
-  "collectionName": "components_block_{blockNameKebab}s",
+  "collectionName": "components_block_{blockNameUnderscore}s",
   "info": {
     "displayName": "{displayName}",
     "icon": "{icon}"
@@ -148,7 +148,8 @@ export { {componentName} };
 
 | Variable | Example | Description |
 |----------|---------|-------------|
-| `{blockNameKebab}` | `hero-banner-block` | CMS schema name |
+| `{blockNameKebab}` | `hero-banner-block` | CMS schema name (kebab-case) |
+| `{blockNameUnderscore}` | `hero_banner_block` | Same as blockNameKebab but with `_` instead of `-` (for collectionName) |
 | `{blockNamePascal}` | `HeroBannerBlock` | Block folder and file name |
 | `{componentName}` | `HeroBanner` | UI component name (without "Block") |
 | `{typeName}` | `ComponentBlockHeroBannerBlock` | GraphQL typename |

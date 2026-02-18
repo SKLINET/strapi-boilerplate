@@ -129,9 +129,10 @@ Create block? (Yes/No)
 
 ```javascript
 // Input: "hero-banner"
-blockNameKebab = "hero-banner-block"      // CMS schema name
-blockNamePascal = "HeroBannerBlock"       // Frontend block folder/file
-componentName = "HeroBanner"              // UI component (without "Block")
+blockNameKebab = "hero-banner-block"       // CMS schema name (kebab-case)
+blockNameUnderscore = "hero_banner_block"  // Same with _ instead of - (for collectionName)
+blockNamePascal = "HeroBannerBlock"        // Frontend block folder/file
+componentName = "HeroBanner"               // UI component (without "Block")
 typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 ```
 
@@ -142,9 +143,11 @@ typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 ### 3.1 CMS Schema
 **File:** `cms/src/components/block/{blockNameKebab}.json`
 
+**collectionName:** Use underscores, not hyphens: `components_block_{blockNameUnderscore}s` (e.g. `components_block_book_blocks`). Variable `blockNameUnderscore` = `blockNameKebab` with every `-` replaced by `_`.
+
 ```json
 {
-  "collectionName": "components_block_{blockNameKebab}s",
+  "collectionName": "components_block_{blockNameUnderscore}s",
   "info": {
     "displayName": "{displayName}",
     "icon": "{icon}"
