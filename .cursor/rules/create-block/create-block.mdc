@@ -85,6 +85,8 @@ Found locations:
 ```
 **Show:** `✓ Location: page (blocks)`
 
+**⚠️ Location drives CMS registration:** For each selected option you MUST add the block to that content type's dynamic zone in Step 3.2. **page (blocks)** → add to `cms/src/api/page/content-types/page/schema.json` → `attributes.blocks.components`. **template (content)** → add to `cms/src/api/template/content-types/template/schema.json` → `attributes.content.components`. Do not skip any selected location.
+
 ### 1.5 getStaticProps
 ```
 Does block need to load data from Strapi? (getStaticProps)
@@ -106,8 +108,8 @@ getStaticProps: No
 
 Files to create/update:
 - cms/src/components/block/book-block.json (new)
-- cms/src/api/page/content-types/page/schema.json (update)
-- cms/src/api/template/content-types/template/schema.json (update) — only if Location includes template (content)
+- cms/src/api/page/content-types/page/schema.json — add block to attributes.blocks.components (if Location includes "page (blocks)")
+- cms/src/api/template/content-types/template/schema.json — add block to attributes.content.components (only if Location includes "template (content)")
 - frontend/src/app/blocks/BookBlock/BookBlock.tsx (new)
 - frontend/src/app/components/blocks/Book/Book.tsx (new)
 - frontend/src/app/components/blocks/Book/Book.module.scss (new)
@@ -152,11 +154,19 @@ typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 }
 ```
 
-### 3.2 Update Content-Type Schema
-**Files:** `cms/src/api/page/content-types/page/schema.json`, optionally `cms/src/api/template/content-types/template/schema.json`
+### 3.2 Update Content-Type Schema (driven by Location from Step 1.4)
 
-- Add `"block.{blockNameKebab}"` to **page** `attributes.blocks.components` (always when creating a block for pages).
-- If user chose **template (content)** in Location: also add `"block.{blockNameKebab}"` to **template** `attributes.content.components`.
+**⚠️ CRITICAL: Add the block to every content type the user selected in Location. Do not skip any.**
+
+| Location selected        | File to update                                                                 | Where to add |
+|--------------------------|---------------------------------------------------------------------------------|--------------|
+| **page (blocks)**        | `cms/src/api/page/content-types/page/schema.json`                               | `attributes.blocks.components` — add `"block.{blockNameKebab}"` to the array |
+| **template (content)**   | `cms/src/api/template/content-types/template/schema.json`                       | `attributes.content.components` — add `"block.{blockNameKebab}"` to the array |
+
+- If user chose **page (blocks)** → update page schema (add to `blocks.components`).
+- If user chose **template (content)** → update template schema (add to `content.components`).
+- If user chose both → update **both** files.
+- Preserve existing formatting (e.g. newlines/commas) when editing JSON.
 
 ### 3.3 Frontend Block Wrapper
 **File:** `frontend/src/app/blocks/{blockNamePascal}/{blockNamePascal}.tsx`
@@ -246,7 +256,7 @@ Inside the fragment `TemplateBlock_content`, in the `template { content { ... } 
 
 ### File creation (after confirmation):
 - [ ] CMS schema (`cms/src/components/block/{blockNameKebab}.json`)
-- [ ] Content-type schema(s) updated (page; template if Location includes template content)
+- [ ] **Content-type schema(s)** — for **each** selected Location: page (blocks) → add block to `page/schema.json` → `attributes.blocks.components`; template (content) → add block to `template/schema.json` → `attributes.content.components`. Do not skip.
 - [ ] Block wrapper (`frontend/src/app/blocks/{blockNamePascal}/`)
 - [ ] UI component (`frontend/src/app/components/blocks/{componentName}/`)
 - [ ] SCSS file

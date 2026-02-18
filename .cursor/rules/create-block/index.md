@@ -37,6 +37,7 @@
    Ask with options: "Where do you want to use the block?" (show found dynamic zones + custom option)
    - Multi-select allowed
    - **Show result:** "✓ Location: `{locations}`"
+   - **Remember:** Each selected location = one content-type schema to update: **page (blocks)** → add block to `page/schema.json` (attributes.blocks.components); **template (content)** → add block to `template/schema.json` (attributes.content.components). You must add the block to every selected content type.
 
    ### Step 3.5: getStaticProps
    Ask: "Does the block need to load data from Strapi? (getStaticProps)"
@@ -60,7 +61,7 @@
 
 4. **Create all files** (only after confirmation):
    - Empty CMS schema (`cms/src/components/block/{blockNameKebab}.json`)
-   - Update content-type schemas (add to dynamic zone)
+   - **Update content-type schemas from Location:** For **page (blocks)** → add `block.{blockNameKebab}` to `cms/src/api/page/content-types/page/schema.json` → `attributes.blocks.components`. For **template (content)** → add to `cms/src/api/template/content-types/template/schema.json` → `attributes.content.components`. Do this for every selected location.
    - Frontend block wrapper (`frontend/src/app/blocks/{BlockNamePascal}/{BlockNamePascal}.tsx`)
    - UI component skeleton + SCSS (`frontend/src/app/components/blocks/{ComponentName}/`)
    - Update `server.ts` (import, fragment, export)
@@ -151,6 +152,7 @@ Test Agent **does not simulate the actual agent** - it verifies **consistency an
 - **Auto-fix formatting issues** (case, underscores, spaces, diacritics, special chars)
 - **Warn user about plural names** - suggest singular, wait for confirmation
 - **CRITICAL: Check for duplicates** - verify block doesn't already exist in CMS or frontend
+- **Location → CMS registration:** The chosen Location(s) determine which content-type schemas to update. **page (blocks)** → always add block to page schema `attributes.blocks.components`. **template (content)** → add block to template schema `attributes.content.components`. Never skip a selected location.
 - **Show summary and ask for confirmation** before creating any files
 - Create ALL files at once, not progressively (only after user confirms)
 - Create EMPTY block (empty attributes in CMS schema, empty GraphQL fragment)
