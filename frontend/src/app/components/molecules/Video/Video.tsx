@@ -1,17 +1,26 @@
 'use client';
 
-import React, { ReactElement, useState } from 'react';
+import React, { JSX, ReactElement, useState } from 'react';
 import styles from './Video.module.scss';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import { IVideo } from '../../../../types/video';
 import { Image } from '../../primitives/Image/Image';
 import { Icon } from '../../primitives/Icon/Icon';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 import { IApp } from '../../../../types/base/app';
-import { UploadedVideo } from '../../primitives/UploadedVideo/UploadedVideo';
-import { YoutubeVideo } from '../../primitives/YoutubeVideo/YoutubeVideo';
-import { VimeoVideo } from '../../primitives/VimeoVideo/VimeoVideo';
-import { FacebookVideo } from '../../primitives/FacebookVideo/FacebookVideo';
+import { isYoutubeShortsUrl } from '../../../../utils/isYoutubeShortsUrl';
+
+const UploadedVideo = dynamic(() =>
+    import('../../primitives/UploadedVideo/UploadedVideo').then((mod) => mod.UploadedVideo),
+);
+const YoutubeVideo = dynamic(() =>
+    import('../../primitives/YoutubeVideo/YoutubeVideo').then((mod) => mod.YoutubeVideo),
+);
+const VimeoVideo = dynamic(() => import('../../primitives/VimeoVideo/VimeoVideo').then((mod) => mod.VimeoVideo));
+const FacebookVideo = dynamic(() =>
+    import('../../primitives/FacebookVideo/FacebookVideo').then((mod) => mod.FacebookVideo),
+);
 
 interface VideoProps {
     data: IVideo;
@@ -23,6 +32,7 @@ interface VideoProps {
 const Video = ({ data: { uploadedVideo, externalVideo, image }, sizes, app, className }: VideoProps): ReactElement => {
     const [play, setPlay] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const isShorts = externalVideo?.provider === 'youtube' && isYoutubeShortsUrl(externalVideo?.url);
 
     const renderVideo = (): ReactElement => {
         const videoClassNames = clsx(styles.video);
@@ -111,7 +121,7 @@ const Video = ({ data: { uploadedVideo, externalVideo, image }, sizes, app, clas
     const icon = play ? 'loader' : 'play';
 
     return (
-        <div className={clsx(styles.wrapper, play && loaded && styles.showVideo, className)}>
+        <div className={clsx(styles.wrapper, play && loaded && styles.showVideo, isShorts && styles.shorts, className)}>
             {play ? renderVideo() : <></>}
             <div className={styles.overlay}>
                 <button

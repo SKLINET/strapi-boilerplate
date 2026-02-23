@@ -9,6 +9,16 @@
             @apply opacity-0 invisible;
         }
     }
+
+    &.shorts {
+        @apply mx-auto aspect-9/16 max-w-90;
+
+        @supports not (aspect-ratio: 9 / 16) {
+            &::before {
+                padding-top: 177.78%;
+            }
+        }
+    }
 }
 
 .video {
