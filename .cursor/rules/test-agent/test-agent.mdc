@@ -43,7 +43,7 @@ Spustí se když uživatel řekne:
 
 Když uživatel řekne "otestuj create block":
 
-1. Načti `.cursor/rules/create-block/create-block.mdc`
+1. Načti `.cursor/skills/create-block/SKILL.md`
 2. Načti relevantní sekci z `AGENTS.md` (pokud existuje)
 3. Extrahuj:
    - Validační pravidla
@@ -58,7 +58,7 @@ Když uživatel řekne "otestuj create block":
 🔍 ANALÝZA PRAVIDEL: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Načteny pravidla: .cursor/rules/create-block/create-block.mdc
+Načteny pravidla: .cursor/skills/create-block/SKILL.md
 Extrahováno:
   ✓ Validační pravidla (English, singular)
   ✓ Auto-fix pravidla (PascalCase, spaces, etc.)
@@ -251,7 +251,7 @@ Report obsahuje:
 👤 User: otestuj create block
 
 🤖 Test Agent:
-   Načítám pravidla z create-block.mdc...
+   Načítám pravidla z create-block skill...
    Generuji test cases...
 
    Nalezeno 25 test cases v 5 kategoriích.

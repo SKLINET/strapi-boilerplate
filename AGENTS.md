@@ -4,7 +4,7 @@ Instructions for AI coding agents working on this project. See [agents.md](https
 
 ## Creating a new block
 
-**To add a new page block**, ask the user to follow the guide in **`.cursor/rules/create-block/index.md`**. That guide automates the full flow: it walks through block name, display name, icon, location, getStaticProps, then creates the CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates. Trigger with phrases like "create block", "add block", "vytvoř blok". Rules live in `create-block.mdc`.
+**To add a new page block**, use the **`create-block`** Agent Skill (`.cursor/skills/create-block/`). The skill automates the full flow: it guides through block name, display name, icon, location, getStaticProps, then creates the CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates. Trigger with phrases like "create block", "add block", "vytvoř blok", or type `/create-block` in Agent chat.
 
 ## Setup
 

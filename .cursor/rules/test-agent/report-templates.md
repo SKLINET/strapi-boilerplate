@@ -221,7 +221,7 @@ Test #{ID}: {Category} - {Description}
 🔍 ANALÝZA PRAVIDEL: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Načteny pravidla: .cursor/rules/create-block/create-block.mdc
+Načteny pravidla: .cursor/skills/create-block/SKILL.md
 Extrahováno:
   ✓ Validační pravidla (English, singular)
   ✓ Auto-fix pravidla (PascalCase, spaces, etc.)

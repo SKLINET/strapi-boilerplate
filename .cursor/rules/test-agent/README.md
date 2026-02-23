@@ -11,7 +11,7 @@ Test Agent systematically validates that other agents (like Block Creator) corre
 ```
 User says: "otestuj create block"
          ↓
-Test Agent loads rules from create-block.mdc
+Test Agent loads rules from create-block skill (SKILL.md)
          ↓
 Generates test cases (happy path, auto-fix, warnings, edge cases)
          ↓
@@ -41,7 +41,7 @@ Generates detailed report with pass/fail results
 ```
 
 Test Agent will:
-1. Load rules from `create-block/create-block.mdc`
+1. Load rules from `create-block` skill (`.cursor/skills/create-block/SKILL.md`)
 2. Generate ~25 test cases
 3. Validate behaviors like:
    - PascalCase → kebab-case conversion
@@ -235,7 +235,7 @@ Edit `report-templates.md` to change:
 
 ## Related Documentation
 
-- **Block Creator**: `.cursor/rules/create-block/`
+- **Block Creator**: `.cursor/skills/create-block/`
 - **Test Reports**: `.cursor/test-reports/`
 
 ## Examples
