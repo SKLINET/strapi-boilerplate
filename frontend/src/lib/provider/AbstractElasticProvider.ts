@@ -12,7 +12,7 @@ export interface GetBodyProps {
     from?: number;
     sort?: Record<string, string> | Array<Record<string, string>>;
     _source?: string[];
-    filter?: Record<string, any>;
+    filters?: Record<string, any>;
 }
 
 export interface SearchProps extends GetBodyProps {
@@ -124,11 +124,11 @@ export default abstract class AbstractElasticProvider<
      * Get search body (default all)
      * @override
      */
-    getBody({ size, from, sort, _source, filter }: GetBodyProps): Record<string, any> {
+    getBody({ size, from, sort, _source, filters }: GetBodyProps): Record<string, any> {
         return {
             query: {
                 bool: {
-                    filter: this.getFilterForSearch(filter),
+                    filter: this.getFilterForSearch(filters),
                 },
             },
             size,
@@ -141,7 +141,7 @@ export default abstract class AbstractElasticProvider<
     async search<T extends keyof TItem = keyof TItem>({
         locale,
         preview,
-        filter,
+        filters,
         size = 9,
         from = 0,
         sort,
@@ -150,7 +150,7 @@ export default abstract class AbstractElasticProvider<
             size,
             from,
             sort,
-            filter,
+            filters,
         });
 
         return await this.findByElastic<T>({ body }, locale, preview);
@@ -162,10 +162,10 @@ export default abstract class AbstractElasticProvider<
         size = 20,
         from = 0,
         sort?: Record<string, string> | Array<Record<string, string>>,
-        filter?: Record<string, any>,
+        filters?: Record<string, any>,
         _source?: string[],
     ): Record<string, any>[] {
-        return [{ index: this.getIndex(locale, !preview) }, this.getBody({ size, from, sort, filter, _source })];
+        return [{ index: this.getIndex(locale, !preview) }, this.getBody({ size, from, sort, filters, _source })];
     }
 
     getAggregatedKeys<T>(data: AggregatedType<T>, key: string): string[] {
@@ -225,12 +225,13 @@ export default abstract class AbstractElasticProvider<
     async findOneForIndex(id: string, locale?: string, preview = false): Promise<TItem | null> {
         const it = await this.find(
             {
-                filter: { documentId: { eq: id } },
+                filters: { documentId: { eq: id } },
                 limit: 1,
                 locale: String(locale),
                 status: getPublicationState(preview),
             } as any,
             preview,
+            true,
             true,
         );
         const item =
@@ -323,7 +324,7 @@ export default abstract class AbstractElasticProvider<
 
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                const { data } = await this.find({ ...options, limit: Infinity, locale } as any, !prod, true);
+                const { data } = await this.find({ ...options, limit: Infinity, locale } as any, !prod, true, true);
 
                 Logger.info('Found', data.length, 'items');
 
@@ -355,7 +356,7 @@ export default abstract class AbstractElasticProvider<
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const { data } = await this.find({ ...options, limit: Infinity }, !prod, true);
+            const { data } = await this.find({ ...options, limit: Infinity }, !prod, true, true);
 
             Logger.info('Found', data.length, 'items');
 
@@ -393,7 +394,7 @@ export default abstract class AbstractElasticProvider<
                 Logger.log(`Getting data for ${this.getIndex(locale, prod)}`);
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                const { data } = await this.find({ locale, limit: Infinity }, !prod, true);
+                const { data } = await this.find({ locale, limit: Infinity }, !prod, true, true);
                 const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
                 const { data: data2 } = await this.findByElastic<'documentId'>({ size: 10000 }, locale, !prod);
@@ -413,7 +414,7 @@ export default abstract class AbstractElasticProvider<
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            const { data } = await this.find({ limit: Infinity }, !prod, true);
+            const { data } = await this.find({ limit: Infinity }, !prod, true, true);
 
             const cmsIds = data.map((item) => item?.documentId).filter((id) => id);
 
@@ -632,6 +633,29 @@ export default abstract class AbstractElasticProvider<
                         },
                     },
                     {
+                        descriptions: {
+                            path_match: '*.description',
+                            mapping: {
+                                type: 'text',
+                                analyzer: locale === 'en' ? 'english' : 'czech',
+                                index_prefixes: {
+                                    min_chars: 1,
+                                    max_chars: 10,
+                                },
+                                fields: {
+                                    suggest: {
+                                        type: 'completion',
+                                        analyzer: locale === 'en' ? 'english' : 'czech',
+                                    },
+                                    search: {
+                                        type: 'search_as_you_type',
+                                        analyzer: locale === 'en' ? 'english' : 'czech',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
                         perex: {
                             path_match: 'perex',
                             mapping: {
@@ -719,6 +743,14 @@ export default abstract class AbstractElasticProvider<
                     //         },
                     //     },
                     // },
+                    {
+                        animatedPart: {
+                            path_match: '*.animatedPart',
+                            mapping: {
+                                type: 'float',
+                            },
+                        },
+                    },
                     {
                         bnValue: {
                             path_match: '*.bnValue',
@@ -830,12 +862,17 @@ export default abstract class AbstractElasticProvider<
      */
     getIndex(locale?: string, prod?: boolean | undefined, version?: number): string {
         const ver = version || this.getIndexVersion();
-        const prefix = process.env.NEXT_PUBLIC_BASE_PATH === 'https://www.<project_name>.cz' ? 'p' : 's';
+        const prefix =
+            process.env.NEXT_PUBLIC_BASE_PATH === 'https://boilerplate.com' ||
+            process.env.NEXT_PUBLIC_BASE_PATH === 'https://boilerplate-prod.symbio.agency'
+                ? 'p'
+                : 's';
         const suffix = typeof prod !== 'undefined' && prod ? '_prod' : '';
+        const apiKey = this.getApiKey().toLowerCase();
         if (this.isLocalizable()) {
-            return `mp_${prefix}_` + this.getApiKey() + '_' + locale + '_v' + ver + suffix;
+            return `boilerplate_${prefix}_` + apiKey + '_' + locale + '_v' + ver + suffix;
         } else {
-            return `mp_${prefix}_` + this.getApiKey() + '_v' + ver + suffix;
+            return `boilerplate_${prefix}_` + apiKey + '_v' + ver + suffix;
         }
     }
 
@@ -880,6 +917,28 @@ export default abstract class AbstractElasticProvider<
                     },
                 },
             },
+            description: {
+                type: 'text',
+                analyzer: locale === 'en' ? 'english' : 'czech',
+                index_prefixes: {
+                    min_chars: 1,
+                    max_chars: 10,
+                },
+                fields: {
+                    sort: {
+                        type: 'keyword',
+                        normalizer: 'default_sort',
+                    },
+                    suggest: {
+                        type: 'completion',
+                        analyzer: locale === 'en' ? 'english' : 'czech',
+                    },
+                    search: {
+                        type: 'search_as_you_type',
+                        analyzer: locale === 'en' ? 'english' : 'czech',
+                    },
+                },
+            },
             publishedAt: {
                 type: 'date',
             },
@@ -888,6 +947,15 @@ export default abstract class AbstractElasticProvider<
             },
             priority: {
                 type: 'integer',
+            },
+            seo: {
+                type: 'object',
+                properties: {
+                    structuredData: {
+                        type: 'object',
+                        enabled: false,
+                    },
+                },
             },
         };
     }

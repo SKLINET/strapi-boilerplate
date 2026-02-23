@@ -9,32 +9,45 @@ import AbstractSingletonStrapiProvider, { SingletonStrapiRecord } from './Abstra
 export default abstract class AbstractSingletonElasticProvider<
     TOperation extends OperationType,
     TItem extends SingletonStrapiRecord = SingletonStrapiRecord,
-> extends AbstractSingletonStrapiProvider<TOperation> {
+> extends AbstractSingletonStrapiProvider<TOperation, TItem> {
     /**
      * Get item from elastic search
      * @param locale
      * @param preview
+     * @param source
+     * @param query
      */
-    async getByElastic(locale?: string, preview = false): Promise<TItem | null> {
+    async getByElastic(
+        locale?: string,
+        preview = false,
+        source?: string[],
+        query?: Record<string, any>,
+    ): Promise<TItem | null> {
         const options = {
             index: this.getIndex(locale, !preview),
             body: {
                 size: 1,
-                query: {
+                query: query || {
                     match_all: {},
                 },
             },
+            _source: source || this.getSource(),
         };
-        const result = await getElastic().search(options);
-        const { hits: hitsStruct, total: totalValue } = result.hits;
-        const total = totalValue as estypes.SearchTotalHits;
-        const hits = hitsStruct as estypes.SearchHit[];
+        try {
+            const result = await getElastic().search(options);
+            const { hits: hitsStruct, total: totalValue } = result.hits;
+            const total = totalValue as estypes.SearchTotalHits;
+            const hits = hitsStruct as estypes.SearchHit[];
 
-        if (total.value < 1) {
-            return null;
+            if (total.value < 1) {
+                return null;
+            }
+
+            return hits[0]._source as TItem;
+        } catch (e) {
+            Logger.warn('Elastic search failed, falling back to DB', e);
+            return this.get(locale, preview);
         }
-
-        return hits[0]._source as TItem;
     }
 
     /**
@@ -51,7 +64,7 @@ export default abstract class AbstractSingletonElasticProvider<
      * @param preview
      */
     async getForIndex(locale?: string, preview = false): Promise<TItem | null> {
-        return (await this.get(locale, preview)) as TItem;
+        return (await this.get(locale, preview, true)) as TItem;
     }
 
     /**
@@ -260,11 +273,17 @@ export default abstract class AbstractSingletonElasticProvider<
      */
     getIndex(locale?: string, prod?: boolean | undefined, version?: number): string {
         const ver = version || this.getIndexVersion();
+        const prefix =
+            process.env.NEXT_PUBLIC_BASE_PATH === 'https://boilerplate.com' ||
+            process.env.NEXT_PUBLIC_BASE_PATH === 'https://boilerplate-prod.symbio.agency'
+                ? 'p'
+                : 's';
         const suffix = typeof prod !== 'undefined' && prod ? '_prod' : '';
+        const apiKey = this.getApiKey().toLowerCase();
         if (this.isLocalizable()) {
-            return this.getApiKey() + '_' + locale + '_v' + ver + suffix;
+            return `boilerplate_${prefix}_` + apiKey + '_' + locale + '_v' + ver + suffix;
         } else {
-            return this.getApiKey() + '_v' + ver + suffix;
+            return `boilerplate_${prefix}_` + apiKey + '_v' + ver + suffix;
         }
     }
 }
