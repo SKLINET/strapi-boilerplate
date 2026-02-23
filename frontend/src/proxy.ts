@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+// CROCT A/B TESTING
+// import { withCroct } from '@croct/plug-next/middleware';
 import sklinet from '../sklinet.config.json';
 
 function isValidAuth(login: string, password: string): boolean {
@@ -59,6 +61,9 @@ export async function proxy(req: NextRequest) {
 
     return NextResponse.rewrite(url);
 }
+
+// CROCT A/B TESTING
+// export const middleware = withCroct(middleware);
 
 export const config = {
     matcher: [
