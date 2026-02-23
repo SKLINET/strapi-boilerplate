@@ -13,7 +13,7 @@ function isValidAuth(login: string, password: string): boolean {
     return false;
 }
 
-// Redirects middleware
+// Redirects proxy
 async function handleRedirects(req: NextRequest): Promise<NextResponse<unknown> | null> {
     const url = req.nextUrl;
     const redirectPath = url.pathname;
@@ -22,7 +22,7 @@ async function handleRedirects(req: NextRequest): Promise<NextResponse<unknown> 
     return null;
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
     const url = req.nextUrl;
 
     const redirects = await handleRedirects(req);

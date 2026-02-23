@@ -13,7 +13,7 @@ import { TopLoader } from '../components/base/TopLoader/TopLoader';
 import config from '../../../sklinet.config.json';
 import { Providers } from './providers';
 
-import '../globals.css';
+import '../../styles/global.css';
 
 const primary = Poppins({
     weight: ['400', '700'],
