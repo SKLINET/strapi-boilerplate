@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-// CROCT A/B TESTING
-// import { withCroct } from '@croct/plug-next/middleware';
+import { withCroct } from '@croct/plug-next/proxy';
 import sklinet from '../sklinet.config.json';
+import { croctConfig } from './lib/croct/config';
 
 function isValidAuth(login: string, password: string): boolean {
     const auths = sklinet.auth.basic;
@@ -24,7 +24,7 @@ async function handleRedirects(req: NextRequest): Promise<NextResponse<unknown> 
     return null;
 }
 
-export async function proxy(req: NextRequest) {
+async function baseProxy(req: NextRequest) {
     const url = req.nextUrl;
 
     const redirects = await handleRedirects(req);
@@ -62,8 +62,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.rewrite(url);
 }
 
-// CROCT A/B TESTING
-// export const middleware = withCroct(middleware);
+export const proxy = croctConfig.appId ? withCroct(baseProxy) : baseProxy;
 
 export const config = {
     matcher: [

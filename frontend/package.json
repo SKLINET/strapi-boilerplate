@@ -23,8 +23,8 @@
     },
     "dependencies": {
         "@cloudinary/url-gen": "^1.21.0",
-        "@croct/plug-next": "^0.7.0",
-        "@croct/plug-react": "^0.14.0",
+        "@croct/plug-next": "^0.9.0",
+        "@croct/plug-react": "^0.16.0",
         "@elastic/elasticsearch": "^8.10.0",
         "@formatjs/intl-localematcher": "^0.5.2",
         "@hookform/resolvers": "^3.3.2",
