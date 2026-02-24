@@ -1,22 +1,24 @@
 ---
-description: Guide for creating a new block in CMS and frontend
-alwaysApply: false
+name: create-block
+description: Creates a new page block in Strapi CMS and Next.js frontend. Use when user says "create block", "add block", "new block", "vytvoř blok", "přidej blok". Guides through block name, display name, icon, location, getStaticProps, then creates CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates.
+compatibility: Strapi boilerplate monorepo (frontend/ Next.js + cms/ Strapi)
 ---
 
 # Create New Block
 
-Creates a complete block - from CMS schema to React components on frontend.
+Creates a complete block – from CMS schema to React components on frontend.
 
 **Reference files in this folder:**
-- `file-templates.md` - TypeScript/SCSS templates for generated files
-- `graphql-reference.md` - GraphQL fragment examples for common field types
-- `cms-reference.md` - CMS field type definitions
+- [references/file-templates.md](references/file-templates.md) – TypeScript/SCSS templates for generated files
+- [references/graphql-reference.md](references/graphql-reference.md) – GraphQL fragment examples for common field types
+- [references/cms-reference.md](references/cms-reference.md) – CMS field type definitions
+- [references/icons-reference.md](references/icons-reference.md) – Strapi icon names for block picker
 
 ---
 
 ## Step 1: Guide User Through Questions (ONE AT A TIME)
 
-**Before starting:** Silently scan CMS schemas for dynamic zones.
+**Before starting:** Silently scan CMS schemas for dynamic zones (page blocks, template content).
 
 ### 1.1 Block Name
 ```
@@ -44,34 +46,23 @@ The '-block' suffix is added automatically.
 - The duplicate check runs AFTER all auto-fix transformations
 
 **⚠️ IMPORTANT: When auto-fix is applied, ALWAYS inform the user what was changed:**
-
 ```
 ✓ Block name: `hero-banner-block`
   (auto-fixed: spaces → hyphens)
 ```
 
-Examples:
-| Input | Output | Message |
-|-------|--------|---------|
-| `book` | `book-block` | `✓ Block name: book-block` |
-| `HeroBanner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: PascalCase → kebab-case) |
-| `hero banner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: spaces → hyphens) |
-| `hero_banner` | `hero-banner-block` | `✓ Block name: hero-banner-block` (auto-fixed: underscores → hyphens) |
-| `HERO` | `hero-block` | `✓ Block name: hero-block` (auto-fixed: uppercase → lowercase) |
-| `hero!` | `hero-block` | `✓ Block name: hero-block` (auto-fixed: special characters removed) |
-
 ### 1.2 Display Name
 ```
-What will be the Czech display name for CMS?
-(e.g., 'Knihy', 'Hlavní banner')
+What will be the display name for CMS?
+(Use Czech for this project, e.g., 'Knihy', 'Hlavni banner')
 ```
-**Show:** `✓ displayName: Knihy`
+**Show:** `✓ displayName: Hlavni banner`
 
 ### 1.3 Icon
 ```
 Which icon to use?
 ```
-**Reference:** Kompletní seznam a mapování ikon z mřížky v modalu „Create a component“ je v **`icons-reference.md`**. Vizuální přehled: [Strapi Design System – Icons](https://design-system.strapi.io/?path=/docs/foundations-icons-icons--docs). V modalu lze vybrat jen podmnožinu – používej názvy v camelCase (např. `layout`, `bulletList`) z referenčního souboru.
+**Reference:** See [references/icons-reference.md](references/icons-reference.md) for available icons. Use camelCase names (e.g., `layout`, `bulletList`).
 
 **Show:** `✓ Icon: book`
 
@@ -101,7 +92,7 @@ Options: Yes / No
 ━━━━━━━━━━━━━━━━━━━━━
 
 Name:           book-block
-displayName:    Knihy  
+displayName:    Knihy
 Icon:           book
 Location:       page (blocks)
 getStaticProps: No
@@ -116,6 +107,7 @@ Files to create/update:
 - frontend/src/app/blocks/server.ts (update)
 - frontend/src/app/blocks/client.ts (update)
 - frontend/src/app/blocks/TemplateBlock/TemplateBlock.ts (update) — only if Location includes template (content)
+- file that defines **getBlockType** (path may vary) — add case `{typeName}` → `{blockNamePascal}`
 
 ━━━━━━━━━━━━━━━━━━━━━
 Create block? (Yes/No)
@@ -133,7 +125,7 @@ blockNameKebab = "hero-banner-block"       // CMS schema name (kebab-case)
 blockNameUnderscore = "hero_banner_block"  // Same with _ instead of - (for collectionName)
 blockNamePascal = "HeroBannerBlock"        // Frontend block folder/file
 componentName = "HeroBanner"               // UI component (without "Block")
-typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
+typeName = "ComponentBlockHeroBannerBlock"  // GraphQL typename
 ```
 
 ---
@@ -161,10 +153,10 @@ typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 
 **⚠️ CRITICAL: Add the block to every content type the user selected in Location. Do not skip any.**
 
-| Location selected        | File to update                                                                 | Where to add |
-|--------------------------|---------------------------------------------------------------------------------|--------------|
-| **page (blocks)**        | `cms/src/api/page/content-types/page/schema.json`                               | `attributes.blocks.components` — add `"block.{blockNameKebab}"` to the array |
-| **template (content)**   | `cms/src/api/template/content-types/template/schema.json`                       | `attributes.content.components` — add `"block.{blockNameKebab}"` to the array |
+| Location selected | File to update | Where to add |
+|-------------------|----------------|--------------|
+| **page (blocks)** | `cms/src/api/page/content-types/page/schema.json` | `attributes.blocks.components` — add `"block.{blockNameKebab}"` to the array |
+| **template (content)** | `cms/src/api/template/content-types/template/schema.json` | `attributes.content.components` — add `"block.{blockNameKebab}"` to the array |
 
 - If user chose **page (blocks)** → update page schema (add to `blocks.components`).
 - If user chose **template (content)** → update template schema (add to `content.components`).
@@ -174,14 +166,14 @@ typeName = "ComponentBlockHeroBannerBlock" // GraphQL typename
 ### 3.3 Frontend Block Wrapper
 **File:** `frontend/src/app/blocks/{blockNamePascal}/{blockNamePascal}.tsx`
 
-See `file-templates.md` for template.
+See [references/file-templates.md](references/file-templates.md) for template. Use getStaticProps variant if Step 1.5 was Yes.
 
 ### 3.4 Frontend UI Component
 **Files:**
 - `frontend/src/app/components/blocks/{componentName}/{componentName}.tsx`
 - `frontend/src/app/components/blocks/{componentName}/{componentName}.module.scss`
 
-See `file-templates.md` for templates.
+See [references/file-templates.md](references/file-templates.md) for templates.
 
 ### 3.5 Update server.ts
 **File:** `frontend/src/app/blocks/server.ts`
@@ -214,6 +206,20 @@ Inside the fragment `TemplateBlock_content`, in the `template { content { ... } 
 
 ⚠️ **Without this, the block will NOT render inside Template block (reusable content)!**
 
+### 3.8 Update getBlockType (CRITICAL!)
+**Where:** The file that defines the function **getBlockType** (search for it; path may vary per project — there is only one such function).
+
+In that file, add a switch case (alphabetically by typeName) mapping GraphQL `__typename` to block folder name:
+
+```typescript
+case '{typeName}':
+    return '{blockNamePascal}';
+```
+
+Example: `case 'ComponentBlockScoreDashboardBlock': return 'ScoreDashboardBlock';`
+
+⚠️ **Without this, the block type will not resolve and the block may not render correctly!**
+
 ---
 
 ## Step 4: Show TODO List
@@ -233,7 +239,7 @@ Inside the fragment `TemplateBlock_content`, in the `template { content { ... } 
    cd frontend && npm run graphql-codegen
 
 4. [ ] Update GraphQL fragment in {blockNamePascal}.tsx
-   (see graphql-reference.md for examples)
+   (see references/graphql-reference.md for examples)
 
 5. [ ] Run Relay compiler
    cd frontend && npm run relay
@@ -259,11 +265,12 @@ Inside the fragment `TemplateBlock_content`, in the `template { content { ... } 
 
 ### File creation (after confirmation):
 - [ ] CMS schema (`cms/src/components/block/{blockNameKebab}.json`)
-- [ ] **Content-type schema(s)** — for **each** selected Location: page (blocks) → add block to `page/schema.json` → `attributes.blocks.components`; template (content) → add block to `template/schema.json` → `attributes.content.components`. Do not skip.
+- [ ] **Content-type schema(s)** — for **each** selected Location: page (blocks) → add block to `page/schema.json` → `attributes.blocks.components`; template (content) → add to `template/schema.json` → `attributes.content.components`. Do not skip.
 - [ ] Block wrapper (`frontend/src/app/blocks/{blockNamePascal}/`)
 - [ ] UI component (`frontend/src/app/components/blocks/{componentName}/`)
 - [ ] SCSS file
 - [ ] `server.ts` updated (import, fragment, export)
 - [ ] `client.ts` updated (switch case) ← CRITICAL!
 - [ ] If Location includes **template (content)**: `TemplateBlock.ts` updated — add `...{blockNamePascal}_content @relay(mask: false)` inside `content { }` in fragment (alphabetically)
+- [ ] **getBlockType** — in the file that defines it (path may vary), add `case '{typeName}': return '{blockNamePascal}';` (alphabetically) ← do not skip!
 - [ ] TODO list shown to user
