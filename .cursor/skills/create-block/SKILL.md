@@ -53,10 +53,10 @@ The '-block' suffix is added automatically.
 
 ### 1.2 Display Name
 ```
-What will be the Czech display name for CMS?
-(e.g., 'Knihy', 'Hlavní banner')
+What will be the display name for CMS?
+(Use Czech for this project, e.g., 'Knihy', 'Hlavni banner')
 ```
-**Show:** `✓ displayName: Knihy`
+**Show:** `✓ displayName: Hlavni banner`
 
 ### 1.3 Icon
 ```

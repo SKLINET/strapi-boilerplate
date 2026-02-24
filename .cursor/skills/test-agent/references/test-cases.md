@@ -1,6 +1,6 @@
 # Test Cases - Generators and Examples
 
-Test case definitions and generators for the Block Creator agent.
+Test case definitions and generators for Block Creator.
 
 ---
 
@@ -9,23 +9,23 @@ Test case definitions and generators for the Block Creator agent.
 Block Creator should be tested across these categories:
 
 ### A) Happy Path (Valid Inputs)
-Inputs that should be accepted without modification or warnings.
+Inputs accepted without modification or warning.
 
 ### B) Auto-fix Cases
-Inputs that require automatic correction (case conversion, special characters, etc.).
+Inputs requiring automatic correction (case conversion, spacing, symbols).
 
 ### C) Warning Cases
-Inputs that should trigger warnings but may be accepted after confirmation.
+Inputs that should trigger warning but may proceed after confirmation.
 
 ### D) Edge Cases
-Extreme or unusual inputs (empty, very long, unicode, etc.).
+Extreme or unusual inputs (empty, unicode, very long).
 
 ### E) Duplicates
-Inputs that conflict with existing blocks.
+Inputs conflicting with existing blocks.
 
 ---
 
-## Block Creator Agent Tests
+## Block Creator Tests
 
 ### A) Happy Path
 
@@ -34,28 +34,28 @@ Inputs that conflict with existing blocks.
 | A1 | `book` | ACCEPT `book-block` | Single word |
 | A2 | `hero-banner` | ACCEPT `hero-banner-block` | Multi-word with hyphens |
 | A3 | `contact-form` | ACCEPT `contact-form-block` | Multi-word |
-| A4 | `step1` | ACCEPT `step1-block` | With number |
+| A4 | `step1` | ACCEPT `step1-block` | Number not at start |
 | A5 | `user-profile` | ACCEPT `user-profile-block` | Common pattern |
 
 ### B) Auto-fix Cases
 
 | ID | Input | Expected Output | Fix Applied | Description |
 |----|-------|----------------|-------------|-------------|
-| B1 | `HeroBanner` | AUTO-FIX `hero-banner-block` | PascalCase → kebab-case | PascalCase conversion |
-| B2 | `contactForm` | AUTO-FIX `contact-form-block` | camelCase → kebab-case | camelCase conversion |
-| B3 | `hero_banner` | AUTO-FIX `hero-banner-block` | Underscores → hyphens | Underscore replacement |
-| B4 | `hero banner` | AUTO-FIX `hero-banner-block` | Spaces → hyphens | Space replacement |
-| B5 | `HERO` | AUTO-FIX `hero-block` | Uppercase → lowercase | Case normalization |
+| B1 | `HeroBanner` | AUTO-FIX `hero-banner-block` | PascalCase -> kebab-case | PascalCase conversion |
+| B2 | `contactForm` | AUTO-FIX `contact-form-block` | camelCase -> kebab-case | camelCase conversion |
+| B3 | `hero_banner` | AUTO-FIX `hero-banner-block` | Underscores -> hyphens | Underscore replacement |
+| B4 | `hero banner` | AUTO-FIX `hero-banner-block` | Spaces -> hyphens | Space replacement |
+| B5 | `HERO` | AUTO-FIX `hero-block` | Uppercase -> lowercase | Case normalization |
 | B6 | `hero!` | AUTO-FIX `hero-block` | Remove special chars | Special character removal |
-| B7 | `hero--banner` | AUTO-FIX `hero-banner-block` | Multiple hyphens → single | Hyphen normalization |
+| B7 | `hero--banner` | AUTO-FIX `hero-banner-block` | Multiple hyphens -> single | Hyphen normalization |
 
 ### C) Warning Cases
 
 | ID | Input | Expected Output | Warning Reason |
 |----|-------|----------------|----------------|
-| C1 | `books` | WARN `book-block` | Plural → suggest singular |
-| C2 | `heroes` | WARN `hero-block` | Plural (-es) → suggest singular |
-| C3 | `galleries` | WARN `gallery-block` | Plural (-ies) → suggest singular |
+| C1 | `books` | WARN `book-block` | Plural -> suggest singular |
+| C2 | `heroes` | WARN `hero-block` | Plural (-es) -> suggest singular |
+| C3 | `galleries` | WARN `gallery-block` | Plural (-ies) -> suggest singular |
 | C4 | `kniha` | WARN "use English" | Czech word with diacritics |
 | C5 | `clanek` | WARN "use English" | Czech word without diacritics |
 
@@ -67,7 +67,7 @@ Inputs that conflict with existing blocks.
 | D2 | `---` | STOP "Name cannot be empty" | Only hyphens (empty after fix) |
 | D3 | `very-long-block-name-that-goes-on-and-on` | ACCEPT | Very long name |
 | D4 | `кнопка` (Cyrillic) | STOP "Invalid characters" | Unicode characters |
-| D5 | `hero-block` | AUTO-FIX `hero-block` | Already has -block suffix |
+| D5 | `hero-block` | AUTO-FIX `hero-block` | Already has `-block` suffix |
 
 ### E) Duplicates
 
@@ -78,7 +78,7 @@ Assume existing blocks: `hero-block`, `contact-form-block`, `testimonial-block`
 | ID | Input | Expected Output | Description |
 |----|-------|----------------|-------------|
 | E1 | `hero` | STOP "Block 'hero-block' already exists" | Direct duplicate |
-| E2 | `Hero` | AUTO-FIX `hero` → STOP | Duplicate after fix |
+| E2 | `Hero` | AUTO-FIX `hero` -> STOP | Duplicate after fix |
 | E3 | `hero-block` | STOP "Block 'hero-block' already exists" | Exact match with suffix |
 
 ---
@@ -112,7 +112,7 @@ function getRandomValidName() {
 
 ```javascript
 function toPascalCaseVariants(kebabName) {
-    // hero-banner → ["HeroBanner", "heroBanner", "HEROBANNER", "Hero_Banner"]
+    // hero-banner -> ["HeroBanner", "heroBanner", "HEROBANNER", "Hero_Banner"]
     const parts = kebabName.split('-');
 
     return [
@@ -130,7 +130,7 @@ function toPascalCaseVariants(kebabName) {
 
 // Example usage:
 toPascalCaseVariants('hero-banner')
-// → ['HeroBanner', 'heroBanner', 'HERO-BANNER', 'hero_banner', 'Hero_Banner']
+// -> ['HeroBanner', 'heroBanner', 'HERO-BANNER', 'hero_banner', 'Hero_Banner']
 ```
 
 ### Plural Tests Generator
@@ -220,58 +220,58 @@ const edgeCases = [
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #1: Happy Path - jednoslovný název
+🧪 Test #1: Happy Path - single-word name
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "book"
-Očekávané chování: Přijmout, vytvořit "book-block"
+Simulating input: "book"
+Expected behavior: Accept and create "book-block"
 
-Aplikuji pravidla...
+Applying rules...
 - detectCzech("book") = false
 - detectPlural("book") = false
 - autoFix("book") = "book"
 - addSuffix("book") = "book-block"
 - checkExists("book-block") = false
 
-Výstup: ACCEPT "book-block"
-Očekávání: ACCEPT "book-block"
+Output:   ACCEPT "book-block"
+Expected: ACCEPT "book-block"
 
-✅ PASS | Test #1 | "book" → "book-block" | Happy Path
+✅ PASS | Test #1 | "book" -> "book-block" | Happy Path
 ```
 
-### Block Creator - Test #4 (Duplicita)
+### Block Creator - Test #4 (Duplicate)
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #4: Duplicita - existující blok
+🧪 Test #4: Duplicate - existing block
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "hero"
-Očekávané chování: STOP - blok hero-block již existuje
+Simulating input: "hero"
+Expected behavior: STOP - block `hero-block` already exists
 
-Aplikuji pravidla...
+Applying rules...
 - detectCzech("hero") = false
 - detectPlural("hero") = false
-- autoFix("hero") = "hero" → blockName = "hero-block"
+- autoFix("hero") = "hero" -> blockName = "hero-block"
 - checkExists("hero-block") = true ❌
-  Nalezen: cms/src/components/block/hero-block.json
+  Found: cms/src/components/block/hero-block.json
 
-Výstup: STOP "Block 'hero-block' already exists"
-Očekávání: STOP s upozorněním na existující blok
+Output:   STOP "Block 'hero-block' already exists"
+Expected: STOP with duplicate warning
 
-✅ PASS | Test #4 | "hero" → STOP (duplicate) | Duplicate detection
+✅ PASS | Test #4 | "hero" -> STOP (duplicate) | Duplicate detection
 ```
 
 ---
 
 ## Adding Custom Test Cases
 
-To add new test cases for Block Creator:
+To add new Block Creator test cases:
 
-1. **Identify the category** (Happy Path, Auto-fix, Warning, Edge case, Duplicate)
+1. **Identify category** (Happy Path, Auto-fix, Warning, Edge case, Duplicate)
 2. **Define input and expected output**
-3. **Add to appropriate table** above
-4. **Update test generator** if new pattern is introduced
+3. **Add to the proper table** above
+4. **Update generator** if introducing a new pattern
 
 Example:
 

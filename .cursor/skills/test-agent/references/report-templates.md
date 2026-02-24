@@ -6,34 +6,34 @@ Templates and formats for test results and reports.
 
 ## Console Output Format
 
-### 1. Test Execution Header
+### 1. Rule Analysis Header
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 ANALÝZA PRAVIDEL: {Agent Name}
+🔍 RULE ANALYSIS: {Agent Name}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Načteny pravidla: .cursor/rules/{agent-folder}/{agent-file}.mdc
-Extrahováno:
-  ✓ Validační pravidla (English, singular)
-  ✓ Auto-fix pravidla (PascalCase, spaces, etc.)
-  ✓ Warning pravidla (Czech, plural)
-  ✓ Stop pravidla (duplicates, empty)
+Loaded rules: {rulesSourcePath} (skill `SKILL.md` or Project Rule `.mdc`)
+Extracted:
+  ✓ Validation rules (English, singular)
+  ✓ Auto-fix rules (PascalCase, spaces, etc.)
+  ✓ Warning rules (Czech, plural)
+  ✓ Stop rules (duplicates, empty)
 
-Generuji test cases...
+Generating test cases...
 ```
 
 ### 2. Test Plan Summary
 
 ```
-✓ Vygenerováno {N} test cases ve {M} kategoriích:
-  - Happy Path:     {N1} testů
-  - Auto-fix:       {N2} testů
-  - Warning:        {N3} testů
-  - Edge cases:     {N4} testů
-  - Duplicity:      {N5} testů
+✓ Generated {N} test cases across {M} categories:
+  - Happy Path:   {N1} tests
+  - Auto-fix:     {N2} tests
+  - Warning:      {N3} tests
+  - Edge cases:   {N4} tests
+  - Duplicates:   {N5} tests
 
-Spouštím testy...
+Running tests...
 ```
 
 ### 3. Individual Test Output
@@ -43,57 +43,57 @@ Spouštím testy...
 🧪 Test #{ID}: {Category} - {Description}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "{input}"
-Očekávané chování: {expected}
+Simulating input: "{input}"
+Expected behavior: {expected}
 
-Aplikuji pravidla...
+Applying rules...
 - detectCzech("{input}") = {result}
 - detectPlural("{input}") = {result}
 - autoFix("{input}") = "{fixed}"
 - checkExists("{final}") = {result}
 
-Výstup: {action} "{result}"
-Očekávání: {expected}
+Output:   {action} "{result}"
+Expected: {expected}
 
-{✅ PASS | ❌ FAIL} | Test #{ID} | "{input}" → "{output}" | {Category}
+{✅ PASS | ❌ FAIL} | Test #{ID} | "{input}" -> "{output}" | {Category}
 ```
 
 ### 4. Results Summary
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY TESTŮ: {Agent Name}
+📊 TEST RESULTS: {Agent Name}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Celkem testů: {total}
-✅ Prošlo:    {passed} ({percentage}%)
-❌ Selhalo:   {failed} ({percentage}%)
+Total tests: {total}
+✅ Passed:    {passed} ({passPercentage}%)
+❌ Failed:    {failed} ({failPercentage}%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📈 Výsledky podle kategorie:
+📈 Results by category:
 
 Happy Path:      {p}/{t}  {✅|⚠️}  {%}
 Auto-fix:        {p}/{t}  {✅|⚠️}  {%}
 Warning:         {p}/{t}  {✅|⚠️}  {%}
 Edge cases:      {p}/{t}  {✅|⚠️}  {%}
-Duplicity:       {p}/{t}  {✅|⚠️}  {%}
+Duplicates:      {p}/{t}  {✅|⚠️}  {%}
 [DisplayName:    {p}/{t}  {✅|⚠️}  {%}]
 [Icon:           {p}/{t}  {✅|⚠️}  {%}]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### 5. Failed Tests (if any)
+### 5. Failed Tests Block (if any)
 
 ```
-❌ SELHANÉ TESTY:
+❌ FAILED TESTS:
 
 Test #{ID}: {Category} - {Description}
-  Vstup:     "{input}"
-  Očekávání: {expected}
-  Skutečnost: {actual}
-  Problém:   {problem description}
+  Input:      "{input}"
+  Expected:   {expected}
+  Actual:     {actual}
+  Issue:      {problemDescription}
 
 [... repeat for each failed test ...]
 
@@ -103,7 +103,7 @@ Test #{ID}: {Category} - {Description}
 ### 6. Recommendations
 
 ```
-💡 DOPORUČENÍ PRO ZLEPŠENÍ:
+💡 IMPROVEMENT RECOMMENDATIONS:
 
 1. {Recommendation 1}
    {Details...}
@@ -113,13 +113,13 @@ Test #{ID}: {Category} - {Description}
 
 [... etc ...]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ### 7. Report Location
 
 ```
-📄 Kompletní report uložen:
+📄 Full report saved:
 .cursor/test-reports/{agent-name}-{timestamp}.md
 ```
 
@@ -138,7 +138,7 @@ Test #{ID}: {Category} - {Description}
 
 **Date:** {YYYY-MM-DD}
 **Agent:** {Agent Name}
-**Rules:** `.cursor/rules/{folder}/{file}.mdc`
+**Rules:** `{rulesSourcePath}` (skill `SKILL.md` or Project Rule `.mdc`)
 **Tester:** Test Agent (Simulated)
 
 ---
@@ -189,7 +189,7 @@ Test #{ID}: {Category} - {Description}
 
 ### E) Duplicates
 
-(Checking against existing: `{existing1}`, `{existing2}`, ...)
+(Checked against existing: `{existing1}`, `{existing2}`, ...)
 
 | ID | Input | Expected | Actual | Result |
 |----|-------|----------|--------|--------|
@@ -200,14 +200,13 @@ Test #{ID}: {Category} - {Description}
 
 ## 💡 Recommendations
 
-1.  **{Recommendation Title}**: {Description}
-2.  **{Recommendation Title}**: {Description}
+1. **{Recommendation Title}**: {Description}
+2. **{Recommendation Title}**: {Description}
 [... etc ...]
 
 ## 🏁 Conclusion
 
 {Overall assessment of agent performance and robustness}
-
 ```
 
 ---
@@ -218,70 +217,70 @@ Test #{ID}: {Category} - {Description}
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 ANALÝZA PRAVIDEL: Block Creator Agent
+🔍 RULE ANALYSIS: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Načteny pravidla: .cursor/skills/create-block/SKILL.md
-Extrahováno:
-  ✓ Validační pravidla (English, singular)
-  ✓ Auto-fix pravidla (PascalCase, spaces, etc.)
-  ✓ Warning pravidla (Czech, plural)
-  ✓ Stop pravidla (duplicates, empty)
+Loaded rules: .cursor/skills/create-block/SKILL.md
+Extracted:
+  ✓ Validation rules (English, singular)
+  ✓ Auto-fix rules (PascalCase, spaces, etc.)
+  ✓ Warning rules (Czech, plural)
+  ✓ Stop rules (duplicates, empty)
 
-Generuji test cases...
+Generating test cases...
 
-✓ Vygenerováno 25 test cases v 5 kategoriích:
-  - Happy Path:     5 testů
-  - Auto-fix:       7 testů
-  - Warning:        5 testů
-  - Edge cases:     4 testů
-  - Duplicity:      4 testů
+✓ Generated 25 test cases in 5 categories:
+  - Happy Path:   5 tests
+  - Auto-fix:     7 tests
+  - Warning:      5 tests
+  - Edge cases:   4 tests
+  - Duplicates:   4 tests
 
-Spouštím testy...
+Running tests...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🧪 Test #1: Happy Path - jednoslovný název
+🧪 Test #1: Happy Path - single-word name
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Simuluji vstup: "book"
-Očekávané chování: Přijmout, vytvořit "book-block"
+Simulating input: "book"
+Expected behavior: Accept and create "book-block"
 
-Aplikuji pravidla...
+Applying rules...
 - detectCzech("book") = false
 - detectPlural("book") = false
-- autoFix("book") = "book" → "book-block"
+- autoFix("book") = "book" -> "book-block"
 - checkExists("book-block") = false
 
-Výstup: ACCEPT "book-block"
-Očekávání: ACCEPT "book-block"
+Output:   ACCEPT "book-block"
+Expected: ACCEPT "book-block"
 
-✅ PASS | Test #1 | "book" → "book-block" | Happy Path
+✅ PASS | Test #1 | "book" -> "book-block" | Happy Path
 
-[... další testy ...]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY TESTŮ: Block Creator Agent
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Celkem testů: 25
-✅ Prošlo:    25 (100%)
-❌ Selhalo:   0 (0%)
+[... more tests ...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 TEST RESULTS: Block Creator Agent
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📈 Výsledky podle kategorie:
+Total tests: 25
+✅ Passed:    25 (100%)
+❌ Failed:    0 (0%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📈 Results by category:
 
 Happy Path:      5/5  ✅ 100%
 Auto-fix:        7/7  ✅ 100%
 Warning:         5/5  ✅ 100%
 Edge cases:      4/4  ✅ 100%
-Duplicity:       4/4  ✅ 100%
+Duplicates:      4/4  ✅ 100%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✨ Všechny testy prošly!
+✨ All tests passed!
 
-📄 Kompletní report uložen:
+📄 Full report saved:
 .cursor/test-reports/block-creator-2026-02-03.md
 ```
 
@@ -289,65 +288,65 @@ Duplicity:       4/4  ✅ 100%
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 VÝSLEDKY TESTŮ: Block Creator Agent
+📊 TEST RESULTS: Block Creator Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Celkem testů: 25
-✅ Prošlo:    23 (92%)
-❌ Selhalo:   2 (8%)
+Total tests: 25
+✅ Passed:    23 (92%)
+❌ Failed:    2 (8%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📈 Výsledky podle kategorie:
+📈 Results by category:
 
 Happy Path:     5/5  ✅ 100%
 Auto-fix:       8/8  ✅ 100%
 Warning:        7/8  ⚠️  87%
 Edge cases:     2/3  ⚠️  67%
-Duplicity:      1/1  ✅ 100%
+Duplicates:     1/1  ✅ 100%
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-❌ SELHANÉ TESTY:
+❌ FAILED TESTS:
 
-Test #12: Warning - české slovo "výrobek"
-  Vstup:     "vyrobek" (without diacritics)
-  Očekávání: WARN "název by měl být v angličtině"
-  Skutečnost: AUTO-FIX "vyrobek-block" (nedetekováno jako české)
-  Problém:   Agent nerozpoznal české slovo bez diakritiky
+Test #12: Warning - Czech word "vyrobek"
+  Input:      "vyrobek" (without diacritics)
+  Expected:   WARN "name should be in English"
+  Actual:     AUTO-FIX "vyrobek-block" (not detected as Czech)
+  Issue:      Agent did not detect Czech word without diacritics
 
-Test #21: Edge case - unicode znaky
-  Vstup:     "блок" (Cyrillic)
-  Očekávání: WARN nebo REJECT
-  Skutečnost: AUTO-FIX "" (empty string after fix)
-  Problém:   Agent by měl požádat o anglický název místo prázdného výstupu
+Test #21: Edge case - unicode characters
+  Input:      "блок" (Cyrillic)
+  Expected:   WARN or REJECT
+  Actual:     AUTO-FIX "" (empty string after fix)
+  Issue:      Agent should request an English name instead of empty output
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 DOPORUČENÍ PRO ZLEPŠENÍ:
+💡 IMPROVEMENT RECOMMENDATIONS:
 
-1. Přidat slovník českých slov (bez diakritiky) pro detekci
-   Příklad: "vyrobek", "sluzba", "clanek" → rozpoznat jako české
+1. Add Czech dictionary entries without diacritics
+   Example: "vyrobek", "sluzba", "clanek" -> detect as Czech
 
-   Implementace:
-   - Rozšířit `detectCzech()` o normalizované formy
-   - Testovat oba: "výrobek" a "vyrobek"
+   Implementation:
+   - Extend `detectCzech()` with normalized forms
+   - Test both: "výrobek" and "vyrobek"
 
-2. Přidat detekci non-ASCII unicode znaků před auto-fix
-   Pokud vstup obsahuje cyrilici, asijské znaky apod. → varovat
+2. Add non-ASCII detection before auto-fix
+   If input contains Cyrillic/Asian/etc characters -> warn
 
-   Implementace:
-   - Přidat kontrolu: /[^\x00-\x7F]/.test(input)
-   - Vrátit WARN "Please use English characters"
+   Implementation:
+   - Add check: /[^\x00-\x7F]/.test(input)
+   - Return WARN "Please use English characters"
 
-3. Zlepšit error messages pro prázdné výstupy
-   Místo generického "Name cannot be empty", specifikovat:
+3. Improve error messages for empty outputs
+   Instead of generic "Name cannot be empty", specify:
    - "Name contains only invalid characters"
    - "Please use only English letters, numbers, and hyphens"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 Kompletní report uložen:
+📄 Full report saved:
 .cursor/test-reports/block-creator-2026-02-03.md
 ```
 
@@ -355,7 +354,7 @@ Test #21: Edge case - unicode znaky
 
 ## Category Indicators
 
-Use these emoji/icon patterns consistently:
+Use these symbols consistently:
 
 | Status | Symbol | Usage |
 |--------|--------|-------|
@@ -363,9 +362,9 @@ Use these emoji/icon patterns consistently:
 | Some failed | ⚠️ XX% | Category had failures |
 | Test passed | ✅ PASS | Individual test passed |
 | Test failed | ❌ FAIL | Individual test failed |
-| Analysis | 🔍 | Beginning analysis |
-| Testing | 🧪 | Running test |
-| Results | 📊 | Showing summary |
+| Analysis | 🔍 | Rule analysis section |
+| Testing | 🧪 | Individual test run |
+| Results | 📊 | Summary section |
 | Trends | 📈 | Category breakdown |
 | Recommendations | 💡 | Improvement suggestions |
 | Report saved | 📄 | File location |
@@ -378,43 +377,43 @@ Use these emoji/icon patterns consistently:
 
 ### Console Output
 
-- Use box drawing characters: `━` for separators
-- Use fixed-width sections for alignment
-- Keep line length ≤ 78 characters
+- Use box-drawing separators: `━`
+- Keep aligned sections for readability
+- Keep line length <= 78 characters when possible
 - Use consistent indentation (2 spaces)
 - Add blank lines between major sections
 
 ### Markdown Report
 
 - Use tables for structured data
-- Use headings hierarchy: `##` for sections, `###` for subsections
-- Use **bold** for emphasis on key findings
-- Use `code blocks` for examples
-- Include links where relevant
+- Use heading hierarchy: `##` sections, `###` subsections
+- Use **bold** for key findings
+- Use fenced `code blocks` for examples
+- Include links when relevant
 
 ### Color/Styling (if terminal supports)
 
-- Green (✅): success, pass
-- Red (❌): failure, fail
-- Yellow (⚠️): warning, partial success
-- Blue (🔍): information, analysis
-- Purple (💡): suggestions, recommendations
+- Green (`✅`): pass/success
+- Red (`❌`): fail/error
+- Yellow (`⚠️`): warning/partial success
+- Blue (`🔍`): analysis/info
+- Purple (`💡`): recommendations
 
 ---
 
 ## Custom Report Sections
 
-### For Agent-Specific Findings
+### Agent-Specific Findings
 
-Add custom sections as needed:
+Add custom sections when needed:
 
 ```markdown
 ## 🔧 Agent-Specific Findings
 
 ### DisplayName Auto-generation
 - Tested: 15 cases
-- All successfully converted kebab-case → PascalCase
-- Examples: `donate-amount` → `DonateAmount` ✓
+- All successfully converted kebab-case -> PascalCase
+- Examples: `donate-amount` -> `DonateAmount` ✓
 
 ### Field Configuration Flow
 - Tested: Progress tracking (Field X/Y format)
@@ -422,7 +421,7 @@ Add custom sections as needed:
 - Summary shown after all fields configured ✓
 ```
 
-### For Performance Metrics
+### Performance Metrics
 
 ```markdown
 ## ⚡ Performance
@@ -437,6 +436,7 @@ Add custom sections as needed:
 ## Archiving Reports
 
 Reports should be stored in:
+
 ```
 .cursor/test-reports/{agent-name}-{YYYY-MM-DD}.md
 ```
