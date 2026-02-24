@@ -20,13 +20,13 @@
     "@sklinet/strapi-plugin-publisher": "^1.0.1",
     "@sklinet/strapi-plugin-tinymce": "^1.1.8",
     "@sklinet/strapi-plugin-video-field": "^1.1.3",
-    "@strapi/plugin-cloud": "^5.36.0",
-    "@strapi/plugin-color-picker": "^5.36.0",
-    "@strapi/plugin-graphql": "^5.36.0",
+    "@strapi/plugin-cloud": "^5.36.1",
+    "@strapi/plugin-color-picker": "^5.36.1",
+    "@strapi/plugin-graphql": "^5.36.1",
     "@strapi/plugin-seo": "^2.0.9",
-    "@strapi/plugin-users-permissions": "^5.36.0",
-    "@strapi/provider-upload-cloudinary": "^5.36.0",
-    "@strapi/strapi": "^5.36.0",
+    "@strapi/plugin-users-permissions": "^5.36.1",
+    "@strapi/provider-upload-cloudinary": "^5.36.1",
+    "@strapi/strapi": "^5.36.1",
     "mysql2": "3.9.4",
     "patch-package": "^8.0.0",
     "pg": "^8.13.0",
@@ -44,7 +44,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=22.0.0 <=24.x.x",
+    "node": ">=24.0.0",
     "npm": ">=6.0.0"
   },
   "strapi": {
