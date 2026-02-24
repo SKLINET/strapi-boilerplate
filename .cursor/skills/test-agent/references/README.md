@@ -1,25 +1,27 @@
 # Test Agent - Documentation
 
-Automated testing framework for validating other agents' behavior and rules.
+Automated testing framework for validating agent workflow behavior.
 
-## Overview
+## Scope
 
-Test Agent validates that other agents (like Block Creator) handle inputs correctly according to their rules.
+This Test Agent is currently designed for:
+- `create-block`
+- `create-complementary`
 
 ## How It Works
 
 ```
-User says: "otestuj create block"
+User says: "otestuj create block" or "otestuj create complementary"
          ↓
-Test Agent loads rules from create-block skill (`SKILL.md`)
+Test Agent loads target rules from skill `SKILL.md`
          ↓
-Generates test cases (happy path, auto-fix, warning, edge cases)
+Generates test cases for name validation + flow branches
          ↓
-Simulates each input through the agent logic
+Simulates user interaction and validation order
          ↓
-Compares actual output with expected behavior
+Compares actual vs expected behavior
          ↓
-Generates a detailed pass/fail report
+Generates a pass/fail report
 ```
 
 ## Files in This Folder
@@ -28,219 +30,132 @@ Generates a detailed pass/fail report
 |------|---------|
 | `../SKILL.md` | Main skill rules and workflow |
 | `README.md` | This documentation file |
-| `test-cases.md` | Test case generators and examples for different agents |
-| `detection-logic.md` | Implementation details for validation algorithms |
-| `report-templates.md` | Output format templates for console + markdown reports |
+| `test-cases.md` | Test case definitions for both target skills |
+| `detection-logic.md` | Validation + workflow simulation logic |
+| `report-templates.md` | Console and markdown report formats |
 
 ## Quick Start
 
-### Testing Block Creator
+### Test Block Creator
 
 ```
-👤 User: otestuj create block
+User: otestuj create block
 ```
 
-Test Agent will:
-1. Load rules from `create-block` skill (`.cursor/skills/create-block/SKILL.md`)
-2. Generate ~25 test cases
-3. Validate behavior such as:
-   - PascalCase -> kebab-case conversion
-   - Czech word detection
-   - Plural -> singular suggestions
-   - Duplicate detection
-   - Auto-appending `-block` suffix
-4. Generate report in `.cursor/test-reports/`
+Checks include:
+- name validation and auto-fix
+- duplicate priority
+- starts-with-number rejection
+- one-question-at-a-time flow
+- confirmation gate (No -> no files)
+- location branching (page/template/both)
+- critical file updates (`client.ts`, `getBlockType`, `TemplateBlock` when needed)
+- `getStaticProps` Yes/No branch
+
+### Test Complementary Creator
+
+```
+User: otestuj create complementary
+```
+
+Checks include:
+- name validation and auto-fix
+- duplicate priority
+- starts-with-number rejection
+- one-question-at-a-time flow
+- confirmation gate (No -> no files)
+- field parsing and iterative field configuration
+- type-specific follow-up questions
+- app-context Yes/No branch
+- displayName auto-generation and icon optional handling
 
 ## Test Categories
 
-### A) Happy Path (Valid Inputs)
-Tests that valid inputs are accepted without modification.
+### Shared categories
+- Name Happy Path
+- Name Auto-fix
+- Name Warning/Stop
+- Name Duplicates
+- Conversation/Confirmation Flow
 
-**Examples:**
-- `author` -> ACCEPT `author`
-- `testimonial` -> ACCEPT `testimonial`
-- `image-gallery` -> ACCEPT `image-gallery`
+### Block-only categories
+- Location Routing
+- Critical File Updates
+- getStaticProps Branch
+- DisplayName/Icon
 
-### B) Auto-fix Cases
-Tests that common mistakes are automatically corrected.
+### Complementary-only categories
+- Field Parsing and Iterative Questions
+- Type-Specific Follow-Ups
+- App Context Branch
+- DisplayName/Icon
 
-**Examples:**
-- `ImageGallery` -> AUTO-FIX `image-gallery` (PascalCase)
-- `hero banner` -> AUTO-FIX `hero-banner` (spaces)
-- `author!` -> AUTO-FIX `author` (special chars)
-- `BUTTON` -> AUTO-FIX `button` (uppercase)
+## Key Rule Decisions
 
-### C) Warning Cases
-Tests that problematic inputs trigger warnings but may proceed after confirmation.
+1. **Starts with number**: treated as **STOP** for both tested skills.
+2. **Duplicate priority**: checked on final normalized name and evaluated before warning branches.
+3. **Confirmation required**: no file creation/update before explicit `Yes`.
 
-**Examples:**
-- `authors` -> WARN `author` (plural detection)
-- `kniha` -> WARN "use English" (Czech word)
-- `galerie` -> WARN (Czech word without diacritics)
+## Understanding Results
 
-### D) Edge Cases
-Tests unusual or extreme inputs.
+### Console output
+Shows totals, pass rate, and category breakdown.
 
-**Examples:**
-- `` (empty) -> STOP
-- `---` -> STOP (empty after fix)
-- `very-long-component-name-that-goes-on` -> ACCEPT
-- `кнопка` (Cyrillic) -> STOP
+### Markdown report
+Saved to `.cursor/test-reports/{agent-name}-{timestamp}.md`, includes:
+- summary table
+- detailed case results
+- failed tests with issues
+- recommendations
 
-### E) Duplicates
-Tests that existing component names are rejected.
+## Common Failures
 
-**Examples:**
-- `button` -> STOP "Component 'button' already exists"
-- `Video` -> AUTO-FIX `video` -> STOP (duplicate after fix)
+### 1. Wrong validation order
 
-## Understanding Test Results
+Example:
+- Input: `Video`
+- Expected: duplicate stop (`video-block` / `video`)
+- Actual: warning/accept path before duplicate check
 
-### Console Output
+Fix:
+- check duplicates immediately after final-name creation.
 
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 TEST RESULTS: Block Creator Agent
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### 2. Confirmation gate bypass
 
-Total tests: 25
-✅ Passed:    23 (92%)
-❌ Failed:    2 (8%)
+Example:
+- User answers `No` in summary.
+- Agent still returns file creation actions.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Fix:
+- enforce hard gate on confirmation step.
 
-📈 Results by category:
+### 3. Missing branch updates
 
-Happy Path:     5/5  ✅ 100%
-Auto-fix:       8/8  ✅ 100%
-Warning:        7/8  ⚠️  87%
-Edge cases:     2/3  ⚠️  67%
-Duplicates:     1/1  ✅ 100%
-```
+Block example:
+- Location `template (content)` chosen.
+- `TemplateBlock.ts` not included in updates.
 
-### Markdown Report
+Fix:
+- branch asserts must verify required file list by location.
 
-Full report saved to `.cursor/test-reports/{agent-name}-{timestamp}.md` includes:
-- Summary table with all test results
-- Detailed breakdown of each test
-- Failed test list with analysis
-- Recommendations for improving the agent
+### 4. Incomplete field follow-ups
 
-## Common Test Failures
+Complementary example:
+- `enumeration` selected without asking enum values.
 
-### 1. Czech Word Not Detected
+Fix:
+- enforce type-specific prompts per field type.
 
-**Problem:**
-```
-Test #12: Warning - Czech word "vyrobek"
-  Input:      "vyrobek" (without diacritics)
-  Expected:   WARN "name should be in English"
-  Actual:     AUTO-FIX "vyrobek-block"
-  Issue:      Agent did not detect Czech word without diacritics
-```
+## Extending the Test Agent
 
-**Solution:** Extend Czech dictionary in `detection-logic.md` to include words without diacritics.
+For future agents:
+1. add agent section in `test-cases.md`
+2. add validation/flow logic in `detection-logic.md`
+3. add trigger/command docs in `../SKILL.md`
+4. extend report categories in `report-templates.md`
 
-### 2. Unicode Not Handled
+## Related
 
-**Problem:**
-```
-Test #21: Edge case - unicode characters
-  Input:      "блок" (Cyrillic)
-  Expected:   WARN or REJECT
-  Actual:     AUTO-FIX "" (empty string)
-  Issue:      Agent should request an English name
-```
-
-**Solution:** Add non-ASCII detection before auto-fix.
-
-### 3. Duplicate Check After Auto-fix
-
-**Problem:**
-```
-Test #8: Auto-fix collision with existing
-  Input:      "VIDEO" (uppercase)
-  Expected:   AUTO-FIX "video" -> STOP (duplicate)
-  Actual:     AUTO-FIX "video" -> ACCEPT
-  Issue:      Duplicate check must run AFTER auto-fix
-```
-
-**Solution:** Ensure duplicate check is the final validation step.
-
-## Extending Test Agent
-
-### Adding Tests for a New Agent
-
-1. **Create test cases** in `test-cases.md`:
-   ```markdown
-   ## New Agent Tests
-
-   ### Happy Path
-   - Input: "example" -> Expected: ACCEPT "example"
-
-   ### Auto-fix
-   - Input: "Example" -> Expected: AUTO-FIX "example"
-   ```
-
-2. **Define detection logic** in `detection-logic.md`:
-   ```javascript
-   function validateNewAgent(input) {
-       // validation logic
-   }
-   ```
-
-3. **Add command** in `SKILL.md`:
-   ```
-   | `otestuj new agent` | Runs tests for New Agent |
-   ```
-
-### Customizing Report Format
-
-Edit `report-templates.md` to change:
-- Console output structure
-- Markdown report structure
-- Success/failure indicators
-- Recommendation templates
-
-## Best Practices
-
-1. **Run tests after rule changes**: always test when agent rules are modified
-2. **Fix failures systematically**: address failed tests by category
-3. **Update test cases**: add new tests when bugs are found
-4. **Document edge cases**: record unusual inputs that caused issues
-5. **Version reports**: keep historical reports to track improvements
-
-## Troubleshooting
-
-### Test Agent Not Triggering
-
-**Problem:** Saying "test create block" does not activate Test Agent.
-
-**Solution:** Use trigger phrases:
-- `otestuj create block`
-- `testuj block creator`
-- `test agent X`
-
-### Tests Running Slowly
-
-**Problem:** Execution takes too long.
-
-**Solution:** Tests run sequentially by design for clear logging. For faster feedback, run only specific categories (scope in `test-cases.md`).
-
-### Report Not Generated
-
-**Problem:** Console shows results but markdown file is missing.
-
-**Solution:** Ensure `.cursor/test-reports/` exists. Test Agent creates it automatically, but permissions can block writes.
-
-## Related Documentation
-
-- **Block Creator**: `.cursor/skills/create-block/`
-- **Test Reports**: `.cursor/test-reports/`
-
-## Examples
-
-See `test-cases.md` for complete examples of:
-- Block Creator test scenarios
-- Custom test case generators
-- Edge case collections
+- Block skill: `.cursor/skills/create-block/`
+- Complementary skill: `.cursor/skills/create-complementary/`
+- Reports: `.cursor/test-reports/`

@@ -1,447 +1,351 @@
 # Detection Logic - Implementation Details
 
-Implementation details for validation and transformation algorithms used in testing.
+Implementation details for validation and workflow simulation used by Test Agent.
 
 ---
 
 ## Overview
 
-Test Agent simulates agent behavior by implementing the same validation logic. This file documents the expected behavior of each detection function.
+Test Agent simulates tested skill behavior. This file documents:
+- shared name validation logic
+- duplicate priority rules
+- starts-with-number behavior
+- flow/state checks for `create-block` and `create-complementary`
 
 ---
 
-## Core Detection Functions
+## Core Name Detection Functions
 
 ### 1. detectCzech(input)
 
-Detects if input is a Czech word (with or without diacritics).
-
-**Implementation:**
+Detects if input is likely a Czech word (with or without diacritics).
 
 ```javascript
 function detectCzech(input) {
-    // Czech dictionary (with and without diacritics)
     const czechDictionary = [
-        // With diacritics
-        'kniha', 'článek', 'tlačítko', 'služba', 'tým', 'člen',
-        'výrobek', 'stránka', 'formulář', 'galerie', 'kategorie',
-        'obrázek', 'štítek', 'příspěvek', 'zpráva', 'odkaz',
-
-        // Without diacritics (important for detection)
-        'clanek', 'tlacitko', 'sluzba', 'tym', 'clen', 'vyrobek',
-        'stranka', 'formular', 'galerie', 'kategorie', 'obrazek',
-        'stitek', 'prispevek', 'zprava', 'odkaz',
-
-        // Common false positives to handle
-        'autor',  // Czech for 'author'
-        'video',  // Same in both languages (but context matters)
+        'kniha', 'clanek', 'cl\u00e1nek', 'tlacitko', 'tla\u010d\u00edtko',
+        'sluzba', 'slu\u017eba', 'tym', 't\u00fdm', 'clen', '\u010dlen',
+        'vyrobek', 'v\u00fdrobek', 'stranka', 'str\u00e1nka',
+        'formular', 'formul\u00e1\u0159', 'galerie', 'kategorie',
+        'obrazek', 'obr\u00e1zek', 'stitek', '\u0161t\u00edtek',
+        'prispevek', 'p\u0159\u00edsp\u011bvek', 'zprava', 'zpr\u00e1va',
+        'odkaz', 'autor', 'video'
     ];
 
-    return czechDictionary.includes(input.toLowerCase());
+    return czechDictionary.includes((input || '').toLowerCase());
 }
 ```
 
-**Test Cases:**
-
-| Input | Expected Result | Reason |
-|-------|----------------|--------|
-| `kniha` | `true` | Czech word with diacritics |
-| `clanek` | `true` | Czech word without diacritics |
-| `autor` | `true` | Czech word (same spelling) |
-| `button` | `false` | English word |
-| `author` | `false` | English word |
-
-**Edge Cases:**
-
-- `galerie` → Should be `true` (Czech word, even though valid after diacritic removal)
-- `video` → Context dependent (both Czech and English)
-
-**Recommendations:**
-
-1. Maintain a comprehensive dictionary of Czech words
-2. Include both forms (with and without diacritics)
-3. Update dictionary when new false negatives are found
-4. Consider word frequency to handle ambiguous cases
-
----
-
 ### 2. detectPlural(input)
 
-Detects if input is in plural form (English grammar rules).
-
-**Implementation:**
+Detects if input is in plural form (English-oriented heuristic).
 
 ```javascript
 function detectPlural(input) {
-    const word = input.toLowerCase();
+    const word = (input || '').toLowerCase();
 
-    // Irregular plurals
     const irregularPlurals = [
         'children', 'people', 'men', 'women', 'teeth', 'feet',
         'mice', 'geese', 'oxen', 'sheep', 'deer', 'fish'
     ];
 
-    if (irregularPlurals.includes(word)) {
-        return true;
-    }
+    if (irregularPlurals.includes(word)) return true;
 
-    // Pattern-based detection
-    const pluralPatterns = [
-        { regex: /ies$/, singular: (w) => w.slice(0, -3) + 'y' },      // stories → story
-        { regex: /ves$/, singular: (w) => w.slice(0, -3) + 'f' },      // knives → knife
-        { regex: /oes$/, singular: (w) => w.slice(0, -2) },            // heroes → hero
-        { regex: /ses$/, singular: (w) => w.slice(0, -1) },            // classes → class
-        { regex: /xes$/, singular: (w) => w.slice(0, -2) },            // boxes → box
-        { regex: /ches$/, singular: (w) => w.slice(0, -2) },           // watches → watch
-        { regex: /shes$/, singular: (w) => w.slice(0, -2) },           // dishes → dish
-        { regex: /s$/, singular: (w) => w.slice(0, -1) },              // books → book
-    ];
-
-    // Exceptions (words ending in 's' that are not plural)
     const exceptions = ['class', 'bus', 'glass', 'gas', 'boss', 'mass', 'pass'];
-    if (exceptions.includes(word)) {
-        return false;
-    }
+    if (exceptions.includes(word)) return false;
 
-    // Check patterns in order
-    for (const pattern of pluralPatterns) {
-        if (pattern.regex.test(word)) {
-            return true;
-        }
-    }
-
-    return false;
+    return /ies$|ves$|oes$|ses$|xes$|ches$|shes$|s$/.test(word);
 }
 
-function suggestSingular(pluralWord) {
-    // Apply reverse transformations
-    const word = pluralWord.toLowerCase();
+function suggestSingular(word) {
+    const value = (word || '').toLowerCase();
 
-    // Irregular plurals mapping
     const irregularMap = {
-        'children': 'child',
-        'people': 'person',
-        'men': 'man',
-        'women': 'woman',
-        // ... etc
+        children: 'child',
+        people: 'person',
+        men: 'man',
+        women: 'woman',
+        teeth: 'tooth',
+        feet: 'foot',
+        mice: 'mouse',
+        geese: 'goose',
     };
 
-    if (irregularMap[word]) {
-        return irregularMap[word];
-    }
+    if (irregularMap[value]) return irregularMap[value];
+    if (value.endsWith('ies')) return value.slice(0, -3) + 'y';
+    if (value.endsWith('ves')) return value.slice(0, -3) + 'f';
+    if (value.endsWith('oes')) return value.slice(0, -2);
+    if (value.endsWith('ses')) return value.slice(0, -1);
+    if (value.endsWith('xes')) return value.slice(0, -2);
+    if (value.endsWith('ches')) return value.slice(0, -2);
+    if (value.endsWith('shes')) return value.slice(0, -2);
+    if (value.endsWith('s')) return value.slice(0, -1);
 
-    // Pattern-based conversion
-    if (word.endsWith('ies')) return word.slice(0, -3) + 'y';
-    if (word.endsWith('ves')) return word.slice(0, -3) + 'f';
-    if (word.endsWith('oes')) return word.slice(0, -2);
-    if (word.endsWith('ses')) return word.slice(0, -1);
-    if (word.endsWith('xes')) return word.slice(0, -2);
-    if (word.endsWith('ches')) return word.slice(0, -2);
-    if (word.endsWith('shes')) return word.slice(0, -2);
-    if (word.endsWith('s')) return word.slice(0, -1);
-
-    return word; // fallback
+    return value;
 }
 ```
 
-**Test Cases:**
-
-| Input | Is Plural? | Suggested Singular |
-|-------|-----------|-------------------|
-| `books` | `true` | `book` |
-| `stories` | `true` | `story` |
-| `categories` | `true` | `category` |
-| `boxes` | `true` | `box` |
-| `heroes` | `true` | `hero` |
-| `class` | `false` | N/A |
-| `bus` | `false` | N/A |
-| `book` | `false` | N/A |
-
-**Edge Cases:**
-
-- `class` → NOT plural (exception)
-- `glasses` → Plural (not in exception list)
-- `gas` → NOT plural (exception)
-- `gases` → Plural
-
----
-
 ### 3. autoFix(input)
 
-Automatically fixes common formatting issues.
-
-**Implementation:**
+Normalizes common formatting issues.
 
 ```javascript
 function autoFix(input) {
-    return input
-        // PascalCase/camelCase → kebab-case
+    return (input || '')
         .replace(/([a-z])([A-Z])/g, '$1-$2')
-
-        // Convert underscores and spaces to hyphens
         .replace(/[_\s]+/g, '-')
-
-        // Convert to lowercase
         .toLowerCase()
-
-        // Remove diacritics (é → e, ř → r, etc.)
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
-
-        // Remove special characters (keep only a-z, 0-9, -)
         .replace(/[^a-z0-9-]/g, '')
-
-        // Replace multiple consecutive hyphens with single hyphen
         .replace(/-+/g, '-')
-
-        // Trim leading/trailing hyphens
         .replace(/^-|-$/g, '');
 }
 ```
 
-**Test Cases:**
-
-| Input | Output | Fix Applied |
-|-------|--------|------------|
-| `HeroBanner` | `hero-banner` | PascalCase → kebab-case |
-| `heroBanner` | `hero-banner` | camelCase → kebab-case |
-| `hero_banner` | `hero-banner` | Underscores → hyphens |
-| `hero banner` | `hero-banner` | Spaces → hyphens |
-| `HERO` | `hero` | Uppercase → lowercase |
-| `héro` | `hero` | Diacritics removed |
-| `hero!` | `hero` | Special chars removed |
-| `hero--banner` | `hero-banner` | Multiple hyphens → single |
-| `-hero-` | `hero` | Trim leading/trailing hyphens |
-
-**Edge Cases:**
-
-| Input | Output | Reason |
-|-------|--------|--------|
-| `---` | `` (empty) | Only hyphens → empty after fix |
-| `!!!` | `` (empty) | Only special chars → empty after fix |
-| `кнопка` | `` (empty) | Cyrillic → empty after fix |
-| `123test` | `123test` | Numbers preserved |
-
-**Important Note:**
-
-After `autoFix()`, always check if the result is empty. If empty, should STOP with error "Name cannot be empty".
-
----
-
-### 4. checkExists(name)
-
-Checks if a block with the given name already exists. Name must already include the `-block` suffix.
-
-**Implementation:**
-
-```javascript
-function checkExists(name) {
-    const basePath = 'cms/src/components/block/';
-    const filePath = `${basePath}${name}.json`;
-    return fileExists(filePath);
-}
-```
-
-**Test Cases (Block):**
-
-Assume existing: `hero-block.json`, `contact-form-block.json`
-
-| Input | Check For | Exists? |
-|-------|-----------|---------|
-| `hero-block` | `hero-block.json` | `true` |
-| `book-block` | `book-block.json` | `false` |
-| `hero-block-block` | `hero-block-block.json` | `false` (wrong suffix) |
-
-**Important:**
-
-- Duplicate check must run **AFTER** auto-fix and after adding `-block` suffix
-- Example flow: `HERO` → auto-fix → `hero` → `hero-block` → check exists → STOP if exists
-
----
-
-### 5. startsWithNumber(input)
-
-Checks if input starts with a number.
-
-**Implementation:**
+### 4. startsWithNumber(input)
 
 ```javascript
 function startsWithNumber(input) {
-    return /^[0-9]/.test(input);
+    return /^[0-9]/.test((input || '').trim());
 }
 ```
 
-**Test Cases:**
+**Rule decision:** For both `create-block` and `create-complementary`, name starting with number is a stop condition.
 
-| Input | Starts With Number? | Action |
-|-------|-------------------|--------|
-| `3d-model` | `true` | WARN "avoid starting with number" |
-| `2factor` | `true` | WARN |
-| `step1` | `false` | ACCEPT (number not at start) |
-| `book` | `false` | ACCEPT |
-
----
-
-### 6. containsOnlyInvalidChars(input)
-
-Checks if input contains only invalid characters (after auto-fix would be empty).
-
-**Implementation:**
+### 5. checkExists(finalName, type, existingNames)
 
 ```javascript
-function containsOnlyInvalidChars(input) {
-    const fixed = autoFix(input);
-    return fixed === '';
+function checkExists(finalName, type, existingNames) {
+    // `finalName` must already be final form:
+    // block -> "{name}-block", complementary -> "{name}"
+    return existingNames.has(finalName);
 }
 ```
 
-**Test Cases:**
-
-| Input | After autoFix | Only Invalid? |
-|-------|--------------|--------------|
-| `---` | `` (empty) | `true` |
-| `!!!` | `` (empty) | `true` |
-| `   ` | `` (empty) | `true` |
-| `кнопка` | `` (empty) | `true` |
-| `hero!` | `hero` | `false` |
+**Source paths for scanning existing names:**
+- block: `cms/src/components/block/*.json`
+- complementary: `cms/src/components/complementary/*.json`
 
 ---
 
-## Validation Order (Critical!)
+## Validation Order (Critical)
 
-The order of validation matters. Here's the correct sequence:
+Order must match tested skill expectations.
 
 ```javascript
-function validateComponentName(input, existingComponents, type = 'block') {
-    // 1. Check if empty
+function validateName(input, type, existingNames) {
+    // 1. Empty input
     if (!input || input.trim() === '') {
         return { action: 'STOP', reason: 'Name cannot be empty' };
     }
 
-    // 2. Apply auto-fix
+    // 2. Auto-fix
     const fixed = autoFix(input);
 
-    // 3. Check if empty after fix
+    // 3. Empty after auto-fix
     if (fixed === '') {
-        return { action: 'STOP', reason: 'Name cannot be empty after removing invalid characters' };
+        return { action: 'STOP', reason: 'Name cannot be empty' };
     }
 
-    // 4. Check Czech (before accepting)
-    if (detectCzech(fixed)) {
-        return { action: 'WARN', reason: 'Czech word detected', suggestion: 'use English name' };
-    }
-
-    // 5. Check plural (before accepting)
-    if (detectPlural(fixed)) {
-        const singular = suggestSingular(fixed);
-        return { action: 'WARN', reason: 'Plural detected', suggestion: singular };
-    }
-
-    // 6. Check starts with number
+    // 4. Starts-with-number -> STOP
     if (startsWithNumber(fixed)) {
-        return { action: 'WARN', reason: 'Starts with number', suggestion: 'avoid starting with number' };
+        return { action: 'STOP', reason: 'Name cannot start with number' };
     }
 
-    // 7. Add suffix (for blocks only)
+    // 5. Build final name
     const finalName = type === 'block' ? `${fixed}-block` : fixed;
 
-    // 8. Check duplicates (MUST be last!)
-    if (checkExists(finalName, existingComponents)) {
+    // 6. Duplicate check (highest priority among post-fix checks)
+    if (checkExists(finalName, type, existingNames)) {
         return { action: 'STOP', reason: `Component '${finalName}' already exists` };
     }
 
-    // 9. Accept
-    const hasAutoFix = input !== fixed;
+    // 7. Czech warning
+    if (detectCzech(fixed)) {
+        return {
+            action: 'WARN',
+            reason: 'Czech word detected',
+            suggestion: 'Use English name',
+            finalName,
+        };
+    }
+
+    // 8. Plural warning
+    if (detectPlural(fixed)) {
+        const singular = suggestSingular(fixed);
+        return {
+            action: 'WARN',
+            reason: 'Plural detected',
+            suggestion: type === 'block' ? `${singular}-block` : singular,
+            finalName,
+        };
+    }
+
+    // 9. Accept or auto-fix
+    const changed = input !== fixed;
     return {
-        action: hasAutoFix ? 'AUTO-FIX' : 'ACCEPT',
-        name: finalName,
+        action: changed ? 'AUTO-FIX' : 'ACCEPT',
         original: input,
-        fixed: fixed
+        fixed,
+        finalName,
     };
 }
 ```
 
-**Why Order Matters:**
+### Why this order
 
-1. Empty check first (no point processing empty input)
-2. Auto-fix early (all other checks work on cleaned input)
-3. Czech/Plural checks before duplicate (inform user of issues)
-4. Suffix addition before duplicate check (check final name)
-5. **Duplicate check LAST** (must check final processed name)
+1. Empty checks first.
+2. Auto-fix early so all later checks use normalized form.
+3. Starts-with-number is a hard reject.
+4. Duplicate check before warning branches to enforce highest-priority uniqueness.
+5. Language/grammar warnings only when the candidate is not already blocked.
+
+---
+
+## Workflow Simulation Rules
+
+### A) validateBlockWorkflow(state)
+
+Checks conversation and branch behavior for `create-block`.
+
+```javascript
+function validateBlockWorkflow(state) {
+    // state:
+    // {
+    //   askedQuestions: [...],
+    //   answers: { name, displayName, icon, location, getStaticProps, confirm },
+    //   plannedFileUpdates: [...]
+    // }
+
+    assertAsksOneQuestionAtATime(state.askedQuestions);
+    assertRequiredQuestionOrder(state.answers, [
+        'name',
+        'displayName',
+        'icon',
+        'location',
+        'getStaticProps',
+        'confirm',
+    ]);
+
+    if (state.answers.confirm !== 'Yes') {
+        assertNoWrites(state.plannedFileUpdates);
+        return;
+    }
+
+    assertContains(state.plannedFileUpdates, 'frontend/src/app/blocks/client.ts');
+    assertContainsByPredicate(state.plannedFileUpdates, (p) => p.includes('getBlockType'));
+
+    if (state.answers.location === 'page (blocks)') {
+        assertContains(state.plannedFileUpdates, 'cms/src/api/page/content-types/page/schema.json');
+        assertNotContains(state.plannedFileUpdates, 'cms/src/api/template/content-types/template/schema.json');
+    }
+
+    if (state.answers.location === 'template (content)') {
+        assertContains(state.plannedFileUpdates, 'cms/src/api/template/content-types/template/schema.json');
+        assertContains(state.plannedFileUpdates, 'frontend/src/app/blocks/TemplateBlock/TemplateBlock.ts');
+    }
+
+    if (state.answers.location === 'page+template') {
+        assertContains(state.plannedFileUpdates, 'cms/src/api/page/content-types/page/schema.json');
+        assertContains(state.plannedFileUpdates, 'cms/src/api/template/content-types/template/schema.json');
+        assertContains(state.plannedFileUpdates, 'frontend/src/app/blocks/TemplateBlock/TemplateBlock.ts');
+    }
+
+    if (state.answers.getStaticProps === 'Yes') {
+        assertUsesGetStaticPropsWrapperTemplate(state);
+    } else {
+        assertUsesSimpleWrapperTemplate(state);
+    }
+}
+```
+
+### B) validateComplementaryWorkflow(state)
+
+Checks conversation and branch behavior for `create-complementary`.
+
+```javascript
+function validateComplementaryWorkflow(state) {
+    // state:
+    // {
+    //   askedQuestions: [...],
+    //   parsedFields: [...],
+    //   fieldConfigs: [...],
+    //   answers: { icon, needsAppContext, confirm },
+    //   plannedFileUpdates: [...]
+    // }
+
+    assertAsksOneQuestionAtATime(state.askedQuestions);
+
+    for (const field of state.fieldConfigs) {
+        assertAsked(field, 'type');
+        assertAsked(field, 'required');
+
+        if (field.type === 'enumeration') assertAsked(field, 'enumValues');
+        if (field.type === 'media') assertAsked(field, 'allowedTypes');
+        if (field.type === 'relation') assertAsked(field, 'relationTarget');
+        if (field.type === 'component') {
+            assertAsked(field, 'componentRef');
+            assertAsked(field, 'repeatable');
+        }
+        if (field.type === 'number') assertAsked(field, 'numberKind');
+    }
+
+    if (state.answers.confirm !== 'Yes') {
+        assertNoWrites(state.plannedFileUpdates);
+        return;
+    }
+
+    assertContains(state.plannedFileUpdates, 'frontend/src/relay/app.ts');
+    assertContainsByPredicate(state.plannedFileUpdates, (p) => p.includes('/src/types/'));
+    assertContainsByPredicate(state.plannedFileUpdates, (p) => p.includes('/src/utils/strapi/get'));
+
+    if (state.answers.needsAppContext === 'Yes') {
+        assertTransformerUsesAppContext(state);
+    } else {
+        assertTransformerWithoutAppContext(state);
+    }
+
+    if (state.answers.icon === '(none)') {
+        assertCmsSchemaOmitsIcon(state);
+    }
+}
+```
 
 ---
 
 ## Common Pitfalls
 
-### Pitfall 1: Duplicate Check Before Auto-fix
+### Pitfall 1: Duplicate check after warning branches
 
-**Wrong:**
-```javascript
-// ❌ Check duplicate on original input
-if (checkExists(input)) { /* STOP */ }
-const fixed = autoFix(input);
-```
+**Wrong:** plural/Czech warning returned before duplicate check.
 
-**Problem:** `VIDEO` would not detect duplicate with existing `video.json`
+**Why bad:** duplicate collision is hard stop and should not be hidden by warning path.
 
-**Correct:**
-```javascript
-// ✅ Check duplicate on fixed input
-const fixed = autoFix(input);
-if (checkExists(fixed)) { /* STOP */ }
-```
+### Pitfall 2: Number-start treated as warning only
 
-### Pitfall 2: Not Checking Empty After Fix
+**Wrong:** return WARN for `3d-model`.
 
-**Wrong:**
-```javascript
-const fixed = autoFix(input);
-// Continue without checking if empty
-```
+**Correct:** STOP and ask for different name.
 
-**Problem:** Input `---` becomes empty after fix, causing errors later
+### Pitfall 3: Confirmation ignored
 
-**Correct:**
-```javascript
-const fixed = autoFix(input);
-if (fixed === '') {
-    return { action: 'STOP', reason: 'Empty after fix' };
-}
-```
+**Wrong:** files planned/created even after summary answer `No`.
 
-### Pitfall 3: Czech Detection After Auto-fix Only
+**Correct:** no create/update actions before explicit `Yes`.
 
-**Wrong:**
-```javascript
-const fixed = autoFix(input); // výrobek → vyrobek
-if (detectCzech(fixed)) { /* only checks 'vyrobek' */ }
-```
+### Pitfall 4: Block location branch not enforced
 
-**Problem:** Czech words with diacritics are normalized, dictionary must include normalized forms
+**Wrong:** always updates only page schema.
 
-**Correct:**
-```javascript
-// Dictionary includes both 'výrobek' and 'vyrobek'
-const czechDictionary = ['výrobek', 'vyrobek', ...];
-```
+**Correct:** update schema files strictly by selected location.
 
 ---
 
-## Adding New Detection Rules
+## Adding New Rules
 
-To add a new validation rule:
-
-1. **Define detection function**
-   ```javascript
-   function detectNewRule(input) {
-       // implementation
-   }
-   ```
-
-2. **Add test cases** in `test-cases.md`
-
-3. **Insert in validation order** at appropriate position
-
-4. **Update documentation** with examples and edge cases
-
-5. **Test with Test Agent** to verify behavior
+When extending test logic:
+1. Add detection/workflow function
+2. Add test cases in `test-cases.md`
+3. Insert check in correct validation/flow order
+4. Update this document with examples
