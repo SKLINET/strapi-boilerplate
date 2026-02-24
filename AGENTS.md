@@ -4,7 +4,19 @@ Instructions for AI coding agents working on this project. See [agents.md](https
 
 ## Creating a new block
 
-**To add a new page block**, ask the user to follow the guide in **`.cursor/rules/create-block/index.md`**. That guide automates the full flow: it walks through block name, display name, icon, location, getStaticProps, then creates the CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates. Trigger with phrases like "create block", "add block", "vytvoř blok". Rules live in `create-block.mdc`.
+**To add a new page block**, use the **`create-block`** Agent Skill (`.cursor/skills/create-block/`). The skill automates the full flow: it guides through block name, display name, icon, location, getStaticProps, then creates the CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates. Trigger with phrases like "create block", "add block", "vytvoř blok", or type `/create-block` in Agent chat.
+
+## Creating a complementary component
+
+**To add a new complementary component**, use the **`create-complementary`** Agent Skill (`.cursor/skills/create-complementary/`). The skill guides through component name, icon, field configuration, usage context, app-context needs, then creates CMS schema, TypeScript type, transformer, and Relay fragment. Trigger with phrases like "create complementary", "add complementary", "vytvoř complementary", or type `/create-complementary` in Agent chat.
+
+## Testing agent workflows
+
+**To test an agent/skill workflow**, use the **`test-agent`** Agent Skill (`.cursor/skills/test-agent/`). It generates test cases, simulates input/output behavior, and produces test reports in `.cursor/test-reports/`. Trigger with phrases like "otestuj create block", "testuj block creator", "test agent X", or type `/test-agent` in Agent chat.
+
+## Running code audit on demand
+
+**To run an informational code audit/checklist review**, use the **`audit`** Agent Skill (`.cursor/skills/audit/`). This skill is configured for explicit invocation only (`disable-model-invocation: true`), so trigger it manually via `/audit`.
 
 ## Setup
 
