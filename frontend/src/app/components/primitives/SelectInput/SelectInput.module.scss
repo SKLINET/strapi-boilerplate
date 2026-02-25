@@ -1,0 +1,162 @@
+@import '../../../../styles/mixins/responsive.scss';
+@import '../../../../styles/mixins/hover.scss';
+
+.wrapper {
+}
+
+.label {
+    @apply inline-flex text-14 leading-1_5 text-black mb-1;
+
+    .required {
+        //
+    }
+}
+
+.inner {
+    @apply w-full relative z-2;
+
+    &.open {
+        .search {
+            .input {
+                @apply cursor-auto;
+            }
+
+            .arrowButton {
+                @apply rotate-[180deg];
+            }
+        }
+
+        .list {
+            @apply opacity-100 visible;
+        }
+    }
+}
+
+.wrapperInput {
+    @apply relative;
+}
+
+.search {
+    @apply w-full flex flex-col relative transition-colors ease-in-out duration-300;
+
+    &.filled {
+        .input {
+            @apply shadow-lg;
+        }
+    }
+
+    &.disabled {
+        @apply opacity-40;
+
+        .input {
+            @apply cursor-not-allowed;
+        }
+    }
+
+    &.error {
+        .label {
+            //
+        }
+
+        .input {
+            //
+        }
+    }
+
+    .input {
+        @apply w-full pl-3 pr-16 py-2.5 border border-black bg-white rounded-md outline-none text-14 text-black cursor-pointer transition-colors ease-in-out duration-300;
+        @apply desktop:pl-4 desktop:pr-18 desktop:py-3 desktop:text-16;
+
+        &::placeholder {
+            @apply text-gray-50;
+        }
+    }
+
+    .crossButton {
+        @apply w-4 h-4 shrink-0 flex text-black rounded-full absolute z-2 right-8 transition-all ease-in-out duration-300;
+        @apply desktop:right-10;
+
+        top: calc(50% - 0.5rem);
+
+        @include hover {
+            &:hover {
+                //
+            }
+        }
+
+        .icon {
+            @apply w-4 h-4;
+        }
+    }
+
+    .arrowButton {
+        @apply w-4 h-4 text-black absolute z-2 right-3 transition-all ease-in-out duration-300;
+        @apply desktop:w-5 desktop:h-5 desktop:right-4;
+
+        top: calc(50% - 0.5rem);
+
+        @include from-desktop {
+            top: calc(50% - 0.625rem);
+        }
+
+        .icon {
+            @apply w-4 h-4;
+            @apply desktop:w-5 desktop:h-5;
+        }
+    }
+}
+
+.list {
+    @apply absolute left-0 right-0 bg-white z-5 shadow-lg opacity-0 border border-black invisible rounded-md overflow-x-hidden overflow-y-auto transition-visibility-opacity ease-in-out duration-300;
+    top: calc(100% + 0.5rem);
+
+    max-height: min(20rem, 60svh);
+
+    &.largeDropdown {
+        @include from-tablet {
+            max-height: min(25rem, 60svh);
+        }
+
+        @include from-tablet-landscape {
+            max-height: min(30rem, 60svh);
+        }
+
+        @include from-desktop {
+            max-height: min(35rem, 60svh);
+        }
+    }
+
+    .item {
+        @apply block w-full text-14 leading-1_5 text-black p-3 text-left transition-colors ease-in-out duration-200;
+
+        &.active {
+            @apply font-bold;
+        }
+
+        @include hover {
+            &:hover {
+                //
+            }
+        }
+    }
+
+    .category {
+        .categoryTitle {
+            @apply p-3 text-14 leading-1_5;
+        }
+
+        .item {
+            @apply pl-6;
+        }
+    }
+
+    .emptyList {
+        @apply text-14 text-black p-3 text-center;
+        @apply desktop:text-16 desktop:p-3.5;
+    }
+}
+
+.errorMessage {
+    @apply text-14 text-left mt-3;
+    @apply desktop:mt-4;
+}

@@ -28,7 +28,7 @@ const BigNumber = ({
     const { start } = useCountUp({
         delay: 0.3,
         duration: 1.5,
-        ref: realValueRef,
+        ref: realValueRef as any,
         start: value * 0.8,
         end: value,
         decimal: ',',

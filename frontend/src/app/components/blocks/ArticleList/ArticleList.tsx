@@ -12,7 +12,7 @@ import { FadeIn } from '../../base/FadeIn/FadeIn';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 
 const ArticleList = ({
-    blocksData: { countOnPage },
+    blocksData: { countOnPage, anchor },
     app,
     data: { articles, categories, canLoadMore },
 }: ArticlesListBlockProps): ReactElement => {
@@ -49,7 +49,11 @@ const ArticleList = ({
     const blogHref = getPageUrl(app.webSetting?.articlesPage?.url || '', app.locale);
 
     return (
-        <FadeIn className={styles.wrapper} spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}>
+        <FadeIn
+            className={styles.wrapper}
+            spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}
+            anchor={anchor}
+        >
             <div className={styles.filters}>
                 <a
                     href={blogHref}

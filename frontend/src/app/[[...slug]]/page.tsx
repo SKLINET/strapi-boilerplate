@@ -7,19 +7,9 @@ import { getStaticProps } from '../../utils/base/getStaticProps';
 import { ServerContextProps } from '../../types/base/page';
 import { IApp } from '../../types/base/app';
 import config from '../../../sklinet.config.json';
-
-// Day JS
-import { CALENDAR_FORMATS } from '../../constants';
-import dayjs from 'dayjs';
-
-// Day JS locales
-import 'dayjs/locale/cs';
-import 'dayjs/locale/en';
-
-// Day JS plugins
-import updateLocale from 'dayjs/plugin/updateLocale';
-import timeZone from 'dayjs/plugin/timezone';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { configureDayjs } from '../../utils/configureDayjs';
+import Script from 'next/script';
+import { pageInfoLog } from '../../utils/base/pageInfoLog';
 
 const PreviewToolbar = dynamic(() =>
     import('../components/base/PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar),
@@ -41,41 +31,44 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
         context,
     };
 
-    const { tz } = config;
-
-    dayjs.extend(updateLocale);
-    dayjs.extend(timeZone);
-    dayjs.extend(localizedFormat);
-    dayjs.updateLocale(app.locale, { calendar: CALENDAR_FORMATS[app.locale] });
-    dayjs.locale(app.locale);
-    dayjs.tz.setDefault(tz);
+    configureDayjs(app);
 
     const gtmCode = app.webSetting?.gtmCode || config.gtm.code || null;
 
+    const structuredData = app?.item?.seo?.structuredData || app?.page?.seo?.structuredData || null;
+
     if (process.env.NODE_ENV === 'development') {
-        console.log('');
-        console.log('- - - - - - - - - - - - - - - -');
-        console.log('💡 Page:', app?.page?.title || '');
-        console.log('- - - - - - - - - - - - - - - -');
+        pageInfoLog(app);
     }
 
     return (
-        <GtmProvider gtmCode={gtmCode}>
-            <Layout app={app}>
-                {app.page && (
-                    <Blocks blocksData={app.page?.content || []} initialProps={app.blocksPropsMap} app={app} />
+        <>
+            <GtmProvider gtmCode={gtmCode}>
+                <Layout app={app}>
+                    {app.page && (
+                        <Blocks blocksData={app.page?.content || []} initialProps={app.blocksPropsMap} app={app} />
+                    )}
+                </Layout>
+
+                {app.preview && app.page && <PreviewToolbar app={app} />}
+
+                {process.env.NODE_ENV === 'development' && (
+                    <>
+                        <GridHelper />
+                        <DataModal app={app} />
+                    </>
                 )}
-            </Layout>
+            </GtmProvider>
 
-            {app.preview && app.page && <PreviewToolbar app={app} />}
-
-            {process.env.NODE_ENV === 'development' && (
-                <>
-                    <GridHelper />
-                    <DataModal app={app} />
-                </>
+            {structuredData && (
+                <Script
+                    id="structured-data"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+                />
             )}
-        </GtmProvider>
+        </>
     );
 };
 

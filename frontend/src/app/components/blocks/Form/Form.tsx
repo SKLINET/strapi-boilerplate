@@ -6,14 +6,18 @@ import { getSendEmailType } from '../../../../utils/strapi/getSendEmailType';
 import { FormBuilder } from '../../organisms/FormBuilder/FormBuilder';
 import { getBuiltFormType } from '../../../../utils/strapi/getBuiltFormType';
 
-const Form = ({ blocksData: { form, sendEmail }, app }: FormBlockProps): ReactElement => {
+const Form = ({ blocksData: { form, sendEmail, anchor }, app }: FormBlockProps): ReactElement => {
     const _form = getBuiltFormType(form);
     const _sendEmail = getSendEmailType(sendEmail);
 
     if (!_form) return <></>;
 
     return (
-        <FadeIn className={styles.wrapper} spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}>
+        <FadeIn
+            className={styles.wrapper}
+            spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}
+            anchor={anchor}
+        >
             <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
         </FadeIn>
     );

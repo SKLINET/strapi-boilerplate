@@ -4,7 +4,7 @@ import React, { ReactElement, useTransition, useEffect, useState } from 'react';
 import styles from './FormBuilder.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';
-import { IBuiltForm, ICondition, IFormField, ISendEmail } from '../../../../types/form';
+import { IBuiltForm, ICondition, IFormField, ISelectedOption, ISendEmail } from '../../../../types/form';
 import { useForm, SubmitHandler, Resolver, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,8 +16,10 @@ import { Button } from '../../primitives/Button/Button';
 import { useAsPath } from '../../../../utils/hooks/useAsPath';
 import axios from 'axios';
 import { Text } from '../../primitives/Text/Text';
-import { Textarea } from '../../primitives/Textarea/Textarea';
-// import { IFile } from '../../../../types/file';
+import { TextArea } from '../../primitives/TextArea/TextArea';
+import { ISelectItem, SelectInput } from '../../primitives/SelectInput/SelectInput';
+import { FileInput } from '../../primitives/FileInput/FileInput';
+import { IFile, IFileInput } from '../../../../types/file';
 
 interface FormBuilderProps {
     data: IBuiltForm;
@@ -91,6 +93,7 @@ export const shouldRenderField = (
 
                 return false;
             }
+            */
             case 'select': {
                 const conditionValue = condition.value as ISelectedOption;
                 const conditionFieldValue: ISelectItem<ISelectedOption> | null = formValues[conditionField.name || ''];
@@ -108,7 +111,6 @@ export const shouldRenderField = (
 
                 return false;
             }
-            */
             default:
                 return false;
         }
@@ -188,7 +190,6 @@ const FormBuilder = ({
         if (isSubmitted) {
             trigger();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitted, JSON.stringify(allValues)]);
 
     const onSubmit: SubmitHandler<any> = async (_data) => {
@@ -200,33 +201,54 @@ const FormBuilder = ({
                 ammountFields.forEach((e) => {
                     if (!e.name) return;
 
-                    _data[e.name] = getTotalPrice(e.fields, data, _data);
+                    _data[e.name] = `${getFormattedPrice(getTotalPrice(e.fields, data, _data))} Kč`;
                 });
                 */
 
-                // const files: IFileInput[] = [];
+                const files: IFileInput[] = [];
                 const rest: Record<string, any> = {};
+                const labels: Record<string, any> = {};
 
+                let i = -1;
                 for (const [key, value] of Object.entries(_data)) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    i = data.findIndex((e) => e?.name === key);
+
                     const field = data.find((e: any) => e?.name === key);
 
                     const useOnly = (field as any)?.useOnly || false;
 
                     if (field && (!shouldRenderField(field, data, allValues) || useOnly)) continue;
 
-                    if (Array.isArray(value) && value.length > 0 && value[0]?.typename === 'file') {
-                        // files.push(...value);
-                        // rest[key] = value.map((e: IFileInput) => e.title);
+                    if ((field as any)?.label) {
+                        labels[key] = (field as any).label;
                     } else {
+                        for (let k = i; k >= 0; k--) {
+                            const el = data[k];
+
+                            if (!el || !shouldRenderField(el, data, allValues)) continue;
+
+                            // Fallback label when field does not have label
+                            if (el.type === 'title') {
+                                labels[key] = el.label;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (Array.isArray(value) && value.length > 0 && value[0]?.typename === 'file') {
+                        files.push(...value);
+                    } else {
+                        if (Array.isArray(value) && value.length === 0) continue;
+
                         if (value && typeof value === 'object') {
                             const _value = value as any;
 
-                            /*
                             if (_value.typename === 'select') {
                                 rest[key] = (_value as ISelectItem<any>).title;
                                 continue;
                             }
-                            */
                         }
 
                         rest[key] = value;
@@ -234,21 +256,20 @@ const FormBuilder = ({
                 }
 
                 const formData = new FormData();
-                /*
                 files.forEach((e) => {
                     formData.append('files', e.data as File, e.title);
                 });
-                */
 
                 formData.append(
                     'formInfo',
                     JSON.stringify({
                         sendEmail: sendEmail || null,
                         asPath: asPath,
-                        // withFiles: files.length > 0,
+                        withFiles: files.length > 0,
                     }),
                 );
                 formData.append('formData', JSON.stringify({ ...additionalData, ...rest }));
+                formData.append('formLabels', JSON.stringify(labels));
 
                 const res = await axios.post('/api/submit-form', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
@@ -292,7 +313,7 @@ const FormBuilder = ({
                 const { id, name, label, placeholder, required, onFullWidth } = field;
                 if (!name) return null;
                 return (
-                    <Textarea
+                    <TextArea
                         key={id}
                         name={name}
                         register={register}
@@ -322,7 +343,6 @@ const FormBuilder = ({
                     />
                 );
             }
-            /*
             case 'file': {
                 const {
                     id,
@@ -399,6 +419,7 @@ const FormBuilder = ({
                     />
                 );
             }
+            /*
             case 'checkboxGroup': {
                 const { id, name, label, options, onFullWidth } = field;
                 if (!name) return null;

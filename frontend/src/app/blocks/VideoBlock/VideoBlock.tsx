@@ -4,7 +4,6 @@ import { VideoBlock_content$data } from './__generated__/VideoBlock_content.grap
 import { Video } from '../../components/blocks/Video/Video';
 import { IApp } from '../../../types/base/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VideoBlockStaticProps {}
 
 export interface VideoBlockContent extends Omit<VideoBlock_content$data, ' $fragmentType'> {
@@ -23,6 +22,7 @@ graphql`
         video {
             ...appVideoFragment @relay(mask: false)
         }
+        anchor
     }
 `;
 

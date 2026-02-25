@@ -1,28 +1,26 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { images } = require('./sklinet.config');
-const path = require('path');
-const webpack = require('webpack');
+import { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import { config } from 'dotenv';
+import path from 'path';
+import sklinetConfig from './sklinet.config.json';
+import { ImageConfigComplete } from 'next/dist/shared/lib/image-config';
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const bundleAnalyzer = withBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
 });
 
-const { parsed: myEnv } = require('dotenv').config({
+config({
     path: path.join(__dirname, '.env'),
 });
 
-/**
- * @type {import('next').NextConfig}
- */
-const nextConfig = {
-    images,
+const nextConfig: NextConfig = {
+    reactCompiler: true,
+    images: sklinetConfig.images as ImageConfigComplete,
     experimental: {
         staleTimes: {
             dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
             static: 180,
         },
-        webpackMemoryOptimizations: true,
         inlineCss: true,
     },
     compiler: {
@@ -31,27 +29,18 @@ const nextConfig = {
             language: 'typescript',
         },
     },
-    webpack: (config, { isServer }) => {
-        config.module.rules.push({
-            test: /\.svg$/,
-            use: ['@svgr/webpack'],
-        });
-        config.plugins = config.plugins || [];
-        // Fixes npm packages that depend on `fs` module
-        if (!isServer) {
-            config.resolve.fallback = {
-                fs: false,
-                net: false,
-                tls: false,
-            };
-        }
-        config.plugins = [...config.plugins];
-        // config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
-
-        return config;
+    // Turbopack configuration for SVG as React components
+    turbopack: {
+        rules: {
+            '*.svg': {
+                loaders: ['@svgr/webpack'],
+                as: '*.js',
+            },
+        },
     },
-    eslint: {
-        dirs: ['src/app', 'src/lib', 'src/providers', 'src/utils'],
+    // Add @reference directive for CSS modules to access Tailwind utilities
+    sassOptions: {
+        additionalData: `@reference "${path.resolve('./src/styles/global.css')}";`,
     },
     async rewrites() {
         return [
@@ -71,16 +60,12 @@ const nextConfig = {
                 source: '/:path*',
                 headers: [
                     {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
                         key: 'X-XSS-Protection',
                         value: '1; mode=block',
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337 https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com; frame-ancestors 'self' https://www.<project_name>.cz https://<project_name>.symbio.agency https://admin-<project_name>.symbio.agency;",
+                        value: "default-src https: blob: data: 'unsafe-inline' 'unsafe-eval' http://localhost:3000 ws://localhost:3000  http://localhost:1337 ws://localhost:1337 https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com; frame-ancestors 'self' http://localhost:3000 http://localhost:1337 https://www.<project_name>.cz https://<project_name>.symbio.agency https://admin-<project_name>.symbio.agency;",
                     },
                     {
                         key: 'Referrer-Policy',
@@ -109,4 +94,4 @@ const nextConfig = {
     },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+export default bundleAnalyzer(nextConfig);

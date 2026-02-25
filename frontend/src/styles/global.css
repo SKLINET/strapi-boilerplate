@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import './variables.css';
+@import './theme.css';
+@import './layout.css';
+
+@layer base {
+    html {
+        @apply scroll-smooth;
+    }
+
+    html,
+    body {
+        @apply text-black font-primary bg-white;
+        font-size: 100%;
+    }
+
+    @media (width >= 120rem) {
+        html,
+        body {
+            font-size: 0.8333333333vw;
+        }
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+.hideScrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

@@ -23,8 +23,7 @@ export default abstract class AbstractStrapiProvider<
     TFind extends OperationType,
     TItem extends StrapiRecord = StrapiRecord,
     TItems extends { data: ReadonlyArray<StrapiRecord | null> } = { data: ReadonlyArray<StrapiRecord | null> },
-> implements Provider
-{
+> implements Provider {
     protected environment: Record<string, Environment> = {
         preview: createRelayEnvironment({}, '', true),
         production: createRelayEnvironment({}, '', false),
@@ -54,11 +53,11 @@ export default abstract class AbstractStrapiProvider<
         this.indexNode = indexNode;
     }
 
-    protected getEnvironment(preview = false): Environment {
+    protected getEnvironment(preview = false, withoutCache = false): Environment {
         if (preview) {
-            return createRelayEnvironment({}, '', true, true);
+            return createRelayEnvironment({}, '', true, withoutCache);
         } else {
-            return createRelayEnvironment({}, '', false);
+            return createRelayEnvironment({}, '', false, withoutCache);
         }
     }
 
@@ -94,7 +93,7 @@ export default abstract class AbstractStrapiProvider<
             variables =
                 typeof options === 'string'
                     ? {
-                          filter: {
+                          filters: {
                               documentId: { eq: options },
                               ...this.getFilterParams(),
                           },
@@ -104,8 +103,8 @@ export default abstract class AbstractStrapiProvider<
                           ...options,
                           limit: 1,
                           offset: 0,
-                          filter: options.filter
-                              ? { ...this.getFilterParams(options?.status || ''), ...options.filter }
+                          filters: options.filters
+                              ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
                               : this.getFilterParams(options?.status || ''),
                           locale,
                       };
@@ -129,16 +128,17 @@ export default abstract class AbstractStrapiProvider<
     }
 
     async find(
-        options: Omit<TFind['variables'], 'locale'> & { locale?: string },
+        options: Omit<TFind['variables'], 'locale'> & { locale?: string; filters?: Record<string, any> },
         preview = false,
         index = false,
+        withoutCache = false,
     ): Promise<FindResponse<TItems['data']>> {
         const variables = {
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
             start: options?.start || 0,
-            filter: options.filter
-                ? { ...this.getFilterParams(options?.status || ''), ...options.filter }
+            filters: options.filters
+                ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
                 : this.getFilterParams(options?.status || ''),
             status: getPublicationState(preview),
         };
@@ -148,7 +148,9 @@ export default abstract class AbstractStrapiProvider<
         if (this.isLocalizable()) {
             variables.locale = options.locale;
         }
-        const environment = index ? this.getEnvironment(true) : this.getEnvironment(preview);
+        const environment = index
+            ? this.getEnvironment(true, withoutCache)
+            : this.getEnvironment(preview, withoutCache);
 
         const result = await fetchQuery<TFind>(environment, node, variables)
             .toPromise()
@@ -309,7 +311,6 @@ export default abstract class AbstractStrapiProvider<
     async create<TItem extends BaseRecord = TFind['response']['items'][number]>(
         variables: any,
     ): Promise<Record<string, any>> {
-        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             await commitMutation<any>(this.getEnvironment(false), {
                 mutation: this.createNode as GraphQLTaggedNode,
@@ -332,7 +333,6 @@ export default abstract class AbstractStrapiProvider<
     async update<TItem extends BaseRecord = TFind['response']['items'][number]>(
         variables: any,
     ): Promise<Record<string, any>> {
-        // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
             await commitMutation<any>(this.getEnvironment(false), {
                 mutation: this.updateNode as GraphQLTaggedNode,

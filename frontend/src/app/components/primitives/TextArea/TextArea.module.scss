@@ -15,10 +15,10 @@
 }
 
 .textarea {
-    @apply w-full bg-transparent border border-black border-opacity-40 px-6 py-3 outline-none rounded-xl text-16 leading-1.5 text-black;
+    @apply w-full bg-transparent border border-black/40 px-6 py-3 outline-none rounded-xl text-16 leading-1_5 text-black;
 
     &::placeholder {
-        @apply text-black text-opacity-60;
+        @apply text-black/60;
     }
 
     &:focus {

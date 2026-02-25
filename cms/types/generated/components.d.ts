@@ -18,6 +18,7 @@ export interface BlockArticlesListBlock extends Struct.ComponentSchema {
     icon: 'book';
   };
   attributes: {
+    anchor: Schema.Attribute.String;
     countOnPage: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
@@ -37,6 +38,7 @@ export interface BlockFormBlock extends Struct.ComponentSchema {
     icon: 'envelop';
   };
   attributes: {
+    anchor: Schema.Attribute.String;
     form: Schema.Attribute.Relation<
       'oneToOne',
       'plugin::form-builder.built-form'
@@ -65,6 +67,7 @@ export interface BlockVideoBlock extends Struct.ComponentSchema {
     icon: 'play';
   };
   attributes: {
+    anchor: Schema.Attribute.String;
     video: Schema.Attribute.Component<'complementary.video', false> &
       Schema.Attribute.Required;
   };
@@ -78,6 +81,7 @@ export interface ComplementaryButton extends Struct.ComponentSchema {
     icon: 'bold';
   };
   attributes: {
+    anchor: Schema.Attribute.String;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     linkExternal: Schema.Attribute.String;
     openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -144,6 +148,7 @@ export interface MenuMenuItem extends Struct.ComponentSchema {
     icon: 'angle-right';
   };
   attributes: {
+    anchor: Schema.Attribute.String;
     externalUrl: Schema.Attribute.String;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;

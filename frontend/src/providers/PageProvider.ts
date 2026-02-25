@@ -215,5 +215,4 @@ class PageProvider extends AbstractStrapiProvider<
     }
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default new PageProvider(pageDetailQuery, pageListQuery);
