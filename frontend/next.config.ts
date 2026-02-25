@@ -18,8 +18,8 @@ const nextConfig: NextConfig = {
     images: sklinetConfig.images as ImageConfigComplete,
     experimental: {
         staleTimes: {
-            dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
-            static: 180,
+            dynamic: 30, // 30 seconds
+            static: 300, // 5 minutes
         },
         inlineCss: true,
     },

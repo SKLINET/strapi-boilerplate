@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import type { Metadata, Viewport } from 'next';
 import { ServerContextProps, ParamsProps } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
@@ -28,6 +28,7 @@ export function generateViewport({ params, searchParams }: ServerContextProps): 
         themeColor: 'white',
         width: 'device-width',
         initialScale: 1,
+        maximumScale: 1,
     };
 }
 
@@ -198,7 +199,9 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
                 */}
             </head>
             <body>
-                <TopLoader />
+                <Suspense fallback={null}>
+                    <TopLoader />
+                </Suspense>
                 <Providers>{children}</Providers>
             </body>
         </html>
