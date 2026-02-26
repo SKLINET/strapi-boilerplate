@@ -64,7 +64,11 @@ export const createRelayEnvironment = (
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    cache: withoutCache ? 'no-store' : 'force-cache',
+                    // cache: withoutCache ? 'no-store' : 'force-cache',
+
+                    // TODO: Umožnit nastavovat cache strategy pro všechna volání providera / zasílání tagů !!!
+                    // Revalidace tagů zneplatní stránky, ale ne relay query fetch na Strapi !!!
+                    cache: 'no-store',
                 });
                 const data = await req.json();
                 return data;

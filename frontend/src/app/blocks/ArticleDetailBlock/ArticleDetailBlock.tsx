@@ -29,7 +29,13 @@ graphql`
     }
 `;
 
-const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...props} />;
+const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => {
+    if (props.item?.documentId) {
+        cacheTag('article', props.item.documentId);
+    }
+
+    return <ArticleDetail {...props} />;
+};
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({
@@ -64,8 +70,6 @@ if (typeof window === 'undefined') {
             err.code = 'ENOENT';
             throw err;
         }
-
-        cacheTag('article', item.documentId);
 
         return { item: item };
     };

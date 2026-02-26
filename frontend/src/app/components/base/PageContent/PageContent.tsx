@@ -1,7 +1,6 @@
 'use cache';
 
 import { ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 import { IApp } from '../../../../types/base/app';
 import { cacheLife } from 'next/cache';
 import config from '../../../../../sklinet.config.json';
@@ -10,10 +9,9 @@ import { Layout } from '../Layout/Layout';
 import { Blocks } from '../Blocks/Blocks';
 import Script from 'next/script';
 import { cacheTag } from '../../../../utils/cache/tag';
-
-const PreviewToolbar = dynamic(() => import('../PreviewToolbar/PreviewToolbar').then((mod) => mod.PreviewToolbar));
-const GridHelper = dynamic(() => import('../GridHelper/GridHelper').then((mod) => mod.GridHelper));
-const DataModal = dynamic(() => import('../DataModal/DataModal').then((mod) => mod.DataModal));
+import { GridHelper } from '../GridHelper/GridHelper';
+import { DataModal } from '../DataModal/DataModal';
+import { PreviewToolbar } from '../PreviewToolbar/PreviewToolbar';
 
 interface PageContentProps {
     app: IApp;

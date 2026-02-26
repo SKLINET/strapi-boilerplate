@@ -36,7 +36,12 @@ graphql`
     }
 `;
 
-const ArticlesListBlock = (props: ArticlesListBlockProps): ReactElement => <ArticleList {...props} />;
+const ArticlesListBlock = (props: ArticlesListBlockProps): ReactElement => {
+    cacheTag('article');
+    cacheTag('article-category');
+
+    return <ArticleList {...props} />;
+};
 
 if (typeof window === 'undefined') {
     ArticlesListBlock.getStaticProps = async ({
@@ -71,9 +76,6 @@ if (typeof window === 'undefined') {
                 preview,
             },
         );
-
-        cacheTag('article');
-        cacheTag('article-category');
 
         return {
             data: {
