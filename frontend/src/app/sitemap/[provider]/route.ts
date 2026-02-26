@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import dayjs from 'dayjs';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';

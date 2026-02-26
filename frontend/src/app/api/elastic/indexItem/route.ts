@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { connection, NextRequest } from 'next/server';
 import AbstractElasticProvider, { IndexingResultItem } from '../../../../lib/provider/AbstractElasticProvider';
 import { findProvider } from '../../../../utils/base/findProvider';
 import AbstractSingletonElasticProvider from '../../../../lib/provider/AbstractSingletonElasticProvider';
@@ -238,6 +238,8 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
 };
 
 export async function GET(request: NextRequest) {
+    await connection();
+
     const typeId = String(request.nextUrl.searchParams.get('typeId'));
     const id = String(request.nextUrl.searchParams.get('id'));
     const action = request.nextUrl.searchParams.get('action') || 'update';
@@ -253,6 +255,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    await connection();
+
     const { model, entry, event } = await request.json();
 
     const typeId: string = model;

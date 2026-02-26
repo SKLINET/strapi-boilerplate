@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { FormBlock_content$data } from './__generated__/FormBlock_content.graphql';
 import { Form } from '../../components/blocks/Form/Form';
 import { IApp } from '../../../types/base/app';
+import { cacheTag } from '../../../utils/cache/tag';
 
 export interface FormBlockStaticProps {}
 
@@ -29,6 +30,12 @@ graphql`
     }
 `;
 
-const FormBlock = (props: FormBlockProps): ReactElement => <Form {...props} />;
+const FormBlock = (props: FormBlockProps): ReactElement => {
+    if (props?.blocksData?.form?.documentId) {
+        cacheTag('form-builder', props.blocksData.form.documentId);
+    }
+
+    return <Form {...props} />;
+};
 
 export default FormBlock;

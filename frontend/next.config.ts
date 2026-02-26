@@ -14,15 +14,20 @@ config({
 });
 
 const nextConfig: NextConfig = {
-    reactCompiler: true,
     images: sklinetConfig.images as ImageConfigComplete,
-    experimental: {
-        staleTimes: {
-            dynamic: 30, // 30 seconds
-            static: 300, // 5 minutes
+    // Next.js 16 Cache Components
+    cacheComponents: true,
+    cacheLife: {
+        max: {
+            stale: 30, // almost no stale on clients
+            revalidate: 2592000, // 1 month
+            expire: 31536000, // 365 days
         },
+    },
+    experimental: {
         inlineCss: true,
     },
+    reactCompiler: true,
     compiler: {
         relay: {
             src: './',

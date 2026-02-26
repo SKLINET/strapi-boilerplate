@@ -1,8 +1,10 @@
-import { NextRequest } from 'next/server';
+import { connection, NextRequest } from 'next/server';
 import { revalidateTag, TCacheTags } from '../../../utils/cache/tag';
 import { revalidateAll, revalidatePath } from '../../../utils/cache/path';
 
 export async function GET(request: NextRequest) {
+    await connection();
+
     const { searchParams } = new URL(request.url);
     const force = searchParams.get('force');
     const tag = searchParams.get('tag') as TCacheTags | null;
@@ -25,12 +27,22 @@ export async function GET(request: NextRequest) {
         revalidateAll();
     }
 
-    return Response.json({
-        status: 'OK',
-    });
+    return new Response(
+        JSON.stringify({
+            status: 'OK',
+        }),
+        {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        },
+    );
 }
 
 export async function POST(request: NextRequest) {
+    await connection();
+
     const { model, entry } = await request.json();
 
     const typeId = model as TCacheTags | null;

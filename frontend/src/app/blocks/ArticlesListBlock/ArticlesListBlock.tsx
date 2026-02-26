@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { StaticBlockContext } from '../../../types/base/block';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
@@ -8,6 +8,7 @@ import { fetchArticles } from '../../actions/fetch-articles';
 import config from '../../../../sklinet.config.json';
 import { fetchArticleCategories } from '../../actions/fetch-article-categories';
 import { IArticle, IArticleCategory } from '../../../types/article';
+import { cacheTag } from '../../../utils/cache/tag';
 
 export interface ArticlesListBlockStaticProps {
     data: {
@@ -70,6 +71,9 @@ if (typeof window === 'undefined') {
                 preview,
             },
         );
+
+        cacheTag('article');
+        cacheTag('article-category');
 
         return {
             data: {

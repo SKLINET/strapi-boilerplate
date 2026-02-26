@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import { NextApiRequest } from 'next';
 import providers from '../../providers';
 import { Provider } from '../../index';

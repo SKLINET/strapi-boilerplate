@@ -1,3 +1,5 @@
+'use cache';
+
 import { ReactNode, Suspense } from 'react';
 import type { Metadata, Viewport } from 'next';
 import { ServerContextProps, ParamsProps } from '../../types/base/page';
@@ -23,7 +25,7 @@ const primary = Poppins({
     display: 'swap',
 });
 
-export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {
+export async function generateViewport({ params, searchParams }: ServerContextProps): Promise<Viewport> {
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -133,7 +135,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
                   follow: true,
                   nocache: true,
               },
-        metadataBase: new URL(String(process.env.NEXT_PUBLIC_BASE_PATH)),
+        metadataBase: String(process.env.NEXT_PUBLIC_BASE_PATH),
         generator: metaData.siteName,
         applicationName: metaData.siteName,
         openGraph: {

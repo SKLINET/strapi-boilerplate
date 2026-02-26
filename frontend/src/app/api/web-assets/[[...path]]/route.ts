@@ -52,5 +52,3 @@ export async function GET(req: NextRequest, context: Record<string, any>) {
         return new Response('Proxy error', { status: 500 });
     }
 }
-
-export const dynamic = 'force-static';

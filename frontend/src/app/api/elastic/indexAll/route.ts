@@ -1,9 +1,11 @@
-import { NextRequest } from 'next/server';
+import { connection, NextRequest } from 'next/server';
 import AbstractElasticProvider from '../../../../lib/provider/AbstractElasticProvider';
 import { findProvider } from '../../../../utils/base/findProvider';
 import AbstractSingletonElasticProvider from '../../../../lib/provider/AbstractSingletonElasticProvider';
 
 export async function GET(request: NextRequest) {
+    await connection();
+
     const typeId = String(request.nextUrl.searchParams.get('typeId'));
     const prod = Boolean(request.nextUrl.searchParams.get('prod')) || false;
 

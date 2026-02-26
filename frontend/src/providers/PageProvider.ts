@@ -116,11 +116,15 @@ class PageProvider extends AbstractStrapiProvider<
         let cnt = -1;
         let done = 0;
         do {
-            const data = await fetchQuery<s.pageStaticPathsQuery>(this.getEnvironment(), pageStaticPathsQuery, {
-                locale: locale,
-                start: 0,
-                limit: 100,
-            }).toPromise();
+            const data = await fetchQuery<s.pageStaticPathsQuery>(
+                this.getEnvironment(false, true),
+                pageStaticPathsQuery,
+                {
+                    locale: locale,
+                    start: 0,
+                    limit: 100,
+                },
+            ).toPromise();
 
             if (data) {
                 if (cnt === -1) {

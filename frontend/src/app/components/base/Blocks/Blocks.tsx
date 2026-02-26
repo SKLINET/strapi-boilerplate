@@ -1,6 +1,7 @@
 import { IApp } from '../../../../types/base/app';
 import { BlocksPropsMap } from '../../../../types/base/block';
 import { getBlockType } from '../../../../utils/base/getBlockType/getBlockType';
+import { cacheTag } from '../../../../utils/cache/tag';
 import { loadBlock } from '../../../blocks/client';
 
 interface BlocksProps {
@@ -19,6 +20,9 @@ export const Blocks = async ({ blocksData, initialProps = {}, app, isTemplateBlo
             }
 
             if (blockName === 'TemplateBlock') {
+                if (block.template?.documentId) {
+                    cacheTag('template', block.template.documentId);
+                }
                 return (
                     <Blocks
                         key={`block_${i}`}

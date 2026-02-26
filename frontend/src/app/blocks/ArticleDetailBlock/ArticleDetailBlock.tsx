@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { BaseBlockProps, StaticBlockContext } from '../../../types/base/block';
 import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
@@ -7,6 +7,7 @@ import { articleDetailFragment$data } from '../../../relay/__generated__/article
 import { ArticleDetail } from '../../components/blocks/ArticleDetail/ArticleDetail';
 import getPublicationState from '../../../utils/base/getPublicationState';
 import { getSlug } from '../../../utils/base/getSlug';
+import { cacheTag } from '../../../utils/cache/tag';
 
 export interface ArticleDetailBlockStaticProps {
     item: Omit<articleDetailFragment$data, ' $fragmentType'>;
@@ -63,7 +64,10 @@ if (typeof window === 'undefined') {
             err.code = 'ENOENT';
             throw err;
         }
-        return { item: item || {} };
+
+        cacheTag('article', item.documentId);
+
+        return { item: item };
     };
 }
 
