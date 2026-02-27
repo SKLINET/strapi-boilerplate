@@ -10,12 +10,10 @@ import { metadataPageQuery$data } from '../../relay/__generated__/metadataPageQu
 
 export interface ServerContextProps {
     params: Promise<ParamsProps>;
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export interface ContextProps {
     params: ParamsProps;
-    searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export type PageProps = NonNullable<
@@ -41,6 +39,4 @@ export type IMetadataResponse = metadataGlobalQuery$data &
         preview: boolean;
     };
 
-export type IContext = GetStaticPropsContext<ParsedUrlQuery> & {
-    searchParams: { [key: string]: string | string[] | undefined };
-};
+export type IContext = GetStaticPropsContext<ParsedUrlQuery>;

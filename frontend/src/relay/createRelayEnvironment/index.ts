@@ -39,6 +39,7 @@ export const createRelayEnvironment = (
     token?: string,
     preview = false,
     withoutCache = false,
+    tags?: string[],
 ): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
@@ -60,16 +61,17 @@ export const createRelayEnvironment = (
                 //     vars.publicationState = getPublicationState(true);
                 // }
 
-                const req = await fetch(process.env.API_ENDPOINT, {
+                const fetchOptions: RequestInit = {
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
                     // cache: withoutCache ? 'no-store' : 'force-cache',
-
-                    // TODO: Umožnit nastavovat cache strategy pro všechna volání providera / zasílání tagů !!!
-                    // Revalidace tagů zneplatní stránky, ale ne relay query fetch na Strapi !!!
                     cache: 'no-store',
-                });
+                };
+                if (tags?.length) {
+                    (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags };
+                }
+                const req = await fetch(process.env.API_ENDPOINT, fetchOptions);
                 const data = await req.json();
                 return data;
             } catch (e) {

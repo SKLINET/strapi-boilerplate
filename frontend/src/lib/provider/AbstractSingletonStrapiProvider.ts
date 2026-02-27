@@ -24,11 +24,11 @@ export default abstract class AbstractSingletonStrapiProvider<
         this.node = node;
     }
 
-    protected getEnvironment(preview = false, withoutCache = false): Environment {
+    protected getEnvironment(preview = false, withoutCache = false, tags?: string[]): Environment {
         if (preview) {
-            return createRelayEnvironment({}, '', true, withoutCache);
+            return createRelayEnvironment({}, '', true, withoutCache, tags);
         } else {
-            return createRelayEnvironment({}, '', false, withoutCache);
+            return createRelayEnvironment({}, '', false, withoutCache, tags);
         }
     }
 
@@ -48,9 +48,9 @@ export default abstract class AbstractSingletonStrapiProvider<
      * @param preview
      * @param withoutCache
      */
-    async get(locale?: string, preview = false, withoutCache = false): Promise<TItem | null> {
+    async get(locale?: string, preview = false, withoutCache = false, tags?: string[]): Promise<TItem | null> {
         const result = await fetchQuery<TOperation>(
-            this.getEnvironment(preview, withoutCache),
+            this.getEnvironment(preview, withoutCache, tags),
             this.node,
             this.isLocalizable()
                 ? {

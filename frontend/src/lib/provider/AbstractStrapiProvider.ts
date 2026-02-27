@@ -53,11 +53,11 @@ export default abstract class AbstractStrapiProvider<
         this.indexNode = indexNode;
     }
 
-    protected getEnvironment(preview = false, withoutCache = false): Environment {
+    protected getEnvironment(preview = false, withoutCache = false, tags?: string[]): Environment {
         if (preview) {
-            return createRelayEnvironment({}, '', true, withoutCache);
+            return createRelayEnvironment({}, '', true, withoutCache, tags);
         } else {
-            return createRelayEnvironment({}, '', false, withoutCache);
+            return createRelayEnvironment({}, '', false, withoutCache, tags);
         }
     }
 
@@ -82,6 +82,7 @@ export default abstract class AbstractStrapiProvider<
         options: string | Omit<TFind['variables'], 'locale'>,
         locale?: string,
         preview = false,
+        tags?: string[],
     ): Promise<TItem | null> {
         if (!this.node) return null;
 
@@ -110,7 +111,11 @@ export default abstract class AbstractStrapiProvider<
                       };
         }
 
-        const result = await fetchQuery<TOne>(this.getEnvironment(preview), this.node, variables).toPromise();
+        const result = await fetchQuery<TOne>(
+            this.getEnvironment(preview, false, tags),
+            this.node,
+            variables,
+        ).toPromise();
         return await this.transformResult(result, locale);
     }
 
@@ -132,6 +137,7 @@ export default abstract class AbstractStrapiProvider<
         preview = false,
         index = false,
         withoutCache = false,
+        tags?: string[],
     ): Promise<FindResponse<TItems['data']>> {
         const variables = {
             ...options,
@@ -149,8 +155,8 @@ export default abstract class AbstractStrapiProvider<
             variables.locale = options.locale;
         }
         const environment = index
-            ? this.getEnvironment(true, withoutCache)
-            : this.getEnvironment(preview, withoutCache);
+            ? this.getEnvironment(true, withoutCache, tags)
+            : this.getEnvironment(preview, withoutCache, tags);
 
         const result = await fetchQuery<TFind>(environment, node, variables)
             .toPromise()

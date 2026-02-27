@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, CSSProperties } from 'react';
+import { ReactElement, CSSProperties } from 'react';
 import NextImage, { StaticImageData, ImageLoaderProps, ImageProps as NextImageProps } from 'next/image';
 import { IImage } from '../../../../types/image';
 import { getImageUrl } from '../../../../utils/getImageUrl';

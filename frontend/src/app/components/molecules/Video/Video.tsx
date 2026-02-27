@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX, ReactElement, useState } from 'react';
+import { JSX, ReactElement, useState } from 'react';
 import styles from './Video.module.scss';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';

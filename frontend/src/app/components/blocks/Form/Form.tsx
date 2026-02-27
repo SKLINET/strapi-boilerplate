@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement, Suspense } from 'react';
 import styles from './Form.module.scss';
 import { FormBlockProps } from '../../../blocks/FormBlock/FormBlock';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
@@ -18,7 +18,9 @@ const Form = ({ blocksData: { form, sendEmail, anchor }, app }: FormBlockProps):
             spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}
             anchor={anchor}
         >
-            <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
+            <Suspense fallback={<div>Loading form...</div>}>
+                <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
+            </Suspense>
         </FadeIn>
     );
 };

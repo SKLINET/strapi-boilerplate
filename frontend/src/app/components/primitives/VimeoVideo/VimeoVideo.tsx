@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import styles from './VimeoVideo.module.scss';
 import clsx from 'clsx';
 

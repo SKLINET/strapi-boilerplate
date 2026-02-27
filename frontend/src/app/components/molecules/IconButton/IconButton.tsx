@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './IconButton.module.scss';
 import clsx from 'clsx';
 import { Icon, Icons } from '../../primitives/Icon/Icon';

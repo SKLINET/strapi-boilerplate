@@ -64,7 +64,7 @@ if (typeof window === 'undefined') {
             status: getPublicationState(preview),
         };
 
-        const item = await provider.findOne(variables, locale, preview);
+        const item = await provider.findOne(variables, locale, preview, ['article']);
         if (!item?.documentId) {
             const err = new Error('Article not found') as Error & { code: string };
             err.code = 'ENOENT';

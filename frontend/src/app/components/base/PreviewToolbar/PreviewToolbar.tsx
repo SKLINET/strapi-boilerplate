@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import styles from './PreviewToolbar.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../primitives/Icon/Icon';

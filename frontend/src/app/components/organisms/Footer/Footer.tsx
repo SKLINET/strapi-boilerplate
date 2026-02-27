@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './Footer.module.scss';
 import { IApp } from '../../../../types/base/app';
 import { FadeIn } from '../../base/FadeIn/FadeIn';

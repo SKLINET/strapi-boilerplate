@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './ArticleDetail.module.scss';
 import { ArticleDetailBlockProps } from '../../../blocks/ArticleDetailBlock/ArticleDetailBlock';
 import { DataPreview } from '../../base/DataPreview/DataPreview';

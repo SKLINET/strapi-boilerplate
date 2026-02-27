@@ -1,3 +1,5 @@
+'use cache';
+
 import { cache } from 'react';
 import config from '../../../sklinet.config.json';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
@@ -112,19 +114,12 @@ export async function generateStaticParams() {
     return uniqueParams;
 }
 
-const getPageData = cache(async (context: ContextProps) => {
-    const data = await getStaticProps(context);
-
-    return data;
-});
-
-export const Page = async ({ params, searchParams }: ServerContextProps) => {
+export const Page = async ({ params }: ServerContextProps) => {
     const context = {
         params: await params,
-        searchParams: await searchParams,
     };
 
-    const data = await getPageData(context);
+    const data = await getStaticProps(context);
 
     const app: IApp = {
         ...data,

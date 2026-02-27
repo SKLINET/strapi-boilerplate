@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState, useEffect, useTransition } from 'react';
+import { ReactElement, useState, useEffect, useTransition } from 'react';
 import styles from './ArticleList.module.scss';
 import clsx from 'clsx';
 import { ArticlesListBlockProps } from '../../../blocks/ArticlesListBlock/ArticlesListBlock';
@@ -29,7 +29,8 @@ const ArticleList = ({
         setCanLoadMore(canLoadMore);
     }, [articles, canLoadMore, app]);
 
-    const categoryId = typeof app.context?.searchParams?.filter === 'string' ? app.context.searchParams.filter : null;
+    // const categoryId = typeof app.context?.searchParams?.filter === 'string' ? app.context.searchParams.filter : null;
+    const categoryId = null;
 
     const loadMore = async (page: number) => {
         if (!isPending) {

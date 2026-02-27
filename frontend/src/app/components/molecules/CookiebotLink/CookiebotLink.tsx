@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { IMenuItem } from '../../../../types/menu';
 
 interface CookiebotLinkProps {

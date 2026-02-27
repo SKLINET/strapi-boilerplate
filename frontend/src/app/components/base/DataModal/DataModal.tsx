@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import styles from './DataModal.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';

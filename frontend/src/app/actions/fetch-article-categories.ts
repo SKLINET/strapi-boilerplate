@@ -38,6 +38,7 @@ export const fetchArticleCategories = async (
         limit: limit,
         preview: app.preview,
         status: getPublicationState(app.preview),
+        tags: ['article-category'],
     })) as unknown as FindResponse<Omit<articleCategoryFragment$data, ' $fragmentType'>[]>;
 
     return {

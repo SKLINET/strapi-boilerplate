@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useTransition, useEffect, useState } from 'react';
+import { ReactElement, useTransition, useEffect, useState } from 'react';
 import styles from './FormBuilder.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';

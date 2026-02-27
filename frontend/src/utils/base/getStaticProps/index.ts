@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import config from '../../../../sklinet.config.json';
 import { ContextProps, IContext } from '../../../types/base/page';
 import { getLocale } from '../getLocal';
@@ -13,7 +14,16 @@ import { IPageResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
-export const getStaticProps = async ({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> => {
+/**
+ * Static function to fetch app and page data for a given route.
+ * Loads page content, blocks props, and app context (menu, web setting, etc.) from CMS.
+ * Does not support dynamic request behavior (e.g. searchParams); use only with resolved,
+ * static context (e.g. slug from generateStaticParams or from route params).
+ *
+ * @param context - Resolved page context (params.slug, etc.)
+ * @returns Page response with app data, page, blocksPropsMap, and locale
+ */
+export const getStaticProps = cache(async ({ params: { slug } }: ContextProps): Promise<IPageResponse> => {
     const { isEnabled } = await draftMode();
     const {
         tz,
@@ -27,7 +37,6 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
         locales,
         defaultLocale,
         params: { slug: getNormalizedSlug(slug) },
-        searchParams: searchParams,
         preview: isEnabled,
         draftMode: isEnabled,
     };
@@ -72,7 +81,6 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
                 params: { slug: ['404'] },
                 preview: isEnabled,
                 draftMode: isEnabled,
-                searchParams,
             },
             providers,
             renamedBlocks,
@@ -81,4 +89,4 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
 
         return notFoundPage.props;
     }
-};
+});

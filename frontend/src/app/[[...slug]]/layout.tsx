@@ -25,7 +25,7 @@ const primary = Poppins({
     display: 'swap',
 });
 
-export async function generateViewport({ params, searchParams }: ServerContextProps): Promise<Viewport> {
+export async function generateViewport({ params }: ServerContextProps): Promise<Viewport> {
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -34,11 +34,11 @@ export async function generateViewport({ params, searchParams }: ServerContextPr
     };
 }
 
-export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ServerContextProps): Promise<Metadata> {
     const context = {
         params: await params,
-        searchParams: await searchParams,
     };
+
     const pathname =
         '/' +
         (context.params.slug || [])

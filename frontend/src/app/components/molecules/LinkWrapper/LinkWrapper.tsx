@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './LinkWrapper.module.scss';
 import clsx from 'clsx';
 import { Link, LinkProps } from '../../primitives/Link/Link';

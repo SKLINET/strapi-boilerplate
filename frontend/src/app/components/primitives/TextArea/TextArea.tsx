@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './TextArea.module.scss';
 import clsx from 'clsx';
 import { UseFormRegister } from 'react-hook-form';

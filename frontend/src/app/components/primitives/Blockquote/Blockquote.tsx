@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import styles from './Blockquote.module.scss';
 
 export interface BlockquoteProps {

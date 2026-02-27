@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactElement, ReactNode } from 'react';
+import { CSSProperties, ReactElement, ReactNode } from 'react';
 import styles from './Text.module.scss';
 import clsx from 'clsx';
 import { nbsp } from '../../../../utils/nbsp';

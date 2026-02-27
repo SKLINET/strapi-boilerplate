@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'react-relay';
 import { OmitRefType } from '@symbio/headless';
 import { {BLOCK_NAME}_content$data } from './__generated__/{BLOCK_NAME}_content.graphql';

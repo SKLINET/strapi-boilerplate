@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, createContext, useContext, useCallback, useEffect } from 'react';
+import { ReactNode, createContext, useContext, useCallback, useEffect } from 'react';
 import { CroctProvider as BaseCroctProvider, useCroct } from '@croct/plug-react';
 import { croctConfig } from '../../../../lib/croct/config';
 

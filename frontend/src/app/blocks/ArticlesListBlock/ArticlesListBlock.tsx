@@ -1,11 +1,9 @@
 import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
-import { StaticBlockContext } from '../../../types/base/block';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
 import { fetchArticles } from '../../actions/fetch-articles';
-import config from '../../../../sklinet.config.json';
 import { fetchArticleCategories } from '../../actions/fetch-article-categories';
 import { IArticle, IArticleCategory } from '../../../types/article';
 import { cacheTag } from '../../../utils/cache/tag';
@@ -36,13 +34,31 @@ graphql`
     }
 `;
 
-const ArticlesListBlock = (props: ArticlesListBlockProps): ReactElement => {
+const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactElement> => {
     cacheTag('article');
     cacheTag('article-category');
 
-    return <ArticleList {...props} />;
+    const { articles, canLoadMore } = await fetchArticles(
+        { limit: 1 },
+        {
+            webSetting: props.app?.webSetting,
+            locale: props.app?.locale,
+            preview: props.app?.preview,
+        },
+    );
+
+    const { categories } = await fetchArticleCategories(
+        {},
+        {
+            locale: props.app?.locale,
+            preview: props.app?.preview,
+        },
+    );
+
+    return <ArticleList {...props} data={{ articles, categories, canLoadMore }} />;
 };
 
+/*
 if (typeof window === 'undefined') {
     ArticlesListBlock.getStaticProps = async ({
         locale,
@@ -86,5 +102,6 @@ if (typeof window === 'undefined') {
         };
     };
 }
+*/
 
 export default ArticlesListBlock;

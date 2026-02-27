@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { IApp } from '../../../../types/base/app';
 import { Navbar } from '../../organisms/Navbar/Navbar';
 import { Footer } from '../../organisms/Footer/Footer';

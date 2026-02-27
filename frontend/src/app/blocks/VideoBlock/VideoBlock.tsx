@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
 import { Video } from '../../components/blocks/Video/Video';

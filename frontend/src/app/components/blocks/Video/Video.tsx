@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './Video.module.scss';
 import { VideoBlockProps } from '../../../blocks/VideoBlock/VideoBlock';
 import { getVideoType } from '../../../../utils/strapi/getVideoType';

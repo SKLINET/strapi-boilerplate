@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, ChangeEvent, DragEvent, useState } from 'react';
+import { ReactElement, ChangeEvent, DragEvent, useState } from 'react';
 import styles from './FileInput.module.scss';
 import clsx from 'clsx';
 import { IFileInput } from '../../../../types/file';
