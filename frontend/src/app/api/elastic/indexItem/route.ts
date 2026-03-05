@@ -2,6 +2,7 @@ import { connection, NextRequest } from 'next/server';
 import AbstractElasticProvider, { IndexingResultItem } from '../../../../lib/provider/AbstractElasticProvider';
 import { findProvider } from '../../../../utils/base/findProvider';
 import AbstractSingletonElasticProvider from '../../../../lib/provider/AbstractSingletonElasticProvider';
+import { revalidateTag, TCacheTags } from '../../../../utils/cache/tag';
 import config from '../../../../../sklinet.config.json';
 
 interface IHandle {
@@ -191,6 +192,15 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
             console.log(
                 `Final indexing results: ${finalIndexedItems.length} items (deduplicated from ${indexedItems.length})`,
             );
+
+            // 5) Revalidate Next.js cache for affected content types
+            const uniqueTypes = [...new Set(finalIndexedItems.map((item) => item.type))];
+            for (const cacheTag of uniqueTypes) {
+                revalidateTag(cacheTag as TCacheTags);
+                for (const item of finalIndexedItems.filter((i) => i.type === cacheTag)) {
+                    revalidateTag(cacheTag as TCacheTags, item.id);
+                }
+            }
 
             return new Response(
                 JSON.stringify({
