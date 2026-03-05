@@ -1,20 +1,14 @@
-import { ReactElement } from 'react';
+import { ReactElement, Suspense } from 'react';
 import { graphql } from 'relay-runtime';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
-import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
-import { fetchArticles } from '../../actions/fetch-articles';
 import { fetchArticleCategories } from '../../actions/fetch-article-categories';
-import { IArticle, IArticleCategory } from '../../../types/article';
 import { cacheTag } from '../../../utils/cache/tag';
+import { ArticlesListBlockClient } from './Client';
+import { ArticlesListBlockLoading } from './Loading';
+import { fetchArticles } from '../../actions/fetch-articles';
 
-export interface ArticlesListBlockStaticProps {
-    data: {
-        articles: IArticle[];
-        categories: IArticleCategory[];
-        canLoadMore: boolean;
-    };
-}
+export interface ArticlesListBlockStaticProps {}
 
 export interface ArticlesListBlockContent extends Omit<ArticlesListBlock_content$data, ' $fragmentType'> {
     __typename: 'ComponentBlockArticlesListBlock';
@@ -23,6 +17,7 @@ export interface ArticlesListBlockContent extends Omit<ArticlesListBlock_content
 export interface ArticlesListBlockProps extends ArticlesListBlockStaticProps {
     blocksData: Omit<ArticlesListBlockContent, ' $fragmentType'>;
     app: IApp;
+    categoryId?: string | null;
     className?: string;
 }
 
@@ -38,24 +33,25 @@ const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactEl
     cacheTag('article');
     cacheTag('article-category');
 
-    const { articles, canLoadMore } = await fetchArticles(
-        { limit: props.blocksData.countOnPage || 6 },
-        {
-            webSetting: props.app?.webSetting,
-            locale: props.app?.locale,
-            preview: props.app?.preview,
-        },
-    );
+    const { locale, preview, webSetting } = props.app;
+
+    const limit = props.blocksData.countOnPage || 6;
+
+    const { articles, canLoadMore } = await fetchArticles({ limit }, { locale, preview, webSetting });
 
     const { categories } = await fetchArticleCategories(
         {},
         {
-            locale: props.app?.locale,
-            preview: props.app?.preview,
+            locale,
+            preview,
         },
     );
 
-    return <ArticleList {...props} data={{ articles, categories, canLoadMore }} />;
+    return (
+        <Suspense fallback={<ArticlesListBlockLoading />}>
+            <ArticlesListBlockClient {...props} data={{ articles, categories, canLoadMore }} />
+        </Suspense>
+    );
 };
 
 /*

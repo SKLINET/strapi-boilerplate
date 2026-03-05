@@ -3,19 +3,24 @@
 import { ReactElement, useState, useEffect, useTransition } from 'react';
 import styles from './ArticleList.module.scss';
 import clsx from 'clsx';
-import { ArticlesListBlockProps } from '../../../blocks/ArticlesListBlock/ArticlesListBlock';
 import { IArticle } from '../../../../types/article';
 import { fetchArticles } from '../../../actions/fetch-articles';
 import { getPageUrl } from '../../../../utils/getPageUrl';
 import { Button } from '../../primitives/Button/Button';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
+import { ArticlesListBlockClientProps } from '../../../blocks/ArticlesListBlock/Client';
+
+interface ArticleListProps extends ArticlesListBlockClientProps {
+    categoryId: string | null;
+}
 
 const ArticleList = ({
     blocksData: { countOnPage, anchor },
     app,
-    data: { articles, categories, canLoadMore },
-}: ArticlesListBlockProps): ReactElement => {
+    data: { articles = [], categories, canLoadMore = false },
+    categoryId = null,
+}: ArticleListProps): ReactElement => {
     const [_articles, setArticles] = useState<IArticle[]>(articles);
 
     const [page, setPage] = useState(1);
@@ -28,9 +33,6 @@ const ArticleList = ({
         setPage(1);
         setCanLoadMore(canLoadMore);
     }, [articles, canLoadMore, app]);
-
-    // const categoryId = typeof app.context?.searchParams?.filter === 'string' ? app.context.searchParams.filter : null;
-    const categoryId = null;
 
     const loadMore = async (page: number) => {
         if (!isPending) {
