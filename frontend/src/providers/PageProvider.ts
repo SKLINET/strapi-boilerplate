@@ -52,7 +52,7 @@ class PageProvider extends AbstractStrapiProvider<
         const status = getPublicationState(preview);
 
         const appData = await fetchQuery<appDataQuery>(
-            this.getEnvironment({ preview, tags: ['web-setting', 'system-resource'] }),
+            this.getEnvironment({ preview, tags: ['menu', 'web-setting', 'system-resource'] }),
             AppDataQuery,
             {
                 locale,

@@ -39,7 +39,7 @@ const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactEl
     cacheTag('article-category');
 
     const { articles, canLoadMore } = await fetchArticles(
-        { limit: 1 },
+        { limit: props.blocksData.countOnPage || 6 },
         {
             webSetting: props.app?.webSetting,
             locale: props.app?.locale,

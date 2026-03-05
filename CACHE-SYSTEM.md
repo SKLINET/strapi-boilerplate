@@ -70,7 +70,7 @@ generateStaticParams → Page ('use cache') → getStaticProps → getBlocksProp
 
 ### tags in fetch (fetch cache binding)
 
-- **PageProvider.getPageBySlug:** `['web-setting', 'system-resource']`, `['page']`
+- **PageProvider.getPageBySlug:** `['menu', 'web-setting', 'system-resource']`, `['page']`
 - **PageProvider.getPageMetadata:** `['web-setting']`, `['redirect']`, `['page']`
 - **fetchArticles:** `tags: ['article']`
 - **fetchArticleCategories:** `tags: ['article-category']`
@@ -117,3 +117,7 @@ Elastic routes (`indexItem`, `indexAll`) always fetch fresh data from Strapi (wi
 3. **New content type in Strapi:** Add tag to `TCacheTags` in `tag.ts` if it should be cached and invalidated.
 4. **Elastic webhook:** `indexItem` already calls `revalidateTag` – when adding a new type to `itemsToReindex` in indexItem, ensure the provider returns a valid `getApiKey()`.
 5. **searchParams / dynamic data:** Pages with `searchParams` must not have `'use cache'` at the level where they are read – see `loading.tsx` and Suspense for dynamic parts.
+
+## Note: Fetch tags must match cacheTag
+
+Fetch tags and `cacheTag` calls must be aligned. If a component calls `cacheTag('menu')`, the fetch that provides menu data must include `'menu'` in its tags. Otherwise `revalidateTag('menu')` will invalidate the component cache but not the fetch cache, leaving stale data. AppDataQuery returns `webSetting` (including `mainMenu`) and `systemResources`, so it is tagged with `['menu', 'web-setting', 'system-resource']` to ensure invalidation works when any of these change.
