@@ -18,9 +18,6 @@ interface PageContentProps {
 }
 
 const PageContent = async ({ app }: PageContentProps): Promise<ReactElement> => {
-    // Set cache life to max (revalidate all / re-deploy)
-    cacheLife('max');
-
     // Set cache tags for global content (AppDataQuery and AppRedirectQuery)
     cacheTag('menu');
     cacheTag('redirect');

@@ -25,8 +25,8 @@ export default abstract class AbstractStrapiProvider<
     TItems extends { data: ReadonlyArray<StrapiRecord | null> } = { data: ReadonlyArray<StrapiRecord | null> },
 > implements Provider {
     protected environment: Record<string, Environment> = {
-        preview: createRelayEnvironment({}, '', true),
-        production: createRelayEnvironment({}, '', false),
+        preview: createRelayEnvironment({}, { preview: true }),
+        production: createRelayEnvironment({}, { preview: false }),
     };
 
     protected node: GraphQLTaggedNode | undefined;
@@ -54,11 +54,7 @@ export default abstract class AbstractStrapiProvider<
     }
 
     protected getEnvironment(preview = false, withoutCache = false, tags?: string[]): Environment {
-        if (preview) {
-            return createRelayEnvironment({}, '', true, withoutCache, tags);
-        } else {
-            return createRelayEnvironment({}, '', false, withoutCache, tags);
-        }
+        return createRelayEnvironment({}, { preview: preview, withoutCache: withoutCache, tags: tags });
     }
 
     public isLocalizable(): boolean {

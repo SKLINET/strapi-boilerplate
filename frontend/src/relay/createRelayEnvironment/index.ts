@@ -34,13 +34,14 @@ class CustomRecordSource extends RecordSource {
     }
 }
 
-export const createRelayEnvironment = (
-    records: RecordMap,
-    token?: string,
-    preview = false,
-    withoutCache = false,
-    tags?: string[],
-): Environment =>
+interface Options {
+    token?: string;
+    preview?: boolean;
+    withoutCache?: boolean;
+    tags?: string[];
+}
+
+export const createRelayEnvironment = (records: RecordMap, options: Options = {}): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
             if (!process.env.API_ENDPOINT) {
@@ -53,7 +54,7 @@ export const createRelayEnvironment = (
                     'Content-Type': 'application/json',
                 };
 
-                const appToken = token || process.env.API_TOKEN;
+                const appToken = options?.token || process.env.API_TOKEN;
                 if (appToken) {
                     headersObj.Authorization = `Bearer ${appToken}`;
                 }
@@ -65,11 +66,10 @@ export const createRelayEnvironment = (
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    // cache: withoutCache ? 'no-store' : 'force-cache',
-                    cache: 'no-store',
+                    cache: options?.withoutCache ? 'no-store' : 'force-cache',
                 };
-                if (tags?.length) {
-                    (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags };
+                if (options?.tags?.length) {
+                    (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags: options.tags };
                 }
                 const req = await fetch(process.env.API_ENDPOINT, fetchOptions);
                 const data = await req.json();

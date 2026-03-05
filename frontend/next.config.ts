@@ -18,9 +18,9 @@ const nextConfig: NextConfig = {
     // Next.js 16 Cache Components
     cacheComponents: true,
     cacheLife: {
-        max: {
+        default: {
             stale: 30, // almost no stale on clients
-            revalidate: 2592000, // 1 month
+            revalidate: 3600, // 1 hour
             expire: 31536000, // 365 days
         },
     },

@@ -25,11 +25,7 @@ export default abstract class AbstractSingletonStrapiProvider<
     }
 
     protected getEnvironment(preview = false, withoutCache = false, tags?: string[]): Environment {
-        if (preview) {
-            return createRelayEnvironment({}, '', true, withoutCache, tags);
-        } else {
-            return createRelayEnvironment({}, '', false, withoutCache, tags);
-        }
+        return createRelayEnvironment({}, { preview: preview, withoutCache: withoutCache, tags: tags });
     }
 
     public isLocalizable(): boolean {

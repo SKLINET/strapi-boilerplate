@@ -1,10 +1,9 @@
 'use cache';
 
-import { cache } from 'react';
 import config from '../../../sklinet.config.json';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
-import { ContextProps, ServerContextProps } from '../../types/base/page';
+import { ServerContextProps } from '../../types/base/page';
 import { IApp } from '../../types/base/app';
 import { pageInfoLog } from '../../utils/base/pageInfoLog';
 import providers from '../../providers';
