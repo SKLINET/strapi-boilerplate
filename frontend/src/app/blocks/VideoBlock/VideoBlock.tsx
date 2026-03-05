@@ -1,3 +1,5 @@
+'use cache';
+
 import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
@@ -26,6 +28,6 @@ graphql`
     }
 `;
 
-const VideoBlock = (props: VideoBlockProps): ReactElement => <Video {...props} />;
+const VideoBlock = async (props: VideoBlockProps): Promise<ReactElement> => <Video {...props} />;
 
 export default VideoBlock;

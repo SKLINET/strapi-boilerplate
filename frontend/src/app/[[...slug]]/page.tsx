@@ -1,14 +1,20 @@
-'use cache';
-
 import config from '../../../sklinet.config.json';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getStaticProps } from '../../utils/base/getStaticProps';
-import { ServerContextProps } from '../../types/base/page';
+import { ContextProps, ServerContextProps } from '../../types/base/page';
 import { IApp } from '../../types/base/app';
 import { pageInfoLog } from '../../utils/base/pageInfoLog';
 import providers from '../../providers';
 import blocks from '../blocks/server';
-import { PageContent } from '../components/base/PageContent/PageContent';
+import { cacheTag } from '../../utils/cache/tag';
+import { GtmProvider } from '../components/base/GtmProvider/GtmProvider';
+import { Layout } from '../components/base/Layout/Layout';
+import { Blocks } from '../components/base/Blocks/Blocks';
+import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
+import { DataModal } from '../components/base/DataModal/DataModal';
+import { GridHelper } from '../components/base/GridHelper/GridHelper';
+import Script from 'next/script';
+import { cache } from 'react';
 
 // Generate static params for ISR
 export async function generateStaticParams() {
@@ -113,11 +119,8 @@ export async function generateStaticParams() {
     return uniqueParams;
 }
 
-export const Page = async ({ params }: ServerContextProps) => {
-    const context = {
-        params: await params,
-    };
-
+const cachedStaticProps = cache(async (context: ContextProps): Promise<IApp> => {
+    'use cache';
     const data = await getStaticProps(context);
 
     const app: IApp = {
@@ -126,11 +129,68 @@ export const Page = async ({ params }: ServerContextProps) => {
         context,
     };
 
+    // Set cache tags for global content (AppDataQuery and AppRedirectQuery)
+    cacheTag('menu');
+    cacheTag('redirect');
+    cacheTag('system-resource');
+    cacheTag('web-setting');
+
+    // Set cache tags for page content (AppPageQuery)
+    if (app.page?.documentId) cacheTag('page', app.page.documentId);
+
+    return app;
+});
+
+export const Page = async ({ params, searchParams }: ServerContextProps) => {
+    const context = {
+        params: await params,
+        searchParams: {},
+    };
+
+    const app = await cachedStaticProps(context);
+
     if (process.env.NODE_ENV === 'development') {
         pageInfoLog(app);
     }
 
-    return <PageContent app={app} />;
+    const gtmCode = app.webSetting?.gtmCode || config.gtm.code || null;
+
+    const structuredData = app?.item?.seo?.structuredData || app?.page?.seo?.structuredData || null;
+
+    return (
+        <>
+            <GtmProvider gtmCode={gtmCode}>
+                <Layout app={app}>
+                    {app.page && (
+                        <Blocks
+                            blocksData={app.page?.content || []}
+                            initialProps={app.blocksPropsMap}
+                            app={app}
+                            searchParams={searchParams}
+                        />
+                    )}
+                </Layout>
+
+                {app.preview && app.page && <PreviewToolbar app={app} />}
+
+                {process.env.NODE_ENV === 'development' && (
+                    <>
+                        <GridHelper />
+                        <DataModal app={app} />
+                    </>
+                )}
+            </GtmProvider>
+
+            {structuredData && (
+                <Script
+                    id="structured-data"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+                />
+            )}
+        </>
+    );
 };
 
 export default Page;

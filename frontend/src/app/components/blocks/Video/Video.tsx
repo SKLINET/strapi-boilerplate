@@ -1,3 +1,5 @@
+'use cache';
+
 import { ReactElement } from 'react';
 import styles from './Video.module.scss';
 import { VideoBlockProps } from '../../../blocks/VideoBlock/VideoBlock';
@@ -5,7 +7,7 @@ import { getVideoType } from '../../../../utils/strapi/getVideoType';
 import { Video as _Video } from '../../molecules/Video/Video';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
 
-const Video = ({ blocksData: { video, anchor }, app }: VideoBlockProps): ReactElement => {
+const Video = async ({ blocksData: { video, anchor }, app }: VideoBlockProps): Promise<ReactElement> => {
     const _video = getVideoType(video);
 
     return (

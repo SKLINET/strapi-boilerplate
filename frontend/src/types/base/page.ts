@@ -8,8 +8,13 @@ import { appPageQuery$data } from '../../relay/__generated__/appPageQuery.graphq
 import { metadataGlobalQuery$data } from '../../relay/__generated__/metadataGlobalQuery.graphql';
 import { metadataPageQuery$data } from '../../relay/__generated__/metadataPageQuery.graphql';
 
+export interface SearchParamsProps {
+    [key: string]: string | string[] | undefined;
+}
+
 export interface ServerContextProps {
     params: Promise<ParamsProps>;
+    searchParams: Promise<SearchParamsProps>;
 }
 
 export interface ContextProps {

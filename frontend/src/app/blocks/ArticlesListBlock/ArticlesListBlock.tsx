@@ -2,11 +2,10 @@ import { ReactElement, Suspense } from 'react';
 import { graphql } from 'relay-runtime';
 import { ArticlesListBlock_content$data } from './__generated__/ArticlesListBlock_content.graphql';
 import { IApp } from '../../../types/base/app';
-import { fetchArticleCategories } from '../../actions/fetch-article-categories';
-import { cacheTag } from '../../../utils/cache/tag';
-import { ArticlesListBlockClient } from './Client';
 import { ArticlesListBlockLoading } from './Loading';
-import { fetchArticles } from '../../actions/fetch-articles';
+import { SearchParamsProps } from '../../../types/base/page';
+import { ArticlesListBlockServer } from './Server';
+// import { cacheTag } from '../../../utils/cache/tag';
 
 export interface ArticlesListBlockStaticProps {}
 
@@ -17,8 +16,8 @@ export interface ArticlesListBlockContent extends Omit<ArticlesListBlock_content
 export interface ArticlesListBlockProps extends ArticlesListBlockStaticProps {
     blocksData: Omit<ArticlesListBlockContent, ' $fragmentType'>;
     app: IApp;
-    categoryId?: string | null;
     className?: string;
+    searchParams?: Promise<SearchParamsProps> | undefined;
 }
 
 graphql`
@@ -29,30 +28,11 @@ graphql`
     }
 `;
 
-const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactElement> => {
-    cacheTag('article');
-    cacheTag('article-category');
-
-    const { locale, preview, webSetting } = props.app;
-
-    const limit = props.blocksData.countOnPage || 6;
-
-    const { articles, canLoadMore } = await fetchArticles({ limit }, { locale, preview, webSetting });
-
-    const { categories } = await fetchArticleCategories(
-        {},
-        {
-            locale,
-            preview,
-        },
-    );
-
-    return (
-        <Suspense fallback={<ArticlesListBlockLoading />}>
-            <ArticlesListBlockClient {...props} data={{ articles, categories, canLoadMore }} />
-        </Suspense>
-    );
-};
+const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactElement> => (
+    <Suspense fallback={<ArticlesListBlockLoading />}>
+        <ArticlesListBlockServer {...props} />
+    </Suspense>
+);
 
 /*
 if (typeof window === 'undefined') {

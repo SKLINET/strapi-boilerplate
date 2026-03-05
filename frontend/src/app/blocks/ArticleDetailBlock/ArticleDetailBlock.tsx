@@ -29,7 +29,8 @@ graphql`
     }
 `;
 
-const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => {
+const ArticleDetailBlock = async (props: ArticleDetailBlockProps): Promise<ReactElement> => {
+    'use cache';
     if (props.item?.documentId) {
         cacheTag('article', props.item.documentId);
     }

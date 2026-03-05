@@ -34,9 +34,11 @@ export async function generateViewport({ params }: ServerContextProps): Promise<
     };
 }
 
-export async function generateMetadata({ params }: ServerContextProps): Promise<Metadata> {
+/*
+export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
     const context = {
         params: await params,
+        searchParams: await searchParams,
     };
 
     const pathname =
@@ -170,6 +172,7 @@ export async function generateMetadata({ params }: ServerContextProps): Promise<
         other: customMetaData,
     };
 }
+*/
 
 interface RootLayoutProps {
     children: ReactNode;

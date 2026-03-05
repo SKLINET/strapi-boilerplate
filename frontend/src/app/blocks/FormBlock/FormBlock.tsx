@@ -1,3 +1,5 @@
+'use cache';
+
 import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { FormBlock_content$data } from './__generated__/FormBlock_content.graphql';
@@ -30,7 +32,7 @@ graphql`
     }
 `;
 
-const FormBlock = (props: FormBlockProps): ReactElement => {
+const FormBlock = async (props: FormBlockProps): Promise<ReactElement> => {
     if (props?.blocksData?.form?.documentId) {
         cacheTag('form-builder', props.blocksData.form.documentId);
     }

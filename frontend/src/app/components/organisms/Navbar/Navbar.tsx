@@ -1,3 +1,5 @@
+'use cache';
+
 import { ReactElement, Suspense } from 'react';
 import styles from './Navbar.module.scss';
 import { IApp } from '../../../../types/base/app';
@@ -10,7 +12,7 @@ interface NavbarProps {
     app: IApp;
 }
 
-const Navbar = ({ app }: NavbarProps): ReactElement => {
+const Navbar = async ({ app }: NavbarProps): Promise<ReactElement> => {
     const menu = getMenuType(app.webSetting?.mainMenu, app);
 
     return (
