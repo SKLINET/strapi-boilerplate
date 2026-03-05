@@ -31,15 +31,15 @@ export const fetchArticleCategories = async (
         filters.documentId = { ne: skipCategoryId };
     }
 
-    const { data, count } = (await providers.articleCategory.find({
-        locale: app.locale,
-        filters: filters,
-        start: (page - 1) * limit,
-        limit: limit,
-        preview: app.preview,
-        status: getPublicationState(app.preview),
-        tags: ['article-category'],
-    })) as unknown as FindResponse<Omit<articleCategoryFragment$data, ' $fragmentType'>[]>;
+    const { data, count } = (await providers.articleCategory.find(
+        {
+            locale: app.locale,
+            filters: filters,
+            start: (page - 1) * limit,
+            limit: limit,
+        },
+        { preview: app.preview, tags: ['article-category'] },
+    )) as unknown as FindResponse<Omit<articleCategoryFragment$data, ' $fragmentType'>[]>;
 
     return {
         categories: getArticleCategoryListType(data),

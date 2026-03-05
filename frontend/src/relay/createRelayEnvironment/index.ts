@@ -34,14 +34,14 @@ class CustomRecordSource extends RecordSource {
     }
 }
 
-interface Options {
+export interface EnvironmentOptions {
     token?: string;
     preview?: boolean;
     withoutCache?: boolean;
     tags?: string[];
 }
 
-export const createRelayEnvironment = (records: RecordMap, options: Options = {}): Environment =>
+export const createRelayEnvironment = (records: RecordMap, options: EnvironmentOptions = {}): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
             if (!process.env.API_ENDPOINT) {

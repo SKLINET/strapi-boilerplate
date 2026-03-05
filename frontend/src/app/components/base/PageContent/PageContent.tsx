@@ -2,7 +2,6 @@
 
 import { ReactElement } from 'react';
 import { IApp } from '../../../../types/base/app';
-import { cacheLife } from 'next/cache';
 import config from '../../../../../sklinet.config.json';
 import { GtmProvider } from '../GtmProvider/GtmProvider';
 import { Layout } from '../Layout/Layout';

@@ -29,7 +29,7 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
     async getStaticPaths(locale: string): Promise<GetStaticPathsResult['paths']> {
         const items = [];
         const data = await fetchQuery<s.articleStaticPathsQuery>(
-            this.getEnvironment(false, true),
+            this.getEnvironment({ preview: false, withoutCache: true, tags: ['article'] }),
             ArticleStaticPathsQuery,
             {
                 locale: locale,

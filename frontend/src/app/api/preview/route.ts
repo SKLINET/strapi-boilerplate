@@ -22,7 +22,7 @@ export async function GET(request: Request) {
         return new Response('Invalid token', { status: 401 });
     }
 
-    const environment = createRelayEnvironment({});
+    const environment = createRelayEnvironment({}, { withoutCache: true });
     const data = await fetchQuery<previewSettingsQuery>(environment, PreviewSettingsQuery, {
         status,
         locale: _locale,

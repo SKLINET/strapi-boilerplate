@@ -36,7 +36,7 @@ export async function generateStaticParams() {
         };
 
         try {
-            const webSetting = await providers.webSetting.get(locale, false);
+            const webSetting = await providers.webSetting.get(locale, { preview: false });
 
             if (!webSetting) throw new Error('Web setting are not filled');
 

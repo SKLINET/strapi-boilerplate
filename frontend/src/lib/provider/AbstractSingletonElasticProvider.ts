@@ -46,7 +46,7 @@ export default abstract class AbstractSingletonElasticProvider<
             return hits[0]._source as TItem;
         } catch (e) {
             Logger.warn('Elastic search failed, falling back to DB', e);
-            return this.get(locale, preview);
+            return this.get(locale, { preview });
         }
     }
 
@@ -64,7 +64,7 @@ export default abstract class AbstractSingletonElasticProvider<
      * @param preview
      */
     async getForIndex(locale?: string, preview = false): Promise<TItem | null> {
-        return (await this.get(locale, preview, true)) as TItem;
+        return (await this.get(locale, { preview, withoutCache: true })) as TItem;
     }
 
     /**
