@@ -59,6 +59,10 @@ Next.js 15, React 19, Relay 16, Tailwind 3, SCSS Modules. Forms: react-hook-form
 - react-hook-form + yupResolver + Yup for validation
 - Use `getSystemResource()` for error messages and labels
 
+## Cache Components (Next.js 16)
+
+The project uses **Cache Components** with cache tags for granular invalidation. For context see **[CACHE-SYSTEM.md](CACHE-SYSTEM.md)** – two-layer caching (`'use cache'` + fetch tags), TCacheTags, provider interface, invalidation via `api/revalidate` and elastic webhooks.
+
 ## Elasticsearch reindexing
 
 - `frontend/src/app/api/elastic/indexItem/route.ts` – webhook handler for CMS changes
