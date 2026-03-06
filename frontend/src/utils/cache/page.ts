@@ -30,10 +30,20 @@ const cacheBlocks = (blocks: serverBlocksContent$data[] | null | undefined) => {
  **/
 export const cachePage = ({ page, webSetting, item }: IApp) => {
     // Set cache tags for global content (AppDataQuery and AppRedirectQuery)
-    cacheTag('menu');
     cacheTag('redirect');
     cacheTag('system-resource');
-    cacheTag('web-setting');
+
+    // Set cache tags for web setting content
+    if (webSetting) {
+        const { documentId, homePage, articlesPage, articleDetailPage, mainMenu } = webSetting;
+
+        cacheTag('web-setting', documentId);
+
+        if (homePage?.documentId) cacheTag('page', homePage.documentId);
+        if (articlesPage?.documentId) cacheTag('page', articlesPage.documentId);
+        if (articleDetailPage?.documentId) cacheTag('page', articleDetailPage.documentId);
+        if (mainMenu?.documentId) cacheTag('menu', mainMenu.documentId);
+    }
 
     // Set cache tags for page content
     if (page) {
