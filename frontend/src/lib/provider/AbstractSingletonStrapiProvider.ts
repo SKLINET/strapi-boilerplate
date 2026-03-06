@@ -39,11 +39,11 @@ export default abstract class AbstractSingletonStrapiProvider<
     }
 
     /**
-     * Get one item by id
-     * @param locale
-     * @param preview
-     * @param withoutCache
-     */
+     * @description Get one item by id
+     * @param {string} locale - Locale to get the item for
+     * @param {EnvironmentOptions} options - Cache options
+     * @returns {Promise<TItem | null>} The item
+     **/
     async get(locale?: string, options: EnvironmentOptions = {}): Promise<TItem | null> {
         const result = await fetchQuery<TOperation>(
             this.getEnvironment(options),

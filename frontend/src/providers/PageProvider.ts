@@ -52,7 +52,7 @@ class PageProvider extends AbstractStrapiProvider<
         const status = getPublicationState(preview);
 
         const appData = await fetchQuery<appDataQuery>(
-            this.getEnvironment({ preview, tags: ['menu', 'web-setting', 'system-resource'] }),
+            this.getEnvironment({ preview, withoutCache: true }),
             AppDataQuery,
             {
                 locale,
@@ -60,11 +60,15 @@ class PageProvider extends AbstractStrapiProvider<
             },
         ).toPromise();
 
-        const appPage = await fetchQuery<appPageQuery>(this.getEnvironment({ preview, tags: ['page'] }), AppPageQuery, {
-            locale,
-            pattern,
-            status,
-        }).toPromise();
+        const appPage = await fetchQuery<appPageQuery>(
+            this.getEnvironment({ preview, withoutCache: true }),
+            AppPageQuery,
+            {
+                locale,
+                pattern,
+                status,
+            },
+        ).toPromise();
 
         return {
             ...appData,
@@ -120,6 +124,12 @@ class PageProvider extends AbstractStrapiProvider<
         };
     }
 
+    /**
+     * @description Get static paths for all pages
+     * @param {string} locale - Locale to get the paths for
+     * @param {Record<string, BlockType>} blocks - Blocks to get the paths for
+     * @returns {Promise<GetStaticPathsResult['paths']>} The static paths
+     **/
     async getStaticPaths(
         locale: string | undefined,
         blocks?: Record<string, BlockType>,
@@ -129,7 +139,7 @@ class PageProvider extends AbstractStrapiProvider<
         let done = 0;
         do {
             const data = await fetchQuery<s.pageStaticPathsQuery>(
-                this.getEnvironment({ preview: false, withoutCache: true, tags: ['page'] }),
+                this.getEnvironment({ preview: false, tags: ['page'] }),
                 pageStaticPathsQuery,
                 {
                     locale: locale,

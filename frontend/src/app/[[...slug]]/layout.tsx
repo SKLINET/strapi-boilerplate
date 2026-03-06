@@ -1,8 +1,6 @@
-'use cache';
-
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, cache } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { ServerContextProps, ParamsProps } from '../../types/base/page';
+import { ServerContextProps, ParamsProps, ContextProps, IMetadataResponse } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
 import { getMetadata } from '../../utils/base/getMetadata';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
@@ -26,6 +24,7 @@ const primary = Poppins({
 });
 
 export async function generateViewport({ params }: ServerContextProps): Promise<Viewport> {
+    'use cache';
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -34,8 +33,20 @@ export async function generateViewport({ params }: ServerContextProps): Promise<
     };
 }
 
-/*
+/**
+ * @description Get metadata for a given context and cache it (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IMetadataResponse>} Metadata data
+ **/
+const cachedMatadataProps = async (context: ContextProps): Promise<IMetadataResponse> => {
+    'use cache';
+    const data = await getMetadata(context);
+
+    return data;
+};
+
 export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
+    'use cache';
     const context = {
         params: await params,
         searchParams: await searchParams,
@@ -50,7 +61,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
             })
             .join('/');
 
-    const data = await getMetadata(context);
+    const data = await cachedMatadataProps(context);
 
     if (data?.redirect?.to) {
         if ((data?.redirect as any)?.permanent) {
@@ -172,7 +183,6 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         other: customMetaData,
     };
 }
-*/
 
 interface RootLayoutProps {
     children: ReactNode;
@@ -180,6 +190,7 @@ interface RootLayoutProps {
 }
 
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
+    'use cache';
     const { slug } = await params;
 
     return (

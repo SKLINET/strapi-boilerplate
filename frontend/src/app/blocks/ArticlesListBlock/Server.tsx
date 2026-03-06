@@ -1,35 +1,54 @@
-import { cache, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { ArticlesListBlockProps } from './ArticlesListBlock';
-import { SearchParamsProps } from '../../../types/base/page';
 import { fetchArticles } from '../../actions/fetch-articles';
 import { fetchArticleCategories } from '../../actions/fetch-article-categories';
 import { ArticleList } from '../../components/blocks/ArticleList/ArticleList';
 import { cacheTag } from '../../../utils/cache/tag';
 import { IApp } from '../../../types/base/app';
 
-export interface ArticlesListBlockServerProps extends ArticlesListBlockProps {
-    searchParams?: Promise<SearchParamsProps> | undefined;
-}
+/**
+ * @description Fetch and cache articles
+ * @param {number} limit - Limit of articles to fetch
+ * @param {string} categoryId - Category ID to filter articles
+ * @param {IApp} app - App data
+ * @returns {Promise<{articles: IArticle[], canLoadMore: boolean}>} Articles list and can load more flag
+ **/
+const cachedArticlesList = async ({
+    limit,
+    categoryId,
+    app,
+}: {
+    limit: number;
+    categoryId: string | undefined;
+    app: { webSetting: IApp['webSetting']; locale: IApp['locale']; preview: IApp['preview'] };
+}) => {
+    'use cache';
+    cacheTag('article');
+    cacheTag('article-category');
 
-const cachedArticlesList = cache(
-    async ({ limit, categoryId, app }: { limit: number; categoryId: string | undefined; app: IApp }) => {
-        'use cache';
-        cacheTag('article');
+    const { articles, canLoadMore } = await fetchArticles(
+        { limit: limit, categoryId: categoryId },
+        {
+            webSetting: app?.webSetting,
+            locale: app?.locale,
+            preview: app?.preview,
+        },
+        ['article', 'article-category'],
+    );
 
-        const { articles, canLoadMore } = await fetchArticles(
-            { limit: limit, categoryId: categoryId },
-            {
-                webSetting: app?.webSetting,
-                locale: app?.locale,
-                preview: app?.preview,
-            },
-        );
+    return { articles, canLoadMore };
+};
 
-        return { articles, canLoadMore };
-    },
-);
-
-const cachedArticleCategories = cache(async ({ app }: { app: IApp }) => {
+/**
+ * @description Fetch and cache article categories
+ * @param {IApp} app - App data
+ * @returns {Promise<{categories: IArticleCategory[]}>} Article categories
+ **/
+const cachedArticleCategories = async ({
+    app,
+}: {
+    app: { webSetting: IApp['webSetting']; locale: IApp['locale']; preview: IApp['preview'] };
+}) => {
     'use cache';
     cacheTag('article-category');
 
@@ -39,11 +58,17 @@ const cachedArticleCategories = cache(async ({ app }: { app: IApp }) => {
             locale: app?.locale,
             preview: app?.preview,
         },
+        ['article-category'],
     );
 
     return { categories };
-});
+};
 
+/**
+ * @description Server component for ArticlesListBlock use search params to filter articles by category
+ * @param {ArticlesListBlockProps} props - ArticlesListBlock props
+ * @returns {Promise<ReactElement>} ArticlesListBlock component
+ **/
 const ArticlesListBlockServer = async ({ searchParams, ...rest }: ArticlesListBlockProps): Promise<ReactElement> => {
     const { filter } = (await searchParams) || {};
 
@@ -51,8 +76,14 @@ const ArticlesListBlockServer = async ({ searchParams, ...rest }: ArticlesListBl
 
     const categoryId = typeof filter === 'string' ? filter : undefined;
 
-    const { articles, canLoadMore } = await cachedArticlesList({ limit, categoryId, app: rest.app });
-    const { categories } = await cachedArticleCategories({ app: rest.app });
+    const { articles, canLoadMore } = await cachedArticlesList({
+        limit,
+        categoryId,
+        app: { webSetting: rest.app?.webSetting, locale: rest.app?.locale, preview: rest.app?.preview },
+    });
+    const { categories } = await cachedArticleCategories({
+        app: { webSetting: rest.app?.webSetting, locale: rest.app?.locale, preview: rest.app?.preview },
+    });
 
     return <ArticleList {...rest} data={{ articles, categories, canLoadMore }} categoryId={categoryId ?? null} />;
 };

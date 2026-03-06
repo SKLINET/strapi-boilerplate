@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import config from '../../../../sklinet.config.json';
 import { ContextProps, IContext } from '../../../types/base/page';
 import { getLocale } from '../getLocal';
@@ -10,15 +9,11 @@ import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
 /**
- * Static function to fetch app and page data for route metadata (e.g. generateMetadata).
- * Loads metadata props (SEO, openGraph, etc.) from CMS for the given slug.
- * Does not support dynamic request behavior (e.g. searchParams); use only with resolved,
- * static context (e.g. slug from generateStaticParams or from route params).
- *
- * @param context - Resolved page context (params.slug, etc.)
- * @returns Metadata response (title, description, openGraph, etc.) for the page
- */
-export const getMetadata = cache(async ({ params: { slug } }: ContextProps): Promise<IMetadataResponse> => {
+ * @description Get metadata for a page by slug (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IMetadataResponse>} Metadata response
+ **/
+export const getMetadata = async ({ params: { slug } }: ContextProps): Promise<IMetadataResponse> => {
     const { isEnabled } = await draftMode();
     const {
         i18n: { defaultLocale, locales },
@@ -75,4 +70,4 @@ export const getMetadata = cache(async ({ params: { slug } }: ContextProps): Pro
 
         return notFoundPage.props;
     }
-});
+};

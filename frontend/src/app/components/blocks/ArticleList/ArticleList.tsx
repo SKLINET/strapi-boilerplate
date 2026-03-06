@@ -11,7 +11,7 @@ import { FadeIn } from '../../base/FadeIn/FadeIn';
 import { getSystemResource } from '../../../../utils/strapi/getSystemResource';
 import { ArticlesListBlockProps } from '../../../blocks/ArticlesListBlock/ArticlesListBlock';
 
-type ArticleListProps = ArticlesListBlockProps & {
+type ArticleListProps = Omit<ArticlesListBlockProps, 'searchParams'> & {
     data: {
         articles: IArticle[];
         categories: IArticleCategory[];

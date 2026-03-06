@@ -1,11 +1,9 @@
-'use cache';
-
 import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { FormBlock_content$data } from './__generated__/FormBlock_content.graphql';
 import { Form } from '../../components/blocks/Form/Form';
 import { IApp } from '../../../types/base/app';
-import { cacheTag } from '../../../utils/cache/tag';
+import { SearchParamsProps } from '../../../types/base/page';
 
 export interface FormBlockStaticProps {}
 
@@ -17,6 +15,7 @@ export interface FormBlockProps extends FormBlockStaticProps {
     blocksData: Omit<FormBlockContent, ' $fragmentType'>;
     app: IApp;
     className?: string;
+    searchParams?: Promise<SearchParamsProps> | undefined;
 }
 
 graphql`
@@ -32,12 +31,6 @@ graphql`
     }
 `;
 
-const FormBlock = async (props: FormBlockProps): Promise<ReactElement> => {
-    if (props?.blocksData?.form?.documentId) {
-        cacheTag('form-builder', props.blocksData.form.documentId);
-    }
-
-    return <Form {...props} />;
-};
+const FormBlock = async ({ searchParams, ...props }: FormBlockProps): Promise<ReactElement> => <Form {...props} />;
 
 export default FormBlock;

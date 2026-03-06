@@ -5,7 +5,6 @@ import { IApp } from '../../../types/base/app';
 import { ArticlesListBlockLoading } from './Loading';
 import { SearchParamsProps } from '../../../types/base/page';
 import { ArticlesListBlockServer } from './Server';
-// import { cacheTag } from '../../../utils/cache/tag';
 
 export interface ArticlesListBlockStaticProps {}
 
@@ -33,51 +32,5 @@ const ArticlesListBlock = async (props: ArticlesListBlockProps): Promise<ReactEl
         <ArticlesListBlockServer {...props} />
     </Suspense>
 );
-
-/*
-if (typeof window === 'undefined') {
-    ArticlesListBlock.getStaticProps = async ({
-        locale,
-        context: { preview, searchParams },
-        block,
-        settings,
-    }: StaticBlockContext): Promise<any> => {
-        if (block?.__typename !== 'ComponentBlockArticlesListBlock') {
-            const err = new Error('Page not found') as Error & { code: string };
-            err.code = 'ENOENT';
-            throw err;
-        }
-
-        const limit = block?.countOnPage || 5;
-
-        const categoryId = typeof searchParams?.filter === 'string' ? searchParams.filter : undefined;
-
-        const { articles, canLoadMore } = await fetchArticles(
-            { limit: limit, categoryId: categoryId },
-            {
-                webSetting: settings,
-                locale: locale || config.i18n.defaultLocale,
-                preview,
-            },
-        );
-
-        const { categories } = await fetchArticleCategories(
-            {},
-            {
-                locale: locale || config.i18n.defaultLocale,
-                preview,
-            },
-        );
-
-        return {
-            data: {
-                articles: articles,
-                categories: categories,
-                canLoadMore: canLoadMore,
-            },
-        };
-    };
-}
-*/
 
 export default ArticlesListBlock;

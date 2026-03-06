@@ -19,9 +19,12 @@ const nextConfig: NextConfig = {
     cacheComponents: true,
     cacheLife: {
         default: {
-            stale: 30, // almost no stale on clients
-            revalidate: 3600, // 1 hour
-            expire: 31536000, // 365 days
+            // Client cache for 30 seconds
+            stale: 30,
+            // Revalidate server cache every hour
+            revalidate: 3600,
+            // Expire cache after 365 days
+            expire: 31536000,
         },
     },
     experimental: {

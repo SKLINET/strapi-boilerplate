@@ -69,17 +69,18 @@ export default abstract class AbstractStrapiProvider<
     abstract getId(): string;
 
     /**
-     * Get one item by id or filter
-     * @param options
-     * @param locale
-     * @param preview
-     */
+     * @description Get one item by id or filter
+     * @param {string | Omit<TFind['variables'], 'locale'>} options - Options to filter the item
+     * @param {string} locale - Locale to get the item for
+     * @param {EnvironmentOptions} cacheOptions - Cache options
+     * @returns {Promise<TItem | null>} The item
+     **/
     async findOne(
         options: string | Omit<TFind['variables'], 'locale'>,
         locale?: string,
         cacheOptions?: EnvironmentOptions,
     ): Promise<TItem | null> {
-        const { preview, tags } = cacheOptions || {};
+        const { preview, tags, withoutCache } = cacheOptions || {};
 
         if (!this.node) return null;
 
@@ -108,7 +109,11 @@ export default abstract class AbstractStrapiProvider<
                       };
         }
 
-        const result = await fetchQuery<TOne>(this.getEnvironment({ preview, tags }), this.node, variables).toPromise();
+        const result = await fetchQuery<TOne>(
+            this.getEnvironment({ preview, tags, withoutCache }),
+            this.node,
+            variables,
+        ).toPromise();
         return await this.transformResult(result, locale);
     }
 
@@ -125,6 +130,13 @@ export default abstract class AbstractStrapiProvider<
         }
     }
 
+    /**
+     * @description Find items by querying Strapi
+     * @param {Omit<TFind['variables'], 'locale'> & { locale?: string; filters?: Record<string, any> }} options - Options to filter the items
+     * @param {EnvironmentOptions} cacheOptions - Cache options
+     * @param {boolean} index - Whether to index the items
+     * @returns {Promise<FindResponse<TItems['data']>>} The items
+     **/
     async find(
         options: Omit<TFind['variables'], 'locale'> & { locale?: string; filters?: Record<string, any> },
         cacheOptions: EnvironmentOptions = {},

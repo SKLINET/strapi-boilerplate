@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import config from '../../../../sklinet.config.json';
 import { ContextProps, IContext } from '../../../types/base/page';
 import { getLocale } from '../getLocal';
@@ -15,15 +14,11 @@ import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
 /**
- * Static function to fetch app and page data for a given route.
- * Loads page content, blocks props, and app context (menu, web setting, etc.) from CMS.
- * Does not support dynamic request behavior (e.g. searchParams); use only with resolved,
- * static context (e.g. slug from generateStaticParams or from route params).
- *
- * @param context - Resolved page context (params.slug, etc.)
- * @returns Page response with app data, page, blocksPropsMap, and locale
- */
-export const getStaticProps = cache(async ({ params: { slug } }: ContextProps): Promise<IPageResponse> => {
+ * @description Get static props for a page by slug (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IPageResponse>} Page response
+ **/
+export const getStaticProps = async ({ params: { slug } }: ContextProps): Promise<IPageResponse> => {
     const { isEnabled } = await draftMode();
     const {
         tz,
@@ -49,6 +44,7 @@ export const getStaticProps = cache(async ({ params: { slug } }: ContextProps): 
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
+
     const renamedBlocks: Record<string, any> = {};
 
     for (const key in blocks) {
@@ -89,4 +85,4 @@ export const getStaticProps = cache(async ({ params: { slug } }: ContextProps): 
 
         return notFoundPage.props;
     }
-});
+};

@@ -1,10 +1,9 @@
-'use cache';
-
 import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { VideoBlock_content$data } from './__generated__/VideoBlock_content.graphql';
 import { Video } from '../../components/blocks/Video/Video';
 import { IApp } from '../../../types/base/app';
+import { SearchParamsProps } from '../../../types/base/page';
 
 export interface VideoBlockStaticProps {}
 
@@ -16,6 +15,7 @@ export interface VideoBlockProps extends VideoBlockStaticProps {
     blocksData: Omit<VideoBlockContent, ' $fragmentType'>;
     app: IApp;
     className?: string;
+    searchParams?: Promise<SearchParamsProps> | undefined;
 }
 
 graphql`
@@ -28,6 +28,6 @@ graphql`
     }
 `;
 
-const VideoBlock = async (props: VideoBlockProps): Promise<ReactElement> => <Video {...props} />;
+const VideoBlock = async ({ searchParams, ...props }: VideoBlockProps): Promise<ReactElement> => <Video {...props} />;
 
 export default VideoBlock;

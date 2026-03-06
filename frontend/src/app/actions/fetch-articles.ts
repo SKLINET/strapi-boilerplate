@@ -16,6 +16,7 @@ export const fetchArticles = async (
         categoryId?: string | null;
     },
     app: { locale?: IApp['locale']; preview: IApp['preview']; webSetting: IApp['webSetting'] },
+    tags: string[] = ['article'],
 ): Promise<{
     articles: IArticle[];
     canLoadMore: boolean;
@@ -42,7 +43,7 @@ export const fetchArticles = async (
             start: (page - 1) * limit,
             limit: limit,
         },
-        { preview: app.preview, tags: ['article'] },
+        { preview: app.preview, tags },
     )) as unknown as FindResponse<Omit<articleFragment$data, ' $fragmentType'>[]>;
 
     return {

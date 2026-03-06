@@ -6,7 +6,6 @@ import { IApp } from '../../types/base/app';
 import { pageInfoLog } from '../../utils/base/pageInfoLog';
 import providers from '../../providers';
 import blocks from '../blocks/server';
-import { cacheTag } from '../../utils/cache/tag';
 import { GtmProvider } from '../components/base/GtmProvider/GtmProvider';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
@@ -14,9 +13,13 @@ import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar
 import { DataModal } from '../components/base/DataModal/DataModal';
 import { GridHelper } from '../components/base/GridHelper/GridHelper';
 import Script from 'next/script';
-import { cache } from 'react';
+import { cachePage } from '../../utils/cache/page';
+import { cacheLife } from 'next/cache';
 
-// Generate static params for ISR
+/**
+ * @description Pregenerate pages for ISR
+ * @returns {Promise<{ slug: string[] }[]>} All static paths for each locale
+ **/
 export async function generateStaticParams() {
     const { locales } = config.i18n;
     const allParams: { slug: string[] }[] = [];
@@ -119,7 +122,12 @@ export async function generateStaticParams() {
     return uniqueParams;
 }
 
-const cachedStaticProps = cache(async (context: ContextProps): Promise<IApp> => {
+/**
+ * @description Get page data for a given slug and cache it (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IApp>} App data
+ **/
+const cachedStaticProps = async (context: ContextProps): Promise<IApp> => {
     'use cache';
     const data = await getStaticProps(context);
 
@@ -129,17 +137,16 @@ const cachedStaticProps = cache(async (context: ContextProps): Promise<IApp> => 
         context,
     };
 
-    // Set cache tags for global content (AppDataQuery and AppRedirectQuery)
-    cacheTag('menu');
-    cacheTag('redirect');
-    cacheTag('system-resource');
-    cacheTag('web-setting');
-
-    // Set cache tags for page content (AppPageQuery)
-    if (app.page?.documentId) cacheTag('page', app.page.documentId);
+    if (!app?.page || app.page.url === '404' || app.page.url === '500') {
+        // Cache error page for 1 minute (min. by NextJS documentation)
+        cacheLife('minutes');
+    } else {
+        // Cache page by tags based on the page content
+        cachePage(app);
+    }
 
     return app;
-});
+};
 
 export const Page = async ({ params, searchParams }: ServerContextProps) => {
     const context = {

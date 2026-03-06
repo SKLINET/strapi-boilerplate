@@ -1,6 +1,7 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
+import dayjs from 'dayjs';
 
 const getDataID = (fieldValue: any, typeName: string) => {
     const { documentId, id, locale, publishedAt, updatedAt } = fieldValue;
@@ -71,6 +72,25 @@ export const createRelayEnvironment = (records: RecordMap, options: EnvironmentO
                 if (options?.tags?.length) {
                     (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags: options.tags };
                 }
+
+                // Cache system logs for fetch to Strapi
+                if (process.env.NEXT_PUBLIC_ALLOW_FETCH_LOGS === '1') {
+                    const queryName =
+                        operation.text?.match(/^(?:query|mutation|subscription)\s+(\w+)/)?.[1] ?? 'unknown';
+
+                    console.log('');
+                    console.log(
+                        dayjs().format('YYYY-MM-DD HH:mm:ss') + ' [LOG] Fetch to Strapi:',
+                        queryName,
+                        'with options:',
+                    );
+                    console.log({
+                        cache: fetchOptions.cache,
+                        next: fetchOptions.next || {},
+                    });
+                    console.log('');
+                }
+
                 const req = await fetch(process.env.API_ENDPOINT, fetchOptions);
                 const data = await req.json();
                 return data;

@@ -1,6 +1,5 @@
 'use server';
 
-import getPublicationState from '../../utils/base/getPublicationState';
 import { IApp } from '../../types/base/app';
 import { IArticleCategory } from '../../types/article';
 import providers from '../../providers';
@@ -16,6 +15,7 @@ export const fetchArticleCategories = async (
         skipCategoryId?: string | null;
     },
     app: { locale?: IApp['locale']; preview: IApp['preview'] },
+    tags: string[] = ['article-category'],
 ): Promise<{
     categories: IArticleCategory[];
     canLoadMore: boolean;
@@ -38,7 +38,7 @@ export const fetchArticleCategories = async (
             start: (page - 1) * limit,
             limit: limit,
         },
-        { preview: app.preview, tags: ['article-category'] },
+        { preview: app.preview, tags },
     )) as unknown as FindResponse<Omit<articleCategoryFragment$data, ' $fragmentType'>[]>;
 
     return {
