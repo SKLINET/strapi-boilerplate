@@ -18,6 +18,10 @@ Instructions for AI coding agents working on this project. See [agents.md](https
 
 **To run an informational code audit/checklist review**, use the **`audit`** Agent Skill (`.cursor/skills/audit/`). This skill is configured for explicit invocation only (`disable-model-invocation: true`), so trigger it manually via `/audit`.
 
+## Cache components system
+
+For cache behavior, revalidation, and block data loading patterns, see [.cursor/cache/CACHE-COMPONENTS.md](.cursor/cache/CACHE-COMPONENTS.md) (AI agents) and [CACHE-COMPONENTS.md](CACHE-COMPONENTS.md) (full manual).
+
 ## Setup
 
 - **Install:** `npm install` (run from `frontend/`)
@@ -58,10 +62,6 @@ Next.js 15, React 19, Relay 16, Tailwind 3, SCSS Modules. Forms: react-hook-form
 
 - react-hook-form + yupResolver + Yup for validation
 - Use `getSystemResource()` for error messages and labels
-
-## Cache Components (Next.js 16)
-
-The project uses **Cache Components** with cache tags for granular invalidation. For context see **[CACHE-SYSTEM.md](CACHE-SYSTEM.md)** – two-layer caching (`'use cache'` + fetch tags), TCacheTags, provider interface, invalidation via `api/revalidate` and elastic webhooks.
 
 ## Elasticsearch reindexing
 
