@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react';
+import { Fragment, ReactElement } from 'react';
 import styles from './RichText.module.scss';
 import clsx from 'clsx';
 import parse from 'html-react-parser';

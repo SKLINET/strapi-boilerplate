@@ -1,6 +1,6 @@
 import Provider from './Provider';
 import { Environment, GraphQLTaggedNode } from 'relay-runtime';
-import { createRelayEnvironment } from '../../relay/createRelayEnvironment';
+import { createRelayEnvironment, EnvironmentOptions } from '../../relay/createRelayEnvironment';
 import { OperationType } from 'relay-runtime/lib/util/RelayRuntimeTypes';
 import { fetchQuery, commitMutation } from 'relay-runtime';
 import { sleep } from '../../utils/sleep';
@@ -25,8 +25,8 @@ export default abstract class AbstractStrapiProvider<
     TItems extends { data: ReadonlyArray<StrapiRecord | null> } = { data: ReadonlyArray<StrapiRecord | null> },
 > implements Provider {
     protected environment: Record<string, Environment> = {
-        preview: createRelayEnvironment({}, '', true),
-        production: createRelayEnvironment({}, '', false),
+        preview: createRelayEnvironment({}, { preview: true }),
+        production: createRelayEnvironment({}, { preview: false }),
     };
 
     protected node: GraphQLTaggedNode | undefined;
@@ -53,12 +53,8 @@ export default abstract class AbstractStrapiProvider<
         this.indexNode = indexNode;
     }
 
-    protected getEnvironment(preview = false, withoutCache = false): Environment {
-        if (preview) {
-            return createRelayEnvironment({}, '', true, withoutCache);
-        } else {
-            return createRelayEnvironment({}, '', false, withoutCache);
-        }
+    protected getEnvironment(options: EnvironmentOptions): Environment {
+        return createRelayEnvironment({}, options);
     }
 
     public isLocalizable(): boolean {
@@ -73,16 +69,19 @@ export default abstract class AbstractStrapiProvider<
     abstract getId(): string;
 
     /**
-     * Get one item by id or filter
-     * @param options
-     * @param locale
-     * @param preview
-     */
+     * @description Get one item by id or filter
+     * @param {string | Omit<TFind['variables'], 'locale'>} options - Options to filter the item
+     * @param {string} locale - Locale to get the item for
+     * @param {EnvironmentOptions} cacheOptions - Cache options
+     * @returns {Promise<TItem | null>} The item
+     **/
     async findOne(
         options: string | Omit<TFind['variables'], 'locale'>,
         locale?: string,
-        preview = false,
+        cacheOptions?: EnvironmentOptions,
     ): Promise<TItem | null> {
+        const { preview, tags, withoutCache } = cacheOptions || {};
+
         if (!this.node) return null;
 
         let variables: TOne['variables'] = {};
@@ -110,7 +109,11 @@ export default abstract class AbstractStrapiProvider<
                       };
         }
 
-        const result = await fetchQuery<TOne>(this.getEnvironment(preview), this.node, variables).toPromise();
+        const result = await fetchQuery<TOne>(
+            this.getEnvironment({ preview, tags, withoutCache }),
+            this.node,
+            variables,
+        ).toPromise();
         return await this.transformResult(result, locale);
     }
 
@@ -127,12 +130,20 @@ export default abstract class AbstractStrapiProvider<
         }
     }
 
+    /**
+     * @description Find items by querying Strapi
+     * @param {Omit<TFind['variables'], 'locale'> & { locale?: string; filters?: Record<string, any> }} options - Options to filter the items
+     * @param {EnvironmentOptions} cacheOptions - Cache options
+     * @param {boolean} index - Whether to index the items
+     * @returns {Promise<FindResponse<TItems['data']>>} The items
+     **/
     async find(
         options: Omit<TFind['variables'], 'locale'> & { locale?: string; filters?: Record<string, any> },
-        preview = false,
+        cacheOptions: EnvironmentOptions = {},
         index = false,
-        withoutCache = false,
     ): Promise<FindResponse<TItems['data']>> {
+        const { preview, withoutCache, tags } = cacheOptions;
+
         const variables = {
             ...options,
             limit: Math.min(options.limit || STRAPI_MAX_LIMIT, STRAPI_MAX_LIMIT),
@@ -140,7 +151,7 @@ export default abstract class AbstractStrapiProvider<
             filters: options.filters
                 ? { ...this.getFilterParams(options?.status || ''), ...options.filters }
                 : this.getFilterParams(options?.status || ''),
-            status: getPublicationState(preview),
+            status: getPublicationState(cacheOptions.preview),
         };
 
         const node: GraphQLTaggedNode = index && this.indexNode ? this.indexNode : this.findNode;
@@ -149,8 +160,8 @@ export default abstract class AbstractStrapiProvider<
             variables.locale = options.locale;
         }
         const environment = index
-            ? this.getEnvironment(true, withoutCache)
-            : this.getEnvironment(preview, withoutCache);
+            ? this.getEnvironment({ preview: true, withoutCache, tags })
+            : this.getEnvironment({ preview, withoutCache, tags });
 
         const result = await fetchQuery<TFind>(environment, node, variables)
             .toPromise()
@@ -312,7 +323,7 @@ export default abstract class AbstractStrapiProvider<
         variables: any,
     ): Promise<Record<string, any>> {
         return new Promise(async (resolve, reject) => {
-            await commitMutation<any>(this.getEnvironment(false), {
+            await commitMutation<any>(this.getEnvironment({ preview: false }), {
                 mutation: this.createNode as GraphQLTaggedNode,
                 variables,
                 onCompleted(response) {
@@ -334,7 +345,7 @@ export default abstract class AbstractStrapiProvider<
         variables: any,
     ): Promise<Record<string, any>> {
         return new Promise(async (resolve, reject) => {
-            await commitMutation<any>(this.getEnvironment(false), {
+            await commitMutation<any>(this.getEnvironment({ preview: false }), {
                 mutation: this.updateNode as GraphQLTaggedNode,
                 variables,
                 onCompleted(response) {

@@ -1,6 +1,7 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { RecordMap } from 'relay-runtime/lib/store/RelayStoreTypes';
 import { Logger } from '../../services';
+import dayjs from 'dayjs';
 
 const getDataID = (fieldValue: any, typeName: string) => {
     const { documentId, id, locale, publishedAt, updatedAt } = fieldValue;
@@ -34,12 +35,14 @@ class CustomRecordSource extends RecordSource {
     }
 }
 
-export const createRelayEnvironment = (
-    records: RecordMap,
-    token?: string,
-    preview = false,
-    withoutCache = false,
-): Environment =>
+export interface EnvironmentOptions {
+    token?: string;
+    preview?: boolean;
+    withoutCache?: boolean;
+    tags?: string[];
+}
+
+export const createRelayEnvironment = (records: RecordMap, options: EnvironmentOptions = {}): Environment =>
     new Environment({
         network: Network.create(async (operation, variables) => {
             if (!process.env.API_ENDPOINT) {
@@ -52,7 +55,7 @@ export const createRelayEnvironment = (
                     'Content-Type': 'application/json',
                 };
 
-                const appToken = token || process.env.API_TOKEN;
+                const appToken = options?.token || process.env.API_TOKEN;
                 if (appToken) {
                     headersObj.Authorization = `Bearer ${appToken}`;
                 }
@@ -60,12 +63,35 @@ export const createRelayEnvironment = (
                 //     vars.publicationState = getPublicationState(true);
                 // }
 
-                const req = await fetch(process.env.API_ENDPOINT, {
+                const fetchOptions: RequestInit = {
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    cache: withoutCache ? 'no-store' : 'force-cache',
-                });
+                    cache: options?.withoutCache ? 'no-store' : 'force-cache',
+                };
+                if (options?.tags?.length) {
+                    (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags: options.tags };
+                }
+
+                // Cache system logs for fetch to Strapi
+                if (process.env.NEXT_PUBLIC_ALLOW_FETCH_LOGS === '1') {
+                    const queryName =
+                        operation.text?.match(/^(?:query|mutation|subscription)\s+(\w+)/)?.[1] ?? 'unknown';
+
+                    console.log('');
+                    console.log(
+                        dayjs().format('YYYY-MM-DD HH:mm:ss') + ' [LOG] Fetch to Strapi:',
+                        queryName,
+                        'with options:',
+                    );
+                    console.log({
+                        cache: fetchOptions.cache,
+                        next: fetchOptions.next || {},
+                    });
+                    console.log('');
+                }
+
+                const req = await fetch(process.env.API_ENDPOINT, fetchOptions);
                 const data = await req.json();
                 return data;
             } catch (e) {

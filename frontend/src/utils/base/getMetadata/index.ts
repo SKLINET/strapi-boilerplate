@@ -8,7 +8,12 @@ import { IMetadataResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
-export const getMetadata = async ({ params: { slug }, searchParams }: ContextProps): Promise<IMetadataResponse> => {
+/**
+ * @description Get metadata for a page by slug (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IMetadataResponse>} Metadata response
+ **/
+export const getMetadata = async ({ params: { slug } }: ContextProps): Promise<IMetadataResponse> => {
     const { isEnabled } = await draftMode();
     const {
         i18n: { defaultLocale, locales },
@@ -21,7 +26,6 @@ export const getMetadata = async ({ params: { slug }, searchParams }: ContextPro
         locales,
         defaultLocale,
         params: { slug: getNormalizedSlug(slug) },
-        searchParams: searchParams,
         preview: isEnabled,
         draftMode: isEnabled,
     };
@@ -58,7 +62,6 @@ export const getMetadata = async ({ params: { slug }, searchParams }: ContextPro
                 params: { slug: ['404'] },
                 preview: isEnabled,
                 draftMode: isEnabled,
-                searchParams,
             },
             providers,
             renamedBlocks,

@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import dayjs from 'dayjs';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';
@@ -61,7 +60,7 @@ export async function GET(req: Request, context: Record<string, any>) {
                 }
             }
         } else {
-            const ws = await providers.webSetting.get(locale, false);
+            const ws = await providers.webSetting.get(locale, { preview: false });
             const pageKey = toCamel(p.getApiKey()) + 'DetailPage';
             const webSetting: any = ws;
             if (webSetting && Object.prototype.hasOwnProperty.call(webSetting, pageKey)) {

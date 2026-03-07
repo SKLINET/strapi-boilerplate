@@ -1,6 +1,5 @@
 'use server';
 
-import getPublicationState from '../../utils/base/getPublicationState';
 import { IApp } from '../../types/base/app';
 import { IArticle } from '../../types/article';
 import providers from '../../providers';
@@ -17,6 +16,7 @@ export const fetchArticles = async (
         categoryId?: string | null;
     },
     app: { locale?: IApp['locale']; preview: IApp['preview']; webSetting: IApp['webSetting'] },
+    tags: string[] = ['article'],
 ): Promise<{
     articles: IArticle[];
     canLoadMore: boolean;
@@ -36,14 +36,15 @@ export const fetchArticles = async (
         filters.category = { documentId: { eq: categoryId } };
     }
 
-    const { data, count } = (await providers.article.find({
-        locale: app.locale,
-        filters: filters,
-        start: (page - 1) * limit,
-        limit: limit,
-        preview: app.preview,
-        status: getPublicationState(app.preview),
-    })) as unknown as FindResponse<Omit<articleFragment$data, ' $fragmentType'>[]>;
+    const { data, count } = (await providers.article.find(
+        {
+            locale: app.locale,
+            filters: filters,
+            start: (page - 1) * limit,
+            limit: limit,
+        },
+        { preview: app.preview, tags },
+    )) as unknown as FindResponse<Omit<articleFragment$data, ' $fragmentType'>[]>;
 
     return {
         articles: getArticleListType(data, app as IApp),

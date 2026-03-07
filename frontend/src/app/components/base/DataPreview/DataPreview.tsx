@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import styles from './DataPreview.module.scss';
 import clsx from 'clsx';
 import { Heading } from '../../primitives/Heading/Heading';

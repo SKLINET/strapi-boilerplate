@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { GoogleTagManager } from '@next/third-parties/google';
 

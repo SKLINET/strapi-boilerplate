@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import dynamic from 'next/dynamic';
 import { ParallaxProps } from 'react-scroll-parallax';
 

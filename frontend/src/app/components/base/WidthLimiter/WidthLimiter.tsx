@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import styles from './WidthLimiter.module.scss';
 import clsx from 'clsx';
 

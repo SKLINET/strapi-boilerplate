@@ -18,6 +18,10 @@ Instructions for AI coding agents working on this project. See [agents.md](https
 
 **To run an informational code audit/checklist review**, use the **`audit`** Agent Skill (`.cursor/skills/audit/`). This skill is configured for explicit invocation only (`disable-model-invocation: true`), so trigger it manually via `/audit`.
 
+## Cache components system
+
+For cache behavior, revalidation, and block data loading patterns, see [.cursor/cache/CACHE-COMPONENTS.md](.cursor/cache/CACHE-COMPONENTS.md) (AI agents) and [CACHE-COMPONENTS.md](CACHE-COMPONENTS.md) (full manual).
+
 ## Setup
 
 - **Install:** `npm install` (run from `frontend/`)

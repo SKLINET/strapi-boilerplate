@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { graphql } from 'relay-runtime';
 import { BaseBlockProps, StaticBlockContext } from '../../../types/base/block';
 import { ArticleDetailBlock_content$data } from './__generated__/ArticleDetailBlock_content.graphql';
@@ -7,6 +7,7 @@ import { articleDetailFragment$data } from '../../../relay/__generated__/article
 import { ArticleDetail } from '../../components/blocks/ArticleDetail/ArticleDetail';
 import getPublicationState from '../../../utils/base/getPublicationState';
 import { getSlug } from '../../../utils/base/getSlug';
+import { SearchParamsProps } from '../../../types/base/page';
 
 export interface ArticleDetailBlockStaticProps {
     item: Omit<articleDetailFragment$data, ' $fragmentType'>;
@@ -20,6 +21,7 @@ export interface ArticleDetailBlockProps extends ArticleDetailBlockStaticProps {
     blocksData: Omit<ArticleDetailBlockContent, ' $fragmentType'>;
     app: IApp;
     className?: string;
+    searchParams?: Promise<SearchParamsProps> | undefined;
 }
 
 graphql`
@@ -28,7 +30,9 @@ graphql`
     }
 `;
 
-const ArticleDetailBlock = (props: ArticleDetailBlockProps): ReactElement => <ArticleDetail {...props} />;
+const ArticleDetailBlock = async ({ searchParams, ...props }: ArticleDetailBlockProps): Promise<ReactElement> => (
+    <ArticleDetail {...props} />
+);
 
 if (typeof window === 'undefined') {
     ArticleDetailBlock.getStaticProps = async ({
@@ -57,13 +61,14 @@ if (typeof window === 'undefined') {
             status: getPublicationState(preview),
         };
 
-        const item = await provider.findOne(variables, locale, preview);
+        const item = await provider.findOne(variables, locale, { preview, withoutCache: true });
         if (!item?.documentId) {
             const err = new Error('Article not found') as Error & { code: string };
             err.code = 'ENOENT';
             throw err;
         }
-        return { item: item || {} };
+
+        return { item: item };
     };
 }
 

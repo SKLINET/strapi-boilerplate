@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useRef, useState, useEffect } from 'react';
+import { ReactElement, useRef, useState, useEffect } from 'react';
 import styles from './Category.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../../primitives/Icon/Icon';
@@ -33,7 +33,9 @@ const Category = ({ title, data }: CategoryProps): ReactElement => {
     return (
         <div className={clsx(styles.wrapper, isOpen && styles.isOpen)}>
             <button type="button" onClick={() => setIsOpen(!isOpen)} className={styles.topbar}>
-                <span className={styles.label}>{title}</span>
+                <span className={styles.label} suppressHydrationWarning>
+                    {title}
+                </span>
                 <Icon name="plus" className={styles.icon} />
             </button>
             <div className={styles.content} ref={ref}>

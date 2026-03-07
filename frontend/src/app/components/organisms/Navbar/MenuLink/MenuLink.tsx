@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './MenuLink.module.scss';
 import clsx from 'clsx';
 import { IMenuItem } from '../../../../../types/menu';

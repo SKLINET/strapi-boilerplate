@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense, cache } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { ServerContextProps, ParamsProps } from '../../types/base/page';
+import { ServerContextProps, ParamsProps, ContextProps, IMetadataResponse } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
 import { getMetadata } from '../../utils/base/getMetadata';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
@@ -23,19 +23,35 @@ const primary = Poppins({
     display: 'swap',
 });
 
-export function generateViewport({ params, searchParams }: ServerContextProps): Viewport {
+export async function generateViewport({ params }: ServerContextProps): Promise<Viewport> {
+    'use cache';
     return {
         themeColor: 'white',
         width: 'device-width',
         initialScale: 1,
+        maximumScale: 1,
     };
 }
 
+/**
+ * @description Get metadata for a given context and cache it (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IMetadataResponse>} Metadata data
+ **/
+const cachedMatadataProps = async (context: ContextProps): Promise<IMetadataResponse> => {
+    'use cache';
+    const data = await getMetadata(context);
+
+    return data;
+};
+
 export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
+    'use cache';
     const context = {
         params: await params,
         searchParams: await searchParams,
     };
+
     const pathname =
         '/' +
         (context.params.slug || [])
@@ -45,7 +61,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
             })
             .join('/');
 
-    const data = await getMetadata(context);
+    const data = await cachedMatadataProps(context);
 
     if (data?.redirect?.to) {
         if ((data?.redirect as any)?.permanent) {
@@ -132,7 +148,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
                   follow: true,
                   nocache: true,
               },
-        metadataBase: new URL(String(process.env.NEXT_PUBLIC_BASE_PATH)),
+        metadataBase: String(process.env.NEXT_PUBLIC_BASE_PATH),
         generator: metaData.siteName,
         applicationName: metaData.siteName,
         openGraph: {
@@ -174,6 +190,7 @@ interface RootLayoutProps {
 }
 
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
+    'use cache';
     const { slug } = await params;
 
     return (
@@ -198,7 +215,9 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
                 */}
             </head>
             <body>
-                <TopLoader />
+                <Suspense fallback={null}>
+                    <TopLoader />
+                </Suspense>
                 <Providers>{children}</Providers>
             </body>
         </html>

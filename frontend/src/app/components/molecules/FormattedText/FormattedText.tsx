@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './FormattedText.module.scss';
 import clsx from 'clsx';
 import { RichText } from '../../primitives/RichText/RichText';

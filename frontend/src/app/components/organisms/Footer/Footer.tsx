@@ -1,4 +1,6 @@
-import React, { ReactElement } from 'react';
+'use cache';
+
+import { ReactElement } from 'react';
 import styles from './Footer.module.scss';
 import { IApp } from '../../../../types/base/app';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
@@ -7,7 +9,7 @@ interface FooterProps {
     app: IApp;
 }
 
-const Footer = ({ app }: FooterProps): ReactElement => {
+const Footer = async ({ app }: FooterProps): Promise<ReactElement> => {
     const currentYear = new Date().getFullYear().toString();
 
     return (

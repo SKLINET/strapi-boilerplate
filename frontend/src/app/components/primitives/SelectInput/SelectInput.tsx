@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState, useRef, useEffect } from 'react';
+import { ReactElement, useState, useRef, useEffect } from 'react';
 import styles from './SelectInput.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';

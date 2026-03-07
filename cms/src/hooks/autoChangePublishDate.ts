@@ -11,7 +11,10 @@ export const autoChangePublishDate = (strapi: Core.Strapi) => {
     }
 
     if (['create', 'update'].includes(context.action)) {
-      (context.params as any).data.publishDate = new Date().toISOString();
+      const data = (context.params as any).data;
+      if (!data.publishDate) {
+        data.publishDate = new Date().toISOString();
+      }
     }
 
     return next();

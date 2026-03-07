@@ -1,7 +1,8 @@
-import { NextRequest } from 'next/server';
+import { connection, NextRequest } from 'next/server';
 import AbstractElasticProvider, { IndexingResultItem } from '../../../../lib/provider/AbstractElasticProvider';
 import { findProvider } from '../../../../utils/base/findProvider';
 import AbstractSingletonElasticProvider from '../../../../lib/provider/AbstractSingletonElasticProvider';
+import { revalidateTag, TCacheTags } from '../../../../utils/cache/tag';
 import config from '../../../../../sklinet.config.json';
 
 interface IHandle {
@@ -192,6 +193,15 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
                 `Final indexing results: ${finalIndexedItems.length} items (deduplicated from ${indexedItems.length})`,
             );
 
+            // 5) Revalidate Next.js cache for affected content types
+            const uniqueTypes = [...new Set(finalIndexedItems.map((item) => item.type))];
+            for (const cacheTag of uniqueTypes) {
+                revalidateTag(cacheTag as TCacheTags);
+                for (const item of finalIndexedItems.filter((i) => i.type === cacheTag)) {
+                    revalidateTag(cacheTag as TCacheTags, item.id);
+                }
+            }
+
             return new Response(
                 JSON.stringify({
                     status: 'OK',
@@ -238,6 +248,8 @@ const handle = async ({ typeId, id, action, simple, entry }: IHandle) => {
 };
 
 export async function GET(request: NextRequest) {
+    await connection();
+
     const typeId = String(request.nextUrl.searchParams.get('typeId'));
     const id = String(request.nextUrl.searchParams.get('id'));
     const action = request.nextUrl.searchParams.get('action') || 'update';
@@ -253,6 +265,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    await connection();
+
     const { model, entry, event } = await request.json();
 
     const typeId: string = model;

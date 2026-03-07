@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import styles from './PreviewToolbar.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../primitives/Icon/Icon';
@@ -43,7 +43,7 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
     return (
         <section className={styles.toolbar}>
             <section className={styles.toolbar__left}>
-                <Link href={adminPath} className={styles.admin}>
+                <Link href={adminPath} alt="Go to Strapi admin" className={styles.admin}>
                     <Icon name="sklinet-round" className={styles.logo} />
                 </Link>
                 <span className={styles.admin__text}>náhled</span>
@@ -54,13 +54,13 @@ const PreviewToolbar = ({ app: { item, page, locale } }: PreviewToolbarProps): R
                     <span className={clsx(styles.indicator, isPublished && styles.indicator__active)} />
                     <span className={styles.title}>{title}</span>
                 </div>
-                <Link className={styles.edit} href={editUrl}>
+                <Link className={styles.edit} href={editUrl} alt="Edit in Strapi">
                     <Icon className={styles.edit__icon} name="edit" />
                     <span className={styles.link__title}>Upravit</span>
                 </Link>
             </section>
 
-            <Link href="/api/exit-preview" className={styles.toolbar__right}>
+            <Link href="/api/exit-preview" alt="Exit preview" className={styles.toolbar__right}>
                 <Icon name="exit" className={styles.exit} />
                 <span className={styles.link__title}>ukončit náhled</span>
             </Link>

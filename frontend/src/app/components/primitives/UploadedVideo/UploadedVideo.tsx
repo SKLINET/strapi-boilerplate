@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useEffect, useRef } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
 import styles from './UploadedVideo.module.scss';
 import clsx from 'clsx';
 import { IUploadedVideo } from '../../../../types/video';

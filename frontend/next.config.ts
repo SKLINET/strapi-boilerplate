@@ -14,15 +14,23 @@ config({
 });
 
 const nextConfig: NextConfig = {
-    reactCompiler: true,
     images: sklinetConfig.images as ImageConfigComplete,
-    experimental: {
-        staleTimes: {
-            dynamic: 30, // Manually set dynamic route staleTime to 30 seconds
-            static: 180,
+    // Next.js 16 Cache Components
+    cacheComponents: true,
+    cacheLife: {
+        default: {
+            // Client cache for 30 seconds
+            stale: 30,
+            // Revalidate server cache every hour
+            revalidate: 3600,
+            // Expire cache after 365 days
+            expire: 31536000,
         },
+    },
+    experimental: {
         inlineCss: true,
     },
+    reactCompiler: true,
     compiler: {
         relay: {
             src: './',

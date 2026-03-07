@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useRef, useEffect } from 'react';
+import { ReactElement, useRef, useEffect } from 'react';
 import styles from './BigNumber.module.scss';
 import clsx from 'clsx';
 import { Text } from '../../primitives/Text/Text';

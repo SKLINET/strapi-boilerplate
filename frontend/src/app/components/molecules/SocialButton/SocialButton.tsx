@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styles from './SocialButton.module.scss';
 import clsx from 'clsx';
 import { Link } from '../../primitives/Link/Link';

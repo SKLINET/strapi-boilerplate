@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import styles from './GridHelper.module.scss';
 import clsx from 'clsx';
 import { Icon } from '../../primitives/Icon/Icon';

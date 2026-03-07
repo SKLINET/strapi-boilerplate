@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Loader from 'nextjs-toploader';
 import NProgress from 'nprogress';

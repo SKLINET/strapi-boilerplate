@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, ReactNode, useRef } from 'react';
+import { ReactElement, ReactNode, useRef } from 'react';
 import styles from './FadeIn.module.scss';
 import clsx from 'clsx';
 import { useIsVisible } from '../../../../utils/hooks/useIsVisible';

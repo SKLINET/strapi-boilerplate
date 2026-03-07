@@ -51,16 +51,24 @@ class PageProvider extends AbstractStrapiProvider<
         const pattern = getPagePattern(slug);
         const status = getPublicationState(preview);
 
-        const appData = await fetchQuery<appDataQuery>(this.getEnvironment(preview), AppDataQuery, {
-            locale,
-            status,
-        }).toPromise();
+        const appData = await fetchQuery<appDataQuery>(
+            this.getEnvironment({ preview, withoutCache: true }),
+            AppDataQuery,
+            {
+                locale,
+                status,
+            },
+        ).toPromise();
 
-        const appPage = await fetchQuery<appPageQuery>(this.getEnvironment(preview), AppPageQuery, {
-            locale,
-            pattern,
-            status,
-        }).toPromise();
+        const appPage = await fetchQuery<appPageQuery>(
+            this.getEnvironment({ preview, withoutCache: true }),
+            AppPageQuery,
+            {
+                locale,
+                pattern,
+                status,
+            },
+        ).toPromise();
 
         return {
             ...appData,
@@ -80,7 +88,7 @@ class PageProvider extends AbstractStrapiProvider<
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
 
         const metadataGlobal = await fetchQuery<metadataGlobalQuery>(
-            this.getEnvironment(preview),
+            this.getEnvironment({ preview, tags: ['web-setting'] }),
             MetadataGlobalQuery,
             {
                 locale,
@@ -88,16 +96,24 @@ class PageProvider extends AbstractStrapiProvider<
             },
         ).toPromise();
 
-        const appRedirect = await fetchQuery<appRedirectQuery>(this.getEnvironment(preview), AppRedirectQuery, {
-            redirect,
-            status,
-        }).toPromise();
+        const appRedirect = await fetchQuery<appRedirectQuery>(
+            this.getEnvironment({ preview, tags: ['redirect'] }),
+            AppRedirectQuery,
+            {
+                redirect,
+                status,
+            },
+        ).toPromise();
 
-        const metadataPage = await fetchQuery<metadataPageQuery>(this.getEnvironment(preview), MetadataPageQuery, {
-            locale,
-            pattern,
-            status,
-        }).toPromise();
+        const metadataPage = await fetchQuery<metadataPageQuery>(
+            this.getEnvironment({ preview, tags: ['page'] }),
+            MetadataPageQuery,
+            {
+                locale,
+                pattern,
+                status,
+            },
+        ).toPromise();
 
         return {
             ...metadataGlobal,
@@ -108,6 +124,12 @@ class PageProvider extends AbstractStrapiProvider<
         };
     }
 
+    /**
+     * @description Get static paths for all pages
+     * @param {string} locale - Locale to get the paths for
+     * @param {Record<string, BlockType>} blocks - Blocks to get the paths for
+     * @returns {Promise<GetStaticPathsResult['paths']>} The static paths
+     **/
     async getStaticPaths(
         locale: string | undefined,
         blocks?: Record<string, BlockType>,
@@ -116,11 +138,15 @@ class PageProvider extends AbstractStrapiProvider<
         let cnt = -1;
         let done = 0;
         do {
-            const data = await fetchQuery<s.pageStaticPathsQuery>(this.getEnvironment(), pageStaticPathsQuery, {
-                locale: locale,
-                start: 0,
-                limit: 100,
-            }).toPromise();
+            const data = await fetchQuery<s.pageStaticPathsQuery>(
+                this.getEnvironment({ preview: false, tags: ['page'] }),
+                pageStaticPathsQuery,
+                {
+                    locale: locale,
+                    start: 0,
+                    limit: 100,
+                },
+            ).toPromise();
 
             if (data) {
                 if (cnt === -1) {

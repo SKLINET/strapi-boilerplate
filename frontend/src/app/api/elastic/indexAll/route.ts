@@ -1,9 +1,12 @@
-import { NextRequest } from 'next/server';
+import { connection, NextRequest } from 'next/server';
 import AbstractElasticProvider from '../../../../lib/provider/AbstractElasticProvider';
 import { findProvider } from '../../../../utils/base/findProvider';
 import AbstractSingletonElasticProvider from '../../../../lib/provider/AbstractSingletonElasticProvider';
+import { revalidateAll } from '../../../../utils/cache/path';
 
 export async function GET(request: NextRequest) {
+    await connection();
+
     const typeId = String(request.nextUrl.searchParams.get('typeId'));
     const prod = Boolean(request.nextUrl.searchParams.get('prod')) || false;
 
@@ -13,6 +16,7 @@ export async function GET(request: NextRequest) {
         try {
             if (provider && provider instanceof AbstractElasticProvider) {
                 await provider.deleteAndIndexAll(prod);
+                revalidateAll();
 
                 return new Response(
                     JSON.stringify({
@@ -27,6 +31,7 @@ export async function GET(request: NextRequest) {
                 );
             } else if (provider && provider instanceof AbstractSingletonElasticProvider) {
                 await provider.index(false, prod);
+                revalidateAll();
 
                 return new Response(
                     JSON.stringify({

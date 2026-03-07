@@ -230,8 +230,7 @@ export default abstract class AbstractElasticProvider<
                 locale: String(locale),
                 status: getPublicationState(preview),
             } as any,
-            preview,
-            true,
+            { preview, withoutCache: true },
             true,
         );
         const item =

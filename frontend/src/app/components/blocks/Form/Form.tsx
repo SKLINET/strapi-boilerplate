@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement, Suspense } from 'react';
 import styles from './Form.module.scss';
 import { FormBlockProps } from '../../../blocks/FormBlock/FormBlock';
 import { FadeIn } from '../../base/FadeIn/FadeIn';
@@ -6,7 +6,10 @@ import { getSendEmailType } from '../../../../utils/strapi/getSendEmailType';
 import { FormBuilder } from '../../organisms/FormBuilder/FormBuilder';
 import { getBuiltFormType } from '../../../../utils/strapi/getBuiltFormType';
 
-const Form = ({ blocksData: { form, sendEmail, anchor }, app }: FormBlockProps): ReactElement => {
+const Form = async ({
+    blocksData: { form, sendEmail, anchor },
+    app,
+}: Omit<FormBlockProps, 'searchParams'>): Promise<ReactElement> => {
     const _form = getBuiltFormType(form);
     const _sendEmail = getSendEmailType(sendEmail);
 
@@ -18,7 +21,9 @@ const Form = ({ blocksData: { form, sendEmail, anchor }, app }: FormBlockProps):
             spaceing={{ x: 'base', y: { top: 'large', bottom: 'large' } }}
             anchor={anchor}
         >
-            <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
+            <Suspense fallback={<div>Loading form...</div>}>
+                <FormBuilder data={_form} app={app} sendEmail={_sendEmail} />
+            </Suspense>
         </FadeIn>
     );
 };

@@ -1,16 +1,23 @@
+import { ReactElement } from 'react';
 import { IApp } from '../../../../types/base/app';
 import { BlocksPropsMap } from '../../../../types/base/block';
+import { SearchParamsProps } from '../../../../types/base/page';
 import { getBlockType } from '../../../../utils/base/getBlockType/getBlockType';
-import { loadBlock } from '../../../blocks/client';
+import blocks from '../../../blocks/server';
 
 interface BlocksProps {
     blocksData: readonly any[] | null;
     initialProps?: BlocksPropsMap;
     app: IApp;
-    isTemplateBlock?: boolean;
+    searchParams?: Promise<SearchParamsProps> | undefined;
 }
 
-export const Blocks = async ({ blocksData, initialProps = {}, app, isTemplateBlock = false }: BlocksProps) => (
+export const Blocks = async ({
+    blocksData,
+    initialProps = {},
+    app,
+    searchParams,
+}: BlocksProps): Promise<ReactElement> => (
     <>
         {blocksData?.map(async (block, i) => {
             const blockName = getBlockType(block?.__typename)?.replace('ComponentBlock', '');
@@ -25,12 +32,12 @@ export const Blocks = async ({ blocksData, initialProps = {}, app, isTemplateBlo
                         blocksData={block.template?.content || []}
                         initialProps={initialProps[block.id]?.data || {}}
                         app={app}
-                        isTemplateBlock
+                        searchParams={searchParams}
                     />
                 );
             }
 
-            const BlockComponent = (await loadBlock(blockName, isTemplateBlock))?.default || null;
+            const BlockComponent = blocks[blockName as keyof typeof blocks];
 
             if (!BlockComponent) {
                 return null;
@@ -41,7 +48,15 @@ export const Blocks = async ({ blocksData, initialProps = {}, app, isTemplateBlo
                     ? initialProps[block.id]
                     : undefined;
 
-            return <BlockComponent blocksData={block} {...(blockInitialProps as any)} app={app} key={`block_${i}`} />;
+            return (
+                <BlockComponent
+                    blocksData={block}
+                    {...(blockInitialProps as any)}
+                    app={app}
+                    key={`block_${i}`}
+                    searchParams={searchParams}
+                />
+            );
         })}
     </>
 );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import styles from './LanguageSelector.module.scss';
 import clsx from 'clsx';
 import { IApp } from '../../../../types/base/app';

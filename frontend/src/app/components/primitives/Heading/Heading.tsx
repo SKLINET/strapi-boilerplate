@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import styles from './Heading.module.scss';
 import clsx from 'clsx';
 import { nbsp } from '../../../../utils/nbsp';

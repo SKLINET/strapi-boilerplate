@@ -13,7 +13,12 @@ import { IPageResponse } from '../../../types/base/page';
 import { getNormalizedSlug } from '../getSlug';
 import { draftMode } from 'next/headers';
 
-export const getStaticProps = async ({ params: { slug }, searchParams }: ContextProps): Promise<IPageResponse> => {
+/**
+ * @description Get static props for a page by slug (search params are ignored)
+ * @param {ContextProps} context - Context props
+ * @returns {Promise<IPageResponse>} Page response
+ **/
+export const getStaticProps = async ({ params: { slug } }: ContextProps): Promise<IPageResponse> => {
     const { isEnabled } = await draftMode();
     const {
         tz,
@@ -27,7 +32,6 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
         locales,
         defaultLocale,
         params: { slug: getNormalizedSlug(slug) },
-        searchParams: searchParams,
         preview: isEnabled,
         draftMode: isEnabled,
     };
@@ -40,6 +44,7 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
         dayjs.locale(locale);
     }
     dayjs.tz.setDefault(tz);
+
     const renamedBlocks: Record<string, any> = {};
 
     for (const key in blocks) {
@@ -72,7 +77,6 @@ export const getStaticProps = async ({ params: { slug }, searchParams }: Context
                 params: { slug: ['404'] },
                 preview: isEnabled,
                 draftMode: isEnabled,
-                searchParams,
             },
             providers,
             renamedBlocks,

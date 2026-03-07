@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import styles from './Button.module.scss';
 import clsx from 'clsx';
 import { Link } from '../Link/Link';

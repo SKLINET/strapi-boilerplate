@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { connection, NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
+    await connection();
+
     try {
         const fileUrl = req.nextUrl.searchParams.get('fileUrl');
         const filename = req.nextUrl.searchParams.get('filename');
