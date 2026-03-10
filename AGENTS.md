@@ -2,6 +2,13 @@
 
 Instructions for AI coding agents working on this project. See [agents.md](https://agents.md/).
 
+## AI Skills Architecture: Baseline vs Recipes
+
+This project uses a dual-layer AI strategy:
+1. **Baseline Skills (The Constitution):** Located in `.cursor/skills/personal/`. These are global, behavioral rules (e.g. `01_Workflow_Analyze_And_Plan.md`, `02_Skill_Styling_And_UI.md`). They teach the AI **HOW** to think, format code (e.g., no arbitrary pixels, strict Tailwind breakpoints), handle Relay data, and manage Git. The AI must follow these rules at all times.
+2. **Action Skills (The Recipes):** Located in `.cursor/skills/`. These are specific, step-by-step generators (like `create-block` or `create-complementary`). They teach the AI **WHAT** steps to execute in what order.
+
+When using an Action Skill (like `/create-block`), the AI combines the recipe with the Baseline rules to produce perfectly formatted, company-standard code.
 ## Creating a new block
 
 **To add a new page block**, use the **`create-block`** Agent Skill (`.cursor/skills/create-block/`). The skill automates the full flow: it guides through block name, display name, icon, location, getStaticProps, then creates the CMS schema, frontend block wrapper, UI skeleton, server/client registration, and template updates. Trigger with phrases like "create block", "add block", "vytvoř blok", or type `/create-block` in Agent chat.
