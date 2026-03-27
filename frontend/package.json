@@ -41,7 +41,7 @@
         "negotiator": "^0.6.3",
         "next": "^16.1.6",
         "nextjs-toploader": "^1.6.12",
-        "nodemailer": "^7.0.13",
+        "nodemailer": "^8.0.4",
         "nprogress": "^0.2.0",
         "react": "^19.2.3",
         "react-countup": "^6.5.3",
