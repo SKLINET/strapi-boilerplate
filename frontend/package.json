@@ -39,7 +39,7 @@
         "http-proxy": "^1.18.1",
         "iron-session": "^8.0.1",
         "negotiator": "^0.6.3",
-        "next": "^16.1.6",
+        "next": "^16.2.3",
         "nextjs-toploader": "^1.6.12",
         "nodemailer": "^7.0.13",
         "nprogress": "^0.2.0",
