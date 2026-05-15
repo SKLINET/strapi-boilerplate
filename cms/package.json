@@ -26,7 +26,7 @@
     "@strapi/plugin-seo": "^2.0.9",
     "@strapi/plugin-users-permissions": "^5.38.0",
     "@strapi/provider-upload-cloudinary": "^5.38.0",
-    "@strapi/strapi": "^5.38.0",
+    "@strapi/strapi": "^5.43.0",
     "mysql2": "3.9.4",
     "patch-package": "^8.0.0",
     "pg": "^8.13.0",
