@@ -1,5 +1,5 @@
 import { ParsedUrlQuery } from 'querystring';
-import { getBlockType } from '../getBlockType/getBlockType';
+import { getBlockType } from '../getBlockType';
 import { Providers } from '../../../types/base/providers';
 import { BlockType } from '../../../types/base/block';
 

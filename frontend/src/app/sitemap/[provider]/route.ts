@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache';
 import dayjs from 'dayjs';
 import config from '../../../../sklinet.config.json';
 import providers from '../../../providers';
@@ -5,6 +6,7 @@ import blocks from '../../blocks/server';
 import { StaticPathsParams } from '../../../types/base/staticPathsParams';
 import { findProvider } from '../../../utils/base/findProvider';
 import { toCamel } from '../../../utils/base/toCamel';
+import { cacheTag, isKnownCacheType } from '../../../utils/cache/tag';
 
 interface SitemapItem {
     url: string;
@@ -12,20 +14,35 @@ interface SitemapItem {
     priority: number;
 }
 
-export async function GET(req: Request, context: Record<string, any>) {
-    const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
-    const { provider } = await context.params;
-    const { i18n } = config;
-    if (typeof provider !== 'string') {
-        return new Response('Sitemap not found', { status: 404 });
+/**
+ * @description Enumerate the sitemap entries for one provider. Walking every static path is the most
+ * expensive read in the app, so it gets its own cache entry keyed by provider; publishing a record of
+ * that type — or a page, since detail URLs are built from the page tree — expires it.
+ * @param {string} providerKey - Provider api key, without the `.xml` suffix
+ * @param {string} basepath - Public base URL
+ * @returns {Promise<SitemapItem[]>} Sitemap entries across all locales
+ **/
+async function getCachedProviderSitemapItems(providerKey: string, basepath: string): Promise<SitemapItem[]> {
+    'use cache';
+    cacheLife('default');
+
+    for (const locale of config.i18n.locales) {
+        if (isKnownCacheType(providerKey)) {
+            cacheTag(providerKey, { locale });
+        }
+        cacheTag('page', { locale });
+        if (providerKey !== 'page') {
+            // Detail URLs come from the web settings, so a settings change moves them all.
+            cacheTag('web-setting', { locale });
+        }
     }
 
-    const p = findProvider(provider.replace('.xml', ''));
-
+    const p = findProvider(providerKey);
     if (!p || !p.getStaticPaths) {
-        return new Response('Sitemap not found', { status: 404 });
+        return [];
     }
 
+    const { i18n } = config;
     const items: SitemapItem[] = [];
 
     for (const locale of i18n.locales) {
@@ -82,7 +99,28 @@ export async function GET(req: Request, context: Record<string, any>) {
             }
         }
     }
+
+    return items;
+}
+
+export async function GET(req: Request, context: Record<string, any>) {
+    const basepath = process.env.NEXT_PUBLIC_BASE_PATH;
+    const { provider } = await context.params;
+
+    if (typeof provider !== 'string') {
+        return new Response('Sitemap not found', { status: 404 });
+    }
+
+    const providerKey = provider.replace('.xml', '');
+    const p = findProvider(providerKey);
+
+    if (!p || !p.getStaticPaths) {
+        return new Response('Sitemap not found', { status: 404 });
+    }
+
+    const items = await getCachedProviderSitemapItems(providerKey, basepath || '');
     const lastmod = dayjs().startOf('day').format();
+
     return new Response(
         `<?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

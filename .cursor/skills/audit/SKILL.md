@@ -73,7 +73,7 @@ This file defines checklist points for code audits. During the audit, verify eac
 - [ ] Use `Omit<FragmentType$data, ' $fragmentType'>` to create type without fragment type
 - [ ] No manually defined types for Strapi data in `utils/strapi` functions
 - [ ] No `any` usage for Strapi data (use generated types)
-- [ ] See examples: `utils/strapi/getImageType.ts`, `utils/strapi/getAddressingType.ts`
+- [ ] See examples: `utils/strapi/getImageType/index.ts`, `utils/strapi/getButtonType/index.ts`
 
 ## Providers Audit
 
@@ -122,15 +122,17 @@ This file defines checklist points for code audits. During the audit, verify eac
     - Good example: add value to Tailwind config and use `@apply rounded-custom;` or use CSS property: `.container { border-radius: 0.5625rem; }`
   - If suitable standard Tailwind utility classes exist, use them (e.g. `rounded-lg` instead of `rounded-[0.5625rem]` when close enough)
 
-### Tailwind 3 Specific
-- [ ] Tailwind 3 uses JavaScript/TypeScript configuration file (`tailwind.config.ts`)
-- [ ] Global styles use `@tailwind` directives (`@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`)
-- [ ] PostCSS configuration uses standard Tailwind PostCSS plugin
+### Tailwind 4 Specific
+- [ ] No `tailwind.config.ts` is introduced — Tailwind 4 is configured in CSS
+- [ ] Global styles enter through `src/styles/global.css` (`@import 'tailwindcss';`), not `@tailwind` directives
+- [ ] Design tokens are added to `@theme inline` in `src/styles/theme.css` rather than used as arbitrary values
+- [ ] Custom utilities are declared with `@utility`
+- [ ] PostCSS uses the `@tailwindcss/postcss` plugin
 
 ### Responsive Design
 - [ ] Tailwind responsive prefixes use custom breakpoints: `mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`
 - [ ] Mobile-first approach
-- [ ] Breakpoints are defined in `tailwind.config.ts`
+- [ ] Breakpoints are declared as `@custom-variant` in `src/styles/layout.css`
 
 ---
 

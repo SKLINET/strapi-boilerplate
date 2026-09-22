@@ -241,7 +241,8 @@ Needs app:     No
 Files to create/update:
 - cms/src/components/complementary/donation-form.json (new, with 4 fields)
 - frontend/src/types/donationForm.ts (new)
-- frontend/src/utils/strapi/getDonationFormType.ts (new)
+- frontend/src/utils/strapi/getDonationFormType/index.ts (new)
+- frontend/src/utils/strapi/getDonationFormType/index.test.ts (new)
 - frontend/src/relay/app.ts (update - add fragment)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -339,9 +340,13 @@ displayName = "ImageGallery"                  // Auto-generated from kebab-case 
 See [references/file-templates.md](references/file-templates.md) for template.
 
 ### 3.3 Transformer Utility
-**File:** `frontend/src/utils/strapi/{transformerName}.ts`
+**Files:**
+- `frontend/src/utils/strapi/{transformerName}/index.ts`
+- `frontend/src/utils/strapi/{transformerName}/index.test.ts`
 
-See [references/file-templates.md](references/file-templates.md) for templates (with and without app context).
+Each transformer is its own folder with `index.ts` and its test beside it — never a loose `.ts` file. Note the import depth that follows from it: `'../../../relay/…'`, `'../../../types/…'`, and a sibling transformer as `'../getPageType'`.
+
+See [references/file-templates.md](references/file-templates.md) for templates (with and without app context, plus the test).
 
 **Important:** Always include both functions:
 - `{transformerName}()` - Transform single item
@@ -460,9 +465,10 @@ graphql`
   - Empty attributes if no fields defined
   - Full field definitions if fields were defined
 - [ ] Type interface (`frontend/src/types/{componentNameCamel}.ts`)
-- [ ] Transformer utility with list helper (`frontend/src/utils/strapi/{transformerName}.ts`)
+- [ ] Transformer utility with list helper (`frontend/src/utils/strapi/{transformerName}/index.ts`)
   - Single item transformer: `{transformerName}()`
   - Array transformer: `{transformerName}List()`
+- [ ] Transformer test (`frontend/src/utils/strapi/{transformerName}/index.test.ts`)
 - [ ] `relay/app.ts` updated (add fragment)
 - [ ] TODO list shown to user (varies based on whether fields were defined)
 

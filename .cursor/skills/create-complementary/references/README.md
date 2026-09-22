@@ -71,9 +71,10 @@ This agent helps you create new complementary components in the Strapi boilerpla
 6. **After confirmation, agent creates:**
    - CMS schema: `cms/src/components/complementary/{name}.json`
    - TypeScript type: `frontend/src/types/{name}.ts`
-   - Transformer with list helper: `frontend/src/utils/strapi/get{Name}Type.ts`
+   - Transformer with list helper: `frontend/src/utils/strapi/get{Name}Type/index.ts`
      - `get{Name}Type()` - Transform single item
      - `get{Name}TypeList()` - Transform array (for repeatable components)
+   - Transformer test: `frontend/src/utils/strapi/get{Name}Type/index.test.ts`
    - GraphQL fragment in `frontend/src/relay/app.ts`
 
 7. **Agent shows TODO list** with next steps
@@ -91,7 +92,7 @@ Empty schema ready for fields to be added in CMS Content-Type Builder.
 Type interface for TypeScript type safety.
 
 ### 3. Transformer Utility
-**Location:** `frontend/src/utils/strapi/get{ComponentName}Type.ts`
+**Location:** `frontend/src/utils/strapi/get{ComponentName}Type/index.ts`
 
 Function that transforms GraphQL fragment data to TypeScript interface.
 
@@ -165,10 +166,10 @@ export interface ITestimonial {
 }
 ```
 
-**Transformer:** `frontend/src/utils/strapi/getTestimonialType.ts`
+**Transformer:** `frontend/src/utils/strapi/getTestimonialType/index.ts`
 ```typescript
-import { appTestimonialFragment$data } from '../../relay/__generated__/appTestimonialFragment.graphql';
-import { ITestimonial } from '../../types/testimonial';
+import { appTestimonialFragment$data } from '../../../relay/__generated__/appTestimonialFragment.graphql';
+import { ITestimonial } from '../../../types/testimonial';
 
 type Fragment = Omit<appTestimonialFragment$data, ' $fragmentType'>;
 

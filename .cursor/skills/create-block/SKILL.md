@@ -172,8 +172,12 @@ See [references/file-templates.md](references/file-templates.md) for template. U
 **Files:**
 - `frontend/src/app/components/blocks/{componentName}/{componentName}.tsx`
 - `frontend/src/app/components/blocks/{componentName}/{componentName}.module.scss`
+- `frontend/src/app/components/blocks/{componentName}/{componentName}.test.tsx`
+- `frontend/src/app/components/blocks/{componentName}/{componentName}.stories.tsx`
 
 See [references/file-templates.md](references/file-templates.md) for templates.
+
+Every component in this repo has a test next to it — a new block is not an exception. The test starts as a smoke test (the component renders with an empty fixture) and grows once the UI is implemented. The story reuses the shared `app` stub from `src/storybook/fixtures.ts` rather than hand-rolled props.
 
 ### 3.5 Update server.ts
 **File:** `frontend/src/app/blocks/server.ts`
@@ -248,7 +252,11 @@ Example: `case 'ComponentBlockScoreDashboardBlock': return 'ScoreDashboardBlock'
 
 7. [ ] Add styles to {componentName}.module.scss
 
-8. [ ] Test on page
+8. [ ] Flesh out {componentName}.test.tsx and {componentName}.stories.tsx
+   cd frontend && npm run test
+   cd frontend && npm run storybook
+
+9. [ ] Test on page
 ```
 
 ---
@@ -269,6 +277,8 @@ Example: `case 'ComponentBlockScoreDashboardBlock': return 'ScoreDashboardBlock'
 - [ ] Block wrapper (`frontend/src/app/blocks/{blockNamePascal}/`)
 - [ ] UI component (`frontend/src/app/components/blocks/{componentName}/`)
 - [ ] SCSS file
+- [ ] Test file (`{componentName}.test.tsx`) — every component in the repo has one
+- [ ] Story file (`{componentName}.stories.tsx`) — reuse fixtures from `src/storybook/fixtures.ts`
 - [ ] `server.ts` updated (import, fragment, export)
 - [ ] `client.ts` updated (switch case) ← CRITICAL!
 - [ ] If Location includes **template (content)**: `TemplateBlock.ts` updated — add `...{blockNamePascal}_content @relay(mask: false)` inside `content { }` in fragment (alphabetically)

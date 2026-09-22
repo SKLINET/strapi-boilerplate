@@ -1,5 +1,3 @@
-'use cache';
-
 import { ReactElement, Suspense } from 'react';
 import styles from './Navbar.module.scss';
 import { IApp } from '../../../../types/base/app';

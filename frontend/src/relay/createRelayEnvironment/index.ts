@@ -63,15 +63,18 @@ export const createRelayEnvironment = (records: RecordMap, options: EnvironmentO
                 //     vars.publicationState = getPublicationState(true);
                 // }
 
-                const fetchOptions: RequestInit = {
+                // Fetch-level caching is opt-in and only ever tagged. A `force-cache` query with no
+                // tags could not be invalidated by a CMS publish, so it would serve stale data until
+                // the process restarted; the `'use cache'` entry above the caller is the real cache.
+                const tags = options?.tags?.filter(Boolean) ?? [];
+                const useTaggedCache = !options?.withoutCache && tags.length > 0;
+
+                const fetchOptions: RequestInit & { next?: { tags: string[] } } = {
                     body: JSON.stringify({ query: operation.text, variables: vars }),
                     headers: headersObj,
                     method: 'POST',
-                    cache: options?.withoutCache ? 'no-store' : 'force-cache',
+                    ...(useTaggedCache ? { next: { tags } } : { cache: 'no-store' as RequestCache }),
                 };
-                if (options?.tags?.length) {
-                    (fetchOptions as RequestInit & { next?: { tags: string[] } }).next = { tags: options.tags };
-                }
 
                 // Cache system logs for fetch to Strapi
                 if (process.env.NEXT_PUBLIC_ALLOW_FETCH_LOGS === '1') {

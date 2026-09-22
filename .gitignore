@@ -27,3 +27,10 @@ frontend/public/images/backgrounds/.DS_Store
 cms/src/extensions/documentation/documentation/1.0.0/full_documentation.json
 cms/.history
 frontend/.history
+
+# tests
+frontend/coverage
+
+# storybook
+frontend/*storybook.log
+frontend/storybook-static

@@ -76,13 +76,14 @@
   "exclude": [
     ".next",
     ".now",
-    "node_modules"
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "node_modules/@types/jest/index.d.ts",
     "src/types/react-responsive.carousel/index.d.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
