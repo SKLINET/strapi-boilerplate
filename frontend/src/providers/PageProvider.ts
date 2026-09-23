@@ -22,6 +22,8 @@ import { getStaticParamsFromBlocks } from '../utils/base/getStaticParamsFromBloc
 import { MetadataGlobalQuery, MetadataPageQuery } from '../relay/metadata';
 import { metadataGlobalQuery } from '../relay/__generated__/metadataGlobalQuery.graphql';
 import { metadataPageQuery } from '../relay/__generated__/metadataPageQuery.graphql';
+import { cachedAppRedirect, cachedGlobalMetadata } from '../utils/cache/cachedGlobalMetadata';
+import config from '../../sklinet.config.json';
 
 class PageProvider extends AbstractStrapiProvider<
     d.pageDetailQuery,
@@ -87,33 +89,35 @@ class PageProvider extends AbstractStrapiProvider<
         const status = getPublicationState(preview);
         const redirect = '/' + (Array.isArray(slug) ? slug : []).join('/');
 
-        const metadataGlobal = await fetchQuery<metadataGlobalQuery>(
-            this.getEnvironment({ preview, tags: ['web-setting'] }),
-            MetadataGlobalQuery,
-            {
-                locale,
-                status,
-            },
-        ).toPromise();
-
-        const appRedirect = await fetchQuery<appRedirectQuery>(
-            this.getEnvironment({ preview, tags: ['redirect'] }),
-            AppRedirectQuery,
-            {
-                redirect,
-                status,
-            },
-        ).toPromise();
-
-        const metadataPage = await fetchQuery<metadataPageQuery>(
-            this.getEnvironment({ preview, tags: ['page'] }),
-            MetadataPageQuery,
-            {
-                locale,
-                pattern,
-                status,
-            },
-        ).toPromise();
+        // Global settings and the redirect table are the same for every URL, so they live in their
+        // own `'use cache'` entries rather than being refetched per page. Preview must never write
+        // to those entries, so it queries Strapi directly instead.
+        const [metadataGlobal, appRedirect, metadataPage] = await Promise.all([
+            preview
+                ? fetchQuery<metadataGlobalQuery>(this.getEnvironment({ preview }), MetadataGlobalQuery, {
+                      locale,
+                      status,
+                  }).toPromise()
+                : cachedGlobalMetadata(locale || config.i18n.defaultLocale),
+            preview
+                ? fetchQuery<appRedirectQuery>(this.getEnvironment({ preview }), AppRedirectQuery, {
+                      redirect,
+                      status,
+                  }).toPromise()
+                : cachedAppRedirect(redirect),
+            fetchQuery<metadataPageQuery>(
+                // No `tags`: the page metadata is already covered by the `cachedMetadata` entry
+                // above it, and a second cache layer with its own lifetime would rebuild that entry
+                // from stale data after a revalidation.
+                this.getEnvironment({ preview, withoutCache: true }),
+                MetadataPageQuery,
+                {
+                    locale,
+                    pattern,
+                    status,
+                },
+            ).toPromise(),
+        ]);
 
         return {
             ...metadataGlobal,
@@ -139,7 +143,9 @@ class PageProvider extends AbstractStrapiProvider<
         let done = 0;
         do {
             const data = await fetchQuery<s.pageStaticPathsQuery>(
-                this.getEnvironment({ preview: false, tags: ['page'] }),
+                // Build-time path enumeration; the fetch cache would only hold a snapshot nothing
+                // reads again, so it stays out of it.
+                this.getEnvironment({ preview: false, withoutCache: true }),
                 pageStaticPathsQuery,
                 {
                     locale: locale,
@@ -154,12 +160,12 @@ class PageProvider extends AbstractStrapiProvider<
                 }
                 // loop over all pages
                 for (const page of data?.pages || []) {
-                    if (String(page?.url) === 'homepage' && page?.sitemap) {
+                    if (String(page?.url).startsWith('homepage')) {
                         items.push({
                             params: {
                                 slug: [],
                                 sitemap: {
-                                    enabled: page?.sitemap?.enabled || false,
+                                    enabled: page?.sitemap?.enabled || true,
                                     changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                     priority: page?.sitemap?.priority || 0.3,
                                 },
@@ -205,7 +211,7 @@ class PageProvider extends AbstractStrapiProvider<
                                         slug: pathParts,
                                         locale,
                                         sitemap: {
-                                            enabled: page?.sitemap?.enabled || false,
+                                            enabled: page?.sitemap?.enabled || true,
                                             changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                             priority: page?.sitemap?.priority || 0.3,
                                         },
@@ -220,7 +226,7 @@ class PageProvider extends AbstractStrapiProvider<
                                     slug: pathParts,
                                     locale,
                                     sitemap: {
-                                        enabled: page?.sitemap?.enabled || false,
+                                        enabled: page?.sitemap?.enabled || true,
                                         changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                         priority: page?.sitemap?.priority || 0.3,
                                     },

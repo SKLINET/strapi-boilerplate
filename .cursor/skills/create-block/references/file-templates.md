@@ -126,6 +126,85 @@ export { {componentName} };
 
 ---
 
+## Test Template
+
+**File:** `frontend/src/app/components/blocks/{componentName}/{componentName}.test.tsx`
+
+Runs under Vitest's `jsdom` project (every `*.test.tsx` does). Starts as a smoke test and grows with the UI. A block component is a server component, so call it and render what it returns.
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react';
+import { app } from '../../../../storybook/fixtures';
+
+import { {componentName} } from './{componentName}';
+
+describe('{componentName} block', () => {
+    it('should render with an empty fixture', async () => {
+        const el = await {componentName}({
+            blocksData: { id: '1', anchor: null } as never,
+            app,
+        });
+        const { container } = render(el);
+
+        expect(container).not.toBeEmptyDOMElement();
+    });
+});
+```
+
+Mock child molecules with `vi.mock` when they pull in browser-only dependencies:
+
+```typescript
+vi.mock('../../molecules/Video/Video', () => ({
+    Video: () => <div>molecule-video</div>,
+}));
+```
+
+---
+
+## Story Template
+
+**File:** `frontend/src/app/components/blocks/{componentName}/{componentName}.stories.tsx`
+
+Reuse the shared `app` stub and sample records from `src/storybook/fixtures.ts` — components take the whole `app` object, so stories need a realistic one.
+
+```typescript
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { {componentName} } from './{componentName}';
+import { app } from '../../../../storybook/fixtures';
+
+const meta: Meta<typeof {componentName}> = {
+    title: 'Blocks/{componentName}',
+    component: {componentName},
+    parameters: {
+        layout: 'fullscreen',
+        // Block components are async server components.
+        react: { rsc: true },
+    },
+    args: {
+        app,
+        blocksData: {
+            id: 'block-{blockNameKebab}',
+            __typename: '{typeName}',
+            anchor: null,
+        } as never,
+    },
+    argTypes: {
+        blocksData: { control: false, table: { disable: true } },
+        app: { control: false, table: { disable: true } },
+        className: { control: false, table: { disable: true } },
+    },
+};
+
+export default meta;
+
+type Story = StoryObj<typeof {componentName}>;
+
+export const Default: Story = {};
+```
+
+---
+
 ## CMS Schema Template
 
 **File:** `cms/src/components/block/{blockNameKebab}.json`

@@ -17,14 +17,19 @@ const nextConfig: NextConfig = {
     images: sklinetConfig.images as ImageConfigComplete,
     // Next.js 16 Cache Components
     cacheComponents: true,
+    // CMS content, settings, redirects and sitemaps all run on `default`. Freshness comes from the
+    // tags burned by the Strapi webhook after a publish; the TTL is only a backstop, which is why it
+    // is long. `external` stays short for third-party data that has no webhook to invalidate it.
     cacheLife: {
         default: {
-            // Client cache for 30 seconds
-            stale: 30,
-            // Revalidate server cache every hour
-            revalidate: 3600,
-            // Expire cache after 365 days
-            expire: 31536000,
+            stale: 86400, // 1 day
+            revalidate: 2592000, // 30 days
+            expire: 31536000, // 1 year
+        },
+        external: {
+            stale: 300, // 5 minutes
+            revalidate: 1800, // 30 minutes
+            expire: 3600, // 1 hour
         },
     },
     experimental: {
@@ -49,9 +54,15 @@ const nextConfig: NextConfig = {
     // Add @reference directive for CSS modules to access Tailwind utilities
     sassOptions: {
         additionalData: `@reference "${path.resolve('./src/styles/global.css')}";`,
+        // @import stays until mixins move to @use; @use cannot follow injected @reference
+        silenceDeprecations: ['import'],
     },
     async rewrites() {
         return [
+            {
+                source: '/:file(favicon\\.ico|favicon\\.svg|favicon-96x96\\.png|apple-touch-icon\\.png|site\\.webmanifest|web-app-manifest-(?:192x192|512x512)\\.png)',
+                destination: '/favicon/:file',
+            },
             {
                 source: '/sitemap.xml',
                 destination: '/sitemap',

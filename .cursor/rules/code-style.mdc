@@ -22,7 +22,7 @@ alwaysApply: true
 
 ## Naming Conventions
 - **Components**: PascalCase (e.g., `UserProfile.tsx`)
-- **Files**: Match component name or use kebab-case for utilities
+- **Files**: Match component name; a utility is a camelCase folder holding `index.ts`
 - **Functions/Variables**: camelCase
 - **Constants**: UPPER_SNAKE_CASE
 - **Types/Interfaces**: PascalCase with descriptive names
@@ -32,3 +32,12 @@ alwaysApply: true
 - Export default for main component
 - Named exports for utilities and types
 - Group related files in folders (e.g., `components/organisms/`, `components/molecules/`)
+- **A component is a folder**: `Component/Component.tsx`, `Component.module.scss`, `Component.test.tsx`, and `Component.stories.tsx` where it makes sense
+- **A utility is a folder**: `utils/<name>/index.ts` with `index.test.ts` beside it — never a loose `utils/<name>.ts`. The same holds under `utils/base/`, `utils/cache/`, `utils/strapi/`, `utils/hooks/` and `lib/blocks/`
+- Shared types stay flat files in `src/types/`
+
+## Tests
+- Every new component and utility ships with a test next to it
+- `*.test.ts` runs in Vitest's `node` project, `*.test.tsx` in the `jsdom` one
+- Components render through `@testing-library/react`; prefer role/text queries over test ids
+- Run with `npm run test` from `frontend/`

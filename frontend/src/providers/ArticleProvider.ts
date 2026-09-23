@@ -43,7 +43,7 @@ class ArticleProvider extends AbstractStrapiProvider<any, any> {
                         slug: [article?.slug || ''],
                         locale,
                         sitemap: {
-                            enabled: article?.sitemap?.enabled || false,
+                            enabled: article?.sitemap?.enabled || true,
                             changeFrequency: article?.sitemap?.changeFrequency || 'monthly',
                             priority: article?.sitemap?.priority || 0.3,
                         },

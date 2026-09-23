@@ -5,7 +5,12 @@ import { usePathname } from 'next/navigation';
 import { GoogleTagManager } from '@next/third-parties/google';
 
 interface GtmProviderProps {
-    children: ReactNode;
+    /**
+     * Optional. The page tree does not need to sit inside this component — it renders a fragment —
+     * and keeping it out lets the caller put the scripts behind `WithoutScripts` and a <Suspense>
+     * boundary of their own, instead of postponing the whole page.
+     */
+    children?: ReactNode;
     gtmCode: string | true | null;
 }
 

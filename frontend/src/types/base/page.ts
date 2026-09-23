@@ -29,11 +29,20 @@ export interface ParamsProps {
     slug: string[] | undefined;
 }
 
+/**
+ * Why a lookup ended up on the CMS 404 page. Carried through the cache boundary so `generateMetadata`
+ * can noindex the URL without re-deriving it from `page.url === '404'`, which cannot tell a rewritten
+ * unknown URL apart from the 404 page requested by its own slug.
+ */
+export type NotFoundReason = 'missing-page' | 'missing-item' | 'empty-block';
+
 export type IPageResponse = appDataQuery$data &
     appPageQuery$data & {
         locale: string;
         blocksPropsMap: BlocksPropsMap;
         preview: boolean;
+        isNotFound?: boolean;
+        notFoundReason?: NotFoundReason;
     };
 
 export type IMetadataResponse = metadataGlobalQuery$data &
@@ -42,6 +51,8 @@ export type IMetadataResponse = metadataGlobalQuery$data &
         locale: string;
         blocksPropsMap: BlocksPropsMap;
         preview: boolean;
+        isNotFound?: boolean;
+        notFoundReason?: NotFoundReason;
     };
 
 export type IContext = GetStaticPropsContext<ParsedUrlQuery>;

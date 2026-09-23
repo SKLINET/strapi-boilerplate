@@ -30,18 +30,38 @@ async function baseProxy(req: NextRequest) {
     const redirects = await handleRedirects(req);
     if (redirects) return redirects;
 
+    // The memory report exposes process internals, so it keeps Basic Auth even on public production
+    // where the rest of the site skips it.
+    const isMemoryRoute = url.pathname.startsWith('/api/memory');
+
+    // `?withoutScripts=1` becomes a request header so `WithoutScripts` can drop every third-party
+    // script server-side. It travels as a header rather than a search param because the components
+    // that need it sit deep in the tree, and search params would otherwise have to be threaded
+    // through — and read — above the block Suspense boundaries.
+    const withoutScripts = url.searchParams.get('withoutScripts') === '1';
+
+    const requestHeaders = new Headers(req.headers);
+    if (withoutScripts) {
+        requestHeaders.set('x-without-scripts', '1');
+    }
+
+    const requestInit = { request: { headers: requestHeaders } };
+
     // --------- SKIP BASIC AUTH ---------
     if (
         url.searchParams.get('disable-auth') ||
         url.pathname.includes('/fonts/') ||
         url.pathname.includes('/pdf') ||
+        url.pathname.includes('/_next/') ||
+        (url.pathname.includes('/api/') && !isMemoryRoute) ||
         (url.host.includes('localhost') && process.env.NODE_ENV !== 'production') ||
         (process.env.NODE_ENV === 'production' &&
+            !isMemoryRoute &&
             !process?.env?.BASE_PATH?.includes('symbio.agency') &&
             !process?.env?.BASE_PATH?.includes('beneficiotest.cz') &&
             !process?.env?.BASE_PATH?.includes('sklinet.com'))
     ) {
-        return NextResponse.next();
+        return NextResponse.next(requestInit);
     }
 
     // --------- BASIC AUTH ---------
@@ -53,13 +73,13 @@ async function baseProxy(req: NextRequest) {
 
         const [user, pwd] = decoded.split(':');
         if (isValidAuth(user, pwd)) {
-            return NextResponse.next();
+            return NextResponse.next(requestInit);
         }
     }
 
     url.pathname = '/api/auth';
 
-    return NextResponse.rewrite(url);
+    return NextResponse.rewrite(url, requestInit);
 }
 
 export const proxy = croctConfig.appId ? withCroct(baseProxy) : baseProxy;
@@ -74,5 +94,7 @@ export const config = {
          * - favicon.ico (favicon file)
          */
         '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        // Opted back in: /api/memory must go through Basic Auth.
+        '/api/memory',
     ],
 };

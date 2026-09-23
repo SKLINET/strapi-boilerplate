@@ -58,11 +58,11 @@ export interface I{componentNamePascal} {
 
 ## Transformer Utility Template (Without App Context)
 
-**File:** `frontend/src/utils/strapi/{transformerName}.ts`
+**File:** `frontend/src/utils/strapi/{transformerName}/index.ts`
 
 ```typescript
-import { {fragmentName}$data } from '../../relay/__generated__/{fragmentName}.graphql';
-import { I{componentNamePascal} } from '../../types/{componentNameCamel}';
+import { {fragmentName}$data } from '../../../relay/__generated__/{fragmentName}.graphql';
+import { I{componentNamePascal} } from '../../../types/{componentNameCamel}';
 
 type Fragment = Omit<{fragmentName}$data, ' $fragmentType'>;
 
@@ -96,10 +96,10 @@ export const {transformerName}List = (
 
 **Complete example (Video):**
 ```typescript
-import { appVideoFragment$data } from '../../relay/__generated__/appVideoFragment.graphql';
-import { IVideo } from '../../types/video';
-import { getImageType } from './getImageType';
-import { getUploadedVideoType } from './getUploadedVideoType';
+import { appVideoFragment$data } from '../../../relay/__generated__/appVideoFragment.graphql';
+import { IVideo } from '../../../types/video';
+import { getImageType } from '../getImageType';
+import { getUploadedVideoType } from '../getUploadedVideoType';
 
 type Fragment = Omit<appVideoFragment$data, ' $fragmentType'>;
 
@@ -137,12 +137,12 @@ export const getVideoTypeList = (
 
 ## Transformer Utility Template (With App Context)
 
-**File:** `frontend/src/utils/strapi/{transformerName}.ts`
+**File:** `frontend/src/utils/strapi/{transformerName}/index.ts`
 
 ```typescript
-import { {fragmentName}$data } from '../../relay/__generated__/{fragmentName}.graphql';
-import { I{componentNamePascal} } from '../../types/{componentNameCamel}';
-import { IApp } from '../../types/base/app';
+import { {fragmentName}$data } from '../../../relay/__generated__/{fragmentName}.graphql';
+import { I{componentNamePascal} } from '../../../types/{componentNameCamel}';
+import { IApp } from '../../../types/base/app';
 
 type Fragment = Omit<{fragmentName}$data, ' $fragmentType'>;
 
@@ -177,10 +177,10 @@ export const {transformerName}List = (
 
 **Complete example (Button):**
 ```typescript
-import { IButton } from '../../types/button';
-import { getPageType } from './getPageType';
-import { appButtonFragment$data } from '../../relay/__generated__/appButtonFragment.graphql';
-import { IApp } from '../../types/base/app';
+import { IButton } from '../../../types/button';
+import { getPageType } from '../getPageType';
+import { appButtonFragment$data } from '../../../relay/__generated__/appButtonFragment.graphql';
+import { IApp } from '../../../types/base/app';
 
 type Fragment = Omit<appButtonFragment$data, ' $fragmentType'>;
 
@@ -220,6 +220,42 @@ export const getButtonListType = (
 
     return data;
 };
+```
+
+---
+
+## Transformer Test Template
+
+**File:** `frontend/src/utils/strapi/{transformerName}/index.test.ts`
+
+Every transformer in `src/utils/strapi/` has a test next to it. It runs under Vitest's `node` project (every `*.test.ts` does). Cover the null case, the happy path, and the list helper's filtering.
+
+```typescript
+import { describe, expect, it } from 'vitest';
+import { {transformerName}, {transformerName}List } from './index';
+
+// Drop the second argument when the transformer takes no app context.
+const app = { locale: 'cs' } as any;
+
+describe('{transformerName}', () => {
+    it('should return null for missing input', () => {
+        expect({transformerName}(null, app)).toBeNull();
+        expect({transformerName}(undefined, app)).toBeNull();
+    });
+
+    it('should map the fragment onto the app type', () => {
+        expect({transformerName}({ id: '1' /* TODO: fixture fields */ } as any, app)).toEqual({
+            id: '1',
+            // TODO: expected mapping
+        });
+    });
+});
+
+describe('{transformerName}List', () => {
+    it('should skip invalid items', () => {
+        expect({transformerName}List([null, { id: '1' } as any], app)).toHaveLength(1);
+    });
+});
 ```
 
 ---

@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { IApp } from '../../../../types/base/app';
 import { BlocksPropsMap } from '../../../../types/base/block';
 import { SearchParamsProps } from '../../../../types/base/page';
-import { getBlockType } from '../../../../utils/base/getBlockType/getBlockType';
+import { getBlockType } from '../../../../utils/base/getBlockType';
 import blocks from '../../../blocks/server';
 
 interface BlocksProps {

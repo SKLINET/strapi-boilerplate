@@ -42,7 +42,8 @@ export default ({ env }) => ({
         introspection: true,
       },
       defaultLimit: 200,
-      maxLimit: -1,
+      maxLimit: 3000,
+      depthLimit: 15,
       landingPage: true,
     },
   },
@@ -115,6 +116,7 @@ export default ({ env }) => ({
       },
     },
   },
+  /*
   upload: {
     config: {
       provider: "cloudinary",
@@ -125,4 +127,5 @@ export default ({ env }) => ({
       },
     },
   },
+  */
 });

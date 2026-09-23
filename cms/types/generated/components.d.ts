@@ -257,7 +257,7 @@ export interface SharedSocialNetworks extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'block.article-detail-block': BlockArticleDetailBlock;
       'block.articles-list-block': BlockArticlesListBlock;

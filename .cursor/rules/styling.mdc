@@ -44,13 +44,15 @@ alwaysApply: true
     - Good example: Add the value to Tailwind configuration and use `@apply rounded-custom;` or use CSS property: `.container { border-radius: 0.5625rem; }`
   - If suitable standard Tailwind utility classes exist, use them (e.g., `rounded-lg` instead of `rounded-[0.5625rem]` if it's close enough)
 
-## Tailwind 3 Specific
-- Tailwind 3 uses JavaScript/TypeScript configuration file (`tailwind.config.ts`)
-- Global styles use `@tailwind` directives (`@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`)
-- PostCSS configuration uses standard Tailwind PostCSS plugin
+## Tailwind 4 Specific
+- Tailwind 4 is configured in CSS, not in a JS/TS config file — there is no `tailwind.config.ts`
+- Entry point is `src/styles/global.css`, which starts with `@import 'tailwindcss';` and pulls in `variables.css`, `theme.css` and `layout.css`
+- Design tokens live in `@theme inline { … }` in `src/styles/theme.css`; extend those instead of adding arbitrary values
+- Custom utilities are declared with `@utility` in `theme.css`
+- PostCSS uses the `@tailwindcss/postcss` plugin
 
 ## Responsive Design
 - Use Tailwind responsive prefixes with custom breakpoints: `mobile-landscape:`, `tablet:`, `tablet-landscape:`, `desktop:`, `large-desktop:`, `fullhd:`
 - Mobile-first approach
 - Test on multiple screen sizes
-- Breakpoints are defined in `tailwind.config.ts`
+- Breakpoints are declared as `@custom-variant` in `src/styles/layout.css`

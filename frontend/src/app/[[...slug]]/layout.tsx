@@ -1,8 +1,9 @@
-import { ReactNode, Suspense, cache } from 'react';
+import { ReactNode, Suspense } from 'react';
 import type { Metadata, Viewport } from 'next';
-import { ServerContextProps, ParamsProps, ContextProps, IMetadataResponse } from '../../types/base/page';
+import { ServerContextProps, ParamsProps } from '../../types/base/page';
 import { getLocale } from '../../utils/base/getLocal';
-import { getMetadata } from '../../utils/base/getMetadata';
+import { cachedMetadata } from '../../utils/cache/cachedMetadata';
+import { isSystemPageSlug } from '../../utils/cache/page';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
 import { getMetaFromItem } from '../../utils/base/getMetaFromItem';
 import { getImageUrl } from '../../utils/getImageUrl';
@@ -23,8 +24,7 @@ const primary = Poppins({
     display: 'swap',
 });
 
-export async function generateViewport({ params }: ServerContextProps): Promise<Viewport> {
-    'use cache';
+export function generateViewport({ params }: ServerContextProps): Viewport {
     return {
         themeColor: 'white',
         width: 'device-width',
@@ -34,34 +34,30 @@ export async function generateViewport({ params }: ServerContextProps): Promise<
 }
 
 /**
- * @description Get metadata for a given context and cache it (search params are ignored)
- * @param {ContextProps} context - Context props
- * @returns {Promise<IMetadataResponse>} Metadata data
+ * @description Build the page metadata.
+ *
+ * Deliberately NOT a `'use cache'` function: a scope here belongs to the catch-all layout, so the
+ * tags written inside `cachedMetadata` would union onto every URL and one publish would expire the
+ * whole site. `cachedMetadata` is the only metadata cache boundary; redirects stay outside it.
+ * @param {ServerContextProps} context - Route params and search params
+ * @returns {Promise<Metadata>} Next.js metadata for the URL
  **/
-const cachedMatadataProps = async (context: ContextProps): Promise<IMetadataResponse> => {
-    'use cache';
-    const data = await getMetadata(context);
+export async function generateMetadata({ params }: ServerContextProps): Promise<Metadata> {
+    const resolvedParams = await params;
+    const slug = resolvedParams.slug || [];
 
-    return data;
-};
-
-export async function generateMetadata({ params, searchParams }: ServerContextProps): Promise<Metadata> {
-    'use cache';
-    const context = {
-        params: await params,
-        searchParams: await searchParams,
-    };
+    const isSystemPage = isSystemPageSlug(slug);
 
     const pathname =
         '/' +
-        (context.params.slug || [])
+        slug
             .filter((e, i) => {
                 if (i === 0 && e === config.i18n.defaultLocale) return false;
                 return true;
             })
             .join('/');
 
-    const data = await cachedMatadataProps(context);
+    const data = await cachedMetadata(slug, getLocale(slug));
 
     if (data?.redirect?.to) {
         if ((data?.redirect as any)?.permanent) {
@@ -79,7 +75,7 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
 
     const itemMeta = getMetaFromItem(item);
 
-    const locale = getLocale(context.params.slug);
+    const locale = getLocale(slug);
 
     const itemSharingImage = itemMeta?.image?.url ? getImageUrl(itemMeta.image.url, true) : null;
     const globalSharingImage = globalSeo?.sharingImage?.url ? getImageUrl(globalSeo.sharingImage.url, true) : null;
@@ -101,8 +97,16 @@ export async function generateMetadata({ params, searchParams }: ServerContextPr
         social: itemMeta?.seo?.socialNetworks || page?.seo?.socialNetworks || null,
         canonical: itemMeta?.seo?.canonicalURL || page?.seo?.canonicalURL || pathname,
         viewPort: itemMeta?.seo?.metaViewport || page?.seo?.metaViewport || null,
+        // A not-found response is never indexable, whatever the CMS says. The URL still answers 200
+        // — under a catch-all, `notFound()` comes too late to change the status once the response
+        // has started streaming — so `noindex` is what keeps a broken URL out of search results.
         preventIndexing:
-            itemMeta?.seo?.preventIndexing || globalSeo?.preventIndexing || page?.seo?.preventIndexing || false,
+            data.isNotFound ||
+            isSystemPage ||
+            itemMeta?.seo?.preventIndexing ||
+            globalSeo?.preventIndexing ||
+            page?.seo?.preventIndexing ||
+            false,
         sharingImage: itemSharingImage || globalSharingImage || null,
         structuredData: itemMeta?.seo?.structuredData || page?.seo?.structuredData || null,
     };
@@ -189,29 +193,40 @@ interface RootLayoutProps {
     params: Promise<ParamsProps>;
 }
 
+/**
+ * Deliberately NOT a `'use cache'` component: a cache scope covers everything a component renders,
+ * including what sits behind a <Suspense> boundary, so anything dynamic below would be frozen into
+ * it. `TopLoader` reads `useSearchParams()` and stays behind its own <Suspense> so the layout still
+ * produces a complete static shell for Partial Prerender.
+ */
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
-    'use cache';
     const { slug } = await params;
 
     return (
-        <html lang={getLocale(slug)} className={`${primary.variable}`}>
+        <html lang={getLocale(slug)} className={`${primary.variable}`} data-scroll-behavior="smooth">
             <head>
-                {/* Favicon */}
-                <link rel="icon" href={'/favicon/favicon.ico'} type="image/x-icon" />
-                {/* <link rel="apple-touch-icon" href={'/favicon/appleTouchIcon.png'} /> */}
-                {/* <link rel="icon" href={'/favicon/androidChromeIcon.png'} type="image/png" /> */}
+                {/* Favicon — root URLs, served from public/favicon via the rewrite in next.config */}
+                <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+                <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+                <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+                <link rel="manifest" href="/site.webmanifest" />
 
-                {/* Cookiebot */}
+                {/* Render Cookiebot only if the user has not opted out */}
                 {/*
-                <script
-                    id="Cookiebot"
-                    src={`https://consent.cookiebot.com/uc.js`}
-                    data-culture={getLocale(slug)}
-                    data-cbid="YOUR_COOKIEBOT_ID"
-                    type="text/javascript"
-                    data-blockingmode="auto"
-                    defer
-                />
+                <Suspense fallback={null}>
+                    <WithoutScripts>
+                        <script
+                            id="Cookiebot"
+                            src={`https://consent.cookiebot.com/uc.js`}
+                            data-culture={getLocale(slug)}
+                            data-cbid="YOUR_COOKIEBOT_ID"
+                            type="text/javascript"
+                            data-blockingmode="auto"
+                            defer
+                        />
+                    </WithoutScripts>
+                </Suspense>
                 */}
             </head>
             <body>

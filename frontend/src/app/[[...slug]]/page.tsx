@@ -1,20 +1,21 @@
 import config from '../../../sklinet.config.json';
 import { getItemFromPageResponse } from '../../utils/base/getItemFromPageResponse';
-import { getStaticProps } from '../../utils/base/getStaticProps';
-import { ContextProps, ServerContextProps } from '../../types/base/page';
+import { getLocale } from '../../utils/base/getLocal';
+import { ServerContextProps } from '../../types/base/page';
 import { IApp } from '../../types/base/app';
 import { pageInfoLog } from '../../utils/base/pageInfoLog';
 import providers from '../../providers';
 import blocks from '../blocks/server';
-import { GtmProvider } from '../components/base/GtmProvider/GtmProvider';
+import { Analytics } from '../components/base/Analytics/Analytics';
 import { Layout } from '../components/base/Layout/Layout';
 import { Blocks } from '../components/base/Blocks/Blocks';
 import { PreviewToolbar } from '../components/base/PreviewToolbar/PreviewToolbar';
 import { DataModal } from '../components/base/DataModal/DataModal';
 import { GridHelper } from '../components/base/GridHelper/GridHelper';
 import Script from 'next/script';
-import { cachePage } from '../../utils/cache/page';
-import { cacheLife } from 'next/cache';
+import { Suspense } from 'react';
+import { cachedStaticProps } from '../../utils/cache/cachedStaticProps';
+import { configureDayjs } from '../../utils/configureDayjs';
 
 /**
  * @description Pregenerate pages for ISR
@@ -23,10 +24,6 @@ import { cacheLife } from 'next/cache';
 export async function generateStaticParams() {
     const { locales } = config.i18n;
     const allParams: { slug: string[] }[] = [];
-
-    if (process.env.NODE_ENV === 'development') {
-        return [{ slug: [] }];
-    }
 
     // Get static paths for each locale
     for (const locale of locales) {
@@ -123,38 +120,31 @@ export async function generateStaticParams() {
 }
 
 /**
- * @description Get page data for a given slug and cache it (search params are ignored)
- * @param {ContextProps} context - Context props
- * @returns {Promise<IApp>} App data
+ * Resolves params and page data and renders the full page tree.
+ *
+ * It must read no dynamic API of its own: React rejects a tree where an element postpones at its own
+ * root and also has postponed slots below it, and every listing block below here has its own
+ * <Suspense>. Draft mode is therefore resolved inside `cachedStaticProps`, outside its `'use cache'`
+ * scope.
+ *
+ * Listing blocks sit in those <Suspense> holes, but that is not what keeps them out of this route's
+ * lifetime and tags — a scope that resolves during the prerender contributes both. What keeps them
+ * out is `streamListing()`, called first inside each listing `Server.tsx`.
  **/
-const cachedStaticProps = async (context: ContextProps): Promise<IApp> => {
-    'use cache';
-    const data = await getStaticProps(context);
+export const Page = async ({ params, searchParams }: ServerContextProps) => {
+    const resolvedParams = await params;
+    const slug = resolvedParams.slug || [];
+    const locale = getLocale(slug);
+
+    const data = await cachedStaticProps(slug, locale);
 
     const app: IApp = {
         ...data,
         item: getItemFromPageResponse(data),
-        context,
+        context: { params: resolvedParams },
     };
 
-    if (!app?.page || app.page.url === '404' || app.page.url === '500') {
-        // Cache error page for 1 minute (min. by NextJS documentation)
-        cacheLife('minutes');
-    } else {
-        // Cache page by tags based on the page content
-        cachePage(app);
-    }
-
-    return app;
-};
-
-export const Page = async ({ params, searchParams }: ServerContextProps) => {
-    const context = {
-        params: await params,
-        searchParams: {},
-    };
-
-    const app = await cachedStaticProps(context);
+    configureDayjs(app);
 
     if (process.env.NODE_ENV === 'development') {
         pageInfoLog(app);
@@ -166,27 +156,30 @@ export const Page = async ({ params, searchParams }: ServerContextProps) => {
 
     return (
         <>
-            <GtmProvider gtmCode={gtmCode}>
-                <Layout app={app}>
-                    {app.page && (
-                        <Blocks
-                            blocksData={app.page?.content || []}
-                            initialProps={app.blocksPropsMap}
-                            app={app}
-                            searchParams={searchParams}
-                        />
-                    )}
-                </Layout>
+            {/* Render analytics only if the user has not opted out */}
+            <Suspense fallback={null}>
+                <Analytics gtmCode={gtmCode ? String(gtmCode) : null} />
+            </Suspense>
 
-                {app.preview && app.page && <PreviewToolbar app={app} />}
-
-                {process.env.NODE_ENV === 'development' && (
-                    <>
-                        <GridHelper />
-                        <DataModal app={app} />
-                    </>
+            <Layout app={app}>
+                {app.page && (
+                    <Blocks
+                        blocksData={app.page?.content || []}
+                        initialProps={app.blocksPropsMap}
+                        app={app}
+                        searchParams={searchParams}
+                    />
                 )}
-            </GtmProvider>
+            </Layout>
+
+            {app.preview && app.page && <PreviewToolbar app={app} />}
+
+            {process.env.NODE_ENV === 'development' && (
+                <>
+                    <GridHelper />
+                    <DataModal app={app} />
+                </>
+            )}
 
             {structuredData && (
                 <Script
