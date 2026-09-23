@@ -27,6 +27,7 @@
     "@strapi/plugin-users-permissions": "^5.44.0",
     "@strapi/provider-upload-cloudinary": "^5.44.0",
     "@strapi/strapi": "^5.44.0",
+    "better-sqlite3": "^13.0.3",
     "mysql2": "3.24.4",
     "patch-package": "^8.0.1",
     "pg": "^8.13.0",

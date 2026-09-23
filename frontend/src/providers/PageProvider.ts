@@ -160,12 +160,12 @@ class PageProvider extends AbstractStrapiProvider<
                 }
                 // loop over all pages
                 for (const page of data?.pages || []) {
-                    if (String(page?.url) === 'homepage' && page?.sitemap) {
+                    if (String(page?.url).startsWith('homepage')) {
                         items.push({
                             params: {
                                 slug: [],
                                 sitemap: {
-                                    enabled: page?.sitemap?.enabled || false,
+                                    enabled: page?.sitemap?.enabled || true,
                                     changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                     priority: page?.sitemap?.priority || 0.3,
                                 },
@@ -211,7 +211,7 @@ class PageProvider extends AbstractStrapiProvider<
                                         slug: pathParts,
                                         locale,
                                         sitemap: {
-                                            enabled: page?.sitemap?.enabled || false,
+                                            enabled: page?.sitemap?.enabled || true,
                                             changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                             priority: page?.sitemap?.priority || 0.3,
                                         },
@@ -226,7 +226,7 @@ class PageProvider extends AbstractStrapiProvider<
                                     slug: pathParts,
                                     locale,
                                     sitemap: {
-                                        enabled: page?.sitemap?.enabled || false,
+                                        enabled: page?.sitemap?.enabled || true,
                                         changeFrequency: page?.sitemap?.changeFrequency || 'monthly',
                                         priority: page?.sitemap?.priority || 0.3,
                                     },

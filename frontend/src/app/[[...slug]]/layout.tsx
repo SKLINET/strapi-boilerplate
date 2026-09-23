@@ -203,7 +203,7 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
     const { slug } = await params;
 
     return (
-        <html lang={getLocale(slug)} className={`${primary.variable}`}>
+        <html lang={getLocale(slug)} className={`${primary.variable}`} data-scroll-behavior="smooth">
             <head>
                 {/* Favicon — root URLs, served from public/favicon via the rewrite in next.config */}
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />

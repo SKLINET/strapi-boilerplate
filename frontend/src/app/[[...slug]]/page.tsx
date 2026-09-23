@@ -25,10 +25,6 @@ export async function generateStaticParams() {
     const { locales } = config.i18n;
     const allParams: { slug: string[] }[] = [];
 
-    if (process.env.NODE_ENV === 'development') {
-        return [{ slug: [] }];
-    }
-
     // Get static paths for each locale
     for (const locale of locales) {
         const addPage = (slug: string[]) => {
