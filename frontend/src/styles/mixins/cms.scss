@@ -1,0 +1,25 @@
+// Admin look for the site's preview and developer tools (PreviewToolbar, DataModal), shared with
+// the other SKLINET projects. Self-contained on purpose: the tools must not change with the site's own theme.
+@mixin cms-tokens {
+    --cms-brand: #215dfd;
+    --cms-brand-hover: #1045d9;
+    --cms-success: #0fa05c;
+    --cms-warning: #e5a000;
+    --cms-elevation-50: oklch(0.97 0.01 265);
+    --cms-elevation-100: oklch(0.94 0.01 265);
+    --cms-elevation-150: oklch(0.898 0.01 265);
+    --cms-elevation-400: oklch(0.686 0.01 265);
+    --cms-elevation-500: oklch(0.6 0.01 265);
+    --cms-elevation-600: oklch(0.507 0.01 265);
+    --cms-text: oklch(0.305 0.01 265);
+    --cms-radius-s: 4px;
+    --cms-radius-m: 6px;
+    --cms-shadow: 0 4px 16px 0 rgb(0 0 0 / 10%);
+    --cms-font-body: var(--font-primary), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --cms-font-mono: 'SF Mono', Menlo, Consolas, monospace;
+
+    color: var(--cms-text);
+    font-family: var(--cms-font-body);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+}

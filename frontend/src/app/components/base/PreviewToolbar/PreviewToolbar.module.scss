@@ -1,52 +1,186 @@
+@import '../../../../styles/mixins/hover.scss';
+@import '../../../../styles/mixins/responsive.scss';
+@import '../../../../styles/mixins/cms.scss';
+
+// A floating card with admin-style buttons and a status pill, so the preview reads as part of the CMS.
 .toolbar {
-    @apply fixed bottom-0 shadow-2xl shadow-black w-full py-2 px-4 tablet:px-8 bg-white flex items-center justify-between z-9999;
-    &__left {
-        @apply flex gap-2 items-center;
+    @include cms-tokens;
+
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: calc(100% - 2rem);
+    max-width: 45rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+    transform: translateX(-50%);
+    border: 1px solid var(--cms-elevation-100);
+    border-radius: var(--cms-radius-m);
+    background: var(--white);
+    box-shadow: var(--cms-shadow);
+
+    @include from-tablet {
+        bottom: 1.25rem;
     }
-    &__mid {
-        @apply flex gap-4 items-center;
+}
+
+.brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 0.75rem;
+    border-right: 1px solid var(--cms-elevation-100);
+}
+
+.home {
+    display: flex;
+    border-radius: var(--cms-radius-s);
+    color: var(--cms-brand);
+
+    &:focus-visible {
+        outline: 2px solid var(--cms-brand);
+        outline-offset: 2px;
     }
-    &__right { 
-        @apply flex gap-2 uppercase items-center underline;
-        &:hover {
-            @apply no-underline;
+}
+
+.mark {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+// Monospace badge next to the logo, like the "admin" badge on a CMS login screen.
+.badge {
+    display: none;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--cms-elevation-150);
+    border-radius: var(--cms-radius-s);
+    color: var(--cms-elevation-500);
+    font-family: var(--cms-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+
+    @include from-mobile-landscape {
+        display: inline-block;
+    }
+}
+
+.doc {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+// Status pill with a dot for the draft state.
+.status {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0 0.5rem;
+    border-radius: var(--cms-radius-s);
+    background: var(--cms-elevation-100);
+    color: var(--cms-text);
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+
+    &::before {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--cms-warning);
+        content: '';
+    }
+
+    &__published::before {
+        background: var(--cms-success);
+    }
+}
+
+.title {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+// Medium admin button; icon only on phones.
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--cms-radius-s);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        border-color 100ms cubic-bezier(0, 0.2, 0.2, 1),
+        color 100ms cubic-bezier(0, 0.2, 0.2, 1),
+        background-color 100ms cubic-bezier(0, 0.2, 0.2, 1);
+
+    &:focus-visible {
+        outline: 2px solid var(--cms-brand);
+        outline-offset: 2px;
+    }
+
+    @include from-mobile-landscape {
+        padding: 0.25rem 0.75rem;
+    }
+
+    &__primary {
+        background: var(--cms-brand);
+        color: var(--white);
+
+        @include hover {
+            &:hover {
+                background: var(--cms-brand-hover);
+            }
+        }
+    }
+
+    &__secondary {
+        border-color: var(--cms-text);
+        background: transparent;
+        color: var(--cms-text);
+
+        @include hover {
+            &:hover {
+                border-color: var(--cms-elevation-400);
+                color: var(--cms-elevation-600);
+            }
         }
     }
 }
 
-.item {
-    @apply flex gap-2 items-center;
+.icon {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
 }
 
-.indicator {
-    @apply w-4 h-4 rounded-full bg-yellow-300;
-    &__active {
-        @apply bg-green;
-    }
-}
+.label {
+    display: none;
 
-.admin__text {
-    @apply uppercase;
-}
-
-.logo {
-    @apply w-[2rem] h-[2rem];
-}
-
-.link__title {
-    @apply hidden mobile-landscape:block;
-}
-
-.exit {
-    @apply w-[1.7rem] h-[2rem];
-}
-
-.edit {
-    @apply flex items-center gap-2 underline  uppercase;
-    &:hover {
-        @apply no-underline;
-    }
-    &__icon {
-        @apply w-[1.7rem] h-[2rem] mt-[-0.5rem];
+    @include from-mobile-landscape {
+        display: inline;
     }
 }

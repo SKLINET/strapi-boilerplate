@@ -1,0 +1,131 @@
+@import '../../../../../styles/mixins/hover.scss';
+
+// Expects the `cms-tokens` variables from an ancestor (DataModal).
+.tree {
+    margin: 0;
+    padding: 0;
+    font-family: var(--cms-font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+    list-style: none;
+}
+
+.children {
+    margin: 0 0 0 0.4375rem;
+    padding: 0 0 0 0.75rem;
+    border-left: 1px solid var(--cms-elevation-100);
+    list-style: none;
+}
+
+.leaf,
+.toggle {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0 0.375rem;
+    border-radius: var(--cms-radius-s);
+}
+
+// A leaf lines up with the key of a branch, after its chevron.
+.leaf {
+    padding-left: 1.5rem;
+}
+
+.toggle {
+    width: 100%;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    @include hover {
+        &:hover {
+            background: var(--cms-elevation-50);
+        }
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--cms-brand);
+        outline-offset: -2px;
+    }
+
+    &[aria-expanded='true'] .chevron {
+        transform: rotate(90deg);
+    }
+}
+
+.chevron {
+    flex-shrink: 0;
+    align-self: center;
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: none;
+    stroke: var(--cms-elevation-500);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+    transition: transform 100ms cubic-bezier(0, 0.2, 0.2, 1);
+}
+
+.key {
+    flex-shrink: 0;
+    font-weight: 600;
+
+    &::after {
+        color: var(--cms-elevation-500);
+        font-weight: 400;
+        content: ':';
+    }
+}
+
+.index {
+    color: var(--cms-elevation-500);
+    font-weight: 400;
+}
+
+.hint {
+    overflow: hidden;
+    font-family: var(--cms-font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.meta {
+    flex-shrink: 0;
+    color: var(--cms-elevation-500);
+}
+
+.string,
+.primitive {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.string {
+    color: oklch(0.48 0.12 155);
+}
+
+.number {
+    color: var(--cms-brand);
+}
+
+.boolean {
+    color: oklch(0.5 0.17 300);
+}
+
+.null,
+.undefined {
+    color: var(--cms-elevation-500);
+    font-style: italic;
+}
+
+.mark {
+    border-radius: 2px;
+    background: color-mix(in oklab, var(--cms-brand) 20%, transparent);
+    color: inherit;
+}
