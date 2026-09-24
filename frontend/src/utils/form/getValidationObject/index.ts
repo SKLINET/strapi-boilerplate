@@ -4,13 +4,26 @@ import { IFormField } from '../../../types/form';
 import { getSystemResource } from '../../strapi/getSystemResource';
 import * as yup from 'yup';
 
-const applyConditions = (
-    yupRecord: yup.Schema<any>,
-    field: IFormField,
-    allFields: IFormField[],
-    app: IApp,
-    error: string = getSystemResource('required_field', app.systemResources),
-) => {
+const applyVisibleSchema =
+    (yupRecord: yup.Schema<any>, field: IFormField, allFields: IFormField[]) =>
+    (value: unknown, context: yup.TestContext) => {
+        if (!shouldRenderField(field, allFields, context.parent)) {
+            return true;
+        }
+
+        try {
+            yupRecord.validateSync(value);
+            return true;
+        } catch (error) {
+            if (error instanceof yup.ValidationError) {
+                return context.createError({ message: error.message });
+            }
+
+            throw error;
+        }
+    };
+
+const applyConditions = (yupRecord: yup.Schema<any>, field: IFormField, allFields: IFormField[]) => {
     const conditions = field.conditions || [];
 
     if (conditions.length === 0) return yupRecord;
@@ -20,47 +33,20 @@ const applyConditions = (
         case 'textarea':
         case 'email':
         case 'phone': {
-            return yup.string().test('conditional', error, (value, { parent }) => {
-                if (shouldRenderField(field, allFields, parent)) {
-                    return yupRecord.isValidSync(value);
-                }
-                return true;
-            });
+            return yup.string().test('conditional', applyVisibleSchema(yupRecord, field, allFields));
         }
         case 'checkbox': {
-            return yup.boolean().test('conditional', error, (value, { parent }) => {
-                if (shouldRenderField(field, allFields, parent)) {
-                    return yupRecord.isValidSync(value);
-                }
-                return true;
-            });
+            return yup.boolean().test('conditional', applyVisibleSchema(yupRecord, field, allFields));
         }
         case 'select': {
             return yup
                 .mixed()
                 .notRequired()
-                .test('conditional', error, (value, { parent }) => {
-                    if (shouldRenderField(field, allFields, parent)) {
-                        return yupRecord.isValidSync(value);
-                    }
-                    return true;
-                });
+                .test('conditional', applyVisibleSchema(yupRecord, field, allFields));
         }
-        case 'file': {
-            return yup.array().test('conditional', error, (value, { parent }) => {
-                if (shouldRenderField(field, allFields, parent)) {
-                    return yupRecord.isValidSync(value);
-                }
-                return true;
-            });
-        }
+        case 'file':
         case 'productsSelection': {
-            return yup.array().test('conditional', error, (value, { parent }) => {
-                if (shouldRenderField(field, allFields, parent)) {
-                    return yupRecord.isValidSync(value);
-                }
-                return true;
-            });
+            return yup.array().test('conditional', applyVisibleSchema(yupRecord, field, allFields));
         }
     }
 
@@ -78,7 +64,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                         yup.string().required(getSystemResource('required_field', app?.systemResources)),
                         e,
                         data,
-                        app,
                     );
                 }
                 return;
@@ -93,14 +78,12 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                                 .email(getSystemResource('invalid_email', app?.systemResources)),
                             e,
                             data,
-                            app,
                         );
                     } else {
                         yupObject[e.name] = applyConditions(
                             yup.string().email(getSystemResource('invalid_email', app?.systemResources)),
                             e,
                             data,
-                            app,
                         );
                     }
                 }
@@ -131,7 +114,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                                 ),
                             e,
                             data,
-                            app,
                         );
                     } else {
                         yupObject[e.name] = applyConditions(
@@ -156,7 +138,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                                 ),
                             e,
                             data,
-                            app,
                         );
                     }
                 }
@@ -169,10 +150,9 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                             yup.boolean().isTrue(getSystemResource('required_field', app?.systemResources)),
                             e,
                             data,
-                            app,
                         );
                     } else {
-                        yupObject[e.name] = applyConditions(yup.boolean(), e, data, app);
+                        yupObject[e.name] = applyConditions(yup.boolean(), e, data);
                     }
                 }
                 return;
@@ -191,7 +171,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                                 ),
                             e,
                             data,
-                            app,
                         );
                     } else {
                         yupObject[e.name] = applyConditions(
@@ -205,7 +184,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                                 ),
                             e,
                             data,
-                            app,
                         );
                     }
                 }
@@ -251,7 +229,7 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                         );
                     }
 
-                    yupObject[e.name] = applyConditions(fileValidation, e, data, app);
+                    yupObject[e.name] = applyConditions(fileValidation, e, data);
                 }
                 return;
             }
@@ -261,8 +239,6 @@ export const getValidationObject = (data: IFormField[], app: IApp) => {
                         yup.array().min(1, getSystemResource('empty_products_selection', app?.systemResources)),
                         e,
                         data,
-                        app,
-                        getSystemResource('empty_products_selection', app?.systemResources),
                     );
                 }
                 return;
