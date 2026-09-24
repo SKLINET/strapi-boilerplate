@@ -9,6 +9,7 @@ vi.mock('../../strapi/getSystemResource', () => ({
 }));
 
 import { getValidationObject } from './index';
+import { shouldRenderField } from '../../../app/components/organisms/FormBuilder/FormBuilder';
 import { IApp } from '../../../types/base/app';
 import { IFormField } from '../../../types/form';
 
@@ -42,5 +43,28 @@ describe('getValidationObject', () => {
         const fields = [{ type: 'checkbox', name: 'agree' }] as IFormField[];
         const schema = getValidationObject(fields, app);
         await expect(schema.agree.validate(false)).resolves.toBe(false);
+    });
+
+    it('keeps the inner schema error message on visible conditional fields', () => {
+        const fields = [
+            { type: 'email', name: 'email', required: true, conditions: [{}] },
+            { type: 'phone', name: 'phone', required: true, conditions: [{}] },
+            { type: 'productsSelection', name: 'products', conditions: [{}] },
+        ] as IFormField[];
+        const schema = getValidationObject(fields, app);
+
+        expect(() => schema.email.validateSync('')).toThrow('required_field');
+        expect(() => schema.email.validateSync('not-an-email')).toThrow('invalid_email');
+        expect(() => schema.phone.validateSync('123')).toThrow('invalid_phone_number');
+        expect(() => schema.products.validateSync([])).toThrow('empty_products_selection');
+        expect(schema.email.isValidSync('valid@example.com')).toBe(true);
+    });
+
+    it('skips validation of hidden conditional fields', () => {
+        vi.mocked(shouldRenderField).mockReturnValueOnce(false);
+        const fields = [{ type: 'email', name: 'email', required: true, conditions: [{}] }] as IFormField[];
+        const schema = getValidationObject(fields, app);
+
+        expect(schema.email.isValidSync('')).toBe(true);
     });
 });
